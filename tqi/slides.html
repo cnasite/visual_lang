@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg-0); color:var(--text-2); font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:rgba(255,92,38,0.30); color:#F7F8F8; }
+  .wrap { max-width:1100px; margin:0 auto; padding:0 var(--space-8); }
+  .m-body { fill:var(--mkb, #F7F8F8); } .m-arrow { fill:var(--mka, #FF5C26); }
+  .m-ink { --mkb:#F7F8F8; --mka:#F7F8F8; }  /* on orange: all white */
+
+  nav { position:sticky; top:0; z-index:50; background:rgba(8,9,10,0.8); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+  nav .wrap { display:flex; align-items:center; gap:var(--space-2); height:56px; }
+  .nav-mark { display:flex; align-items:center; gap:10px; margin-right:var(--space-6); text-decoration:none; }
+  .nav-mark span { font:590 14px/1 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); }
+  .ntab { font:500 12.5px/1 var(--font-ui); color:var(--text-2); text-decoration:none; padding:7px 12px;
+    border-radius:var(--r-sm); transition:background var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+  .ntab:hover { color:var(--text-1); background:var(--bg-2); }
+  .ntab.on { background:var(--intent-wash); color:var(--text-1); }
+  .nspacer { margin-left:auto; }
+
+  /* floating on-page nav */
+  .fnav { position:fixed; top:50%; right:18px; transform:translateY(-50%); z-index:60;
+    display:flex; flex-direction:column; gap:1px; padding:9px 7px; max-height:80vh; overflow:auto;
+    background:rgba(19,20,22,0.80); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border-radius:var(--r-lg); box-shadow:var(--inset), 0 16px 40px rgba(0,0,0,0.45); }
+  .fnav .fcap { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); padding:2px 9px 7px; }
+  .fnav a { display:flex; align-items:center; gap:8px; font:450 11.5px/1 var(--font-ui); color:var(--text-2);
+    text-decoration:none; padding:5px 9px; border-radius:var(--r-sm); white-space:nowrap;
+    transition:background var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+  .fnav a::before { content:""; width:3px; height:3px; border-radius:50%; background:var(--text-3); flex:none; }
+  .fnav a:hover { color:var(--text-1); background:var(--bg-3); }
+  .fnav a.on { color:var(--text-1); background:var(--intent-wash); }
+  .fnav a.on::before { background:var(--intent-bright); }
+  @media (max-width:1320px){ .fnav{ display:none; } }
+
+  .page-head { padding:var(--space-16) 0 var(--space-8); }
+  .idx { font:500 12px/1.4 var(--font-mono); color:var(--intent-bright); margin-bottom:var(--space-3); }
+  .page-head h1 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--text-1); }
+  .page-head p { max-width:620px; margin-top:var(--space-3); line-height:1.65; }
+
+  .sb-head { display:flex; align-items:baseline; gap:var(--space-4); padding:var(--space-12) 0 var(--space-6); }
+  .sb-head .num { font:500 12px/1.4 var(--font-mono); color:var(--text-3); }
+  .sb-head h2 { font:var(--text-h2); letter-spacing:var(--track-h); color:var(--text-1); }
+  .sb-head p { font:var(--text-small); color:var(--text-3); margin-left:auto; max-width:380px; text-align:right; }
+
+  .slide { width:min(1100px, calc(100vw - 48px)); aspect-ratio:16/9; position:relative; left:50%; transform:translateX(-50%);
+    background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); overflow:hidden;
+    margin-bottom:24px; padding:64px; display:flex; flex-direction:column; }
+  .sfoot { margin-top:auto; display:flex; gap:var(--space-6); font:500 10.5px/1.4 var(--font-mono); color:var(--text-3); letter-spacing:0.04em; }
+  .kick { display:flex; align-items:center; gap:10px; font:500 12px/1 var(--font-mono); color:var(--intent-bright); margin-bottom:28px; }
+  .kick::before { content:""; width:26px; height:1.5px; background:var(--intent); }
+  .display { font:400 clamp(40px,5.4vw,72px)/1.08 var(--font-display); letter-spacing:0.015em; color:var(--text-1); text-transform:uppercase; }
+  .prop { display:inline-flex; align-items:center; gap:6px; font:500 11.5px/1 var(--font-ui); color:var(--text-2);
+    background:var(--bg-2); box-shadow:var(--inset); border-radius:var(--r-sm); padding:4px 9px; }
+  .u-dot { width:8px; height:8px; }
+
+  /* report slide */
+  .kpis { display:flex; gap:56px; margin:34px 0 38px; }
+  .kpis .k .n { font:590 44px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--text-1); }
+  .kpis .k .n em { font-style:normal; font-size:20px; color:var(--st-done); }
+  .kpis .k .l { font:400 13px/1.5 var(--font-ui); color:var(--text-3); margin-top:8px; }
+  .rcols { display:grid; grid-template-columns:1fr 1fr; gap:40px; flex:1; }
+  .rtbl { width:100%; border-collapse:collapse; font:400 13px/1.5 var(--font-ui); }
+  .rtbl td { padding:9px 0; border-bottom:1px solid var(--border); color:var(--text-2); }
+  .rtbl td:first-child { font-family:var(--font-mono); font-size:11.5px; color:var(--text-1); }
+  .rtbl td:last-child { text-align:right; font-family:var(--font-mono); font-size:11.5px; }
+  .bars { display:grid; grid-template-columns:repeat(12,1fr); gap:8px; align-items:end; height:150px; }
+  .bars div { background:var(--bg-3); border-radius:4px 4px 0 0; box-shadow:var(--inset); }
+  .bars .hot { background:var(--intent); }
+
+  /* demo slide */
+  .demo { display:grid; grid-template-columns:0.9fr 1.1fr; gap:48px; flex:1; align-items:center; }
+  .mini { background:var(--bg-0); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); overflow:hidden; font-size:11px; }
+  .mini .mh { display:flex; gap:8px; align-items:center; padding:9px 14px; border-bottom:1px solid var(--border);
+    font:560 11px/1 var(--font-ui); color:var(--text-1); }
+  .mini .row { display:grid; grid-template-columns:14px 86px 1fr auto; gap:12px; align-items:center; padding:8px 14px; border-bottom:1px solid var(--border); }
+  .mini .row .rf { font:400 10px/1 var(--font-mono); color:var(--text-3); }
+  .mini .row .tt { font:500 11px/1.4 var(--font-ui); color:var(--text-1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .mini .row .mm { font:400 9px/1 var(--font-mono); color:var(--text-3); }
+  .mini .sel { background:var(--intent-wash); }
+
+  footer { border-top:1px solid var(--border); padding:var(--space-8) 0; margin-top:var(--space-12); }
+  footer .wrap { display:flex; justify-content:space-between; font:var(--text-small); color:var(--text-3); }
+  @media (max-width:880px){ .slide{padding:32px;} .rcols,.demo{grid-template-columns:1fr;} .kpis{gap:28px;} .sb-head p{display:none;} }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-body" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-arrow" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="nav-mark" href="index.html"><svg width="22" height="23" viewBox="0 0 377 396"><use href="#amark"/></svg><span>Asite</span></a>
+    <a class="ntab" href="index.html">Language</a>
+    <a class="ntab" href="screens.html">Product</a>
+    <a class="ntab" href="web.html">Website</a>
+    <a class="ntab on" href="slides.html">Slides</a>
+    <span class="nspacer"></span>
+  </div>
+</nav>
+
+<aside class="fnav" aria-label="On this page">
+  <div class="fcap">On this page</div>
+  <a href="#t1">Title</a>
+  <a href="#t2">Divider</a>
+  <a href="#t3">Report</a>
+  <a href="#t4">Product demo</a>
+  <a href="#t5">Close</a>
+  <a href="#t6">Illustrated</a>
+</aside>
+
+<div class="wrap page-head">
+  <div class="idx">The Quiet Instrument · Slides</div>
+  <h1>Slide system</h1>
+  <p>Five canonical slide types. Cornerstone carries the large titles; Inter does everything beneath; the orange is rationed — except on the one slide where it becomes the room.</p>
+</div>
+
+<div class="wrap sb-head" id="t1"><span class="num">SLD.01</span><h2>Title</h2><p>Ember aurora, the mark, one Cornerstone statement. Presenter data in mono.</p></div>
+<div class="slide" style="background:var(--aurora), var(--bg-1)">
+  <svg width="44" height="46" viewBox="0 0 377 396"><use href="#amark"/></svg>
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center">
+    <div class="kick">QUARTERLY PROGRAMME REVIEW</div>
+    <div class="display">Built to hold<span style="color:var(--intent)">.</span></div>
+    <p style="margin-top:22px; max-width:480px; font-size:16px; line-height:1.6">Meridian Tower C — information management performance, Q2 2026.</p>
+  </div>
+  <div class="sfoot"><span>ASITE · MCG</span><span>11 JUN 2026</span><span style="margin-left:auto">C. NJOKU · INFORMATION MANAGER</span></div>
+</div>
+
+<div class="wrap sb-head" id="t2"><span class="num">SLD.02</span><h2>Divider — The Hold Point</h2><p>The one surface where Survey Orange is the background: a section break that behaves like a site hold — everything stops, one instruction.</p></div>
+<div class="slide" style="background:var(--intent)">
+  <div style="display:flex; align-items:center; gap:12px">
+    <svg class="m-ink" width="34" height="36" viewBox="0 0 377 396"><use href="#amark"/></svg>
+    <span style="font:500 12px/1 var(--font-mono); color:#1A0E08; letter-spacing:0.06em">SECTION 02 / 04</span>
+  </div>
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center">
+    <div class="display" style="color:#1A0E08; font-size:clamp(48px,6.4vw,84px)">Hold point<span style="color:#F7F8F8">.</span></div>
+    <p style="margin-top:20px; max-width:520px; font:400 17px/1.6 var(--font-ui); color:rgba(26,14,8,0.75)">Two decisions block the next pour. Nothing on the following slides moves until they're made.</p>
+  </div>
+  <div class="sfoot" style="color:rgba(26,14,8,0.6)"><span>RFI-0847 · CORE WALL COVER</span><span>MAT-019 · COUPLER APPROVAL</span><span style="margin-left:auto">LIFTED ON CLOSE-OUT</span></div>
+</div>
+
+<div class="wrap sb-head" id="t3"><span class="num">SLD.03</span><h2>Report</h2><p>Numbers as instruments: large Inter figures, a register excerpt, deliverable bars with today burning.</p></div>
+<div class="slide">
+  <div class="kick">Q2 · INFORMATION PERFORMANCE</div>
+  <h3 style="font:590 30px/1.2 var(--font-ui); letter-spacing:-0.015em; color:var(--text-1)">The register held its tolerance.</h3>
+  <div class="kpis">
+    <div class="k"><div class="n">98.4<em>%</em></div><div class="l">register health</div></div>
+    <div class="k"><div class="n">1.8<em>d</em></div><div class="l">median RFI response</div></div>
+    <div class="k"><div class="n">230</div><div class="l">controlled files</div></div>
+    <div class="k"><div class="n">18</div><div class="l">documents converted</div></div>
+  </div>
+  <div class="rcols">
+    <div>
+      <div style="font:500 10.5px/1.4 var(--font-mono); color:var(--text-3); letter-spacing:0.06em; margin-bottom:10px">OPEN RISKS</div>
+      <table class="rtbl">
+        <tr><td>RFI-0847</td><td>Core wall cover clash — holds P-1131</td><td style="color:var(--st-blocked)">2d over</td></tr>
+        <tr><td>MAT-019</td><td>Type 2 couplers — approval pending</td><td style="color:var(--st-progress)">in review</td></tr>
+        <tr><td>CONV-018</td><td>Subcontractor brief — verify one field</td><td>today</td></tr>
+      </table>
+    </div>
+    <div>
+      <div style="font:500 10.5px/1.4 var(--font-mono); color:var(--text-3); letter-spacing:0.06em; margin-bottom:10px">DELIVERABLES / WEEK</div>
+      <div class="bars"><div style="height:35%"></div><div style="height:48%"></div><div style="height:42%"></div><div style="height:66%"></div><div style="height:58%"></div><div style="height:72%"></div><div style="height:50%"></div><div style="height:80%"></div><div style="height:64%"></div><div style="height:90%"></div><div class="hot" style="height:96%"></div><div style="height:44%; opacity:0.5"></div></div>
+    </div>
+  </div>
+  <div class="sfoot"><span>ASITE · QPR Q2</span><span style="margin-left:auto">14 / 22</span></div>
+</div>
+
+<div class="wrap sb-head" id="t4"><span class="num">SLD.04</span><h2>Product demo</h2><p>Claim on the left, living interface on the right — the app frame is the image.</p></div>
+<div class="slide">
+  <div class="kick">CONVERT · NEW</div>
+  <div class="demo">
+    <div>
+      <div class="display" style="font-size:clamp(30px,3.6vw,46px)">Paper, made native</div>
+      <p style="margin-top:18px; max-width:380px; font-size:15px; line-height:1.7">Briefs, forms, and site scans become editable, versioned documents — with per-field confidence and a single orange ask when a human eye is needed.</p>
+      <div style="display:flex; gap:8px; margin-top:22px">
+        <span class="prop">PDF · DOCX · scans</span>
+        <span class="prop"><i class="u-dot" style="background:var(--st-done)"></i>full audit</span>
+      </div>
+    </div>
+    <div class="mini">
+      <div class="mh"><svg width="14" height="15" viewBox="0 0 377 396"><use href="#amark"/></svg>Convert — queue<span style="margin-left:auto; font:400 9px/1 var(--font-mono); color:var(--text-3)">3 ITEMS</span></div>
+      <div class="row"><i class="u-dot" style="background:var(--st-progress); width:7px; height:7px"></i><span class="rf">BRIEF-PKG2</span><span class="tt">Subcontractor brief — groundworks</span><span class="mm">64%</span></div>
+      <div class="row sel"><i class="u-dot" style="background:var(--st-done); width:7px; height:7px"></i><span class="rf">P-1119</span><span class="tt">Pour card (site scan, handwriting)</span><span class="mm">done ✓</span></div>
+      <div class="row"><i class="u-dot" style="background:var(--st-backlog); width:7px; height:7px"></i><span class="rf">PERMIT-CR</span><span class="tt">Crane oversail application</span><span class="mm">queued</span></div>
+      <div class="row" style="border-bottom:none"><span></span><span class="rf"></span><span class="tt" style="color:var(--text-3); font-weight:400">→ stored as native docs in Files</span><span></span></div>
+    </div>
+  </div>
+  <div class="sfoot"><span>ASITE · PRODUCT</span><span style="margin-left:auto">17 / 22</span></div>
+</div>
+
+<div class="wrap sb-head" id="t5"><span class="num">SLD.05</span><h2>Close</h2><p>Mark, one line, the ask. Nothing else.</p></div>
+<div class="slide" style="background:var(--aurora), var(--bg-1); align-items:center; text-align:center">
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center">
+    <svg width="52" height="55" viewBox="0 0 377 396" style="margin-bottom:30px"><use href="#amark"/></svg>
+    <div class="display" style="font-size:clamp(34px,4.4vw,56px)">The quiet instrument<span style="color:var(--intent)">.</span></div>
+    <p style="margin-top:18px; font-size:15px">Decisions next steering meeting — direction sign-off.</p>
+  </div>
+  <div class="sfoot" style="width:100%"><span>ASITE · DIRECTION 02</span><span style="margin-left:auto">22 / 22</span></div>
+</div>
+
+<div class="wrap sb-head" id="t6"><span class="num">SLD.06</span><h2>Illustrated — Line Art</h2><p>Narrative slide: the elevation scene explains while the copy claims. Line modes for precision contexts.</p></div>
+<div class="slide">
+  <div class="kick">ON SITE · NARRATIVE</div>
+  <div class="demo">
+    <div>
+      <div class="display" style="font-size:clamp(26px,3.2vw,40px)">The site tells the truth</div>
+      <p style="margin-top:16px; max-width:360px; font-size:14.5px; line-height:1.7">Poured floors are solid. Planned floors are dashed. The instrument never reports what it hopes — only where the point landed.</p>
+    </div>
+    <svg width="100%" viewBox="0 0 560 330" fill="none" stroke-linecap="round">
+      <line x1="20" y1="300" x2="540" y2="300" stroke="#33363B" stroke-width="1.5"/>
+      <g stroke="#FF5C26" stroke-width="5"><line x1="70" y1="291" x2="92" y2="309"/><line x1="92" y1="291" x2="70" y2="309"/></g>
+      <rect x="200" y="90" width="170" height="210" stroke="#3A4046" stroke-width="1.5"/>
+      <g stroke="#33363B" stroke-width="1.2"><line x1="200" y1="260" x2="370" y2="260"/><line x1="200" y1="220" x2="370" y2="220"/><line x1="200" y1="180" x2="370" y2="180"/><line x1="200" y1="140" x2="370" y2="140"/></g>
+      <rect x="200" y="56" width="170" height="34" stroke="#33363B" stroke-width="1.2" stroke-dasharray="4 6"/>
+      <g stroke="#3A4046" stroke-width="1.4">
+        <line x1="120" y1="300" x2="120" y2="50"/><line x1="134" y1="300" x2="134" y2="50"/>
+        <line x1="120" y1="100" x2="134" y2="128"/><line x1="134" y1="100" x2="120" y2="128"/>
+        <line x1="120" y1="170" x2="134" y2="198"/><line x1="134" y1="170" x2="120" y2="198"/>
+        <line x1="66" y1="50" x2="420" y2="50"/><line x1="127" y1="26" x2="127" y2="50"/><line x1="127" y1="26" x2="300" y2="50"/><line x1="127" y1="26" x2="66" y2="50"/>
+      </g>
+      <line x1="330" y1="50" x2="330" y2="112" stroke="#62666D" stroke-width="1.2"/>
+      <circle cx="330" cy="118" r="4" fill="#FF5C26"/>
+      <g stroke="#62666D" stroke-width="1.4"><line x1="470" y1="300" x2="460" y2="254"/><line x1="470" y1="300" x2="480" y2="254"/><line x1="470" y1="294" x2="470" y2="248"/></g>
+      <rect x="461" y="234" width="18" height="13" rx="3" stroke="#8A8F98" stroke-width="1.4"/>
+      <line x1="459" y1="238" x2="376" y2="156" stroke="#FF5C26" stroke-width="1.2" stroke-dasharray="2 6"/>
+      <circle cx="372" cy="152" r="3.4" fill="#FF5C26"/>
+    </svg>
+  </div>
+  <div class="sfoot"><span>ILLUSTRATION · MODE 01 — LINE ART</span><span style="margin-left:auto">18 / 22</span></div>
+</div>
+
+<div class="wrap sb-head" id="t7"><span class="num">SLD.07</span><h2>Illustrated — Line Isometry</h2><p>Architecture slide: each platform layer maps to a slab in the stack.</p></div>
+<div class="slide">
+  <div class="kick">PLATFORM · ARCHITECTURE</div>
+  <div class="demo" style="grid-template-columns:1fr 1fr">
+    <div>
+      <div class="display" style="font-size:clamp(26px,3.2vw,40px)">Three layers, one object</div>
+      <div style="margin-top:24px; display:flex; flex-direction:column; gap:14px; max-width:340px">
+        <div style="display:flex; gap:12px; align-items:baseline"><span style="font:500 10px/1 var(--font-mono); color:var(--text-3)">TOP</span><div><b style="font:560 14px/1.4 var(--font-ui); color:var(--text-1)">Field &amp; capture</b><p style="font:400 12.5px/1.6 var(--font-ui); color:var(--text-3)">Pour cards, inspections, scans.</p></div></div>
+        <div style="display:flex; gap:12px; align-items:baseline"><span style="font:500 10px/1 var(--font-mono); color:var(--intent-bright)">MID</span><div><b style="font:560 14px/1.4 var(--font-ui); color:var(--text-1)">Workflows &amp; holds</b><p style="font:400 12.5px/1.6 var(--font-ui); color:var(--text-3)">Where decisions gate the work — the level that glows.</p></div></div>
+        <div style="display:flex; gap:12px; align-items:baseline"><span style="font:500 10px/1 var(--font-mono); color:var(--text-3)">BASE</span><div><b style="font:560 14px/1.4 var(--font-ui); color:var(--text-1)">The register</b><p style="font:400 12.5px/1.6 var(--font-ui); color:var(--text-3)">Two million documents, audited.</p></div></div>
+      </div>
+    </div>
+    <svg width="100%" viewBox="0 0 480 330" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M90 240 L240 165 L390 240 L240 315 Z" stroke="#26282C" stroke-width="1.5"/>
+      <path d="M160 215 L240 175 L320 215 L240 255 Z" fill="#1A1B1E" stroke="#33363B" stroke-width="1.5"/>
+      <path d="M160 215 L240 255 L240 272 L160 232 Z" fill="#101214" stroke="#33363B" stroke-width="1.5"/>
+      <path d="M320 215 L240 255 L240 272 L320 232 Z" fill="#141517" stroke="#33363B" stroke-width="1.5"/>
+      <path d="M172 162 L240 128 L308 162 L240 196 Z" fill="rgba(255,92,38,0.13)" stroke="#FF5C26" stroke-width="1.5"/>
+      <path d="M172 162 L240 196 L240 211 L172 177 Z" fill="#141517" stroke="#FF5C26" stroke-width="1.2" stroke-opacity="0.5"/>
+      <path d="M308 162 L240 196 L240 211 L308 177 Z" fill="#141517" stroke="#FF5C26" stroke-width="1.2" stroke-opacity="0.5"/>
+      <path d="M184 112 L240 84 L296 112 L240 140 Z" fill="#1A1B1E" stroke="#33363B" stroke-width="1.5"/>
+      <path d="M184 112 L240 140 L240 155 L184 127 Z" fill="#101214" stroke="#33363B" stroke-width="1.5"/>
+      <path d="M296 112 L240 140 L240 155 L296 127 Z" fill="#141517" stroke="#33363B" stroke-width="1.5"/>
+      <path d="M198 40 L240 19 L282 40 L240 61 Z" stroke="#62666D" stroke-width="1.2" stroke-dasharray="4 5"/>
+      <circle cx="240" cy="40" r="3.6" fill="#FF5C26"/>
+      <line x1="240" y1="46" x2="240" y2="78" stroke="#FF5C26" stroke-width="1.1" stroke-dasharray="2 6"/>
+    </svg>
+  </div>
+  <div class="sfoot"><span>ILLUSTRATION · MODE 02 — LINE ISOMETRY</span><span style="margin-left:auto">19 / 22</span></div>
+</div>
+
+<div class="wrap sb-head" id="t8"><span class="num">SLD.08</span><h2>Illustrated — Filled Art</h2><p>Culture slide: filled silhouettes carry warmth; the cap owns the orange.</p></div>
+<div class="slide" style="align-items:center; text-align:center; justify-content:center">
+  <svg width="300" viewBox="0 0 220 150" fill="none" style="margin-bottom:34px">
+    <line x1="20" y1="122" x2="200" y2="122" stroke="#33363B" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M55 104 Q55 48 110 48 Q165 48 165 104 Z" fill="#FF5C26"/>
+    <path d="M98 48 Q98 38 110 38 Q122 38 122 48 L122 60 Q116 57 110 57 Q104 57 98 60 Z" fill="#FF7A4D"/>
+    <rect x="42" y="104" width="136" height="13" rx="6.5" fill="#FF5C26"/>
+    <path d="M84 58 Q78 76 78 104 M136 58 Q142 76 142 104" stroke="#C8431A" stroke-width="2" fill="none"/>
+  </svg>
+  <div class="display" style="font-size:clamp(28px,3.6vw,46px); max-width:700px">Ownership is worn, not assigned<span style="color:var(--intent)">.</span></div>
+  <p style="margin-top:16px; max-width:440px; font-size:14.5px; line-height:1.7">Every line we set, someone answers for. The product works the way the cap does.</p>
+  <div class="sfoot" style="width:100%"><span>ILLUSTRATION · MODE 03 — FILLED ART</span><span style="margin-left:auto">20 / 22</span></div>
+</div>
+
+<div class="wrap sb-head" id="t9"><span class="num">SLD.09</span><h2>Illustrated — Filled Isometry</h2><p>Roadmap slide: quarters pour slabs; the current one is solid orange.</p></div>
+<div class="slide">
+  <div class="kick">ROADMAP · FY26</div>
+  <div class="demo" style="grid-template-columns:1.05fr 0.95fr">
+    <svg width="100%" viewBox="0 0 480 330" fill="none">
+      <ellipse cx="240" cy="296" rx="150" ry="22" fill="#000000" opacity="0.35"/>
+      <path d="M90 250 L240 175 L390 250 L240 325 Z" fill="#101214"/>
+      <path d="M160 222 L240 182 L320 222 L240 262 Z" fill="#26282C"/>
+      <path d="M160 222 L240 262 L240 280 L160 240 Z" fill="#141517"/>
+      <path d="M320 222 L240 262 L240 280 L320 240 Z" fill="#1A1B1E"/>
+      <path d="M172 168 L240 134 L308 168 L240 202 Z" fill="#FF5C26"/>
+      <path d="M172 168 L240 202 L240 218 L172 184 Z" fill="#C8431A"/>
+      <path d="M308 168 L240 202 L240 218 L308 184 Z" fill="#E04E1F"/>
+      <path d="M184 118 L240 90 L296 118 L240 146 Z" fill="#26282C"/>
+      <path d="M184 118 L240 146 L240 161 L184 133 Z" fill="#141517"/>
+      <path d="M296 118 L240 146 L240 161 L296 133 Z" fill="#1A1B1E"/>
+      <path d="M204 42 L240 24 L276 42 L240 60 Z" fill="#1A1B1E"/>
+      <circle cx="240" cy="42" r="3.6" fill="#FF7A4D"/>
+    </svg>
+    <div>
+      <div class="display" style="font-size:clamp(24px,3vw,36px)">Poured by quarter</div>
+      <div style="margin-top:22px; display:flex; flex-direction:column; gap:13px; max-width:320px">
+        <div style="display:flex; gap:12px"><span style="font:500 10px/1.6 var(--font-mono); color:var(--text-3); width:24px">Q1</span><span style="font:400 13px/1.6 var(--font-ui); color:var(--text-3)">Register foundation — shipped</span></div>
+        <div style="display:flex; gap:12px"><span style="font:500 10px/1.6 var(--font-mono); color:var(--text-3); width:24px">Q2</span><span style="font:400 13px/1.6 var(--font-ui); color:var(--text-3)">Convert &amp; native docs — shipped</span></div>
+        <div style="display:flex; gap:12px"><span style="font:500 10px/1.6 var(--font-mono); color:var(--intent-bright); width:24px">Q3</span><span style="font:500 13px/1.6 var(--font-ui); color:var(--text-1)">Hold-point automation — pouring now</span></div>
+        <div style="display:flex; gap:12px"><span style="font:500 10px/1.6 var(--font-mono); color:var(--text-3); width:24px">Q4</span><span style="font:400 13px/1.6 var(--font-ui); color:var(--text-3)">Portfolio intelligence — formwork up</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="sfoot"><span>ILLUSTRATION · MODE 04 — FILLED ISOMETRY</span><span style="margin-left:auto">21 / 22</span></div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Asite — The Quiet Instrument</span>
+    <span>2026</span>
+  </div>
+</footer>
+<script>
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('.fnav a'))
+      .filter(function(l){ return l.getAttribute('href').indexOf('#') === 0; });
+    var map = links.map(function(l){ return [document.getElementById(l.getAttribute('href').slice(1)), l]; })
+      .filter(function(x){ return x[0]; });
+    if(!map.length) return;
+    function spy(){
+      var cur = map[0][1];
+      for (var i=0;i<map.length;i++){ if (map[i][0].getBoundingClientRect().top <= 130) cur = map[i][1]; }
+      links.forEach(function(l){ l.classList.toggle('on', l === cur); });
+    }
+    addEventListener('scroll', spy, {passive:true}); spy();
+  })();
+</script>
+</body>
+</html>

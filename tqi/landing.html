@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Build without limits</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg-0); color:var(--text-2); font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:rgba(255,92,38,0.30); color:#F7F8F8; }
+  .wrap { max-width:1140px; margin:0 auto; padding:0 var(--space-8); }
+  .m-body { fill:var(--mkb, #F7F8F8); } .m-arrow { fill:var(--mka, #FF5C26); }
+  .m-ink { --mkb:#F7F8F8; --mka:#F7F8F8; }
+  a { color:inherit; }
+
+  .display { font-family:var(--font-display); text-transform:uppercase; letter-spacing:0.015em; color:var(--text-1); }
+  .mono { font-family:var(--font-mono); }
+  .btn { display:inline-flex; align-items:center; gap:8px; font:560 13.5px/1 var(--font-ui); padding:11px 20px;
+    border-radius:var(--r-md); border:none; cursor:pointer; text-decoration:none; white-space:nowrap; }
+  .btn-primary { background:var(--intent); color:#fff; }
+  .btn-primary:hover { background:var(--intent-bright); }
+  .btn-secondary { background:var(--bg-3); color:var(--text-1); box-shadow:var(--inset); }
+  .btn-ghost { background:none; color:var(--text-2); }
+  .btn-ghost:hover { color:var(--text-1); }
+  .u-kbd { font:500 10.5px/1 var(--font-mono); color:var(--text-3); background:var(--bg-3); box-shadow:var(--inset);
+    border-radius:4px; padding:3px 6px; }
+
+  /* nav */
+  nav { position:sticky; top:0; z-index:50; background:rgba(8,9,10,0.82); backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+  nav .wrap { display:flex; align-items:center; gap:var(--space-2); height:60px; }
+  .nav-mark { display:flex; align-items:center; gap:10px; margin-right:var(--space-6); text-decoration:none; }
+  .nav-mark span { font:590 14.5px/1 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); }
+  nav .lnk { font:500 13px/1 var(--font-ui); color:var(--text-2); text-decoration:none; padding:8px 12px; border-radius:var(--r-sm); }
+  nav .lnk:hover { color:var(--text-1); background:var(--bg-2); }
+  nav .sp { margin-left:auto; display:flex; align-items:center; gap:10px; }
+  nav .login { font:500 13px/1 var(--font-ui); color:var(--text-2); text-decoration:none; padding:8px 12px; }
+  nav .login:hover { color:var(--text-1); }
+
+  /* hero */
+  .hero { position:relative; padding:120px 0 96px; background:var(--aurora), var(--bg-0); overflow:hidden; border-bottom:1px solid var(--border); }
+  .hero .beam { position:absolute; left:50%; top:0; width:1px; height:148px; background:linear-gradient(var(--intent), transparent); }
+  .hero .wrap { display:grid; grid-template-columns:1.15fr 0.85fr; gap:var(--space-12); align-items:center; }
+  .hero .eyebrow { display:inline-flex; align-items:center; gap:9px; font:500 11.5px/1 var(--font-mono); letter-spacing:0.14em;
+    color:var(--intent-bright); margin-bottom:22px; }
+  .hero .eyebrow i { width:6px; height:6px; border-radius:50%; background:var(--intent); }
+  .hero h1 { font:400 clamp(40px,4.8vw,62px)/1.04 var(--font-display); text-transform:uppercase; letter-spacing:0.02em; color:var(--text-1); }
+  .hero .sub { font:400 16px/1.7 var(--font-ui); color:var(--text-2); max-width:520px; margin-top:22px; }
+  .hero .cta { display:flex; gap:14px; align-items:center; margin-top:34px; }
+  .hero .meta { display:flex; gap:26px; margin-top:46px; font:500 10.5px/1.5 var(--font-mono); letter-spacing:0.09em; color:var(--text-3); }
+
+  /* hero register card */
+  .hcard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); overflow:hidden; position:relative; }
+  .hcard .hd { display:flex; align-items:center; gap:9px; padding:12px 16px; border-bottom:1px solid var(--border); }
+  .hcard .hd b { font:560 12.5px/1 var(--font-ui); color:var(--text-1); }
+  .hcard .hd span { margin-left:auto; font:400 10px/1 var(--font-mono); color:var(--text-3); }
+  .hrow { display:flex; align-items:center; gap:10px; padding:11px 16px; border-bottom:1px solid var(--border);
+    font:400 12.5px/1.4 var(--font-ui); color:var(--text-2); }
+  .hrow:last-child { border-bottom:none; }
+  .hrow .dot { width:8px; height:8px; border-radius:50%; flex:none; }
+  .hrow .rf { font:400 11px/1 var(--font-mono); color:var(--text-3); width:84px; flex:none; }
+  .hrow .t { color:var(--text-1); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hrow .tm { margin-left:auto; font:400 9.5px/1 var(--font-mono); color:var(--text-3); }
+  .hrow.sel { background:var(--intent-wash); }
+
+  /* sections */
+  section { padding:var(--space-24) 0; border-bottom:1px solid var(--border); }
+  .sec-eyebrow { font:500 11.5px/1 var(--font-mono); letter-spacing:0.14em; color:var(--intent-bright); margin-bottom:16px; }
+  section h2 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--text-1); max-width:640px; }
+  section .lead { font:400 15px/1.7 var(--font-ui); color:var(--text-2); max-width:560px; margin-top:14px; }
+
+  /* proof strip */
+  .proof { padding:var(--space-12) 0; border-bottom:1px solid var(--border); }
+  .proof .wrap { display:flex; flex-wrap:wrap; align-items:center; gap:18px 36px; }
+  .proof .n { font:500 12px/1.4 var(--font-mono); color:var(--text-1); white-space:nowrap; }
+  .proof span { font:560 14px/1 var(--font-ui); color:var(--text-3); white-space:nowrap; }
+
+  /* features */
+  .feat { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); margin-top:40px; }
+  .fcard { position:relative; background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-6); }
+  .fcard.flag { background:var(--bg-2); }
+  .fcard .cross { position:absolute; top:18px; right:18px; width:18px; height:18px; }
+  .fcard .cross::before, .fcard .cross::after { content:""; position:absolute; background:var(--intent); }
+  .fcard .cross::before { left:50%; top:0; bottom:0; width:1.5px; transform:translateX(-50%); }
+  .fcard .cross::after { top:50%; left:0; right:0; height:1.5px; transform:translateY(-50%); }
+  .fcard .ic { font-size:20px; color:var(--text-2); margin-bottom:18px; display:block; }
+  .fcard b { font:560 15px/1.4 var(--font-ui); color:var(--text-1); display:block; margin-bottom:8px; }
+  .fcard p { font:400 13px/1.65 var(--font-ui); color:var(--text-2); }
+  .fcard .mn { font:400 10px/1.5 var(--font-mono); letter-spacing:0.08em; color:var(--text-3); margin-top:16px; display:block; }
+  .addons { display:flex; flex-wrap:wrap; gap:8px; margin-top:var(--space-6); }
+  .addons span { font:500 11.5px/1 var(--font-ui); color:var(--text-2); background:var(--bg-2); box-shadow:var(--inset);
+    border-radius:999px; padding:7px 13px; }
+
+  /* showcase */
+  .show { display:grid; grid-template-columns:0.9fr 1.1fr; gap:var(--space-12); align-items:center; margin-top:40px; }
+  .show .frame { position:relative; }
+  .show .ann { position:absolute; left:-14px; top:54%; display:flex; align-items:center; gap:10px; transform:translateX(-100%); white-space:nowrap; }
+  .show .ann .lab { font:500 11px/1.4 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em; text-align:right; }
+  .show .ann .ln { width:54px; height:1px; background:var(--intent); }
+
+  /* numbers */
+  .nums { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-4); margin-top:40px; }
+  .num { padding:var(--space-6); background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); }
+  .num.hot { background:var(--intent-wash); box-shadow:var(--inset), 0 0 0 1px rgba(255,92,38,0.3); }
+  .num .v { font:590 34px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--text-1); }
+  .num .l { font:400 12px/1.6 var(--font-ui); color:var(--text-2); margin-top:10px; }
+  .num .s { font:400 9.5px/1.5 var(--font-mono); letter-spacing:0.08em; color:var(--text-3); margin-top:12px; display:block; }
+
+  /* case studies */
+  .cases { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); margin-top:40px; }
+  .case { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-8); position:relative; }
+  .case .tag { font:500 10px/1 var(--font-mono); letter-spacing:0.12em; color:var(--text-3); }
+  .case h3 { font:560 19px/1.35 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); margin:14px 0 10px; }
+  .case p { font:400 13px/1.7 var(--font-ui); color:var(--text-2); }
+  .case .who { display:flex; align-items:center; gap:10px; margin-top:22px; }
+  .case .who .ln { width:34px; height:1px; background:var(--intent); }
+  .case .who span { font:500 11px/1.4 var(--font-mono); letter-spacing:0.07em; color:var(--text-1); }
+
+  /* security band */
+  .sec-band { display:flex; align-items:center; gap:var(--space-8); background:var(--bg-1); border-radius:var(--r-lg);
+    box-shadow:var(--inset); padding:var(--space-8); margin-top:40px; }
+  .sec-band .shield { flex:none; width:54px; height:60px; }
+  .sec-band b { font:560 16px/1.45 var(--font-ui); color:var(--text-1); display:block; }
+  .sec-band p { font:400 12.5px/1.6 var(--font-ui); color:var(--text-2); margin-top:6px; max-width:520px; }
+  .sec-band .mn { margin-left:auto; font:400 10px/1.9 var(--font-mono); letter-spacing:0.09em; color:var(--text-3); text-align:right; }
+
+  /* CTA field */
+  .ctafield { background:var(--intent); border-bottom:none; }
+  .ctafield .wrap { text-align:center; }
+  .ctafield h2 { font:400 clamp(34px,4.4vw,56px)/1.06 var(--font-display); text-transform:uppercase; letter-spacing:0.02em; color:#16100C; max-width:none; }
+  .ctafield p { font:500 15px/1.6 var(--font-ui); color:rgba(22,16,12,0.78); max-width:480px; margin:18px auto 0; }
+  .ctafield .btn-ink { background:#16100C; color:#FFF; margin-top:32px; }
+  .ctafield .mn { font:500 10px/1.5 var(--font-mono); letter-spacing:0.1em; color:rgba(22,16,12,0.6); margin-top:26px; }
+
+  /* footer */
+  .stripeband { height:8px; background:repeating-linear-gradient(90deg, var(--intent) 0 64px, transparent 64px 65px),
+    linear-gradient(var(--intent), var(--intent)); background-blend-mode:normal; }
+  footer { background:var(--bg-1); }
+  footer .cols { display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr 1fr; gap:var(--space-8); padding:var(--space-12) 0 var(--space-8); }
+  footer .mn-h { font:500 10.5px/1 var(--font-mono); color:var(--text-3); letter-spacing:0.09em; margin-bottom:14px; }
+  footer .col a { display:block; font:500 12.5px/2 var(--font-ui); color:var(--text-2); text-decoration:none; }
+  footer .col a:hover { color:var(--text-1); }
+  footer .desc { font:400 12.5px/1.65 var(--font-ui); color:var(--text-3); max-width:240px; margin-top:14px; }
+  footer .legal { display:flex; gap:24px; padding:18px 0; border-top:1px solid var(--border);
+    font:500 10px/1.4 var(--font-mono); color:var(--text-3); letter-spacing:0.05em; }
+  footer .legal .r { margin-left:auto; }
+
+  .backlink { position:fixed; left:16px; bottom:16px; z-index:60; font:500 10px/1 var(--font-mono); letter-spacing:0.08em;
+    color:var(--text-3); background:rgba(19,20,22,0.85); backdrop-filter:blur(10px); box-shadow:var(--inset);
+    border-radius:999px; padding:8px 13px; text-decoration:none; }
+  .backlink:hover { color:var(--text-1); }
+
+  @media (max-width:980px){
+    .hero .wrap, .show, .cases { grid-template-columns:1fr; }
+    .feat, .nums { grid-template-columns:1fr 1fr; }
+    footer .cols { grid-template-columns:1fr 1fr; }
+    .show .ann { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-body" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-arrow" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="nav-mark" href="#top"><svg width="22" height="23" viewBox="0 0 377 396"><use href="#amark"/></svg><span>Asite</span></a>
+    <a class="lnk" href="#platform">Products</a>
+    <a class="lnk" href="#cases">Industries</a>
+    <a class="lnk" href="#cases">Insights</a>
+    <a class="lnk" href="#security">Company</a>
+    <span class="sp">
+      <a class="login" href="#cta">Log in</a>
+      <a class="btn btn-primary" href="#cta">Book a demo</a>
+    </span>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="beam"></div>
+  <div class="wrap">
+    <div>
+      <div class="eyebrow"><i></i>BUILD WITHOUT LIMITS</div>
+      <h1>One platform for everything you build.</h1>
+      <p class="sub">A comprehensive data platform for your asset and construction project data. Connect the design, build, and operational phases of your assets — and improve information management, insight, and profitability.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#cta">Book a demo</a>
+        <a class="btn btn-ghost" href="#platform">Explore the platform <span class="u-kbd">↵</span></a>
+      </div>
+      <div class="meta">
+        <span>DEFINING THE CDE CATEGORY SINCE 2001</span>
+        <span>84,000+ COMPANIES</span>
+        <span>ISO 19650</span>
+      </div>
+    </div>
+    <div class="hcard">
+      <div class="hd"><svg width="16" height="17" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C — Register</b><span>LIVE</span></div>
+      <div class="hrow"><span class="dot" style="background:var(--st-done)"></span><span class="rf">STR-DWG-0412</span><span class="t">Core wall reinforcement L24–L28</span><span class="tm">REV C03</span></div>
+      <div class="hrow sel"><span class="dot" style="background:var(--st-blocked)"></span><span class="rf">RFI-0847</span><span class="t">Cover clash at L26 — holds pour</span><span class="tm">2D OVER</span></div>
+      <div class="hrow"><span class="dot" style="background:var(--st-progress)"></span><span class="rf">MAT-019</span><span class="t">Type 2 coupler approval</span><span class="tm">WK 25</span></div>
+      <div class="hrow"><span class="dot" style="background:var(--st-review)"></span><span class="rf">TR-0291</span><span class="t">Arup reply filed from aMail</span><span class="tm">09:12</span></div>
+      <div class="hrow"><span class="dot" style="background:var(--st-backlog)"></span><span class="rf">ITP-044</span><span class="t">L25 rebar inspection scheduled</span><span class="tm">WK 25</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="proof">
+  <div class="wrap">
+    <span class="n">84,000+ COMPANIES BUILD ON ASITE</span>
+    <span>Laing O'Rourke</span><span>Skanska</span><span>Kier</span><span>Bouygues</span><span>Berkeley</span>
+    <span>Ferrovial</span><span>Transport for London</span><span>McLaren</span><span>Barratt</span><span>VolkerWessels</span>
+  </div>
+</div>
+
+<section id="platform">
+  <div class="wrap">
+    <div class="sec-eyebrow">THE PLATFORM</div>
+    <h2>Transform project risk into clarity and control</h2>
+    <p class="lead">Three instruments, one register. The cross marks the one your project stands on.</p>
+    <div class="feat">
+      <div class="fcard flag">
+        <div class="cross"></div>
+        <span class="ic">▦</span>
+        <b>Common Data Environment</b>
+        <p>A single source of truth for your information. Control project data in a standards-based collaborative platform with powerful workflows — built for Information Managers.</p>
+        <span class="mn">DEFINING THE CATEGORY SINCE 2001</span>
+      </div>
+      <div class="fcard">
+        <span class="ic">◳</span>
+        <b>Asite 3D Repo</b>
+        <p>BIM design coordination in the browser. Augment and interrogate your models through open, transparent collaborative working — on projects of every size.</p>
+        <span class="mn">OPEN STANDARDS · IN-BROWSER</span>
+      </div>
+      <div class="fcard">
+        <span class="ic">≡</span>
+        <b>Asite Playbook</b>
+        <p>The go-to tool for Information Managers: configure information delivery processes and schedules, and turn ISO 19650 into a practical delivery engine.</p>
+        <span class="mn">ISO 19650 · DELIVERY PLANS</span>
+      </div>
+    </div>
+    <div class="addons">
+      <span>Asite Field</span><span>Project Financials</span><span>Contract Management</span><span>aMail</span>
+      <span>aDrive</span><span>Marketplace · Bid Management</span><span>Procure to Pay</span><span>Permits</span>
+      <span>Supplier Performance</span><span>Sustainability</span><span>SafetiBase</span>
+    </div>
+  </div>
+</section>
+
+<section id="showcase">
+  <div class="wrap">
+    <div class="show">
+      <div>
+        <div class="sec-eyebrow">SINGLE SOURCE OF TRUTH</div>
+        <h2>Bring clarity to your projects</h2>
+        <p class="lead">Every drawing, RFI, approval, and email on one auditable register — a common view of the latest information, for every partner on the project. When something holds the work, it says so, in one place, in orange.</p>
+        <div class="cta" style="display:flex; gap:14px; margin-top:28px">
+          <a class="btn btn-secondary" href="#cases">See it on real projects</a>
+        </div>
+      </div>
+      <div class="frame">
+        <div class="ann"><span class="lab">ONE HOLD<br>NAMED</span><span class="ln"></span></div>
+        <div class="hcard">
+          <div class="hd"><svg width="16" height="17" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Workflows — Approvals</b><span>WK 24</span></div>
+          <div class="hrow"><span class="dot" style="background:var(--st-done)"></span><span class="rf">06-A-DR-0419</span><span class="t">L26 cover markup — distributed</span><span class="tm">09:14</span></div>
+          <div class="hrow sel"><span class="dot" style="background:var(--st-blocked)"></span><span class="rf">RFI-0847</span><span class="t">Awaiting QA counter-sign — releases P-1131</span><span class="tm">NOW</span></div>
+          <div class="hrow"><span class="dot" style="background:var(--st-progress)"></span><span class="rf">WF-22</span><span class="t">Coupler certs — batch 7 of 8 in review</span><span class="tm">TODAY</span></div>
+          <div class="hrow"><span class="dot" style="background:var(--st-backlog)"></span><span class="rf">ITP-044</span><span class="t">L25 rebar inspection — scheduled</span><span class="tm">WK 25</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="numbers">
+  <div class="wrap">
+    <div class="sec-eyebrow">PROVEN PROJECT DELIVERY AND CONTROLS</div>
+    <h2>The numbers are the argument</h2>
+    <div class="nums">
+      <div class="num hot"><div class="v">84,000+</div><div class="l">companies trust Asite with their project data</div><span class="s">AND COUNTING</span></div>
+      <div class="num"><div class="v">2001</div><div class="l">defining the CDE category since the beginning</div><span class="s">25 YEARS OF REGISTERS</span></div>
+      <div class="num"><div class="v">70%</div><div class="l">tendering cost saved by Laing O'Rourke on Heathrow T5 packages</div><span class="s">PACKAGES &gt; £10M</span></div>
+      <div class="num"><div class="v">1</div><div class="l">source of truth — every phase, every partner, every asset</div><span class="s">CONCEPT TO COMPLETION</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="wrap">
+    <div class="sec-eyebrow">CASE STUDIES</div>
+    <h2>Out in the wild, holding the line</h2>
+    <div class="cases">
+      <div class="case">
+        <span class="tag">CASE STUDY · INFRASTRUCTURE</span>
+        <h3>Helping rebuild New York's transit system</h3>
+        <p>New York's MTA needed private developers, public agencies, and utility companies to coordinate seamlessly — from permits to build within 200 feet of MTA property to complex joint development projects. A streamlined process was critical.</p>
+        <div class="who"><span class="ln"></span><span>METROPOLITAN TRANSPORTATION AUTHORITY</span></div>
+      </div>
+      <div class="case">
+        <span class="tag">CASE STUDY · AVIATION</span>
+        <h3>70% saved on T5 tendering packages</h3>
+        <p>Laing O'Rourke, first-tier civil engineering provider on BAA's Terminal 5, cut the cost of tendering two packages worth in excess of £10m by 70% — by running them through Asite.</p>
+        <div class="who"><span class="ln"></span><span>LAING O'ROURKE · HEATHROW TERMINAL 5</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="security">
+  <div class="wrap">
+    <div class="sec-eyebrow">WHY ASITE IS THE PREFERRED CDE</div>
+    <h2>Security and data privacy, by design and by default</h2>
+    <div class="sec-band">
+      <svg class="shield" viewBox="0 0 54 60" fill="none">
+        <path d="M27 2 L50 10 V28 C50 44 40 53 27 58 C14 53 4 44 4 28 V10 Z" stroke="var(--text-3)" stroke-width="1.5"/>
+        <path d="M18 29 L25 36 L37 22" stroke="var(--intent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <b>Your register is the project record. We treat it that way.</b>
+        <p>Standards-based information management with audited workflows, controlled distribution, and information that survives staff turnover, project end dates, and storage wipes.</p>
+      </div>
+      <span class="mn">ISO 19650 · ISO 27001<br>SOC 2 · CERTIFICATIONS ↗</span>
+    </div>
+  </div>
+</section>
+
+<section class="ctafield" id="cta">
+  <div class="wrap">
+    <h2>See the whole project.</h2>
+    <p>Book a product demo — see Asite in action on a register like yours, with your standards and your supply chain.</p>
+    <a class="btn btn-ink" href="#top">Book a demo</a>
+    <div class="mn">NO SHOUTING. JUST READINGS.</div>
+  </div>
+</section>
+
+<div class="stripeband"></div>
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div class="col">
+        <div style="display:flex; align-items:center; gap:10px"><svg width="24" height="25" viewBox="0 0 377 396"><use href="#amark"/></svg><span style="font:590 15px/1 var(--font-ui); color:var(--text-1)">Asite</span></div>
+        <p class="desc">The cloud collaboration system for seamless collaboration across disciplines — from concept to completion, and beyond.</p>
+      </div>
+      <div class="col"><div class="mn-h">PRODUCTS</div><a href="#platform">Common Data Environment</a><a href="#platform">Asite Field</a><a href="#platform">Project Financials</a><a href="#platform">Asite Playbook</a><a href="#platform">aMail</a><a href="#platform">3D Repo</a></div>
+      <div class="col"><div class="mn-h">COMPANY</div><a href="#security">About</a><a href="#security">Leadership</a><a href="#security">Awards</a><a href="#security">Offices</a><a href="#security">Careers</a></div>
+      <div class="col"><div class="mn-h">INSIGHTS</div><a href="#cases">Case studies</a><a href="#cases">Blog</a><a href="#cases">Webinars</a><a href="#cases">News</a><a href="#cases">Events</a></div>
+      <div class="col"><div class="mn-h">ECOSYSTEM</div><a href="#platform">Integrations</a><a href="#platform">Marketplace</a><a href="#platform">API guide</a><a href="#platform">Become a partner</a></div>
+    </div>
+    <div class="legal">
+      <span>© 2026 ASITE</span><span>PRIVACY</span><span>TERMS</span><span>CARBON REDUCTION PLAN</span>
+      <span class="r">REGISTERED · LONDON</span>
+    </div>
+  </div>
+</footer>
+
+<a class="backlink" href="web.html#w10">‹ BACK TO THE STYLE GUIDE</a>
+
+</body>
+</html>

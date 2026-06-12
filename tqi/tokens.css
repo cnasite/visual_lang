@@ -1,0 +1,131 @@
+/* ============================================================
+   ASITE — DIRECTION 02: THE QUIET INSTRUMENT
+   Visual language in the Linear idiom: a narrow monochrome
+   surface ramp, one rationed indigo signal, instrument-panel
+   density, and depth from borders & light — never from fills.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Cornerstone';
+  src: url('../fonts/Cornerstone.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+
+  /* ----------------------------------------------------------
+     1. SURFACES — a four-step ramp, cool and near-black.
+     Depth comes from 1px inset borders and soft shadows,
+     not from contrast between fills.
+     ---------------------------------------------------------- */
+  --bg-0: #08090A;              /* canvas                        */
+  --bg-1: #0F1011;              /* app chrome, sidebars          */
+  --bg-2: #141517;              /* cards, popovers               */
+  --bg-3: #1A1B1E;              /* hover, raised                 */
+  --bg-overlay: rgba(8, 9, 10, 0.6);
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --inset: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --shadow-pop: 0 16px 64px rgba(0, 0, 0, 0.55);
+
+  /* ----------------------------------------------------------
+     2. TEXT — three steps, cool grays. Hierarchy by value,
+     never by weight alone.
+     ---------------------------------------------------------- */
+  --text-1: #F7F8F8;            /* primary                       */
+  --text-2: #8A8F98;            /* secondary                     */
+  --text-3: #62666D;            /* tertiary, placeholders        */
+
+  /* ----------------------------------------------------------
+     3. THE INTENT — Survey Orange.
+     One chromatic accent, rationed to a single primary action
+     or focus per screen. It is the color of decisions on site:
+     setting-out marks, the surveyor's cap, the live beam.
+     Everything else stays monochrome.
+     ---------------------------------------------------------- */
+  --intent: #FF5C26;
+  --intent-bright: #FF7A4D;     /* hover, links on dark          */
+  --intent-wash: rgba(255, 92, 38, 0.13);
+  --intent-glow: 0 0 0 1px rgba(255, 92, 38, 0.4), 0 0 24px rgba(255, 92, 38, 0.22);
+
+  /* Ember — the only gradient in the system. Hero fields only. */
+  --aurora:
+    radial-gradient(640px 320px at 18% 0%, rgba(255, 92, 38, 0.10), transparent 65%),
+    radial-gradient(560px 300px at 78% 8%, rgba(255, 122, 77, 0.06), transparent 60%),
+    radial-gradient(800px 420px at 50% -10%, rgba(200, 67, 26, 0.08), transparent 70%);
+
+  /* ----------------------------------------------------------
+     4. STATUS — desaturated, dot-first.
+     Status is a 8px dot + plain text, never a filled pill.
+     ---------------------------------------------------------- */
+  --st-done: #4CB782;
+  --st-progress: #D4A444;
+  --st-blocked: #EB6E6E;
+  --st-review: #7FA3BC;
+  --st-backlog: #62666D;
+
+  /* ----------------------------------------------------------
+     5. TYPE — Cornerstone for large titles only: a blocky,
+     load-bearing display face used at hero scale and on slide
+     titles. Inter Variable carries headings, subheadings, and
+     body — instrument-panel density, medium weights, tight
+     tracking. JetBrains Mono for engineering alphanumerics.
+     ---------------------------------------------------------- */
+  --font-display: 'Cornerstone', 'Inter', sans-serif;
+  --font-ui: 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+  --text-display: 400 clamp(38px, 4.6vw, 58px)/1.1 var(--font-display);
+  --text-h1:      590 34px/1.15 var(--font-ui);
+  --text-h2:      560 22px/1.25 var(--font-ui);
+  --text-h3:      560 16px/1.35 var(--font-ui);
+  --text-body:    400 15px/1.6  var(--font-ui);
+  --text-small:   400 13px/1.55 var(--font-ui);
+  --text-micro:   500 11px/1.4  var(--font-ui);
+  --text-mono:    400 12.5px/1.5 var(--font-mono);
+
+  --track-display: 0.015em;     /* Cornerstone breathes slightly */
+  --track-h: -0.012em;
+  --track-micro: 0.02em;
+
+  /* ----------------------------------------------------------
+     6. GEOMETRY — soft, machined-plastic radii. Nothing sharp.
+     ---------------------------------------------------------- */
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-6: 24px; --space-8: 32px; --space-12: 48px; --space-16: 64px;
+  --space-24: 96px;
+
+  /* ----------------------------------------------------------
+     7. MOTION — instant, weightless, 50–150ms. Fade + 2px rise.
+     ---------------------------------------------------------- */
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --t-fast: 80ms;
+  --t-base: 140ms;
+}
+
+/* ---------------- utilities ---------------- */
+
+.u-card {
+  background: var(--bg-2);
+  border-radius: var(--r-md);
+  box-shadow: var(--inset), var(--shadow-card);
+}
+
+.u-kbd {
+  font: 500 11px/1 var(--font-ui);
+  color: var(--text-2);
+  background: var(--bg-3);
+  border-radius: 4px;
+  box-shadow: var(--inset);
+  padding: 3px 6px;
+}
+
+.u-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }

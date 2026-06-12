@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Web Sections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg-0); color:var(--text-2); font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:rgba(255,92,38,0.30); color:#F7F8F8; }
+  .wrap { max-width:1100px; margin:0 auto; padding:0 var(--space-8); }
+  .m-body { fill:var(--mkb, #F7F8F8); } .m-arrow { fill:var(--mka, #FF5C26); }
+  .m-ink { --mkb:#F7F8F8; --mka:#F7F8F8; }  /* on orange: all white */
+
+  nav { position:sticky; top:0; z-index:50; background:rgba(8,9,10,0.8); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+  nav .wrap { display:flex; align-items:center; gap:var(--space-2); height:56px; }
+  .nav-mark { display:flex; align-items:center; gap:10px; margin-right:var(--space-6); text-decoration:none; }
+  .nav-mark span { font:590 14px/1 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); }
+  .ntab { font:500 12.5px/1 var(--font-ui); color:var(--text-2); text-decoration:none; padding:7px 12px;
+    border-radius:var(--r-sm); transition:background var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+  .ntab:hover { color:var(--text-1); background:var(--bg-2); }
+  .ntab.on { background:var(--intent-wash); color:var(--text-1); }
+  .nspacer { margin-left:auto; }
+
+  /* floating on-page nav */
+  .fnav { position:fixed; top:50%; right:18px; transform:translateY(-50%); z-index:60;
+    display:flex; flex-direction:column; gap:1px; padding:9px 7px; max-height:80vh; overflow:auto;
+    background:rgba(19,20,22,0.80); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border-radius:var(--r-lg); box-shadow:var(--inset), 0 16px 40px rgba(0,0,0,0.45); }
+  .fnav .fcap { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); padding:2px 9px 7px; }
+  .fnav a { display:flex; align-items:center; gap:8px; font:450 11.5px/1 var(--font-ui); color:var(--text-2);
+    text-decoration:none; padding:5px 9px; border-radius:var(--r-sm); white-space:nowrap;
+    transition:background var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+  .fnav a::before { content:""; width:3px; height:3px; border-radius:50%; background:var(--text-3); flex:none; }
+  .fnav a:hover { color:var(--text-1); background:var(--bg-3); }
+  .fnav a.on { color:var(--text-1); background:var(--intent-wash); }
+  .fnav a.on::before { background:var(--intent-bright); }
+  @media (max-width:1320px){ .fnav{ display:none; } }
+
+  .page-head { padding:var(--space-16) 0 var(--space-4); }
+  .idx { font:500 12px/1.4 var(--font-mono); color:var(--intent-bright); margin-bottom:var(--space-3); }
+  .page-head h1 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--text-1); }
+  .page-head p { max-width:640px; margin-top:var(--space-3); line-height:1.65; }
+
+  .sb-head { display:flex; align-items:baseline; gap:var(--space-4); padding:var(--space-12) 0 var(--space-6); }
+  .sb-head .num { font:500 12px/1.4 var(--font-mono); color:var(--text-3); }
+  .sb-head h2 { font:var(--text-h2); letter-spacing:var(--track-h); color:var(--text-1); }
+  .sb-head p { font:var(--text-small); color:var(--text-3); margin-left:auto; max-width:400px; text-align:right; }
+
+  .sec { width:min(1240px, calc(100vw - 48px)); position:relative; left:50%; transform:translateX(-50%);
+    border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); overflow:hidden; margin-bottom:56px; }
+  .display { font-family:var(--font-display); text-transform:uppercase; letter-spacing:0.015em; color:var(--text-1); }
+  .btn { font:560 13px/1 var(--font-ui); padding:11px 20px; border-radius:var(--r-md); border:none; cursor:pointer; text-decoration:none; display:inline-block; }
+  .btn-primary { background:var(--intent); color:#fff; }
+  .btn-secondary { background:var(--bg-3); color:var(--text-1); box-shadow:var(--inset); }
+  .prop { display:inline-flex; align-items:center; gap:7px; font:500 11.5px/1 var(--font-ui); color:var(--text-2);
+    background:var(--bg-2); box-shadow:var(--inset); border-radius:var(--r-sm); padding:5px 10px; }
+  .u-dot { width:8px; height:8px; }
+  .stripeband { background:repeating-linear-gradient(90deg, var(--intent) 0 26px, #F7F8F8 26px 52px); }
+  .mini { background:var(--bg-0); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); overflow:hidden; font-size:11px; }
+  .mini .mh { display:flex; gap:8px; align-items:center; padding:9px 14px; border-bottom:1px solid var(--border); font:560 11px/1 var(--font-ui); color:var(--text-1); }
+  .mini .row { display:grid; grid-template-columns:14px 88px 1fr auto; gap:12px; align-items:center; padding:9px 14px; border-bottom:1px solid var(--border); }
+  .mini .rf { font:400 10px/1 var(--font-mono); color:var(--text-3); }
+  .mini .tt { font:500 11px/1.4 var(--font-ui); color:var(--text-1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .mini .mm { font:400 9px/1 var(--font-mono); color:var(--text-3); }
+  .mini .sel { background:var(--intent-wash); }
+  .fcardw { background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset); padding:26px; }
+  .fcardw svg { stroke:var(--text-2); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+  .fcardw b { font:560 15px/1.4 var(--font-ui); color:var(--text-1); display:block; margin:14px 0 6px; }
+  .fcardw p { font:400 13px/1.6 var(--font-ui); color:var(--text-3); }
+
+  footer.page { border-top:1px solid var(--border); padding:var(--space-8) 0; margin-top:var(--space-8); }
+  footer.page .wrap { display:flex; justify-content:space-between; font:var(--text-small); color:var(--text-3); }
+  @media (max-width:880px){ .sb-head p{display:none;} .g2,.g3,.g4{grid-template-columns:1fr !important;} }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-body" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-arrow" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="nav-mark" href="index.html"><svg width="22" height="23" viewBox="0 0 377 396"><use href="#amark"/></svg><span>Asite</span></a>
+    <a class="ntab" href="index.html">Language</a>
+    <a class="ntab" href="screens.html">Product</a>
+    <a class="ntab on" href="web.html">Website</a>
+    <a class="ntab" href="slides.html">Slides</a>
+    <span class="nspacer"></span>
+  </div>
+</nav>
+
+<aside class="fnav" aria-label="On this page">
+  <div class="fcap">On this page</div>
+  <a href="#w1">Heroes</a>
+  <a href="#w3">Proof strip</a>
+  <a href="#w4">Features</a>
+  <a href="#w5">Showcase</a>
+  <a href="#w6">Numbers</a>
+  <a href="#w7">Quote</a>
+  <a href="#w8">CTA</a>
+  <a href="#w9">Footer</a>
+  <a href="#w10">See it live</a>
+</aside>
+
+<div class="wrap page-head">
+  <div class="idx">The Quiet Instrument · Web</div>
+  <h1>Website sections</h1>
+  <p>Nine standalone sections, not one site — each shows a motif at work: the Beam points, the Cross marks, the Metre Band edges, the Wash selects. Orange still appears once per section, unless the section is the orange.</p>
+</div>
+
+<!-- W1 HERO -->
+<div class="wrap sb-head" id="w1"><span class="num">SEC.01</span><h2>Hero — The Beam</h2><p>Cornerstone statement, ember aurora, and the Beam motif leading the eye straight into the primary action.</p></div>
+<div class="sec" style="background:var(--aurora), var(--bg-0); padding:84px 72px 72px">
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:48px">
+    <svg width="24" height="25" viewBox="0 0 377 396"><use href="#amark"/></svg>
+    <span style="font:590 14px/1 var(--font-ui); color:var(--text-1)">Asite</span>
+    <span style="margin-left:auto; display:flex; gap:24px; font:500 12.5px/1 var(--font-ui); color:var(--text-2)"><span>Platform</span><span>Industries</span><span>Pricing</span><span style="color:var(--text-1)">Log in</span></span>
+  </div>
+  <div class="display" style="font-size:clamp(36px,5vw,64px); line-height:1.08; max-width:760px">Two million documents.<br>One source of truth<span style="color:var(--intent)">.</span></div>
+  <p style="margin-top:22px; max-width:520px; font-size:16px; line-height:1.65">The common data environment for teams who build heavy things. Versioned, auditable, and fast enough for site time.</p>
+  <div style="display:flex; align-items:center; gap:18px; margin-top:36px">
+    <svg width="150" height="24" viewBox="0 0 150 24"><line x1="0" y1="12" x2="118" y2="12" stroke="#62666D" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round"/><circle cx="136" cy="12" r="5" fill="#FF5C26"/><circle cx="136" cy="12" r="11" fill="none" stroke="#FF5C26" stroke-opacity="0.3" stroke-width="1.5"/></svg>
+    <a class="btn btn-primary" href="#w1">Book a demo</a>
+    <a class="btn btn-secondary" href="#w1">See the platform</a>
+  </div>
+  <div style="display:flex; gap:40px; margin-top:56px; font:500 11px/1.5 var(--font-mono); color:var(--text-3); letter-spacing:0.04em">
+    <span>84,000+ COMPANIES</span><span>ISO 19650</span><span>SINCE 2001</span>
+  </div>
+</div>
+
+<!-- W1B HERO ILLUSTRATION / COLUMN GRID -->
+<div class="wrap sb-head" id="w1b"><span class="num">SEC.01B</span><h2>Hero — Expressive Illustration · Column Grid</h2><p>The site drawn in the icon grammar: crane, dashed future floors, the instrument taking its point. Asymmetric two-column grid.</p></div>
+<div class="sec" style="background:var(--aurora), var(--bg-0); display:grid; grid-template-columns:1fr 1.1fr; gap:24px; padding:72px; align-items:center">
+  <div>
+    <span style="font:500 11px/1 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em">THE COMMON DATA ENVIRONMENT</span>
+    <div class="display" style="font-size:clamp(30px,3.8vw,46px); margin-top:16px; line-height:1.1">Every level,<br>held to plan<span style="color:var(--intent)">.</span></div>
+    <p style="margin-top:18px; max-width:380px; font-size:15px; line-height:1.7">From the floors you've poured to the ones still dashed — one register holds the whole building, and the instrument never blinks.</p>
+    <div style="display:flex; gap:14px; margin-top:30px">
+      <a class="btn btn-primary" href="#w1b">Book a demo</a>
+      <a class="btn btn-secondary" href="#w1b">See how it works</a>
+    </div>
+    <div style="display:flex; gap:32px; margin-top:40px; font:500 10.5px/1.5 var(--font-mono); color:var(--text-3); letter-spacing:0.04em"><span>ISO 19650</span><span>±0.5MM</span><span>SINCE 2001</span></div>
+  </div>
+  <svg width="100%" viewBox="0 0 560 440" fill="none" stroke-linecap="round">
+    <!-- ground -->
+    <line x1="20" y1="400" x2="540" y2="400" stroke="#33363B" stroke-width="1.5"/>
+    <!-- setting-out cross -->
+    <g stroke="#FF5C26" stroke-width="5"><line x1="78" y1="390" x2="102" y2="410"/><line x1="102" y1="390" x2="78" y2="410"/></g>
+    <text x="68" y="428" font-family="JetBrains Mono, monospace" font-size="9" fill="#62666D">SO-114</text>
+    <!-- tower -->
+    <rect x="200" y="120" width="180" height="280" stroke="#3A4046" stroke-width="1.5"/>
+    <g stroke="#33363B" stroke-width="1.2">
+      <line x1="200" y1="360" x2="380" y2="360"/><line x1="200" y1="320" x2="380" y2="320"/>
+      <line x1="200" y1="280" x2="380" y2="280"/><line x1="200" y1="240" x2="380" y2="240"/><line x1="200" y1="200" x2="380" y2="200"/>
+    </g>
+    <g stroke="#33363B" stroke-width="1.2" stroke-dasharray="4 6">
+      <line x1="200" y1="160" x2="380" y2="160"/>
+      <rect x="200" y="80" width="180" height="40"/>
+    </g>
+    <g stroke="#26282C" stroke-width="1"><line x1="260" y1="160" x2="260" y2="400"/><line x1="320" y1="160" x2="320" y2="400"/></g>
+    <text x="388" y="244" font-family="JetBrains Mono, monospace" font-size="9" fill="#62666D">L24</text>
+    <!-- crane -->
+    <g stroke="#3A4046" stroke-width="1.5">
+      <line x1="118" y1="400" x2="118" y2="70"/><line x1="134" y1="400" x2="134" y2="70"/>
+      <line x1="118" y1="100" x2="134" y2="130"/><line x1="134" y1="100" x2="118" y2="130"/>
+      <line x1="118" y1="170" x2="134" y2="200"/><line x1="134" y1="170" x2="118" y2="200"/>
+      <line x1="118" y1="240" x2="134" y2="270"/><line x1="134" y1="240" x2="118" y2="270"/>
+      <line x1="118" y1="310" x2="134" y2="340"/><line x1="134" y1="310" x2="118" y2="340"/>
+      <line x1="60" y1="70" x2="440" y2="70"/>
+      <line x1="126" y1="40" x2="126" y2="70"/>
+      <line x1="126" y1="40" x2="300" y2="70"/><line x1="126" y1="40" x2="60" y2="70"/>
+    </g>
+    <line x1="340" y1="70" x2="340" y2="142" stroke="#62666D" stroke-width="1.2"/>
+    <circle cx="340" cy="148" r="4.5" fill="#FF5C26"/>
+    <rect x="316" y="156" width="48" height="12" stroke="#62666D" stroke-width="1.2"/>
+    <!-- instrument + beam -->
+    <g stroke="#62666D" stroke-width="1.5"><line x1="470" y1="400" x2="458" y2="346"/><line x1="470" y1="400" x2="482" y2="346"/><line x1="470" y1="394" x2="470" y2="340"/></g>
+    <rect x="460" y="324" width="20" height="14" rx="3" stroke="#8A8F98" stroke-width="1.5"/>
+    <line x1="458" y1="328" x2="386" y2="206" stroke="#FF5C26" stroke-width="1.3" stroke-dasharray="2 6"/>
+    <circle cx="382" cy="200" r="3.5" fill="#FF5C26"/>
+  </svg>
+</div>
+
+<!-- W1C HERO ILLUSTRATION / CENTER STACK -->
+<div class="wrap sb-head" id="w1c"><span class="num">SEC.01C</span><h2>Hero — Expressive Illustration · Center Stack</h2><p>Same grammar as a skyline panorama; the copy stacks center-aligned above it.</p></div>
+<div class="sec" style="background:var(--aurora), var(--bg-0); padding:80px 72px 0; text-align:center">
+  <span style="font:500 11px/1 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em">BUILT FOR HEAVY THINGS</span>
+  <div class="display" style="font-size:clamp(34px,4.6vw,58px); margin:18px auto 0; max-width:760px; line-height:1.08">The whole site, one register<span style="color:var(--intent)">.</span></div>
+  <p style="margin:20px auto 0; max-width:480px; font-size:15.5px; line-height:1.7">Twelve projects, eighty-four thousand documents, and a single point of measurement.</p>
+  <div style="display:flex; gap:14px; margin-top:30px; justify-content:center">
+    <a class="btn btn-primary" href="#w1c">Book a demo</a>
+    <a class="btn btn-secondary" href="#w1c">Watch the film</a>
+  </div>
+  <svg width="100%" viewBox="0 0 980 300" fill="none" stroke-linecap="round" style="display:block; margin-top:44px">
+    <line x1="30" y1="260" x2="950" y2="260" stroke="#33363B" stroke-width="1.5"/>
+    <g stroke="#FF5C26" stroke-width="4.5"><line x1="80" y1="252" x2="100" y2="268"/><line x1="100" y1="252" x2="80" y2="268"/></g>
+    <!-- low block -->
+    <rect x="140" y="180" width="110" height="80" stroke="#3A4046" stroke-width="1.5"/>
+    <g stroke="#26282C" stroke-width="1"><line x1="140" y1="206" x2="250" y2="206"/><line x1="140" y1="232" x2="250" y2="232"/></g>
+    <!-- tall tower -->
+    <rect x="320" y="70" width="130" height="190" stroke="#3A4046" stroke-width="1.5"/>
+    <g stroke="#33363B" stroke-width="1.1"><line x1="320" y1="110" x2="450" y2="110"/><line x1="320" y1="150" x2="450" y2="150"/><line x1="320" y1="190" x2="450" y2="190"/><line x1="320" y1="225" x2="450" y2="225"/></g>
+    <rect x="320" y="34" width="130" height="36" stroke="#33363B" stroke-width="1.1" stroke-dasharray="4 6"/>
+    <!-- crane -->
+    <g stroke="#3A4046" stroke-width="1.4">
+      <line x1="498" y1="260" x2="498" y2="40"/><line x1="510" y1="260" x2="510" y2="40"/>
+      <line x1="498" y1="80" x2="510" y2="104"/><line x1="510" y1="80" x2="498" y2="104"/>
+      <line x1="498" y1="140" x2="510" y2="164"/><line x1="510" y1="140" x2="498" y2="164"/>
+      <line x1="498" y1="200" x2="510" y2="224"/><line x1="510" y1="200" x2="498" y2="224"/>
+      <line x1="446" y1="40" x2="700" y2="40"/><line x1="504" y1="16" x2="504" y2="40"/>
+      <line x1="504" y1="16" x2="620" y2="40"/><line x1="504" y1="16" x2="446" y2="40"/>
+    </g>
+    <line x1="586" y1="40" x2="586" y2="92" stroke="#62666D" stroke-width="1.1"/>
+    <circle cx="586" cy="98" r="4" fill="#FF5C26"/>
+    <!-- mid block -->
+    <rect x="640" y="140" width="120" height="120" stroke="#3A4046" stroke-width="1.5"/>
+    <g stroke="#26282C" stroke-width="1"><line x1="640" y1="172" x2="760" y2="172"/><line x1="640" y1="204" x2="760" y2="204"/><line x1="640" y1="232" x2="760" y2="232"/><line x1="680" y1="140" x2="680" y2="260"/><line x1="720" y1="140" x2="720" y2="260"/></g>
+    <!-- instrument right -->
+    <g stroke="#62666D" stroke-width="1.4"><line x1="880" y1="260" x2="870" y2="216"/><line x1="880" y1="260" x2="890" y2="216"/><line x1="880" y1="254" x2="880" y2="210"/></g>
+    <rect x="871" y="196" width="18" height="13" rx="3" stroke="#8A8F98" stroke-width="1.4"/>
+    <line x1="869" y1="200" x2="456" y2="76" stroke="#FF5C26" stroke-width="1.2" stroke-dasharray="2 6"/>
+    <circle cx="452" cy="74" r="3.5" fill="#FF5C26"/>
+  </svg>
+</div>
+
+<!-- W1D HERO ISOMETRIC / COLUMN GRID -->
+<div class="wrap sb-head" id="w1d"><span class="num">SEC.01D</span><h2>Hero — Isometric · Column Grid</h2><p>The register as a 3D object: poured slabs solid, the held level in orange, the data plane floating above with the beam taking its measure.</p></div>
+<div class="sec" style="background:var(--aurora), var(--bg-0); display:grid; grid-template-columns:1fr 1fr; gap:24px; padding:72px; align-items:center">
+  <div>
+    <span style="font:500 11px/1 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em">LIVE FROM THE REGISTER</span>
+    <div class="display" style="font-size:clamp(30px,3.8vw,46px); margin-top:16px; line-height:1.1">Your building,<br>as data<span style="color:var(--intent)">.</span></div>
+    <p style="margin-top:18px; max-width:380px; font-size:15px; line-height:1.7">Every slab maps to a workflow state. The level that's held glows once — and the plane above always knows why.</p>
+    <div style="display:flex; gap:14px; margin-top:30px">
+      <a class="btn btn-primary" href="#w1d">See your project in 3D</a>
+      <a class="btn btn-secondary" href="#w1d">Asite 3D Repo</a>
+    </div>
+  </div>
+  <svg width="100%" viewBox="0 0 560 460" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- base platform -->
+    <path d="M100 340 L280 250 L460 340 L280 430 Z" stroke="#26282C" stroke-width="1.5"/>
+    <!-- setting-out cross on platform -->
+    <g stroke="#FF5C26" stroke-width="4"><line x1="160" y1="356" x2="184" y2="368"/><line x1="184" y1="356" x2="160" y2="368"/></g>
+    <!-- slab 1 (bottom) -->
+    <path d="M180 310 L280 260 L380 310 L280 360 Z" fill="#1A1B1E" stroke="#33363B" stroke-width="1.5"/>
+    <path d="M180 310 L280 360 L280 378 L180 328 Z" fill="#101214" stroke="#33363B" stroke-width="1.5"/>
+    <path d="M380 310 L280 360 L280 378 L380 328 Z" fill="#141517" stroke="#33363B" stroke-width="1.5"/>
+    <!-- slab 2 (HOLD, orange) -->
+    <path d="M195 252 L280 210 L365 252 L280 294 Z" fill="rgba(255,92,38,0.13)" stroke="#FF5C26" stroke-width="1.5"/>
+    <path d="M195 252 L280 294 L280 310 L195 268 Z" fill="#141517" stroke="#FF5C26" stroke-width="1.2" stroke-opacity="0.5"/>
+    <path d="M365 252 L280 294 L280 310 L365 268 Z" fill="#141517" stroke="#FF5C26" stroke-width="1.2" stroke-opacity="0.5"/>
+    <!-- slab 3 (top) -->
+    <path d="M210 196 L280 161 L350 196 L280 231 Z" fill="#1A1B1E" stroke="#33363B" stroke-width="1.5"/>
+    <path d="M210 196 L280 231 L280 246 L210 211 Z" fill="#101214" stroke="#33363B" stroke-width="1.5"/>
+    <path d="M350 196 L280 231 L280 246 L350 211 Z" fill="#141517" stroke="#33363B" stroke-width="1.5"/>
+    <!-- floating data plane -->
+    <path d="M210 86 L280 51 L350 86 L280 121 Z" stroke="#62666D" stroke-width="1.3" stroke-dasharray="4 5"/>
+    <line x1="245" y1="68.5" x2="315" y2="103.5" stroke="#33363B" stroke-width="1" stroke-dasharray="3 5"/>
+    <line x1="315" y1="68.5" x2="245" y2="103.5" stroke="#33363B" stroke-width="1" stroke-dasharray="3 5"/>
+    <circle cx="280" cy="86" r="4" fill="#FF5C26"/>
+    <!-- beam down -->
+    <line x1="280" y1="92" x2="280" y2="155" stroke="#FF5C26" stroke-width="1.2" stroke-dasharray="2 6"/>
+    <!-- leader to hold label -->
+    <line x1="368" y1="252" x2="452" y2="222" stroke="#62666D" stroke-width="1.3" stroke-dasharray="2 6"/>
+    <circle cx="456" cy="220" r="3" fill="#FF5C26"/>
+    <text x="466" y="224" font-family="JetBrains Mono, monospace" font-size="10" fill="#8A8F98">HOLD · L24</text>
+    <!-- material cubes -->
+    <path d="M120 388 L150 373 L180 388 L150 403 Z" fill="#141517" stroke="#33363B" stroke-width="1.2"/>
+    <path d="M120 388 L150 403 L150 420 L120 405 Z" fill="#101214" stroke="#33363B" stroke-width="1.2"/>
+    <path d="M180 388 L150 403 L150 420 L180 405 Z" fill="#141517" stroke="#33363B" stroke-width="1.2"/>
+    <path d="M400 372 L424 360 L448 372 L424 384 Z" fill="#141517" stroke="#33363B" stroke-width="1.2"/>
+    <path d="M400 372 L424 384 L424 398 L400 386 Z" fill="#101214" stroke="#33363B" stroke-width="1.2"/>
+    <path d="M448 372 L424 384 L424 398 L448 386 Z" fill="#141517" stroke="#33363B" stroke-width="1.2"/>
+  </svg>
+</div>
+
+<!-- W1E HERO ISOMETRIC / CENTER STACK -->
+<div class="wrap sb-head" id="w1e"><span class="num">SEC.01E</span><h2>Hero — Isometric · Center Stack</h2><p>The same object, centered and monumental. Copy stacks above; the beam drops straight down the axis.</p></div>
+<div class="sec" style="background:var(--aurora), var(--bg-0); padding:80px 72px 24px; text-align:center">
+  <span style="font:500 11px/1 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em">ASITE 3D REPO</span>
+  <div class="display" style="font-size:clamp(34px,4.6vw,58px); margin:18px auto 0; max-width:720px; line-height:1.08">Coordinate in three dimensions<span style="color:var(--intent)">.</span></div>
+  <p style="margin:20px auto 0; max-width:460px; font-size:15.5px; line-height:1.7">BIM collaboration in the browser — clash, comment, and hold, on the model everyone sees.</p>
+  <div style="display:flex; gap:14px; margin-top:30px; justify-content:center">
+    <a class="btn btn-primary" href="#w1e">Open a sample model</a>
+  </div>
+  <svg width="640" viewBox="0 0 560 380" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block; margin:36px auto 0; max-width:100%">
+    <path d="M100 270 L280 180 L460 270 L280 360 Z" stroke="#26282C" stroke-width="1.5"/>
+    <path d="M180 240 L280 190 L380 240 L280 290 Z" fill="#1A1B1E" stroke="#33363B" stroke-width="1.5"/>
+    <path d="M180 240 L280 290 L280 308 L180 258 Z" fill="#101214" stroke="#33363B" stroke-width="1.5"/>
+    <path d="M380 240 L280 290 L280 308 L380 258 Z" fill="#141517" stroke="#33363B" stroke-width="1.5"/>
+    <path d="M195 184 L280 142 L365 184 L280 226 Z" fill="rgba(255,92,38,0.13)" stroke="#FF5C26" stroke-width="1.5"/>
+    <path d="M195 184 L280 226 L280 242 L195 200 Z" fill="#141517" stroke="#FF5C26" stroke-width="1.2" stroke-opacity="0.5"/>
+    <path d="M365 184 L280 226 L280 242 L365 200 Z" fill="#141517" stroke="#FF5C26" stroke-width="1.2" stroke-opacity="0.5"/>
+    <path d="M210 130 L280 95 L350 130 L280 165 Z" fill="#1A1B1E" stroke="#33363B" stroke-width="1.5"/>
+    <path d="M210 130 L280 165 L280 180 L210 145 Z" fill="#101214" stroke="#33363B" stroke-width="1.5"/>
+    <path d="M350 130 L280 165 L280 180 L350 145 Z" fill="#141517" stroke="#33363B" stroke-width="1.5"/>
+    <path d="M225 46 L280 18.5 L335 46 L280 73.5 Z" stroke="#62666D" stroke-width="1.3" stroke-dasharray="4 5"/>
+    <circle cx="280" cy="46" r="4" fill="#FF5C26"/>
+    <line x1="280" y1="52" x2="280" y2="90" stroke="#FF5C26" stroke-width="1.2" stroke-dasharray="2 6"/>
+    <line x1="368" y1="184" x2="446" y2="156" stroke="#62666D" stroke-width="1.3" stroke-dasharray="2 6"/>
+    <circle cx="450" cy="154" r="3" fill="#FF5C26"/>
+    <text x="460" y="158" font-family="JetBrains Mono, monospace" font-size="10" fill="#8A8F98">HOLD · L24</text>
+    <g stroke="#FF5C26" stroke-width="4"><line x1="150" y1="290" x2="172" y2="301"/><line x1="172" y1="290" x2="150" y2="301"/></g>
+  </svg>
+</div>
+
+<!-- W1F HERO FILLED ART / CENTER STACK -->
+<div class="wrap sb-head" id="w1f"><span class="num">SEC.01F</span><h2>Hero — Filled Art · Center Stack</h2><p>The warm one: silhouettes from the ramp, no strokes, the cap owning the orange. For culture and careers pages.</p></div>
+<div class="sec" style="background:var(--aurora), var(--bg-0); padding:80px 72px 0; text-align:center">
+  <span style="font:500 11px/1 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em">CAREERS · LIFE AT ASITE</span>
+  <div class="display" style="font-size:clamp(32px,4.4vw,56px); margin:18px auto 0; max-width:760px; line-height:1.1">Built by people who wear the orange<span style="color:var(--intent)">.</span></div>
+  <p style="margin:20px auto 0; max-width:460px; font-size:15.5px; line-height:1.7">We make the software that holds heavy things to plan — and we answer for our lines the way a surveyor does.</p>
+  <div style="display:flex; gap:14px; margin-top:30px; justify-content:center">
+    <a class="btn btn-primary" href="#w1f">Open roles</a>
+    <a class="btn btn-secondary" href="#w1f">Meet the team</a>
+  </div>
+  <svg width="100%" viewBox="0 0 980 270" fill="none" style="display:block; margin-top:44px">
+    <rect x="40" y="244" width="900" height="8" rx="4" fill="#1A1B1E"/>
+    <!-- filled buildings -->
+    <rect x="320" y="64" width="150" height="180" fill="#1A1B1E"/>
+    <rect x="320" y="64" width="150" height="13" fill="#26282C"/>
+    <rect x="350" y="98" width="22" height="10" fill="#101214"/><rect x="396" y="98" width="22" height="10" fill="#101214"/>
+    <rect x="350" y="134" width="22" height="10" fill="#101214"/><rect x="396" y="134" width="22" height="10" fill="#101214"/>
+    <rect x="350" y="170" width="22" height="10" fill="#101214"/><rect x="396" y="170" width="22" height="10" fill="#101214"/>
+    <rect x="170" y="156" width="100" height="88" fill="#141517"/>
+    <rect x="170" y="156" width="100" height="10" fill="#1F2125"/>
+    <rect x="650" y="120" width="120" height="124" fill="#141517"/>
+    <rect x="650" y="120" width="120" height="11" fill="#1F2125"/>
+    <rect x="676" y="148" width="20" height="9" fill="#101214"/><rect x="716" y="148" width="20" height="9" fill="#101214"/>
+    <rect x="676" y="180" width="20" height="9" fill="#101214"/><rect x="716" y="180" width="20" height="9" fill="#101214"/>
+    <!-- crane silhouette -->
+    <rect x="520" y="36" width="11" height="208" fill="#26282C"/>
+    <rect x="438" y="30" width="200" height="9" rx="4" fill="#26282C"/>
+    <rect x="618" y="39" width="22" height="17" fill="#1A1B1E"/>
+    <rect x="468" y="39" width="3" height="44" fill="#33363B"/>
+    <rect x="460" y="83" width="19" height="15" fill="#FF7A4D"/>
+    <!-- the cap, foreground -->
+    <path d="M84 222 Q84 184 122 184 Q160 184 160 222 Z" fill="#FF5C26"/>
+    <path d="M114 184 Q114 176 122 176 Q130 176 130 184 L130 192 Q126 190 122 190 Q118 190 114 192 Z" fill="#FF7A4D"/>
+    <rect x="74" y="222" width="96" height="10" rx="5" fill="#FF5C26"/>
+    <path d="M102 191 Q98 204 98 222 M142 191 Q146 204 146 222" stroke="#C8431A" stroke-width="2"/>
+    <circle cx="470" cy="160" r="3.5" fill="#F7F8F8"/>
+  </svg>
+</div>
+
+<!-- W1G HERO FILLED ISOMETRY / COLUMN GRID -->
+<div class="wrap sb-head" id="w1g"><span class="num">SEC.01G</span><h2>Hero — Filled Isometry · Column Grid</h2><p>The monument: solid faces, no outlines, the held level in full orange. Launch-page energy.</p></div>
+<div class="sec" style="background:var(--aurora), var(--bg-0); display:grid; grid-template-columns:1fr 1fr; gap:24px; padding:72px; align-items:center">
+  <div>
+    <span style="font:500 11px/1 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em">LAUNCH · HOLD-POINT AUTOMATION</span>
+    <div class="display" style="font-size:clamp(30px,3.8vw,46px); margin-top:16px; line-height:1.1">Decisions,<br>cast in place<span style="color:var(--intent)">.</span></div>
+    <p style="margin-top:18px; max-width:380px; font-size:15px; line-height:1.7">Hold points now write themselves from your workflows — and lift the moment the answer lands. Solid, automatic, audited.</p>
+    <div style="display:flex; gap:14px; margin-top:30px">
+      <a class="btn btn-primary" href="#w1g">See it pour</a>
+      <a class="btn btn-secondary" href="#w1g">Read the launch notes</a>
+    </div>
+  </div>
+  <svg width="100%" viewBox="0 0 480 400" fill="none">
+    <ellipse cx="240" cy="350" rx="160" ry="24" fill="#000000" opacity="0.35"/>
+    <path d="M80 300 L240 220 L400 300 L240 380 Z" fill="#101214"/>
+    <path d="M150 268 L240 223 L330 268 L240 313 Z" fill="#26282C"/>
+    <path d="M150 268 L240 313 L240 333 L150 288 Z" fill="#141517"/>
+    <path d="M330 268 L240 313 L240 333 L330 288 Z" fill="#1A1B1E"/>
+    <path d="M164 206 L240 168 L316 206 L240 244 Z" fill="#FF5C26"/>
+    <path d="M164 206 L240 244 L240 262 L164 224 Z" fill="#C8431A"/>
+    <path d="M316 206 L240 244 L240 262 L316 224 Z" fill="#E04E1F"/>
+    <path d="M178 148 L240 117 L302 148 L240 179 Z" fill="#26282C"/>
+    <path d="M178 148 L240 179 L240 196 L178 165 Z" fill="#141517"/>
+    <path d="M302 148 L240 179 L240 196 L302 165 Z" fill="#1A1B1E"/>
+    <path d="M200 58 L240 38 L280 58 L240 78 Z" fill="#1A1B1E"/>
+    <circle cx="240" cy="58" r="4" fill="#FF7A4D"/>
+    <path d="M124 322 L150 309 L176 322 L150 335 Z" fill="#26282C"/>
+    <path d="M124 322 L150 335 L150 350 L124 337 Z" fill="#141517"/>
+    <path d="M176 322 L150 335 L150 350 L176 337 Z" fill="#1A1B1E"/>
+  </svg>
+</div>
+
+<!-- W2 HERO PRODUCT -->
+<div class="wrap sb-head" id="w2"><span class="num">SEC.02</span><h2>Hero — Product &amp; Metre Band</h2><p>The Metre Band edges the frame; the product is the image; the Wash shows the live selection inside it.</p></div>
+<div class="sec" style="background:var(--bg-1); display:grid; grid-template-columns:26px 1fr 1.05fr; min-height:420px" >
+  <div class="stripeband" style="background:repeating-linear-gradient(0deg, var(--intent) 0 26px, #F7F8F8 26px 52px)"></div>
+  <div style="padding:64px 48px; display:flex; flex-direction:column; justify-content:center">
+    <span style="font:500 11px/1 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em">CONVERT · NEW</span>
+    <div class="display" style="font-size:clamp(28px,3.4vw,42px); margin-top:14px">Paper, made native</div>
+    <p style="margin-top:16px; max-width:380px; font-size:14.5px; line-height:1.7">Briefs, forms, and site scans become editable, versioned documents — one orange ask when a human eye is needed.</p>
+    <div style="margin-top:26px"><a class="btn btn-primary" href="#w2">Try Convert</a></div>
+  </div>
+  <div style="display:flex; align-items:center; padding:48px 48px 48px 0">
+    <div class="mini" style="width:100%">
+      <div class="mh"><svg width="14" height="15" viewBox="0 0 377 396"><use href="#amark"/></svg>Convert — queue<span style="margin-left:auto; font:400 9px/1 var(--font-mono); color:var(--text-3)">3 ITEMS</span></div>
+      <div class="row"><i class="u-dot" style="background:var(--st-progress)"></i><span class="rf">BRIEF-PKG2</span><span class="tt">Subcontractor brief — groundworks</span><span class="mm">64%</span></div>
+      <div class="row sel"><i class="u-dot" style="background:var(--st-done)"></i><span class="rf">P-1119</span><span class="tt">Pour card (site scan, handwriting)</span><span class="mm">done ✓</span></div>
+      <div class="row" style="border-bottom:none"><i class="u-dot" style="background:var(--st-backlog)"></i><span class="rf">PERMIT-CR</span><span class="tt">Crane oversail application</span><span class="mm">queued</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- W3 PROOF STRIP -->
+<div class="wrap sb-head" id="w3"><span class="num">SEC.03</span><h2>Proof Strip</h2><p>Names in quiet gray; the count in mono. No logos shouting — the number does the work.</p></div>
+<div class="sec" style="background:var(--bg-0); border-top:1px solid var(--border); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:48px; padding:30px 72px; flex-wrap:wrap">
+  <span style="font:500 11px/1 var(--font-mono); color:var(--text-3); letter-spacing:0.05em">TRUSTED BY 84,000+ COMPANIES</span>
+  <span style="display:flex; gap:40px; flex-wrap:wrap; font:560 14px/1 var(--font-ui); color:var(--text-3); margin-left:auto">
+    <span>Laing O'Rourke</span><span>Skanska</span><span>Kier</span><span>TfL</span><span>Ferrovial</span><span>Berkeley</span>
+  </span>
+</div>
+
+<!-- W4 FEATURES -->
+<div class="wrap sb-head" id="w4"><span class="num">SEC.04</span><h2>Features — The Cross marks one</h2><p>Three quiet cards; the Setting-out Cross sits only on the flagship. One decision per section.</p></div>
+<div class="sec" style="background:var(--bg-0); padding:64px 72px">
+  <div class="display" style="font-size:28px; margin-bottom:40px">Built for the way sites work</div>
+  <div class="g3" style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px">
+    <div class="fcardw" style="position:relative">
+      <svg style="position:absolute; top:22px; right:22px" width="22" height="22" viewBox="0 0 20 20" stroke="#FF5C26" stroke-width="3.4" stroke-linecap="round"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg>
+      <svg width="26" height="26" viewBox="0 0 20 20"><path d="M4 3.5 H11 L16 8.5 V16.5 H4 Z"/><path d="M11 3.5 V8.5 H16"/></svg>
+      <b>Common Data Environment</b>
+      <p>Every drawing at revision, every action audited. The register that holds two million documents to tolerance.</p>
+    </div>
+    <div class="fcardw">
+      <svg width="26" height="26" viewBox="0 0 20 20"><path d="M4 7 H14 L11.5 4.5 M16 13 H6 L8.5 15.5"/></svg>
+      <b>Convert</b>
+      <p>Site paper becomes native, editable documents — with per-field confidence and full audit.</p>
+    </div>
+    <div class="fcardw">
+      <svg width="26" height="26" viewBox="0 0 20 20"><rect x="5.5" y="5.5" width="9" height="9" transform="rotate(45 10 10)"/></svg>
+      <b>Hold points</b>
+      <p>Decisions block exactly what they should — pours wait for answers, automatically.</p>
+    </div>
+  </div>
+</div>
+
+<!-- W5 SHOWCASE -->
+<div class="wrap sb-head" id="w5"><span class="num">SEC.05</span><h2>Showcase — The Beam annotates</h2><p>A live product frame with the Beam motif pointing at the row that matters.</p></div>
+<div class="sec" style="background:var(--aurora), var(--bg-1); padding:64px 72px">
+  <div style="display:flex; gap:18px; align-items:baseline; margin-bottom:36px">
+    <div class="display" style="font-size:26px">The queue knows the site</div>
+    <span style="font:400 13px/1.5 var(--font-ui); color:var(--text-3)">— sorted by impact, not by date.</span>
+  </div>
+  <div style="position:relative; max-width:880px; margin:0 auto">
+    <div class="mini">
+      <div class="mh"><svg width="14" height="15" viewBox="0 0 377 396"><use href="#amark"/></svg>Your queue<span style="margin-left:auto; font:400 9px/1 var(--font-mono); color:var(--text-3)">6 ITEMS</span></div>
+      <div class="row sel"><i class="u-dot" style="background:var(--st-blocked)"></i><span class="rf">RFI-0847</span><span class="tt">Respond — core wall cover clash L26</span><span class="mm">holds P-1131</span></div>
+      <div class="row"><i class="u-dot" style="background:var(--st-progress)"></i><span class="rf">STR-CAL-0098</span><span class="tt">Review — transfer beam load calc</span><span class="mm">due today</span></div>
+      <div class="row" style="border-bottom:none"><i class="u-dot" style="background:var(--st-review)"></i><span class="rf">TX-0204</span><span class="tt">Approve — transmittal to Arup</span><span class="mm">today</span></div>
+    </div>
+    <svg style="position:absolute; right:-10px; top:-34px" width="240" height="70" viewBox="0 0 240 70"><line x1="236" y1="8" x2="120" y2="8" stroke="#62666D" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round"/><line x1="120" y1="8" x2="84" y2="52" stroke="#62666D" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round"/><circle cx="78" cy="58" r="5" fill="#FF5C26"/></svg>
+    <span style="position:absolute; right:0; top:-46px; font:500 10.5px/1 var(--font-mono); color:var(--text-2)">THE ONE HOLDING CONCRETE</span>
+  </div>
+</div>
+
+<!-- W6 NUMBERS -->
+<div class="wrap sb-head" id="w6"><span class="num">SEC.06</span><h2>Numbers band</h2><p>Instrument-scale figures. The Wash highlights the number that is a promise, not a stat.</p></div>
+<div class="sec" style="background:var(--bg-0); border-top:1px solid var(--border); border-bottom:1px solid var(--border); display:grid; grid-template-columns:repeat(4,1fr); padding:48px 72px; gap:32px" class="g4">
+  <div><div style="font:590 40px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--text-1)">2001</div><div style="font:400 13px/1.5 var(--font-ui); color:var(--text-3); margin-top:8px">defining the CDE since</div></div>
+  <div><div style="font:590 40px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--text-1)">84k+</div><div style="font:400 13px/1.5 var(--font-ui); color:var(--text-3); margin-top:8px">companies on Asite</div></div>
+  <div><div style="font:590 40px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--text-1)">£2bn+</div><div style="font:400 13px/1.5 var(--font-ui); color:var(--text-3); margin-top:8px">programmes carried</div></div>
+  <div style="background:var(--intent-wash); border-radius:var(--r-md); padding:16px; margin:-16px 0"><div style="font:590 40px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--intent-bright)">0</div><div style="font:400 13px/1.5 var(--font-ui); color:var(--text-2); margin-top:8px">documents lost. Ever.</div></div>
+</div>
+
+<!-- W7 QUOTE -->
+<div class="wrap sb-head" id="w7"><span class="num">SEC.07</span><h2>Quote — The Beam attributes</h2><p>The testimonial ends where the Beam lands: on the person who said it.</p></div>
+<div class="sec" style="background:var(--bg-1); padding:72px; text-align:center">
+  <div class="display" style="font-size:clamp(22px,2.6vw,32px); max-width:780px; margin:0 auto; line-height:1.3">"The first platform that treats site time as sacred<span style="color:var(--intent)">.</span>"</div>
+  <svg width="200" height="26" viewBox="0 0 200 26" style="margin-top:28px"><line x1="20" y1="13" x2="160" y2="13" stroke="#62666D" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round"/><circle cx="178" cy="13" r="4.5" fill="#FF5C26"/></svg>
+  <div style="margin-top:14px; font:500 11px/1.7 var(--font-mono); color:var(--text-3); letter-spacing:0.05em">HEAD OF INFORMATION MANAGEMENT<br>TIER-1 CONTRACTOR · £2BN PROGRAMME</div>
+</div>
+
+<!-- W8 CTA ORANGE -->
+<div class="wrap sb-head" id="w8"><span class="num">SEC.08</span><h2>CTA — The Orange Field</h2><p>The one section where orange becomes the room. All-white mark, ink text, a single ink action.</p></div>
+<div class="sec" style="background:var(--intent); padding:72px; display:flex; align-items:center; gap:48px">
+  <svg class="m-ink" width="64" height="67" viewBox="0 0 377 396" style="flex:none"><use href="#amark"/></svg>
+  <div>
+    <div class="display" style="font-size:clamp(28px,3.6vw,44px); color:#1A0E08">Stop losing decisions<span style="color:#F7F8F8">.</span></div>
+    <p style="margin-top:12px; font:400 15px/1.6 var(--font-ui); color:rgba(26,14,8,0.75); max-width:440px">A 30-minute walkthrough with your own project structure. No slideware.</p>
+  </div>
+  <div style="margin-left:auto; display:flex; flex-direction:column; gap:12px; align-items:flex-end">
+    <a class="btn" style="background:#1A0E08; color:#F7F8F8; padding:14px 26px" href="#w8">Book a demo</a>
+    <span style="font:500 10px/1 var(--font-mono); color:rgba(26,14,8,0.6); letter-spacing:0.06em">NO CREDIT CARD · ISO 19650 READY</span>
+  </div>
+</div>
+
+<!-- W9 FOOTER -->
+<div class="wrap sb-head" id="w9"><span class="num">SEC.09</span><h2>Footer — The Metre Band closes</h2><p>The band runs the top edge — shared scale, end of page. Columns in working gray, legal in mono.</p></div>
+<div class="sec" style="background:var(--bg-1)">
+  <div class="stripeband" style="height:8px"></div>
+  <div class="g4" style="display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:32px; padding:56px 72px 40px">
+    <div>
+      <div style="display:flex; align-items:center; gap:10px"><svg width="24" height="25" viewBox="0 0 377 396"><use href="#amark"/></svg><span style="font:590 15px/1 var(--font-ui); color:var(--text-1)">Asite</span></div>
+      <p style="margin-top:14px; font:400 12.5px/1.65 var(--font-ui); color:var(--text-3); max-width:240px">The common data environment for teams who build heavy things.</p>
+    </div>
+    <div><div style="font:500 11px/1 var(--font-mono); color:var(--text-3); letter-spacing:0.08em; margin-bottom:14px">PLATFORM</div><div style="display:flex; flex-direction:column; gap:9px; font:500 13px/1.4 var(--font-ui); color:var(--text-2)"><span>CDE</span><span>Convert</span><span>Field</span><span>3D Repo</span></div></div>
+    <div><div style="font:500 11px/1 var(--font-mono); color:var(--text-3); letter-spacing:0.08em; margin-bottom:14px">COMPANY</div><div style="display:flex; flex-direction:column; gap:9px; font:500 13px/1.4 var(--font-ui); color:var(--text-2)"><span>About</span><span>Careers</span><span>Awards</span><span>Contact</span></div></div>
+    <div><div style="font:500 11px/1 var(--font-mono); color:var(--text-3); letter-spacing:0.08em; margin-bottom:14px">RESOURCES</div><div style="display:flex; flex-direction:column; gap:9px; font:500 13px/1.4 var(--font-ui); color:var(--text-2)"><span>Case studies</span><span>Blog</span><span>API guide</span><span>Support</span></div></div>
+  </div>
+  <div style="display:flex; gap:24px; padding:18px 72px; border-top:1px solid var(--border); font:500 10px/1.4 var(--font-mono); color:var(--text-3); letter-spacing:0.05em">
+    <span>© 2026 ASITE</span><span>PRIVACY</span><span>TERMS</span><span style="margin-left:auto">BUILT ON ONE SOURCE OF TRUTH</span>
+  </div>
+</div>
+
+
+<div class="wrap sb-head" id="w10"><span class="num">SEC.10</span><h2>See it live</h2><p>The full landing page, assembled from these sections with Asite's real content.</p></div>
+<div class="sec" style="background:radial-gradient(900px 360px at 50% 120%, rgba(255,92,38,0.14), transparent 65%), var(--bg-0); text-align:center; padding:96px 72px">
+  <div style="font:500 12px/1.4 var(--font-mono); color:var(--intent-bright); letter-spacing:0.14em">ASSEMBLED &amp; WORKING</div>
+  <div style="font:400 clamp(30px,4vw,52px)/1.1 var(--font-display); color:var(--text-1); text-transform:uppercase; letter-spacing:0.02em; margin-top:18px">See Asite in this language</div>
+  <p style="font:400 15px/1.7 var(--font-ui); color:var(--text-2); max-width:480px; margin:16px auto 0">Every motif on this page, doing its job on one live landing page — hero to footer, built from asite.com's own content.</p>
+  <div style="margin-top:32px"><a class="btn btn-primary" href="landing.html" style="padding:12px 24px; font-size:13.5px">Open the landing page ↗</a></div>
+</div>
+
+<footer class="page">
+  <div class="wrap">
+    <span>Asite — The Quiet Instrument</span>
+    <span>2026</span>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('.fnav a'))
+      .filter(function(l){ return l.getAttribute('href').indexOf('#') === 0; });
+    var map = links.map(function(l){ return [document.getElementById(l.getAttribute('href').slice(1)), l]; })
+      .filter(function(x){ return x[0]; });
+    if(!map.length) return;
+    function spy(){
+      var cur = map[0][1];
+      for (var i=0;i<map.length;i++){ if (map[i][0].getBoundingClientRect().top <= 130) cur = map[i][1]; }
+      links.forEach(function(l){ l.classList.toggle('on', l === cur); });
+    }
+    addEventListener('scroll', spy, {passive:true}); spy();
+  })();
+</script>
+</body>
+</html>
