@@ -5,10 +5,42 @@
    density, and depth from borders & light — never from fills.
    ============================================================ */
 
+/* Bundled fonts — self-contained so the repo renders identically on GitHub
+   without relying on locally-installed system fonts. */
 @font-face {
   font-family: 'Cornerstone';
-  src: url('../fonts/Cornerstone.ttf') format('truetype');
+  src: url('assets/fonts/Cornerstone.ttf') format('truetype');
   font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('assets/fonts/Inter-400.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('assets/fonts/Inter-500.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('assets/fonts/Inter-600.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('assets/fonts/JetBrainsMono-400.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('assets/fonts/JetBrainsMono-500.woff2') format('woff2');
+  font-weight: 500;
   font-display: swap;
 }
 
