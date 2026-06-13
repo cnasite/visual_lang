@@ -1,0 +1,101 @@
+/* ============================================================
+   ASITE — DIRECTION 05: SPLIT FIELD
+   Two planes, one seam. No borders, no shadows, no texture —
+   mass meets mass and the seam does the talking. Because a
+   seam has a position, it carries data: progress, splits, and
+   shares are all "how far the yellow travels."
+   ============================================================ */
+
+:root {
+
+  /* ----------------------------------------------------------
+     1. COLOR — four planes, three signals.
+     A color is either there or it isn't. No tints, no washes.
+     ---------------------------------------------------------- */
+  --yel: #FFC60A;             /* the field — claim, selection    */
+  --ink: #0E0D0A;             /* the mass — type, counter-plane  */
+  --paper: #FFFFFF;           /* the work                        */
+  --bone: #F4F0E4;            /* warm neutral plane              */
+
+  --ink-2: #16140F;           /* dark panel                      */
+  --ink-3: #2A2822;           /* dark hairline / track on ink    */
+  --grey-1: #55524A;          /* secondary text on light         */
+  --grey-2: #8F8B7E;          /* secondary text on dark          */
+  --grey-3: #A6A294;          /* tertiary / muted                */
+
+  --red: #E0301E;             /* hold / danger — solid only      */
+  --grn: #1E7A4A;             /* clear / pass — solid only       */
+  --blu: #1456B8;             /* mandatory / info — solid only   */
+
+  /* ----------------------------------------------------------
+     2. THE SEAM — the only ornament, and it isn't one.
+     A seam is where two planes meet. Give it a position and
+     it becomes a reading: progress, share, NOW.
+     ---------------------------------------------------------- */
+  --seam: 10px;               /* signature seam thickness        */
+  --seam-thin: 4px;
+  --seam-track: var(--ink);   /* bar track on light surfaces     */
+  --seam-track-dark: var(--ink-3);
+
+  /* ----------------------------------------------------------
+     3. EDGES — there are none.
+     Zero radius. Zero borders. Zero shadows. Separation is a
+     change of plane; emphasis is a change of mass.
+     ---------------------------------------------------------- */
+  --r: 0;
+
+  /* ----------------------------------------------------------
+     4. TYPE — weight does the talking.
+     Inter Black, set tight, sentence case. Mono is stencil
+     duty only: refs, stamps, coordinates.
+     ---------------------------------------------------------- */
+  --font-ui: 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --text-wall:    900 clamp(56px, 8vw, 132px)/0.92 var(--font-ui);
+  --text-display: 900 clamp(38px, 5vw, 72px)/0.95 var(--font-ui);
+  --text-h1:      900 36px/1.0  var(--font-ui);
+  --text-h2:      800 24px/1.1  var(--font-ui);
+  --text-h3:      800 17px/1.25 var(--font-ui);
+  --text-body:    500 15px/1.6  var(--font-ui);
+  --text-small:   500 13px/1.55 var(--font-ui);
+  --text-stencil: 500 11px/1.4  var(--font-mono);
+
+  --track-wall: -0.05em;
+  --track-display: -0.045em;
+  --track-h: -0.03em;
+  --track-stencil: 0.16em;
+
+  /* ----------------------------------------------------------
+     5. SPACE — planes breathe. 8px base, poster margins.
+     ---------------------------------------------------------- */
+  --s1: 8px;  --s2: 16px; --s3: 24px; --s4: 32px;
+  --s6: 48px; --s8: 64px; --s12: 96px; --s16: 128px;
+
+  /* ----------------------------------------------------------
+     6. MOTION — planes slide, they don't fade.
+     ---------------------------------------------------------- */
+  --t: 140ms;
+  --ease: cubic-bezier(0.6, 0, 0.2, 1);
+}
+
+/* ---------------- utilities ---------------- */
+
+.u-stencil {
+  font: var(--text-stencil);
+  letter-spacing: var(--track-stencil);
+  text-transform: uppercase;
+}
+
+/* seam-position bar: track + travel */
+.u-bar { height: var(--seam); background: var(--seam-track); }
+.u-bar > i { display: block; height: 100%; background: var(--yel); }
+
+/* solid block tag */
+.u-tag {
+  display: inline-block;
+  font: 700 10.5px/1 var(--font-ui);
+  padding: 4px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}

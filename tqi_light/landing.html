@@ -195,7 +195,7 @@
 
   /* case studies */
   .cases { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); margin-top:40px; }
-  .case { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-8); position:relative; }
+  .case { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); overflow:hidden; position:relative; }
   .case .tag { font:500 10px/1 var(--font-mono); letter-spacing:0.12em; color:var(--text-3); }
   .case h3 { font:560 19px/1.35 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); margin:14px 0 10px; }
   .case p { font:400 13px/1.7 var(--font-ui); color:var(--text-2); }
@@ -230,10 +230,41 @@
     font:500 10px/1.4 var(--font-mono); color:var(--text-3); letter-spacing:0.05em; }
   footer .legal .r { margin-left:auto; }
 
-  .backlink { position:fixed; left:16px; bottom:16px; z-index:60; font:500 10px/1 var(--font-mono); letter-spacing:0.08em;
+  .dock { position:fixed; left:16px; bottom:16px; z-index:60; display:flex; align-items:center; gap:8px; }
+  .backlink { font:500 10px/1 var(--font-mono); letter-spacing:0.08em;
     color:var(--text-3); background:rgba(255,255,255,0.88); backdrop-filter:blur(10px); box-shadow:var(--inset);
     border-radius:999px; padding:8px 13px; text-decoration:none; }
   .backlink:hover { color:var(--text-1); }
+  .themeswitch { display:inline-flex; align-items:center; gap:2px; background:rgba(255,255,255,0.88); backdrop-filter:blur(10px);
+    box-shadow:var(--inset); border-radius:999px; padding:3px; font:500 10px/1 var(--font-mono); letter-spacing:0.08em; }
+  .themeswitch a, .themeswitch span { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:999px;
+    color:var(--text-3); text-decoration:none; }
+  .themeswitch .ts-on { background:var(--intent); color:#fff; }
+  .themeswitch a:hover { color:var(--text-1); }
+
+  /* case study imagery */
+  .case-ph { position:relative; height:200px; overflow:hidden; }
+  .case-ph img { width:100%; height:100%; object-fit:cover; display:block;
+    filter:grayscale(1) contrast(1.04); transition:filter var(--t-base) var(--ease); }
+  .case:hover .case-ph img { filter:grayscale(0.3) contrast(1.04); }
+  .case-ph::after { content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, transparent 32%, var(--bg-1) 100%); }
+  .case-body { padding:var(--space-8); }
+
+  /* video — auto-playing image reel */
+  .vid .reel { position:absolute; inset:0; z-index:1; overflow:hidden; background:#0C0D0F; }
+  .vid .frame { position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    opacity:0; transform:scale(1.06); filter:grayscale(1) brightness(0.7) contrast(1.05);
+    transition:opacity 1.2s var(--ease); will-change:opacity, transform; }
+  .vid .frame.on { opacity:1; animation:kenburns 5.4s var(--ease) forwards; }
+  @keyframes kenburns { from { transform:scale(1.06); } to { transform:scale(1.16); } }
+  .vid .vgrad { position:absolute; inset:0; z-index:2; pointer-events:none;
+    background:radial-gradient(120% 92% at 50% 32%, transparent 42%, rgba(8,9,10,0.5) 100%),
+               linear-gradient(rgba(8,9,10,0.08), rgba(8,9,10,0.38)); }
+  .vid .play { z-index:3; border:none; padding:0; cursor:pointer; }
+  .vid.playing .play::after { width:6px; height:20px; margin:0; border:none; border-radius:1px;
+    background:#16100C; box-shadow:11px 0 0 #16100C; transform:translateX(-5px); }
+  @media (prefers-reduced-motion: reduce){ .vid .frame.on { animation:none; transform:scale(1.06); } }
 
   @media (max-width:980px){
     .hero .wrap, .cases, .mockband { grid-template-columns:1fr; }
@@ -382,6 +413,31 @@
     <span class="n">&amp; 84K+ COMPANIES THAT USE ASITE</span>
   </div>
 </div>
+
+<section id="video">
+  <div class="wrap">
+    <div class="sec-eyebrow">SEE IT WORK</div>
+    <h2>Two minutes on the register</h2>
+    <p class="lead">How a hold is found, named, answered from the inbox, and released — without one raised voice.</p>
+    <div class="vid" id="player">
+      <div class="stage">
+        <div class="reel">
+          <img class="frame on" src="https://images.unsplash.com/photo-1751808830304-51c95ed33b10?w=1200&q=70&auto=format&fit=crop" alt="Tower cranes against the sky" loading="lazy">
+          <img class="frame" src="https://images.unsplash.com/photo-1635712707475-6038e8bf5068?w=1200&q=70&auto=format&fit=crop" alt="Metro station infrastructure" loading="lazy">
+          <img class="frame" src="https://images.unsplash.com/photo-1762896498171-32c406e0144f?w=1200&q=70&auto=format&fit=crop" alt="City skyline under construction" loading="lazy">
+          <img class="frame" src="https://images.unsplash.com/photo-1684497404598-6e844dff9cde?w=1200&q=70&auto=format&fit=crop" alt="Construction site at dusk" loading="lazy">
+        </div>
+        <div class="vgrad"></div>
+        <button class="play" id="playToggle" type="button" aria-label="Play or pause the reel"></button>
+      </div>
+      <div class="bar">
+        <b>Watch: the register holds the line</b>
+        <span class="mn">02:14 · PRODUCT TOUR</span>
+        <span class="tl"><i id="vprog"></i></span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="platform">
   <div class="wrap">
@@ -532,46 +588,6 @@
   </div>
 </section>
 
-<section id="video">
-  <div class="wrap">
-    <div class="sec-eyebrow">SEE IT WORK</div>
-    <h2>Two minutes on the register</h2>
-    <p class="lead">How a hold is found, named, answered from the inbox, and released — without one raised voice.</p>
-    <div class="vid">
-      <div class="stage">
-        <!-- Filled Isometry poster: the register as a monument -->
-        <svg viewBox="0 0 960 450" fill="none" preserveAspectRatio="xMidYMid slice">
-          <g opacity="0.9">
-            <!-- base platform -->
-            <polygon points="480,328 700,218 480,108 260,218" fill="#FBFBFA"/>
-            <polygon points="480,328 700,218 700,238 480,348" fill="#FFFFFF"/>
-            <polygon points="480,328 260,218 260,238 480,348" fill="#EEEEEB"/>
-            <!-- slab 1 -->
-            <polygon points="480,288 630,213 480,138 330,213" fill="#E3E4E0"/>
-            <polygon points="480,288 630,213 630,229 480,304" fill="#EEEEEB"/>
-            <polygon points="480,288 330,213 330,229 480,304" fill="#CFD1CC"/>
-            <!-- slab 2 — the held level, washed orange -->
-            <polygon points="480,238 590,183 480,128 370,183" fill="#E8501C" opacity="0.85"/>
-            <polygon points="480,238 590,183 590,197 480,252" fill="#C8431A"/>
-            <polygon points="480,238 370,183 370,197 480,252" fill="#FF5C26" opacity="0.6"/>
-            <!-- slab 3 dashed: planned -->
-            <polygon points="480,178 550,143 480,108 410,143" stroke="#90949B" stroke-width="1.5" stroke-dasharray="5 5" fill="none"/>
-            <!-- live point -->
-            <circle cx="480" cy="84" r="4" fill="#E8501C"/>
-            <line x1="480" y1="88" x2="480" y2="108" stroke="#E8501C" stroke-width="1.2"/>
-          </g>
-        </svg>
-        <div class="play"></div>
-      </div>
-      <div class="bar">
-        <b>Watch: a clash becomes a record</b>
-        <span class="mn">02:14 · PRODUCT TOUR</span>
-        <span class="tl"><i></i></span>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section id="numbers">
   <div class="wrap">
     <div class="sec-eyebrow">PROVEN PROJECT DELIVERY AND CONTROLS</div>
@@ -591,16 +607,22 @@
     <h2>Out in the wild, holding the line</h2>
     <div class="cases">
       <div class="case">
-        <span class="tag">CASE STUDY · INFRASTRUCTURE</span>
-        <h3>Helping rebuild New York's transit system</h3>
-        <p>New York's MTA needed private developers, public agencies, and utility companies to coordinate seamlessly — from permits to build within 200 feet of MTA property to complex joint development projects. A streamlined process was critical.</p>
-        <div class="who"><span class="ln"></span><span>METROPOLITAN TRANSPORTATION AUTHORITY</span></div>
+        <div class="case-ph"><img src="https://images.unsplash.com/photo-1691435006749-c9485d527d44?w=1200&q=70&auto=format&fit=crop" alt="Transit tunnel infrastructure" loading="lazy"></div>
+        <div class="case-body">
+          <span class="tag">CASE STUDY · INFRASTRUCTURE</span>
+          <h3>Helping rebuild New York's transit system</h3>
+          <p>New York's MTA needed private developers, public agencies, and utility companies to coordinate seamlessly — from permits to build within 200 feet of MTA property to complex joint development projects. A streamlined process was critical.</p>
+          <div class="who"><span class="ln"></span><span>METROPOLITAN TRANSPORTATION AUTHORITY</span></div>
+        </div>
       </div>
       <div class="case">
-        <span class="tag">CASE STUDY · AVIATION</span>
-        <h3>70% saved on T5 tendering packages</h3>
-        <p>Laing O'Rourke, first-tier civil engineering provider on BAA's Terminal 5, cut the cost of tendering two packages worth in excess of £10m by 70% — by running them through Asite.</p>
-        <div class="who"><span class="ln"></span><span>LAING O'ROURKE · HEATHROW TERMINAL 5</span></div>
+        <div class="case-ph"><img src="https://images.unsplash.com/photo-1664190425588-a2c96bc61abb?w=1200&q=70&auto=format&fit=crop" alt="Airport terminal under construction" loading="lazy"></div>
+        <div class="case-body">
+          <span class="tag">CASE STUDY · AVIATION</span>
+          <h3>70% saved on T5 tendering packages</h3>
+          <p>Laing O'Rourke, first-tier civil engineering provider on BAA's Terminal 5, cut the cost of tendering two packages worth in excess of £10m by 70% — by running them through Asite.</p>
+          <div class="who"><span class="ln"></span><span>LAING O'ROURKE · HEATHROW TERMINAL 5</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -653,7 +675,32 @@
   </div>
 </footer>
 
-<a class="backlink" href="web.html#w10">‹ BACK TO THE STYLE GUIDE</a>
+<div class="dock">
+  <a class="backlink" href="web.html#w10">‹ BACK TO THE STYLE GUIDE</a>
+  <div class="themeswitch" role="group" aria-label="Theme">
+    <a href="../tqi/landing.html" aria-label="Switch to dark theme">● DARK</a>
+    <span class="ts-on">○ LIGHT</span>
+  </div>
+</div>
 
+<script>
+(function(){
+  var p=document.getElementById('player'); if(!p) return;
+  var frames=p.querySelectorAll('.frame'), prog=document.getElementById('vprog'), btn=document.getElementById('playToggle');
+  var i=0, n=frames.length, timer=null, dur=4200, playing=false;
+  var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function show(k){
+    for(var j=0;j<n;j++) frames[j].classList.toggle('on', j===k);
+    if(prog){ prog.style.transition='none'; prog.style.width='0%'; void prog.offsetWidth;
+      if(playing && !reduce){ prog.style.transition='width '+dur+'ms linear'; prog.style.width='100%'; } }
+  }
+  function step(){ i=(i+1)%n; show(i); }
+  function play(){ if(playing) return; playing=true; p.classList.add('playing'); show(i); timer=setInterval(step,dur); }
+  function pause(){ playing=false; p.classList.remove('playing'); if(timer){ clearInterval(timer); timer=null; }
+    if(prog){ var w=getComputedStyle(prog).width; prog.style.transition='none'; prog.style.width=w; } }
+  if(btn) btn.addEventListener('click', function(){ playing ? pause() : play(); });
+  show(0); if(!reduce) play();
+})();
+</script>
 </body>
 </html>

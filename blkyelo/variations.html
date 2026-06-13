@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Direction 05: Three Variations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family:'Cornerstone'; src:url('../fonts/Cornerstone.ttf') format('truetype'); font-display:swap; }
+  :root {
+    --yel:#FFC60A; --yel-dim:#8A6E00; --ink:#0E0D0A; --ink2:#161511; --ink3:#1F1E18;
+    --paper:#FFFFFF; --grey:#8F8B7E; --grey2:#55524A;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:#0A0908; color:#C9C5B8; font:400 15px/1.6 'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  ::selection { background:var(--yel); color:var(--ink); }
+  .wrap { max-width:1140px; margin:0 auto; padding:0 32px; }
+
+  nav { position:sticky; top:0; z-index:50; background:rgba(10,9,8,0.85); backdrop-filter:blur(16px); border-bottom:1px solid rgba(255,198,10,0.18); }
+  nav .wrap { display:flex; align-items:center; gap:24px; height:58px; }
+  nav b { font:700 12px/1 'JetBrains Mono',monospace; letter-spacing:0.16em; color:var(--yel); }
+  nav a { font:600 12px/1 'Inter',sans-serif; letter-spacing:0.04em; color:#8F8B7E; text-decoration:none; }
+  nav a:hover { color:#fff; }
+  .m-fill { fill:var(--mk, var(--yel)); }
+
+  .intro { padding:110px 0 70px; }
+  .intro h1 { font:800 clamp(34px,4.6vw,56px)/1.08 'Inter',sans-serif; letter-spacing:-0.02em; color:#F5F2E8; max-width:760px; }
+  .intro h1 em { font-style:normal; color:var(--yel); }
+  .intro p { max-width:600px; margin-top:18px; color:#8F8B7E; }
+
+  .vhead { display:flex; align-items:baseline; gap:18px; padding:84px 0 26px; }
+  .vhead .tag { font:700 11px/1 'JetBrains Mono',monospace; letter-spacing:0.2em; color:var(--yel); }
+  .vhead h2 { font:800 30px/1.1 'Inter',sans-serif; letter-spacing:-0.015em; color:#F5F2E8; }
+  .vhead p { margin-left:auto; max-width:380px; text-align:right; font-size:13px; color:#8F8B7E; }
+
+  .frame { width:min(1240px, calc(100vw - 48px)); position:relative; left:50%; transform:translateX(-50%);
+    overflow:hidden; margin-bottom:18px; border-radius:14px; }
+  .strip { width:min(1240px, calc(100vw - 48px)); position:relative; left:50%; transform:translateX(-50%);
+    display:grid; grid-template-columns:1.1fr 0.9fr 1fr; gap:14px; margin-bottom:30px; }
+  .cell { border-radius:14px; overflow:hidden; min-height:190px; padding:26px; }
+  .cell .lb { font:700 9.5px/1.4 'JetBrains Mono',monospace; letter-spacing:0.18em; }
+
+  /* ================= VAR A — NIGHT GALLERY ================= */
+  .va { background:#0C0B09; }
+  .va-hero { min-height:540px; display:flex; flex-direction:column; padding:54px 64px;
+    background:radial-gradient(900px 420px at 78% 110%, rgba(255,198,10,0.16), transparent 60%), #0C0B09; }
+  .va-nav { display:flex; align-items:center; gap:28px; }
+  .va-nav span { font:300 13.5px/1 'Inter',sans-serif; letter-spacing:0.02em; color:#8F8B7E; }
+  .va-nav .vword { font:400 16px/1 'Cornerstone',sans-serif; letter-spacing:0.12em; color:#F5F2E8; margin-right:auto; display:flex; align-items:center; gap:12px; }
+  .va-hero h3 { font:400 clamp(44px,6vw,84px)/1.04 'Cornerstone',sans-serif; letter-spacing:0.02em; color:#F5F2E8; margin-top:auto; text-transform:uppercase; }
+  .va-hero h3 em { font-style:normal; color:var(--yel); }
+  .va-hero .sub { margin-top:20px; max-width:460px; font:300 16px/1.7 'Inter',sans-serif; color:#A39F92; }
+  .va-rule { width:64px; height:1px; background:var(--yel); margin:26px 0; }
+  .va-cta { display:flex; gap:26px; align-items:center; }
+  .va-btn { font:500 13px/1 'Inter',sans-serif; letter-spacing:0.06em; color:var(--ink); background:var(--yel);
+    padding:14px 26px; border-radius:999px; text-decoration:none; }
+  .va-link { font:400 13px/1 'Inter',sans-serif; color:#C9C5B8; text-decoration:none; border-bottom:1px solid var(--yel); padding-bottom:4px; }
+
+  /* ================= VAR B — THE DATUM ================= */
+  .vb { background:#0E0D0A; }
+  .vb-hero { min-height:540px; position:relative; padding:54px 64px; display:flex; flex-direction:column;
+    background:
+      linear-gradient(rgba(255,198,10,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,198,10,0.05) 1px, transparent 1px),
+      #0E0D0A;
+    background-size:56px 56px; }
+  .vb-nav { display:flex; align-items:center; gap:24px; font:500 11px/1 'JetBrains Mono',monospace; letter-spacing:0.14em; color:#8F8B7E; }
+  .vb-nav .vword { margin-right:auto; display:flex; align-items:center; gap:12px; color:#F5F2E8; font-size:13px; letter-spacing:0.2em; }
+  .vb-hero h3 { font:500 clamp(34px,4.6vw,62px)/1.12 'Inter',sans-serif; letter-spacing:-0.022em; color:#F5F2E8; margin-top:auto; max-width:700px; }
+  .vb-hero h3 .dat { color:var(--yel); font-family:'JetBrains Mono',monospace; font-weight:400; font-size:0.62em; vertical-align:middle; letter-spacing:0; }
+  .vb-hero .sub { margin-top:18px; max-width:480px; font:400 15px/1.7 'Inter',sans-serif; color:#8F8B7E; }
+  .vb-datum { position:absolute; left:0; right:0; top:318px; height:1px; background:var(--yel); opacity:0.9; }
+  .vb-datum::before, .vb-datum::after { content:""; position:absolute; top:-4px; width:9px; height:9px; border:1px solid var(--yel); transform:rotate(45deg); background:#0E0D0A; }
+  .vb-datum::before { left:42px; } .vb-datum::after { right:42px; }
+  .vb-tick { position:absolute; font:400 10px/1 'JetBrains Mono',monospace; color:var(--yel); letter-spacing:0.1em; }
+  .vb-cta { display:flex; gap:14px; margin-top:26px; }
+  .vb-btn { font:500 12.5px/1 'JetBrains Mono',monospace; letter-spacing:0.08em; color:var(--ink); background:var(--yel); padding:13px 22px; text-decoration:none; }
+  .vb-btn2 { font:500 12.5px/1 'JetBrains Mono',monospace; letter-spacing:0.08em; color:var(--yel); border:1px solid rgba(255,198,10,0.4); padding:13px 22px; text-decoration:none; }
+
+  /* ================= VAR C — SPLIT FIELD ================= */
+  .vc-hero { min-height:540px; display:grid; grid-template-columns:1.15fr 0.85fr; }
+  .vc-l { background:var(--yel); padding:54px 56px; display:flex; flex-direction:column; color:var(--ink); }
+  .vc-r { background:var(--ink); padding:54px 56px; display:flex; flex-direction:column; justify-content:flex-end; }
+  .vc-nav { display:flex; gap:24px; align-items:center; font:600 13px/1 'Inter',sans-serif; }
+  .vc-nav .vword { font:900 17px/1 'Inter',sans-serif; letter-spacing:-0.03em; margin-right:auto; display:flex; align-items:center; gap:10px; }
+  .vc-l h3 { font:900 clamp(48px,6.6vw,96px)/0.95 'Inter',sans-serif; letter-spacing:-0.045em; margin-top:auto; }
+  .vc-l .sub { margin-top:22px; max-width:400px; font:500 16px/1.6 'Inter',sans-serif; }
+  .vc-cta { display:flex; gap:12px; margin-top:30px; }
+  .vc-btn { font:700 13.5px/1 'Inter',sans-serif; letter-spacing:-0.01em; background:var(--ink); color:var(--yel); padding:16px 28px; text-decoration:none; }
+  .vc-btn2 { font:700 13.5px/1 'Inter',sans-serif; background:none; color:var(--ink); padding:16px 0; text-decoration:underline; text-underline-offset:5px; text-decoration-thickness:2.5px; }
+  .vc-r .big { font:900 clamp(60px,8vw,120px)/0.9 'Inter',sans-serif; letter-spacing:-0.05em; color:var(--yel); }
+  .vc-r .cap { font:500 13px/1.6 'Inter',sans-serif; color:#8F8B7E; margin-top:14px; max-width:260px; }
+
+  .verdict { width:min(1240px, calc(100vw - 48px)); position:relative; left:50%; transform:translateX(-50%);
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:60px 0 90px; }
+  .vcard { border:1px solid rgba(255,198,10,0.2); border-radius:14px; padding:26px; }
+  .vcard b { color:#F5F2E8; font-weight:700; display:block; margin-bottom:8px; font-size:15px; }
+  .vcard b i { font-style:normal; color:var(--yel); font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; margin-right:10px; }
+  .vcard p { font-size:13px; color:#8F8B7E; line-height:1.65; }
+  @media (max-width:900px){ .strip,.verdict{grid-template-columns:1fr;} .vc-hero{grid-template-columns:1fr;} .vhead p{display:none;} }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-fill" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-fill" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <b>D05 · VARIATIONS</b>
+    <a href="#vb">B — The Datum</a>
+    <a href="#vc">C — Split Field</a>
+    <a href="datum.html" style="color:var(--yel)">Datum in the wild →</a>
+    <a href="splitfield.html" style="color:var(--yel)">Split Field in the wild →</a>
+    <span style="margin-left:auto"></span>
+    <a href="index.html">v0 draft ↗</a>
+    <a href="../direction-02/index.html">Dir 02 ↗</a>
+  </div>
+</nav>
+
+<div class="wrap intro">
+  <h1>Black and yellow, <em>two finalists.</em></h1>
+  <p>Night Gallery is retired. The Datum and Split Field remain — each now has a full field trip: web, product, slides, and the wild.</p>
+</div>
+
+<!-- ============ VAR B — THE DATUM ============ -->
+<div class="wrap vhead" id="vb"><span class="tag">VAR B</span><h2>The Datum</h2><p>Direction 02's instrument discipline, re-keyed to yellow. A survey datum line crosses everything; yellow is line-work, never fill.</p></div>
+<div class="frame vb">
+  <div class="vb-hero">
+    <div class="vb-nav">
+      <span class="vword"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg>ASITE</span>
+      <span>PLATFORM</span><span>INDUSTRIES</span><span style="color:var(--yel)">DEMO ↗</span>
+    </div>
+    <div class="vb-datum"></div>
+    <span class="vb-tick" style="top:300px; left:64px">DATUM +00.000</span>
+    <span class="vb-tick" style="top:300px; right:64px">WK 24</span>
+    <h3>Everything measured<br>from one line<span style="color:var(--yel)">.</span></h3>
+    <p class="sub">The common data environment as a survey instrument: every document, request, and pour referenced to a single datum.</p>
+    <div class="vb-cta">
+      <a class="vb-btn" href="#vb">BOOK A DEMO</a>
+      <a class="vb-btn2" href="#vb">SEE THE PLATFORM</a>
+    </div>
+  </div>
+</div>
+<div class="strip">
+  <div class="cell" style="background:#13110D">
+    <span class="lb" style="color:var(--yel)">TYPE</span>
+    <div style="font:500 30px/1.18 'Inter',sans-serif; letter-spacing:-0.02em; color:#F5F2E8; margin-top:16px">Heavy data,<br>held to <span style="border-bottom:1.5px solid var(--yel)">tolerance</span></div>
+    <div style="font:400 12px/1.6 'JetBrains Mono',monospace; color:#8F8B7E; margin-top:14px">INTER MEDIUM · MONO STENCILS · YELLOW = LINE</div>
+  </div>
+  <div class="cell" style="background:#13110D; display:flex; flex-direction:column; gap:12px">
+    <span class="lb" style="color:var(--yel)">CONTROLS</span>
+    <a class="vb-btn" style="align-self:flex-start" href="#vb">PRIMARY</a>
+    <a class="vb-btn2" style="align-self:flex-start" href="#vb">SECONDARY</a>
+    <div style="margin-top:auto; font:400 11px/1.6 'JetBrains Mono',monospace; color:#8F8B7E">SQUARE · QUIET · CROSSHAIR FOCUS</div>
+  </div>
+  <div class="cell" style="background:#13110D; display:flex; flex-direction:column">
+    <span class="lb" style="color:var(--yel)">PRODUCT ROW</span>
+    <div style="margin-top:auto">
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid rgba(255,198,10,0.5)">
+        <span style="font:400 11px/1 'JetBrains Mono',monospace; color:var(--yel)">RFI-0847</span>
+        <span style="font:400 13px/1 'Inter',sans-serif; color:#F5F2E8">Core wall cover clash L26</span>
+        <span style="font:400 10px/1 'JetBrains Mono',monospace; color:#8F8B7E">2D OVER</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid rgba(255,198,10,0.15)">
+        <span style="font:400 11px/1 'JetBrains Mono',monospace; color:#55524A">P-1128</span>
+        <span style="font:400 13px/1 'Inter',sans-serif; color:#8F8B7E">Pour card — L24 core</span>
+        <span style="font:400 10px/1 'JetBrains Mono',monospace; color:#55524A">FRI</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ VAR C — SPLIT FIELD ============ -->
+<div class="wrap vhead" id="vc"><span class="tag">VAR C</span><h2>Split Field</h2><p>Swiss modernism, two planes meeting at a seam. No borders, no shadows, no texture — just mass, type set heavy and tight, and the seam doing all the work.</p></div>
+<div class="frame vc-hero">
+  <div class="vc-l">
+    <div class="vc-nav">
+      <span class="vword"><svg width="22" height="23" viewBox="0 0 377 396" style="--mk:var(--ink)"><use href="#amark"/></svg>Asite</span>
+      <span>Platform</span><span>Industries</span>
+    </div>
+    <h3>One source<br>of truth.</h3>
+    <p class="sub">Built for the people who build. Two million documents, zero ambiguity.</p>
+    <div class="vc-cta">
+      <a class="vc-btn" href="#vc">Book a demo</a>
+      <a class="vc-btn2" href="#vc">See pricing</a>
+    </div>
+  </div>
+  <div class="vc-r">
+    <div class="big">98.4%</div>
+    <p class="cap">register health across twelve live programmes — measured, not promised.</p>
+    <div style="margin-top:34px; display:flex; flex-direction:column; gap:0">
+      <div style="display:flex; justify-content:space-between; padding:13px 0; border-top:1px solid #2A2822">
+        <span style="font:700 12px/1 'Inter',sans-serif; color:var(--yel)">RFI-0847</span>
+        <span style="font:500 13px/1 'Inter',sans-serif; color:#C9C5B8">Cover clash L26</span>
+        <span style="font:700 11px/1 'Inter',sans-serif; color:#fff; background:#E0301E; padding:3px 7px">HOLD</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:13px 0; border-top:1px solid #2A2822">
+        <span style="font:700 12px/1 'Inter',sans-serif; color:#8F8B7E">P-1128</span>
+        <span style="font:500 13px/1 'Inter',sans-serif; color:#8F8B7E">Pour card L24</span>
+        <span style="font:700 11px/1 'Inter',sans-serif; color:var(--ink); background:var(--yel); padding:3px 7px">FRI</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="strip">
+  <div class="cell" style="background:var(--yel); color:var(--ink)">
+    <span class="lb" style="color:var(--ink)">TYPE</span>
+    <div style="font:900 38px/0.98 'Inter',sans-serif; letter-spacing:-0.045em; margin-top:16px">Held to<br>tolerance.</div>
+    <div style="font:500 12.5px/1.6 'Inter',sans-serif; margin-top:12px">Inter Black, tight. Sentence case. No Cornerstone.</div>
+  </div>
+  <div class="cell" style="background:var(--ink); display:flex; flex-direction:column; gap:12px">
+    <span class="lb" style="color:var(--yel)">CONTROLS</span>
+    <a class="vc-btn" style="align-self:flex-start; background:var(--yel); color:var(--ink)" href="#vc">Primary</a>
+    <a class="vc-btn2" style="align-self:flex-start; color:var(--yel)" href="#vc">Underline action</a>
+    <div style="margin-top:auto; font:500 12px/1.6 'Inter',sans-serif; color:#8F8B7E">Flat planes · seams · zero chrome</div>
+  </div>
+  <div class="cell" style="background:var(--ink); padding:0; display:grid; grid-template-columns:1fr 1fr">
+    <div style="background:var(--yel)"></div>
+    <div style="padding:26px; display:flex; flex-direction:column">
+      <span class="lb" style="color:var(--yel)">THE SEAM</span>
+      <p style="font:500 12.5px/1.6 'Inter',sans-serif; color:#8F8B7E; margin-top:auto">Where two planes meet is the brand's signature line — used for splits, progress, and dividers.</p>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="verdict">
+  <div class="vcard"><b><i>VAR B</i>The Datum</b><p>Most "us" — the surveying soul of Direction 02 re-keyed to yellow line-work. Ages best in product UI; the datum line is a genuinely ownable device. Risk: quietest of the three; needs the hero moments to carry drama.</p></div>
+  <div class="vcard"><b><i>VAR C</i>Split Field</b><p>Most confident. Swiss planes and heavy Inter feel timeless and scale from app to billboard without translation. Risk: drops Cornerstone entirely — the system's voice becomes weight and color, not letterforms.</p></div>
+</div>
+
+</body>
+</html>
