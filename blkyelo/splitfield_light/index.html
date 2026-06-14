@@ -262,6 +262,13 @@
   h2 { color:var(--ink); } .sub { color:var(--grey-1); } .note { color:var(--grey-1); }
   .ladder .lrow { border-top-color:rgba(14,13,10,0.12); }
   .lrow .s { color:var(--ink); } .lrow .m { color:var(--grey-1); }
+
+  /* mode toggle dock */
+  .dock { position:fixed; left:16px; bottom:16px; z-index:70; display:flex; align-items:center; gap:8px; }
+  .lmsw { display:inline-flex; background:var(--ink); }
+  .lmsw a, .lmsw span { font:800 10px/1 var(--font-mono); letter-spacing:0.08em; padding:9px 11px; text-decoration:none; }
+  .lmsw .on { background:var(--yel); color:var(--ink); }
+  .lmsw a { color:var(--grey-2); } .lmsw a:hover { color:var(--paper); }
 </style>
 </head>
 <body>
@@ -638,5 +645,9 @@
   </div>
 </footer>
 
+
+<div class="dock">
+  <div class="lmsw"><a href="../splitfield/index.html">DARK</a><span class="on">LIGHT</span></div>
+</div>
 </body>
 </html>

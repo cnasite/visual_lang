@@ -454,6 +454,13 @@
     .phead { flex-direction:column; } .phead .fv { align-items:flex-start; }
     .photostrip { grid-template-columns:1fr 1fr; } .wall .wband { flex-wrap:wrap; }
   }
+
+  /* mode toggle dock */
+  .dock { position:fixed; left:16px; bottom:16px; z-index:70; display:flex; align-items:center; gap:8px; }
+  .lmsw { display:inline-flex; background:var(--ink-2); }
+  .lmsw a, .lmsw span { font:800 10px/1 var(--font-mono); letter-spacing:0.08em; padding:9px 11px; text-decoration:none; }
+  .lmsw .on { background:var(--yel); color:var(--ink); }
+  .lmsw a { color:var(--grey-2); } .lmsw a:hover { color:var(--paper); }
 </style>
 </head>
 <body>
@@ -1142,5 +1149,9 @@
 
 <div style="height:90px"></div>
 
+
+<div class="dock">
+  <div class="lmsw"><span class="on">DARK</span><a href="../splitfield_light/screens.html">LIGHT</a></div>
+</div>
 </body>
 </html>

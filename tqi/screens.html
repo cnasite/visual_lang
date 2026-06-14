@@ -366,6 +366,13 @@
   footer { border-top:1px solid var(--border); padding:var(--space-8) 0; margin-top:var(--space-8); }
   footer .wrap { display:flex; justify-content:space-between; font:var(--text-small); color:var(--text-3); }
   @media (max-width:900px){ .app-body{grid-template-columns:1fr;} .side{display:none;} .dash-grid,.canvas-grid,.conv{grid-template-columns:1fr;} .fgrid{grid-template-columns:1fr 1fr;} .sb-head p{display:none;} }
+
+  /* mode toggle dock */
+  .dock { position:fixed; left:16px; bottom:16px; z-index:60; display:flex; align-items:center; gap:8px; }
+  .themeswitch { display:inline-flex; align-items:center; gap:2px; background:rgba(19,20,22,0.85); backdrop-filter:blur(10px); box-shadow:var(--inset); border-radius:999px; padding:3px; font:500 10px/1 var(--font-mono); letter-spacing:0.08em; }
+  .themeswitch a, .themeswitch span { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:999px; color:var(--text-3); text-decoration:none; }
+  .themeswitch .ts-on { background:var(--intent); color:#fff; }
+  .themeswitch a:hover { color:var(--text-1); }
 </style>
 </head>
 <body>
@@ -1891,5 +1898,12 @@
     });
   })();
 </script>
+
+<div class="dock">
+  <div class="themeswitch" role="group" aria-label="Theme">
+    <span class="ts-on">● DARK</span>
+    <a href="../tqi_light/screens.html" aria-label="Switch to light theme">○ LIGHT</a>
+  </div>
+</div>
 </body>
 </html>

@@ -245,6 +245,13 @@
     .icon-grid { grid-template-columns:repeat(3,1fr); }
     .lrow { grid-template-columns:1fr; }
   }
+
+  /* mode toggle dock */
+  .dock { position:fixed; left:16px; bottom:16px; z-index:70; display:flex; align-items:center; gap:8px; }
+  .lmsw { display:inline-flex; background:var(--ink-2); }
+  .lmsw a, .lmsw span { font:800 10px/1 var(--font-mono); letter-spacing:0.08em; padding:9px 11px; text-decoration:none; }
+  .lmsw .on { background:var(--yel); color:var(--ink); }
+  .lmsw a { color:var(--grey-2); } .lmsw a:hover { color:var(--paper); }
 </style>
 </head>
 <body>
@@ -621,5 +628,9 @@
   </div>
 </footer>
 
+
+<div class="dock">
+  <div class="lmsw"><span class="on">DARK</span><a href="../splitfield_light/index.html">LIGHT</a></div>
+</div>
 </body>
 </html>

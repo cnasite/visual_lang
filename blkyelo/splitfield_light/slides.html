@@ -95,6 +95,13 @@
   .fnav { background:rgba(244,240,228,0.95); } .fnav .cap { color:var(--grey-1); } .fnav a { color:var(--grey-1); } .fnav a:hover { color:var(--ink); } .fnav a::before { background:rgba(14,13,10,0.2); }
   .page-head h1 { color:var(--ink); } .page-head p { color:var(--grey-1); }
   .sb-head h2 { color:var(--ink); } .sb-head p { color:var(--grey-1); }
+
+  /* mode toggle dock */
+  .dock { position:fixed; left:16px; bottom:16px; z-index:70; display:flex; align-items:center; gap:8px; }
+  .lmsw { display:inline-flex; background:var(--ink); }
+  .lmsw a, .lmsw span { font:800 10px/1 var(--font-mono); letter-spacing:0.08em; padding:9px 11px; text-decoration:none; }
+  .lmsw .on { background:var(--yel); color:var(--ink); }
+  .lmsw a { color:var(--grey-2); } .lmsw a:hover { color:var(--paper); }
 </style>
 </head>
 <body>
@@ -287,5 +294,9 @@
 
 <div style="height:90px"></div>
 
+
+<div class="dock">
+  <div class="lmsw"><a href="../splitfield/slides.html">DARK</a><span class="on">LIGHT</span></div>
+</div>
 </body>
 </html>
