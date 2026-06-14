@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Website Sections · Split Field</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ink); color:#C9C5B8; font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:var(--yel); color:var(--ink); }
+  img { display:block; max-width:100%; }
+  a { color:inherit; }
+  .wrap { max-width:1240px; margin:0 auto; padding:0 var(--s4); }
+  .m-fill { fill:var(--mk, var(--yel)); }
+  .stencil { font:var(--text-stencil); letter-spacing:var(--track-stencil); text-transform:uppercase; }
+
+  nav { position:sticky; top:0; z-index:50; background:rgba(14,13,10,0.9); backdrop-filter:blur(16px); border-bottom:1px solid var(--ink-3); }
+  nav .wrap { display:flex; align-items:center; gap:var(--s2); height:60px; }
+  .word { display:flex; align-items:center; gap:10px; font:900 19px/1 var(--font-ui); letter-spacing:-0.04em; color:var(--paper); text-decoration:none; margin-right:var(--s4); }
+  .ntab { font:700 12.5px/1 var(--font-ui); letter-spacing:-0.01em; color:var(--grey-2); text-decoration:none; padding:8px 12px; }
+  .ntab:hover { color:var(--paper); } .ntab.on { color:var(--ink); background:var(--yel); }
+  .nspace { margin-left:auto; }
+  .nwild { font:700 12px/1 var(--font-mono); letter-spacing:0.06em; color:var(--yel); text-decoration:none; }
+
+  .fnav { position:fixed; top:50%; right:16px; transform:translateY(-50%); z-index:60; display:flex; flex-direction:column; gap:1px;
+    padding:10px 8px; max-height:84vh; overflow:auto; background:rgba(22,20,15,0.92); backdrop-filter:blur(12px); }
+  .fnav .cap { font:var(--text-stencil); letter-spacing:0.14em; text-transform:uppercase; color:var(--grey-1); padding:2px 8px 8px; }
+  .fnav a { display:flex; align-items:center; gap:8px; font:600 11.5px/1 var(--font-ui); color:var(--grey-2); text-decoration:none; padding:6px 8px; white-space:nowrap; }
+  .fnav a::before { content:""; width:7px; height:3px; background:var(--ink-3); flex:none; }
+  .fnav a:hover { color:var(--paper); } .fnav a:hover::before { background:var(--yel); }
+  @media (max-width:1360px){ .fnav { display:none; } }
+
+  .page-head { padding:110px 0 var(--s6); }
+  .page-head .idx { font:700 12px/1.4 var(--font-mono); letter-spacing:0.06em; color:var(--yel); margin-bottom:var(--s2); }
+  .page-head h1 { font:var(--text-display); letter-spacing:var(--track-display); color:var(--paper); }
+  .page-head p { max-width:660px; margin-top:var(--s3); font:500 16px/1.6 var(--font-ui); color:var(--grey-3); }
+
+  .sb { padding:var(--s12) 0 var(--s4); }
+  .sb-head { display:flex; align-items:baseline; gap:var(--s3); }
+  .sb-head .num { font:700 12px/1.4 var(--font-mono); color:var(--yel); }
+  .sb-head h2 { font:var(--text-h2); letter-spacing:var(--track-h); color:var(--paper); }
+  .sb-head p { font:500 13px/1.5 var(--font-ui); color:var(--grey-2); margin-left:auto; max-width:400px; text-align:right; }
+  .frame { width:min(1240px, calc(100vw - 40px)); position:relative; left:50%; transform:translateX(-50%); overflow:hidden; border-top:var(--seam) solid var(--yel); }
+
+  /* buttons */
+  .btn { display:inline-flex; align-items:center; gap:9px; font:700 14px/1 var(--font-ui); letter-spacing:-0.01em; padding:16px 28px; text-decoration:none; border:none; cursor:pointer; }
+  .btn-yel { background:var(--yel); color:var(--ink); } .btn-ink { background:var(--ink); color:var(--yel); }
+  .btn-line { background:none; padding:16px 4px; text-decoration:underline; text-underline-offset:6px; text-decoration-thickness:3px; }
+
+  /* nav strip inside heroes */
+  .wnav { display:flex; align-items:center; gap:22px; font:700 13px/1 var(--font-ui); }
+  .wnav .w { font:900 17px/1 var(--font-ui); letter-spacing:-0.03em; margin-right:auto; display:flex; align-items:center; gap:9px; }
+
+  /* HERO — split */
+  .h-split { display:grid; grid-template-columns:1fr 1.05fr; min-height:min(82vh, 760px); }
+  .h-split .l { background:var(--ink); padding:var(--s6); display:flex; flex-direction:column; color:var(--paper); }
+  .h-split .ey { font:var(--text-stencil); letter-spacing:0.14em; text-transform:uppercase; color:var(--yel); margin:auto 0 var(--s3); }
+  .h-split h3 { font:900 clamp(40px,5vw,68px)/0.9 var(--font-ui); letter-spacing:-0.05em; color:var(--paper); }
+  .h-split h3 em { font-style:normal; color:var(--yel); }
+  .h-split p { font:500 16px/1.55 var(--font-ui); color:var(--grey-3); margin-top:var(--s3); max-width:380px; }
+  .h-split .cta { display:flex; gap:var(--s3); margin-top:var(--s6); align-items:center; }
+  .h-split .r { position:relative; border-left:var(--seam) solid var(--yel); overflow:hidden; background:var(--ink-2); }
+  .h-split .r img { width:100%; height:100%; object-fit:cover; }
+  .h-split .r .stamp { position:absolute; left:0; bottom:22px; background:var(--yel); color:var(--ink); font:700 11px/1 var(--font-mono); letter-spacing:0.14em; padding:9px 14px; }
+
+  /* HERO — field */
+  .h-field { background:var(--yel); color:var(--ink); padding:var(--s8); min-height:min(82vh, 760px); display:flex; flex-direction:column; }
+  .h-field .wnav .w { color:var(--ink); }
+  .h-field h3 { font:900 clamp(48px,6.5vw,92px)/0.88 var(--font-ui); letter-spacing:-0.05em; margin:auto 0 0; max-width:12ch; }
+  .h-field p { font:600 17px/1.5 var(--font-ui); margin-top:var(--s3); max-width:420px; }
+  .h-field .cta { display:flex; gap:var(--s3); margin-top:var(--s6); align-items:center; }
+
+  /* HERO — photo bleed */
+  .h-photo { position:relative; min-height:min(82vh, 760px); display:flex; flex-direction:column; overflow:hidden; }
+  .h-photo img.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 60%; }
+  .h-photo::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgba(14,13,10,0.9), rgba(14,13,10,0.45) 60%, rgba(14,13,10,0.2)), linear-gradient(rgba(14,13,10,0.2), rgba(14,13,10,0.6)); }
+  .h-photo > * { position:relative; z-index:2; }
+  .h-photo .in { padding:var(--s8); margin-top:auto; }
+  .h-photo .ey { font:var(--text-stencil); letter-spacing:0.14em; text-transform:uppercase; color:var(--yel); }
+  .h-photo h3 { font:900 clamp(44px,6vw,84px)/0.88 var(--font-ui); letter-spacing:-0.05em; color:var(--paper); margin-top:var(--s3); }
+  .h-photo .nav2 { padding:var(--s6) var(--s8) 0; }
+
+  /* PROOF */
+  .proof { background:var(--ink-2); padding:var(--s6) var(--s4); }
+  .proof .big { font:800 clamp(20px,2.4vw,30px)/1.05 var(--font-ui); letter-spacing:-0.03em; color:var(--paper); max-width:420px; }
+  .proof .big em { font-style:normal; color:var(--yel); }
+  .proof .names { display:flex; flex-wrap:wrap; gap:var(--s2) var(--s6); margin-top:var(--s4); font:700 13px/1 var(--font-mono); letter-spacing:0.04em; color:var(--grey-2); }
+  .metre { height:14px; margin-top:var(--s4); background:repeating-linear-gradient(90deg, var(--yel) 0 26px, var(--ink-3) 26px 52px); }
+  .stripe-sep { width:min(1240px, calc(100vw - 40px)); margin:var(--s8) auto 0; height:16px; background:repeating-linear-gradient(90deg, var(--yel) 0 28px, var(--ink-3) 28px 56px); }
+  .h-field .metre-ink { height:18px; margin-top:auto; background:repeating-linear-gradient(90deg, var(--ink) 0 28px, transparent 28px 56px); }
+  .cta-f .metre-ink { height:18px; margin-top:var(--s6); background:repeating-linear-gradient(90deg, var(--ink) 0 28px, transparent 28px 56px); }
+  .seelive { display:flex; align-items:center; gap:var(--s6); background:var(--yel); color:var(--ink); padding:var(--s8); text-decoration:none; }
+  .seelive .k { font:var(--text-stencil); letter-spacing:0.14em; text-transform:uppercase; }
+  .seelive h3 { font:900 clamp(32px,4.4vw,60px)/0.9 var(--font-ui); letter-spacing:-0.05em; margin-top:8px; }
+  .seelive .ar { margin-left:auto; font:900 clamp(40px,6vw,80px)/0.8 var(--font-ui); }
+
+  /* FEATURES */
+  .feat { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--seam); background:var(--yel); }
+  .fc { background:var(--ink); padding:var(--s6); color:var(--paper); }
+  .fc.flag { background:var(--yel); color:var(--ink); }
+  .fc .n { font:700 11px/1 var(--font-mono); letter-spacing:0.14em; color:var(--yel); }
+  .fc.flag .n { color:var(--ink); }
+  .fc h4 { font:900 22px/1.05 var(--font-ui); letter-spacing:-0.03em; margin:14px 0 10px; }
+  .fc p { font:500 13.5px/1.6 var(--font-ui); color:var(--grey-3); } .fc.flag p { color:var(--ink); }
+  .fc .more { display:inline-block; margin-top:16px; font:800 13px/1 var(--font-ui); color:var(--yel); text-decoration:none; } .fc.flag .more { color:var(--ink); }
+
+  /* SHOWCASE */
+  .show { display:grid; grid-template-columns:0.85fr 1.15fr; min-height:460px; }
+  .show .t { background:var(--ink); padding:var(--s8); display:flex; flex-direction:column; justify-content:center; color:var(--paper); }
+  .show .ey { font:var(--text-stencil); letter-spacing:0.14em; text-transform:uppercase; color:var(--yel); margin-bottom:var(--s3); }
+  .show h3 { font:900 clamp(30px,3.4vw,46px)/0.92 var(--font-ui); letter-spacing:-0.04em; }
+  .show p { font:500 15px/1.6 var(--font-ui); color:var(--grey-3); margin-top:var(--s3); max-width:360px; }
+  .show .g { position:relative; background:var(--bone); border-left:var(--seam) solid var(--yel); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .show .g img { width:100%; height:100%; object-fit:cover; }
+  .show .ann { position:absolute; left:0; top:34px; display:flex; align-items:center; z-index:2; }
+  .show .ann .rod { width:64px; height:var(--seam-thin); background:var(--yel); }
+  .show .ann .lab { background:var(--yel); color:var(--ink); font:700 10px/1 var(--font-mono); letter-spacing:0.1em; padding:7px 10px; }
+
+  /* NUMBERS */
+  .nums { display:flex; }
+  .nums .nm { flex:1; padding:var(--s8) var(--s4); background:var(--paper); color:var(--ink); }
+  .nums .nm:nth-child(even) { background:var(--bone); }
+  .nums .nm + .nm { border-left:var(--seam-thin) solid var(--yel); }
+  .nums .nm.hot { background:var(--yel); }
+  .nums .nm .v { font:900 clamp(38px,5vw,64px)/0.82 var(--font-ui); letter-spacing:-0.05em; }
+  .nums .nm .l { font:600 12px/1.4 var(--font-ui); color:var(--grey-1); margin-top:12px; } .nums .nm.hot .l { color:var(--ink); }
+
+  /* QUOTE */
+  .quote { background:var(--ink); padding:var(--s12) var(--s8); position:relative; }
+  .quote .bar { position:absolute; left:0; top:var(--s12); bottom:var(--s12); width:var(--seam); background:var(--yel); }
+  .quote blockquote { font:900 clamp(26px,3.4vw,44px)/1.08 var(--font-ui); letter-spacing:-0.03em; color:var(--paper); max-width:18ch; padding-left:var(--s6); }
+  .quote blockquote em { font-style:normal; color:var(--yel); }
+  .quote .by { display:flex; align-items:center; gap:12px; margin:var(--s6) 0 0 var(--s6); }
+  .quote .by .ln { width:34px; height:var(--seam-thin); background:var(--yel); }
+  .quote .by span { font:700 11px/1.4 var(--font-mono); letter-spacing:0.07em; color:var(--grey-2); }
+
+  /* CTA */
+  .cta-f { background:var(--yel); color:var(--ink); padding:var(--s12) var(--s8); }
+  .cta-f h3 { font:900 clamp(40px,5.5vw,80px)/0.9 var(--font-ui); letter-spacing:-0.05em; max-width:16ch; }
+  .cta-f p { font:600 17px/1.5 var(--font-ui); margin-top:var(--s3); max-width:440px; }
+  .cta-f .cta { display:flex; gap:var(--s3); margin-top:var(--s6); }
+
+  /* FOOTER */
+  .foot { background:var(--ink); padding:var(--s8) var(--s6) var(--s4); }
+  .foot .cols { display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:var(--s6); }
+  .foot .w { display:flex; align-items:center; gap:10px; font:900 19px/1 var(--font-ui); letter-spacing:-0.04em; color:var(--paper); }
+  .foot .desc { font:500 13px/1.6 var(--font-ui); color:var(--grey-2); max-width:240px; margin-top:var(--s3); }
+  .foot .mh { font:700 11px/1 var(--font-mono); letter-spacing:0.1em; color:var(--yel); margin-bottom:var(--s3); text-transform:uppercase; }
+  .foot .col a { display:block; font:600 13px/2 var(--font-ui); color:var(--grey-2); text-decoration:none; } .foot .col a:hover { color:var(--paper); }
+  .foot .stripe { height:8px; margin-top:var(--s8); background:repeating-linear-gradient(90deg, var(--yel) 0 26px, var(--ink-3) 26px 52px); }
+  .foot .legal { display:flex; gap:var(--s4); margin-top:var(--s4); font:700 10px/1.4 var(--font-mono); color:var(--grey-1); }
+  .foot .legal .r { margin-left:auto; }
+
+  @media (max-width:860px){
+    .h-split, .show, .feat { grid-template-columns:1fr; }
+    .h-split .r, .show .g { border-left:none; border-top:var(--seam) solid var(--yel); min-height:300px; }
+    .nums { flex-wrap:wrap; } .nums .nm { flex:1 1 50%; } .foot .cols { grid-template-columns:1fr 1fr; }
+  }
+
+  /* ===== LIGHT MODE — light ground + chrome ===== */
+  body { background:var(--bone); color:var(--grey-1); }
+  nav { background:rgba(244,240,228,0.92); border-bottom:1px solid rgba(14,13,10,0.12); }
+  .word { color:var(--ink); }
+  .ntab { color:var(--grey-1); } .ntab:hover { color:var(--ink); } .ntab.on { color:var(--ink); background:var(--yel); }
+  .fnav { background:rgba(244,240,228,0.95); } .fnav .cap { color:var(--grey-1); } .fnav a { color:var(--grey-1); } .fnav a:hover { color:var(--ink); } .fnav a::before { background:rgba(14,13,10,0.2); }
+  .page-head h1 { color:var(--ink); } .page-head p { color:var(--grey-1); }
+  .sb-head h2 { color:var(--ink); } .sb-head p { color:var(--grey-1); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-fill" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-fill" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="word" href="index.html"><svg width="22" height="23" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg>Asite</a>
+    <a class="ntab" href="index.html">Language</a>
+    <a class="ntab" href="screens.html">Product</a>
+    <a class="ntab on" href="web.html">Website</a>
+    <a class="ntab" href="slides.html">Slides</a>
+    <span class="nspace"></span>
+  </div>
+</nav>
+
+<aside class="fnav" aria-label="On this page">
+  <div class="cap">Sections</div>
+  <a href="#h1">Hero · split</a>
+  <a href="#h2">Hero · field</a>
+  <a href="#h3">Hero · photo</a>
+  <a href="#proof">Proof strip</a>
+  <a href="#feat">Features</a>
+  <a href="#show">Showcase</a>
+  <a href="#nums">Numbers</a>
+  <a href="#quote">Quote</a>
+  <a href="#cta">CTA field</a>
+  <a href="#foot">Footer</a>
+  <a href="#live">See it live</a>
+</aside>
+
+<div class="wrap">
+  <header class="page-head">
+    <div class="idx">Direction 05 · Split Field</div>
+    <h1>Website sections</h1>
+    <p>The blocks the marketing site is built from — three ways to open, the proof strip, features, a showcase the seam annotates, the numbers band, a quote, the field CTA, and the footer. Every divide is a seam; the field carries the claim.</p>
+  </header>
+</div>
+
+<!-- HERO SPLIT -->
+<div class="wrap"><div class="sb" id="h1"><div class="sb-head"><span class="num">01</span><h2>Hero · split</h2><p>Two planes meet at the seam — ink type against a site photograph.</p></div></div></div>
+<div class="frame">
+  <div class="h-split">
+    <div class="l">
+      <div class="wnav"><span class="w"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg>Asite</span><span style="color:var(--grey-2)">Platform</span><span style="color:var(--grey-2)">Industries</span></div>
+      <span class="ey">Common data environment</span>
+      <h3>Built for the people who&nbsp;<em>build.</em></h3>
+      <p>One platform for everything you build. Two million documents, zero ambiguity.</p>
+      <div class="cta"><a class="btn btn-yel">Book a demo</a><a class="btn btn-line" style="color:var(--paper)">See the platform</a></div>
+    </div>
+    <div class="r"><img src="https://images.unsplash.com/photo-1751808830304-51c95ed33b10?w=1100&q=72&auto=format&fit=crop" alt="Tower cranes"><span class="stamp">On site · Grid 04</span></div>
+  </div>
+</div>
+
+<!-- HERO FIELD -->
+<div class="wrap"><div class="sb" id="h2"><div class="sb-head"><span class="num">02</span><h2>Hero · field</h2><p>The loud one — a full yellow plane, ink set heavy and tight.</p></div></div></div>
+<div class="frame">
+  <div class="h-field">
+    <div class="wnav"><span class="w"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--ink)"><use href="#amark"/></svg>Asite</span><span>Platform</span><span>Industries</span></div>
+    <h3>One source of truth.</h3>
+    <p>Built for the people who build. Concept to completion, every phase on one register.</p>
+    <div class="cta"><a class="btn btn-ink">Book a demo</a><a class="btn btn-line" style="color:var(--ink)">See pricing</a></div>
+  </div>
+</div>
+
+<!-- HERO PHOTO -->
+<div class="wrap"><div class="sb" id="h3"><div class="sb-head"><span class="num">03</span><h2>Hero · photo bleed</h2><p>Imagery-led — a full-bleed site photograph carries the feeling, type the claim.</p></div></div></div>
+<div class="frame">
+  <div class="h-photo">
+    <img class="bg" src="https://images.unsplash.com/photo-1664190425588-a2c96bc61abb?w=1280&q=72&auto=format&fit=crop" alt="Project under construction">
+    <div class="nav2"><div class="wnav"><span class="w" style="color:var(--paper)"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg>Asite</span><span style="color:#E8E4D7">Platform</span><span style="color:#E8E4D7">Industries</span></div></div>
+    <div class="in"><span class="ey">The whole project</span><h3>See it all.</h3><div class="cta" style="display:flex; gap:var(--s3); margin-top:var(--s4)"><a class="btn btn-yel">Book a demo</a></div></div>
+  </div>
+</div>
+
+<div class="stripe-sep"></div>
+
+<!-- PROOF -->
+<div class="wrap"><div class="sb" id="proof"><div class="sb-head"><span class="num">04</span><h2>Proof strip</h2><p>Names in mono, closed by a metre band.</p></div></div></div>
+<div class="frame">
+  <div class="proof">
+    <div class="big">Trusted on the world's <em>most demanding</em> programmes.</div>
+    <div class="names"><span>TRANSPORT FOR LONDON</span><span>LAING O'ROURKE</span><span>KIER</span><span>McLAREN</span><span>BERKELEY GROUP</span><span>ROYAL HASKONINGDHV</span></div>
+    <div class="metre"></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="wrap"><div class="sb" id="feat"><div class="sb-head"><span class="num">05</span><h2>Features · the field marks one</h2><p>Three planes; the field marks the one your project stands on.</p></div></div></div>
+<div class="frame">
+  <div class="feat">
+    <div class="fc"><div class="n">01 — CDE</div><h4>Common Data Environment</h4><p>A single source of truth in a standards-based, collaborative platform with powerful workflows.</p><a class="more">Explore →</a></div>
+    <div class="fc flag"><div class="n">02 — 3D REPO</div><h4>Coordinate in 3D</h4><p>Augment and interrogate BIM models in the browser — clashes found, named, resolved.</p><a class="more">Open a model →</a></div>
+    <div class="fc"><div class="n">03 — PLAYBOOK</div><h4>Delivery by the book</h4><p>Turn ISO 19650 into a practical, repeatable delivery engine.</p><a class="more">See Playbook →</a></div>
+  </div>
+</div>
+
+<!-- SHOWCASE -->
+<div class="wrap"><div class="sb" id="show"><div class="sb-head"><span class="num">06</span><h2>Showcase · the seam annotates</h2><p>A product surface with a seam-and-stamp callout doing the pointing.</p></div></div></div>
+<div class="frame">
+  <div class="show">
+    <div class="t"><span class="ey">01 — Product</span><h3>The register, in the open.</h3><p>One source of truth, read at every altitude — the boardroom, the first morning, the site gate.</p></div>
+    <div class="g">
+      <img src="https://images.unsplash.com/photo-1758518732175-5d608ba3abdf?w=1100&q=72&auto=format&fit=crop" alt="Team reviewing the register">
+      <div class="ann"><span class="lab">REGISTER HEALTH · 98.4%</span><span class="rod"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- NUMBERS -->
+<div class="wrap"><div class="sb" id="nums"><div class="sb-head"><span class="num">07</span><h2>Numbers band</h2><p>Oversize figures on alternating planes — a ranging pole of proof.</p></div></div></div>
+<div class="frame">
+  <div class="nums">
+    <div class="nm hot"><div class="v">84k+</div><div class="l">companies build on Asite</div></div>
+    <div class="nm"><div class="v">2001</div><div class="l">defining the CDE category</div></div>
+    <div class="nm"><div class="v">70%</div><div class="l">saved on T5 tendering packages</div></div>
+    <div class="nm"><div class="v">1</div><div class="l">source of truth, every phase</div></div>
+  </div>
+</div>
+
+<div class="stripe-sep"></div>
+
+<!-- QUOTE -->
+<div class="wrap"><div class="sb" id="quote"><div class="sb-head"><span class="num">08</span><h2>Quote · the field attributes</h2><p>A heavy pull-quote, the seam running its length.</p></div></div></div>
+<div class="frame">
+  <div class="quote">
+    <span class="bar"></span>
+    <blockquote>Two packages worth over £10m, tendered for <em>70% less</em> — by running them through Asite.</blockquote>
+    <div class="by"><span class="ln"></span><span>LAING O'ROURKE · HEATHROW TERMINAL 5</span></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="wrap"><div class="sb" id="cta"><div class="sb-head"><span class="num">09</span><h2>CTA · the field</h2><p>The closing claim on a full yellow plane.</p></div></div></div>
+<div class="frame">
+  <div class="cta-f">
+    <h3>See the whole project.</h3>
+    <p>Book a demo — Asite on a register like yours, with your standards and your supply chain.</p>
+    <div class="cta"><a class="btn btn-ink">Book a demo</a><a class="btn btn-line" style="color:var(--ink)">Talk to sales</a></div>
+    <div class="metre-ink"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="wrap"><div class="sb" id="foot"><div class="sb-head"><span class="num">10</span><h2>Footer · the seam closes</h2><p>Ink mass, a metre band, the legal line.</p></div></div></div>
+<div class="frame">
+  <div class="foot">
+    <div class="cols">
+      <div class="col"><div class="w"><svg width="24" height="25" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg>Asite</div><p class="desc">The common data environment for the people who build — concept to completion, and beyond.</p></div>
+      <div class="col"><div class="mh">Platform</div><a>Common Data Environment</a><a>3D Repo</a><a>Playbook</a><a>aMail</a></div>
+      <div class="col"><div class="mh">Company</div><a>About</a><a>Careers</a><a>News</a><a>Contact</a></div>
+      <div class="col"><div class="mh">Insights</div><a>Case studies</a><a>Webinars</a><a>Blog</a><a>Events</a></div>
+    </div>
+    <div class="stripe"></div>
+    <div class="legal"><span>© 2026 ASITE</span><span>PRIVACY</span><span>TERMS</span><span class="r">DIR 05 · SPLIT FIELD</span></div>
+  </div>
+</div>
+
+<div class="stripe-sep"></div>
+
+<!-- SEE IT LIVE -->
+<div class="wrap"><div class="sb" id="live"><div class="sb-head"><span class="num">11</span><h2>See it live</h2><p>The sections above, assembled into the page.</p></div></div></div>
+<div class="frame">
+  <a class="seelive" href="landing.html">
+    <div><div class="k">In the wild</div><h3>Open the landing page.</h3></div>
+    <span class="ar">→</span>
+  </a>
+</div>
+
+<div style="height:90px"></div>
+
+</body>
+</html>

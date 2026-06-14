@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Website Sections · Datum</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg-0); color:var(--t2); font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:var(--yel-soft); color:var(--t1); }
+  img { display:block; max-width:100%; } a { color:inherit; }
+  .wrap { max-width:1240px; margin:0 auto; padding:0 var(--s6); }
+  .m-body { fill:var(--t1); } .m-arrow { fill:var(--yel); }
+  .stencil { font:var(--text-stencil); letter-spacing:var(--track-mono); text-transform:uppercase; color:var(--t3); }
+
+  nav { position:sticky; top:0; z-index:50; background:rgba(10,10,8,0.84); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+  nav .wrap { display:flex; align-items:center; gap:var(--s2); height:58px; }
+  .word { display:flex; align-items:center; gap:10px; font:590 15px/1 var(--font-ui); letter-spacing:-0.01em; color:var(--t1); text-decoration:none; margin-right:var(--s6); }
+  .ntab { font:500 12.5px/1 var(--font-ui); color:var(--t2); text-decoration:none; padding:18px 2px; margin:0 11px; border-bottom:2px solid transparent; }
+  .ntab:hover { color:var(--t1); } .ntab.on { color:var(--t1); border-bottom-color:var(--yel); }
+  .nspace { margin-left:auto; }
+
+  .fnav { position:fixed; top:50%; right:16px; transform:translateY(-50%); z-index:60; display:flex; flex-direction:column; gap:1px;
+    padding:10px 8px; max-height:84vh; overflow:auto; background:rgba(17,17,16,0.9); backdrop-filter:blur(12px); border:1px solid var(--border-soft); border-radius:var(--r-lg); }
+  .fnav .cap { font:var(--text-stencil); letter-spacing:var(--track-mono); text-transform:uppercase; color:var(--t3); padding:2px 8px 8px; }
+  .fnav a { display:flex; align-items:center; gap:8px; font:450 11.5px/1 var(--font-ui); color:var(--t2); text-decoration:none; padding:6px 9px; white-space:nowrap; }
+  .fnav a::before { content:""; width:5px; height:5px; border:1px solid var(--t3); transform:rotate(45deg); flex:none; }
+  .fnav a:hover { color:var(--t1); } .fnav a:hover::before { border-color:var(--yel); }
+  @media (max-width:1360px){ .fnav { display:none; } }
+
+  .page-head { padding:104px 0 var(--s8); }
+  .page-head .idx { font:var(--text-mono); color:var(--yel); letter-spacing:0.06em; margin-bottom:var(--s2); }
+  .page-head h1 { font:var(--text-display); letter-spacing:var(--track-tight); color:var(--t1); }
+  .page-head p { max-width:640px; margin-top:var(--s3); font:400 16px/1.7 var(--font-ui); color:var(--t2); }
+
+  .sb { padding:var(--s12) 0 var(--s4); }
+  .sb-head { display:flex; align-items:baseline; gap:var(--s3); }
+  .sb-head .num { font:var(--text-mono); font-size:12px; color:var(--yel); }
+  .sb-head h2 { font:var(--text-h2); letter-spacing:var(--track-h); color:var(--t1); }
+  .sb-head p { font:400 13px/1.5 var(--font-ui); color:var(--t2); margin-left:auto; max-width:380px; text-align:right; }
+  .frame { width:min(1240px, calc(100vw - 40px)); position:relative; left:50%; transform:translateX(-50%); overflow:hidden; border:1px solid var(--border-soft); border-radius:var(--r-md); }
+
+  /* buttons */
+  .btn { display:inline-flex; align-items:center; gap:9px; font:500 13.5px/1 var(--font-ui); padding:13px 22px; border:1px solid transparent; border-radius:var(--r-md); cursor:pointer; text-decoration:none; }
+  .btn-primary { background:var(--yel); color:var(--bg-0); } .btn-line { background:none; color:var(--yel); border-color:var(--yel); }
+  .btn-ghost { background:none; color:var(--t1); border-bottom:1px solid var(--yel); border-radius:0; padding:13px 2px; }
+  .wnav { display:flex; align-items:center; gap:20px; font:500 12.5px/1 var(--font-ui); color:var(--t2); }
+  .wnav .w { font:590 16px/1 var(--font-ui); color:var(--t1); margin-right:auto; display:flex; align-items:center; gap:9px; }
+
+  .datum { position:relative; height:1px; background:var(--yel); }
+  .datum::before, .datum::after { content:""; position:absolute; top:-4px; width:9px; height:9px; border:1px solid var(--yel); transform:rotate(45deg); background:var(--bg-0); }
+  .datum::before { left:0; } .datum::after { right:0; }
+  .ticks { display:flex; justify-content:space-between; margin-top:10px; font:var(--text-mono); font-size:11px; color:var(--t3); letter-spacing:0.08em; }
+
+  /* HERO datum */
+  .h-datum { padding:var(--s16) var(--s8); min-height:min(78vh,680px); display:flex; flex-direction:column; justify-content:center;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:32px 32px; }
+  .h-datum .wnav { margin-bottom:auto; }
+  .h-datum .ey { color:var(--yel); margin:var(--s8) 0 var(--s4); }
+  .h-datum h3 { font:var(--text-display); letter-spacing:var(--track-tight); color:var(--t1); max-width:14ch; }
+  .h-datum h3 em { font-style:normal; color:var(--yel); }
+  .h-datum p { font:400 16px/1.65 var(--font-ui); color:var(--t2); max-width:440px; margin-top:var(--s4); }
+  .h-datum .cta { display:flex; gap:var(--s4); margin-top:var(--s6); align-items:center; }
+  .h-datum .datum { margin-top:var(--s12); }
+
+  /* HERO photo */
+  .h-photo { position:relative; min-height:min(78vh,680px); display:flex; flex-direction:column; overflow:hidden; }
+  .h-photo img.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 60%; }
+  .h-photo::after { content:""; position:absolute; inset:0; background:linear-gradient(rgba(10,10,8,0.4), rgba(10,10,8,0.82)); }
+  .h-photo > * { position:relative; z-index:2; }
+  .h-photo .top2 { padding:var(--s6) var(--s8) 0; }
+  .h-photo .in { padding:var(--s8); margin-top:auto; }
+  .h-photo .ey { color:var(--yel); } .h-photo h3 { font:var(--text-display); letter-spacing:var(--track-tight); color:var(--t1); margin-top:var(--s3); }
+  .h-photo .dline { position:absolute; left:0; right:0; bottom:120px; height:1px; background:var(--yel); z-index:1; }
+  .h-photo .dline::before { content:""; position:absolute; left:var(--s8); top:-4px; width:9px; height:9px; border:1px solid var(--yel); transform:rotate(45deg); background:rgba(10,10,8,0.7); }
+
+  /* PROOF */
+  .proof { padding:var(--s8); }
+  .proof .big { font:500 17px/1.3 var(--font-ui); color:var(--t1); } .proof .big em { font-style:normal; color:var(--yel); }
+  .proof .names { display:flex; align-items:center; justify-content:space-between; gap:var(--s6); margin-top:var(--s6); }
+  .proof .names img { height:24px; max-width:120px; object-fit:contain; opacity:0.55; filter:grayscale(1); }
+  .proof .datum { margin-top:var(--s6); }
+
+  /* FEATURES */
+  .feat { display:grid; grid-template-columns:repeat(3,1fr); }
+  .fc { padding:var(--s8); border-left:1px solid var(--border-soft); } .fc:first-child { border-left:none; }
+  .fc.flag { border-top:2px solid var(--yel); }
+  .fc .n { font:var(--text-mono); font-size:11px; color:var(--yel); letter-spacing:0.06em; }
+  .fc h4 { font:560 20px/1.15 var(--font-ui); letter-spacing:var(--track-h); color:var(--t1); margin:14px 0 10px; }
+  .fc p { font:400 13.5px/1.65 var(--font-ui); color:var(--t2); }
+  .fc .more { display:inline-block; margin-top:16px; font:500 13px/1 var(--font-ui); color:var(--t1); border-bottom:1px solid var(--yel); padding-bottom:4px; text-decoration:none; }
+
+  /* SHOWCASE */
+  .show { display:grid; grid-template-columns:0.85fr 1.15fr; min-height:440px; }
+  .show .t { padding:var(--s8); display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--border-soft); }
+  .show .ey { color:var(--yel); margin-bottom:var(--s3); } .show h3 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--t1); } .show p { font:400 14px/1.65 var(--font-ui); color:var(--t2); margin-top:var(--s3); max-width:340px; }
+  .show .g { position:relative; display:flex; align-items:center; justify-content:center; padding:var(--s8);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:30px 30px; }
+  .show .pm { width:100%; border:1px solid var(--border); border-radius:var(--r-md); background:var(--bg-1); overflow:hidden; }
+  .show .pm .bar { display:flex; gap:7px; padding:10px 12px; border-bottom:1px solid var(--border-soft); } .show .pm .bar i { width:6px;height:6px;border:1px solid var(--t3); } .show .pm .bar i.y{border-color:var(--yel);}
+  .show .pm .body { padding:16px; } .show .pm .read { display:flex; border:1px solid var(--border-soft); } .show .pm .read .k { flex:1; padding:12px; border-left:1px solid var(--border-soft);} .show .pm .read .k:first-child{border-left:none;} .show .pm .read .v{font:400 26px/0.9 var(--font-ui);color:var(--t1);} .show .pm .read .v.hot{color:var(--yel);} .show .pm .read .l{font:var(--text-mono);font-size:9px;color:var(--t3);margin-top:7px;}
+  .show .ann2 { position:absolute; left:0; top:40px; display:flex; align-items:center; z-index:2; }
+  .show .ann2 .lab { font:var(--text-mono); font-size:9.5px; color:var(--yel); letter-spacing:0.08em; border:1px solid var(--border); background:var(--bg-2); padding:5px 8px; } .show .ann2 .rod { width:46px; height:1px; background:var(--yel); }
+
+  /* NUMBERS readout */
+  .nums { display:flex; }
+  .nums .nm { flex:1; padding:var(--s12) var(--s6); border-left:1px solid var(--border-soft); } .nums .nm:first-child { border-left:none; }
+  .nums .nm .v { font:400 clamp(36px,4.4vw,56px)/0.9 var(--font-display); letter-spacing:-0.03em; color:var(--t1); } .nums .nm .v em { font-style:normal; color:var(--yel); }
+  .nums .nm .l { font:var(--text-mono); font-size:10px; color:var(--t3); margin-top:12px; letter-spacing:0.05em; }
+
+  /* QUOTE */
+  .quote { position:relative; padding:var(--s16) var(--s8) var(--s16) var(--s12); }
+  .quote .bar { position:absolute; left:var(--s8); top:var(--s16); bottom:var(--s16); width:1px; background:var(--yel); }
+  .quote .bar::before, .quote .bar::after { content:""; position:absolute; left:-4px; width:9px; height:9px; border:1px solid var(--yel); transform:rotate(45deg); background:var(--bg-0); } .quote .bar::before{top:-4px;} .quote .bar::after{bottom:-4px;}
+  .quote blockquote { font:400 clamp(24px,3vw,38px)/1.25 var(--font-display); letter-spacing:-0.01em; color:var(--t1); max-width:20ch; } .quote blockquote em { font-style:normal; color:var(--yel); }
+  .quote .by { display:flex; align-items:center; gap:12px; margin-top:var(--s6); } .quote .by .ln { width:32px; height:1px; background:var(--yel); } .quote .by span { font:var(--text-mono); font-size:11px; color:var(--t2); letter-spacing:0.07em; }
+
+  /* CTA */
+  .cta-f { padding:var(--s16) var(--s8); background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:32px 32px; }
+  .cta-f h3 { font:var(--text-display); letter-spacing:var(--track-tight); color:var(--t1); max-width:16ch; } .cta-f h3 em { font-style:normal; color:var(--yel); }
+  .cta-f p { font:400 16px/1.6 var(--font-ui); color:var(--t2); max-width:440px; margin-top:var(--s4); }
+  .cta-f .cta { display:flex; gap:var(--s4); margin-top:var(--s6); } .cta-f .datum { margin-top:var(--s12); }
+
+  /* FOOTER */
+  .foot { padding:var(--s8); }
+  .foot .cols { display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:var(--s6); }
+  .foot .w { display:flex; align-items:center; gap:10px; font:590 16px/1 var(--font-ui); color:var(--t1); }
+  .foot .desc { font:400 12.5px/1.6 var(--font-ui); color:var(--t2); max-width:240px; margin-top:var(--s3); }
+  .foot .mh { font:var(--text-stencil); letter-spacing:var(--track-mono); text-transform:uppercase; color:var(--yel); margin-bottom:var(--s3); }
+  .foot .col a { display:block; font:400 13px/2 var(--font-ui); color:var(--t2); text-decoration:none; } .foot .col a:hover { color:var(--t1); }
+  .foot .datum { margin:var(--s8) 0 var(--s4); }
+  .foot .legal { display:flex; gap:var(--s4); font:var(--text-mono); font-size:10px; color:var(--t3); letter-spacing:0.05em; } .foot .legal .r { margin-left:auto; }
+
+  /* see it live */
+  .seelive { display:flex; align-items:center; gap:var(--s6); padding:var(--s8); text-decoration:none;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:30px 30px; }
+  .seelive .k { font:var(--text-stencil); letter-spacing:var(--track-mono); text-transform:uppercase; color:var(--yel); }
+  .seelive h3 { font:400 clamp(30px,3.8vw,52px)/1 var(--font-display); letter-spacing:var(--track-tight); color:var(--t1); margin-top:8px; }
+  .seelive .ar { margin-left:auto; font:400 clamp(36px,5vw,64px)/1 var(--font-ui); color:var(--yel); }
+
+  @media (max-width:860px){
+    .feat, .show { grid-template-columns:1fr; } .fc { border-left:none; border-top:1px solid var(--border-soft); } .fc:first-child{border-top:none;}
+    .show .t { border-right:none; border-bottom:1px solid var(--border-soft); }
+    .nums { flex-wrap:wrap; } .nums .nm { flex:1 1 50%; border-left:none; }
+    .proof .names { flex-wrap:wrap; justify-content:flex-start; gap:var(--s4) var(--s6); } .foot .cols { grid-template-columns:1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-body" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-arrow" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="word" href="index.html"><svg width="22" height="23" viewBox="0 0 377 396"><use href="#amark"/></svg>Asite</a>
+    <a class="ntab" href="index.html">Language</a>
+    <a class="ntab" href="screens.html">Product</a>
+    <a class="ntab on" href="web.html">Website</a>
+    <a class="ntab" href="slides.html">Slides</a>
+    <span class="nspace"></span>
+  </div>
+</nav>
+
+<aside class="fnav" aria-label="On this page">
+  <div class="cap">Sections</div>
+  <a href="#h1">Hero · datum</a>
+  <a href="#h2">Hero · photo</a>
+  <a href="#proof">Proof strip</a>
+  <a href="#feat">Features</a>
+  <a href="#show">Showcase</a>
+  <a href="#nums">Numbers</a>
+  <a href="#quote">Quote</a>
+  <a href="#cta">CTA</a>
+  <a href="#foot">Footer</a>
+  <a href="#live">See it live</a>
+</aside>
+
+<div class="wrap">
+  <header class="page-head">
+    <div class="idx">Direction 05 · Datum</div>
+    <h1>Website sections</h1>
+    <p>The blocks the marketing site is built from — two ways to open, the proof strip, features, a showcase the datum annotates, the readout band, a quote, the CTA, and the footer. Every divide is a hairline; the datum carries the reading.</p>
+  </header>
+</div>
+
+<!-- HERO DATUM -->
+<div class="wrap"><div class="sb" id="h1"><div class="sb-head"><span class="num">01</span><h2>Hero · datum</h2><p>The instrument open — headline on the grid, the datum carrying the reading.</p></div></div></div>
+<div class="frame">
+  <div class="h-datum">
+    <div class="wnav"><span class="w"><svg width="20" height="21" viewBox="0 0 377 396"><use href="#amark"/></svg>Asite</span><span>Platform</span><span>Industries</span></div>
+    <span class="ey stencil">Common data environment</span>
+    <h3>Built for those who <em>build tomorrow.</em></h3>
+    <p>One platform for everything you build, referenced to a single datum. Two million documents, zero ambiguity.</p>
+    <div class="cta"><a class="btn btn-primary">Book a demo</a><a class="btn btn-ghost">See the platform</a></div>
+    <div class="datum"></div>
+    <div class="ticks"><span>DATUM +00.000 AOD</span><span>GRID 04</span><span>WK 24</span></div>
+  </div>
+</div>
+
+<!-- HERO PHOTO -->
+<div class="wrap"><div class="sb" id="h2"><div class="sb-head"><span class="num">02</span><h2>Hero · annotated photo</h2><p>A site in full colour, located by a datum and a mono tick.</p></div></div></div>
+<div class="frame">
+  <div class="h-photo">
+    <img class="bg" src="https://images.unsplash.com/photo-1664190425588-a2c96bc61abb?w=1280&q=72&auto=format&fit=crop" alt="Project under construction">
+    <div class="top2"><div class="wnav"><span class="w" style="color:var(--t1)"><svg width="20" height="21" viewBox="0 0 377 396"><use href="#amark"/></svg>Asite</span><span style="color:#cfcabb">Platform</span><span style="color:#cfcabb">Industries</span></div></div>
+    <div class="dline"></div>
+    <div class="in"><span class="ey stencil">The whole project</span><h3>See it all.</h3><div class="cta" style="display:flex; gap:var(--s4); margin-top:var(--s4)"><a class="btn btn-primary">Book a demo</a></div></div>
+  </div>
+</div>
+
+<!-- PROOF -->
+<div class="wrap"><div class="sb" id="proof"><div class="sb-head"><span class="num">03</span><h2>Proof strip</h2><p>Logos, closed by the datum.</p></div></div></div>
+<div class="frame">
+  <div class="proof">
+    <div class="big">Trusted by the <em>world's best.</em></div>
+    <div class="names"><img src="assets/logos/TFL-mono.png" alt="Transport for London"><img src="assets/logos/Laing-mono.png" alt="Laing O'Rourke"><img src="assets/logos/Kier-mono.png" alt="Kier"><img src="assets/logos/McLaren-mono.png" alt="McLaren"><img src="assets/logos/Berkeley-mono.png" alt="Berkeley Group"><img src="assets/logos/Royal-mono.png" alt="Royal HaskoningDHV"></div>
+    <div class="datum"></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="wrap"><div class="sb" id="feat"><div class="sb-head"><span class="num">04</span><h2>Features · the datum marks one</h2><p>Three columns, hairline-divided; the datum flags the one your project stands on.</p></div></div></div>
+<div class="frame">
+  <div class="feat">
+    <div class="fc"><div class="n">01 — CDE</div><h4>Common Data Environment</h4><p>A single source of truth in a standards-based, collaborative platform with powerful workflows.</p><a class="more">Explore →</a></div>
+    <div class="fc flag"><div class="n">02 — 3D REPO</div><h4>Coordinate in 3D</h4><p>Augment and interrogate BIM models in the browser — clashes found, named, resolved.</p><a class="more">Open a model →</a></div>
+    <div class="fc"><div class="n">03 — PLAYBOOK</div><h4>Delivery by the book</h4><p>Turn ISO 19650 into a practical, repeatable delivery engine.</p><a class="more">See Playbook →</a></div>
+  </div>
+</div>
+
+<!-- SHOWCASE -->
+<div class="wrap"><div class="sb" id="show"><div class="sb-head"><span class="num">05</span><h2>Showcase · the datum annotates</h2><p>A product surface with a datum-and-tick callout doing the pointing.</p></div></div></div>
+<div class="frame">
+  <div class="show">
+    <div class="t"><span class="ey stencil">01 — Product</span><h3>The register, in the open.</h3><p>One source of truth, read at every altitude — the boardroom, the first morning, the site gate.</p></div>
+    <div class="g">
+      <div class="pm">
+        <div class="bar"><i class="y"></i><i></i><i></i></div>
+        <div class="body"><div class="read"><div class="k"><div class="v hot">98.4%</div><div class="l">REGISTER HEALTH</div></div><div class="k"><div class="v">47</div><div class="l">OPEN RFIS</div></div><div class="k"><div class="v">L24</div><div class="l">CORE AT LEVEL</div></div></div></div>
+      </div>
+      <div class="ann2"><span class="lab">REGISTER HEALTH · 98.4%</span><span class="rod"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- NUMBERS -->
+<div class="wrap"><div class="sb" id="nums"><div class="sb-head"><span class="num">06</span><h2>Numbers band</h2><p>An instrument readout — figures in line, labels in mono.</p></div></div></div>
+<div class="frame">
+  <div class="nums">
+    <div class="nm"><div class="v"><em>84k+</em></div><div class="l">COMPANIES BUILD ON ASITE</div></div>
+    <div class="nm"><div class="v">2001</div><div class="l">DEFINING THE CDE CATEGORY</div></div>
+    <div class="nm"><div class="v">70%</div><div class="l">SAVED ON T5 TENDERING</div></div>
+    <div class="nm"><div class="v">1</div><div class="l">SOURCE OF TRUTH, EVERY PHASE</div></div>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="wrap"><div class="sb" id="quote"><div class="sb-head"><span class="num">07</span><h2>Quote · the datum attributes</h2><p>A pull-quote with the datum running its length.</p></div></div></div>
+<div class="frame">
+  <div class="quote">
+    <span class="bar"></span>
+    <blockquote>Two packages worth over £10m, tendered for <em>70% less</em> — by running them through Asite.</blockquote>
+    <div class="by"><span class="ln"></span><span>LAING O'ROURKE · HEATHROW TERMINAL 5</span></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="wrap"><div class="sb" id="cta"><div class="sb-head"><span class="num">08</span><h2>CTA</h2><p>The closing claim on the grid, with the one rationed fill.</p></div></div></div>
+<div class="frame">
+  <div class="cta-f">
+    <h3>See the whole project, <em>measured.</em></h3>
+    <p>Book a demo — Asite on a register like yours, with your standards and your datum.</p>
+    <div class="cta"><a class="btn btn-primary">Book a demo</a><a class="btn btn-line">Talk to sales</a></div>
+    <div class="datum"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="wrap"><div class="sb" id="foot"><div class="sb-head"><span class="num">09</span><h2>Footer · the datum closes</h2><p>Mono columns under one last line.</p></div></div></div>
+<div class="frame">
+  <div class="foot">
+    <div class="cols">
+      <div class="col"><div class="w"><svg width="22" height="23" viewBox="0 0 377 396"><use href="#amark"/></svg>Asite</div><p class="desc">The common data environment for the people who build — concept to completion, and beyond.</p></div>
+      <div class="col"><div class="mh">Platform</div><a>Common Data Environment</a><a>3D Repo</a><a>Playbook</a><a>aMail</a></div>
+      <div class="col"><div class="mh">Company</div><a>About</a><a>Careers</a><a>News</a><a>Contact</a></div>
+      <div class="col"><div class="mh">Insights</div><a>Case studies</a><a>Webinars</a><a>Blog</a><a>Events</a></div>
+    </div>
+    <div class="datum"></div>
+    <div class="legal"><span>© 2026 ASITE</span><span>PRIVACY</span><span>TERMS</span><span class="r">DIR 05 · DATUM</span></div>
+  </div>
+</div>
+
+<!-- SEE IT LIVE -->
+<div class="wrap"><div class="sb" id="live"><div class="sb-head"><span class="num">10</span><h2>See it live</h2><p>The sections above, assembled into the page.</p></div></div></div>
+<div class="frame">
+  <a class="seelive" href="landing.html"><div><div class="k">In the wild</div><h3>Open the landing page.</h3></div><span class="ar">→</span></a>
+</div>
+
+<div style="height:90px"></div>
+</body>
+</html>

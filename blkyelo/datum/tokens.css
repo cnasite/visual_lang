@@ -1,0 +1,109 @@
+/* ============================================================
+   ASITE — DIRECTION 05: DATUM
+   The quiet instrument, re-keyed to yellow. Depth comes from
+   borders and light, never from fills. One rationed signal —
+   Survey Yellow — used as line-work: the datum line, ticks,
+   hairlines, focus. A survey datum crosses everything; every
+   value is measured from one line.
+   ============================================================ */
+
+/* Bundled fonts — self-contained for GitHub. Inter (Light→Semibold)
+   carries the instrument voice; JetBrains Mono is coordinate duty. */
+@font-face { font-family:'Inter'; src:url('assets/fonts/Inter-300.woff2') format('woff2'); font-weight:300; font-display:swap; }
+@font-face { font-family:'Inter'; src:url('assets/fonts/Inter-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Inter'; src:url('assets/fonts/Inter-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+@font-face { font-family:'Inter'; src:url('assets/fonts/Inter-600.woff2') format('woff2'); font-weight:600; font-display:swap; }
+@font-face { font-family:'JetBrains Mono'; src:url('assets/fonts/JetBrainsMono-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'JetBrains Mono'; src:url('assets/fonts/JetBrainsMono-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+/* Exo 2 (Google) — the display voice: a precise, slightly technical geometric
+   sans that reads like an instrument face. Reserved for headlines only. */
+@font-face { font-family:'Exo 2'; src:url('assets/fonts/Exo2-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Exo 2'; src:url('assets/fonts/Exo2-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+@font-face { font-family:'Exo 2'; src:url('assets/fonts/Exo2-600.woff2') format('woff2'); font-weight:600; font-display:swap; }
+
+:root {
+  /* ---- surfaces — a near-black ramp; depth from borders & light ---- */
+  --bg-0: #0A0A08;            /* canvas              */
+  --bg-1: #111110;            /* chrome, sidebars    */
+  --bg-2: #161614;            /* cards, popovers     */
+  --bg-3: #1D1C18;            /* hover, raised       */
+  --bg-over: rgba(10,10,8,0.66);
+
+  --border:      rgba(255,198,10,0.18);   /* yellow hairline      */
+  --border-soft: rgba(245,242,232,0.09);  /* neutral hairline     */
+  --inset:       inset 0 0 0 1px rgba(255,198,10,0.10);
+  --shadow:      0 16px 50px rgba(0,0,0,0.55);
+
+  /* ---- text — three steps, warm greys ---- */
+  --t1: #F5F2E8;             /* primary             */
+  --t2: #9A968A;             /* secondary           */
+  --t3: #615F58;             /* tertiary, ticks     */
+
+  /* ---- the signal — Survey Yellow, line-work only ---- */
+  --yel:      #FFC60A;
+  --yel-bright:#FFD64A;       /* hover / links       */
+  --yel-dim:  #8A6E00;
+  --yel-soft: rgba(255,198,10,0.12);   /* focus wash      */
+  --grid:     rgba(255,198,10,0.045);  /* graph-paper      */
+  --datum-glow: 0 0 0 1px rgba(255,198,10,0.4), 0 0 22px rgba(255,198,10,0.18);
+
+  /* ---- status — desaturated, dot-first, never a filled row ---- */
+  --st-ok:   #5FB58A;
+  --st-warn: #D4A444;
+  --st-hold: #E0664E;
+  --st-info: #7FA3BC;
+  --st-idle: #615F58;
+
+  /* ---- type — Inter medium, instrument density; mono for figures ---- */
+  --font-ui:      'Inter','Segoe UI',sans-serif;
+  --font-mono:    'JetBrains Mono','SF Mono',monospace;
+  --font-display: 'Exo 2','Inter','Segoe UI',sans-serif;
+
+  --text-display: 400 clamp(40px,5.2vw,72px)/1.04 var(--font-display);
+  --text-h1:      590 32px/1.16 var(--font-ui);
+  --text-h2:      560 22px/1.26 var(--font-ui);
+  --text-h3:      560 16px/1.35 var(--font-ui);
+  --text-body:    400 15px/1.62 var(--font-ui);
+  --text-small:   400 13px/1.55 var(--font-ui);
+  --text-mono:    400 12px/1.5  var(--font-mono);
+  --text-stencil: 500 10.5px/1.4 var(--font-mono);
+
+  --track-tight:  -0.02em;
+  --track-h:      -0.015em;
+  --track-mono:   0.14em;
+
+  /* ---- geometry — instrument; near-zero radius ---- */
+  --r-sm: 2px; --r-md: 3px; --r-lg: 4px;
+
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s6:24px;
+  --s8:32px; --s12:48px; --s16:64px; --s24:96px;
+
+  --ease: cubic-bezier(0.25,0.1,0.25,1);
+  --t-fast: 90ms; --t-base: 150ms;
+}
+
+/* ---------------- utilities ---------------- */
+
+/* stencil label — mono, spaced, uppercase */
+.u-stencil { font: var(--text-stencil); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--t3); }
+
+/* the datum line — a yellow hairline with diamond end-caps */
+.u-datum { position: relative; height: 1px; background: var(--yel); }
+.u-datum::before, .u-datum::after { content:""; position:absolute; top:-4px; width:8px; height:8px;
+  border:1px solid var(--yel); transform:rotate(45deg); background:var(--bg-0); }
+.u-datum::before { left:0; } .u-datum::after { right:0; }
+
+/* setting-out cross */
+.u-cross { position: relative; width: 16px; height: 16px; }
+.u-cross::before, .u-cross::after { content:""; position:absolute; background: var(--yel); }
+.u-cross::before { left:50%; top:0; bottom:0; width:1px; transform:translateX(-50%); }
+.u-cross::after { top:50%; left:0; right:0; height:1px; transform:translateY(-50%); }
+
+/* graph-paper grid background */
+.u-grid { background-image:
+  linear-gradient(var(--grid) 1px, transparent 1px),
+  linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px; }
+
+/* status dot */
+.u-dot { width:7px; height:7px; border-radius:50%; display:inline-block; flex:none; }

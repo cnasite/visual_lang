@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Split Field</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ink); color:#C9C5B8; font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:var(--yel); color:var(--ink); }
+  img { display:block; max-width:100%; }
+  a { color:inherit; }
+  .wrap { max-width:1140px; margin:0 auto; padding:0 var(--s4); }
+  .m-fill { fill:var(--mk, var(--yel)); }
+  .stencil { font:var(--text-stencil); letter-spacing:var(--track-stencil); text-transform:uppercase; }
+
+  /* nav */
+  nav { position:sticky; top:0; z-index:50; background:rgba(14,13,10,0.9); backdrop-filter:blur(16px); border-bottom:1px solid var(--ink-3); }
+  nav .wrap { display:flex; align-items:center; gap:var(--s2); height:60px; }
+  .word { display:flex; align-items:center; gap:10px; font:900 19px/1 var(--font-ui); letter-spacing:-0.04em; color:var(--paper); text-decoration:none; margin-right:var(--s4); }
+  .ntab { font:700 12.5px/1 var(--font-ui); letter-spacing:-0.01em; color:var(--grey-2); text-decoration:none; padding:8px 12px; }
+  .ntab:hover { color:var(--paper); }
+  .ntab.on { color:var(--ink); background:var(--yel); }
+  .nspace { margin-left:auto; }
+  .nwild { font:700 12px/1 var(--font-mono); letter-spacing:0.06em; color:var(--yel); text-decoration:none; }
+
+  /* floating section nav */
+  .fnav { position:fixed; top:50%; right:16px; transform:translateY(-50%); z-index:60; display:flex; flex-direction:column; gap:1px;
+    padding:10px 8px; max-height:84vh; overflow:auto; background:rgba(22,20,15,0.92); backdrop-filter:blur(12px); }
+  .fnav .cap { font:var(--text-stencil); letter-spacing:0.14em; text-transform:uppercase; color:var(--grey-1); padding:2px 8px 8px; }
+  .fnav a { display:flex; align-items:center; gap:8px; font:600 11.5px/1 var(--font-ui); color:var(--grey-2); text-decoration:none; padding:6px 8px; white-space:nowrap; }
+  .fnav a::before { content:""; width:7px; height:3px; background:var(--ink-3); flex:none; }
+  .fnav a:hover { color:var(--paper); } .fnav a:hover::before { background:var(--yel); }
+  @media (max-width:1340px){ .fnav { display:none; } }
+
+  /* hero */
+  header.hero { padding:120px 0 90px; }
+  .hero .ey { color:var(--yel); margin-bottom:var(--s4); }
+  .hero h1 { font:var(--text-wall); letter-spacing:var(--track-wall); color:var(--paper); }
+  .hero h1 em { font-style:normal; color:var(--yel); }
+  .hero .sub { margin-top:var(--s4); max-width:600px; font:500 18px/1.6 var(--font-ui); color:var(--grey-3); }
+  .hero .meta { margin-top:var(--s8); display:flex; gap:var(--s8); flex-wrap:wrap; }
+  .hero .meta div { max-width:200px; }
+  .hero .meta b { display:block; font:800 13px/1.3 var(--font-ui); color:var(--paper); margin-bottom:4px; }
+  .hero .meta span { font:500 13px/1.5 var(--font-ui); color:var(--grey-2); }
+  .hero .bar { margin-top:var(--s8); height:var(--seam); background:var(--ink-3); max-width:540px; }
+  .hero .bar i { display:block; height:100%; width:64%; background:var(--yel); }
+
+  /* section shell */
+  section { padding:var(--s16) 0; border-top:1px solid var(--ink-3); }
+  .idx { font:700 12px/1.4 var(--font-mono); letter-spacing:0.06em; color:var(--yel); margin-bottom:var(--s2); }
+  h2 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--paper); margin-bottom:var(--s3); }
+  h2 em { font-style:normal; color:var(--yel); }
+  .sub { max-width:620px; font:500 15px/1.65 var(--font-ui); color:var(--grey-3); margin-bottom:var(--s8); }
+  .note { font:500 13px/1.6 var(--font-ui); color:var(--grey-2); border-left:var(--seam-thin) solid var(--yel); padding-left:var(--s3); max-width:600px; margin-top:var(--s6); }
+
+  /* logo */
+  .logo-stage { display:grid; grid-template-columns:1fr 1fr; gap:var(--seam); }
+  .lcell { min-height:230px; display:flex; align-items:center; justify-content:center; gap:var(--s4); }
+  .lcell .lw { font:900 42px/1 var(--font-ui); letter-spacing:-0.05em; }
+
+  /* color */
+  .planes { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--seam); margin-bottom:var(--seam); }
+  .pl { height:150px; padding:var(--s3); display:flex; flex-direction:column; justify-content:flex-end; }
+  .pl .nm { font:800 14px/1.2 var(--font-ui); }
+  .pl .hx { font:600 11px/1.4 var(--font-mono); opacity:0.7; }
+  .subplanes { display:grid; grid-template-columns:repeat(5,1fr); gap:var(--seam); margin-bottom:var(--s6); }
+  .sp { height:84px; padding:10px; display:flex; flex-direction:column; justify-content:flex-end; }
+  .sp .nm { font:700 11px/1.2 var(--font-ui); } .sp .hx { font:600 10px/1.3 var(--font-mono); opacity:0.7; }
+  .signals { display:flex; gap:var(--s3); flex-wrap:wrap; }
+  .sig { display:flex; align-items:center; gap:9px; font:600 13px/1 var(--font-ui); color:#C9C5B8; }
+  .sig i { width:16px; height:16px; flex:none; }
+
+  /* seam */
+  .seam-demos { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--seam); }
+  .sd { background:var(--ink-2); min-height:230px; display:flex; flex-direction:column; }
+  .sd .top { flex:1; position:relative; overflow:hidden; }
+  .sd .cap { padding:var(--s3); }
+  .sd .cap b { display:block; font:800 14px/1.2 var(--font-ui); color:var(--paper); margin-bottom:4px; }
+  .sd .cap p { font:500 12px/1.5 var(--font-ui); color:var(--grey-2); }
+  .demo-split { display:grid; grid-template-columns:1fr 1fr; height:100%; }
+  .demo-split .a { background:var(--yel); } .demo-split .b { background:var(--ink); border-left:var(--seam) solid var(--yel); }
+  .demo-prog { display:flex; align-items:center; justify-content:center; height:100%; }
+  .demo-prog .u-bar { width:78%; background:var(--ink-3); }
+  .demo-now { position:relative; height:100%; }
+  .demo-now .field { position:absolute; inset:0; background:var(--yel); }
+  .demo-now .field.b { left:62%; background:var(--ink); border-left:var(--seam) solid var(--paper); }
+  .demo-now .lbl { position:absolute; top:12px; left:calc(62% + 16px); font:700 10px/1 var(--font-mono); color:var(--yel); letter-spacing:0.1em; }
+
+  /* type */
+  .ladder { display:flex; flex-direction:column; }
+  .lrow { display:grid; grid-template-columns:200px 1fr; gap:var(--s4); padding:var(--s4) 0; border-top:1px solid var(--ink-3); align-items:baseline; }
+  .lrow .m { font:600 11px/1.5 var(--font-mono); color:var(--grey-1); }
+  .lrow .s { color:var(--paper); }
+  .wl-3 { font-weight:300; } .wl-4 { font-weight:400; } .wl-5 { font-weight:500; }
+  .wl-7 { font-weight:700; } .wl-8 { font-weight:800; } .wl-9 { font-weight:900; }
+
+  /* imagery */
+  .img-rule { background:var(--ink-2); padding:var(--s6); margin-bottom:var(--s6); display:flex; gap:var(--s6); flex-wrap:wrap; }
+  .img-rule div { flex:1; min-width:200px; }
+  .img-rule b { display:block; font:800 14px/1.2 var(--font-ui); color:var(--paper); margin-bottom:6px; }
+  .img-rule b i { font-style:normal; color:var(--yel); font:700 10px/1 var(--font-mono); letter-spacing:0.14em; margin-right:8px; }
+  .img-rule p { font:500 12.5px/1.55 var(--font-ui); color:var(--grey-2); }
+  .img-grid { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:var(--seam); }
+  .ish { position:relative; overflow:hidden; min-height:300px; border-top:var(--seam) solid var(--yel); }
+  .ish img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .ish .stamp { position:absolute; left:0; bottom:16px; z-index:2; background:var(--yel); color:var(--ink); font:700 10px/1 var(--font-mono); letter-spacing:0.14em; padding:7px 11px; }
+  .ish.tall { grid-row:span 1; }
+
+  /* buttons / components */
+  .stage { background:var(--ink-2); padding:var(--s8); display:flex; flex-direction:column; gap:var(--s6); }
+  .row { display:flex; gap:var(--s3); align-items:center; flex-wrap:wrap; }
+  .btn { display:inline-flex; align-items:center; gap:9px; font:700 13.5px/1 var(--font-ui); letter-spacing:-0.01em; padding:15px 26px; text-decoration:none; border:none; cursor:pointer; }
+  .btn-yel { background:var(--yel); color:var(--ink); }
+  .btn-ink { background:var(--ink); color:var(--yel); }
+  .btn-line { background:none; color:var(--paper); padding:15px 4px; text-decoration:underline; text-underline-offset:6px; text-decoration-thickness:3px; }
+  .tag { display:inline-block; font:700 10.5px/1 var(--font-ui); padding:5px 9px; text-transform:uppercase; letter-spacing:0.02em; }
+  .pill { font:700 11px/1 var(--font-ui); padding:5px 9px; }
+  .inp { background:var(--ink); border:none; border-bottom:3px solid var(--ink-3); color:var(--paper); font:500 14px/1.4 var(--font-ui); padding:11px 0; outline:none; min-width:260px; transition:border-color var(--t) var(--ease); }
+  .inp::placeholder { color:var(--grey-1); }
+  .inp:focus { border-color:var(--yel); }
+  .ann { font:500 13px/1.6 var(--font-ui); color:var(--grey-2); }
+
+  /* register */
+  .reg { background:var(--ink-2); }
+  .reg .r { display:flex; align-items:center; gap:var(--s3); padding:15px var(--s4); border-top:1px solid var(--ink-3); }
+  .reg .r:first-child { border-top:none; }
+  .reg .r .ref { font:700 12px/1 var(--font-mono); color:var(--yel); width:92px; flex:none; }
+  .reg .r .ref.dim { color:var(--grey-1); }
+  .reg .r .t { font:600 14px/1.3 var(--font-ui); color:#C9C5B8; }
+  .reg .r .meta { margin-left:auto; font:600 11px/1 var(--font-mono); color:var(--grey-1); }
+  .reg .r .pill { margin-left:14px; }
+  .pill.hold { background:var(--red); color:#fff; } .pill.due { background:var(--yel); color:var(--ink); } .pill.ok { background:var(--grn); color:#fff; }
+
+  /* principles */
+  .princ { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--seam); }
+  .pc { background:var(--ink-2); padding:var(--s4); border-top:var(--seam) solid var(--yel); }
+  .pc b { display:block; font:800 16px/1.2 var(--font-ui); letter-spacing:-0.02em; color:var(--paper); margin-bottom:8px; }
+  .pc p { font:500 13px/1.6 var(--font-ui); color:var(--grey-2); }
+
+  /* in the world */
+  .world { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--seam); }
+  .wc { position:relative; overflow:hidden; min-height:240px; display:flex; align-items:flex-end; border-top:var(--seam) solid var(--yel); text-decoration:none; }
+  .wc img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .wc::after { content:""; position:absolute; inset:0; background:linear-gradient(rgba(14,13,10,0.1), rgba(14,13,10,0.88)); }
+  .wc .l { position:relative; z-index:2; padding:var(--s4); }
+  .wc .l b { display:block; font:900 24px/1 var(--font-ui); letter-spacing:-0.03em; color:var(--paper); }
+  .wc .l span { font:600 12px/1 var(--font-mono); color:var(--yel); }
+
+  footer { padding:var(--s8) 0; border-top:var(--seam) solid var(--yel); }
+  footer .wrap { display:flex; justify-content:space-between; font:600 12px/1.5 var(--font-mono); color:var(--grey-1); flex-wrap:wrap; gap:var(--s3); }
+
+  /* icons */
+  .icon-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:var(--seam); }
+  .icell { background:var(--ink-2); padding:var(--s4); display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .icell svg { stroke:var(--grey-2); fill:none; stroke-width:2.5; stroke-linecap:butt; stroke-linejoin:miter; }
+  .icell:hover svg { stroke:var(--paper); }
+  .icell.hold svg { stroke:var(--yel); }
+  .icell span { font:700 11px/1.3 var(--font-ui); color:var(--grey-1); }
+
+  /* illustration */
+  .illo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--seam); }
+  .illo { background:var(--ink-2); }
+  .illo .st { aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; border-bottom:var(--seam) solid var(--yel); }
+  .illo .ct { padding:var(--s3); }
+  .illo .ct b { display:block; font:800 14px/1.2 var(--font-ui); color:var(--paper); margin-bottom:4px; }
+  .illo .ct p { font:500 12px/1.5 var(--font-ui); color:var(--grey-2); }
+
+  /* motifs */
+  .mgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--seam); }
+  .mo { background:var(--ink-2); }
+  .mo .st { height:128px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .mo .ct { padding:var(--s3); border-top:1px solid var(--ink-3); }
+  .mo .ct b { display:block; font:800 13px/1.2 var(--font-ui); color:var(--paper); }
+  .mo .ct p { font:500 11.5px/1.5 var(--font-ui); color:var(--grey-2); margin-top:3px; }
+  .metre { width:100%; height:100%; background:repeating-linear-gradient(90deg, var(--yel) 0 22px, var(--ink) 22px 44px); }
+  .bignum { font:900 60px/0.8 var(--font-ui); letter-spacing:-0.05em; color:var(--yel); }
+  .wedge { width:100%; height:100%; background:linear-gradient(135deg, var(--yel) 0 50%, var(--ink) 50% 100%); }
+  .stampbig { background:var(--yel); color:var(--ink); font:700 11px/1 var(--font-mono); letter-spacing:0.14em; padding:9px 13px; }
+
+  /* spacing & grid */
+  .spscale { margin-bottom:var(--s6); }
+  .spr { display:flex; align-items:center; gap:var(--s3); padding:8px 0; border-top:1px solid var(--ink-3); }
+  .spr .tk { font:600 11px/1 var(--font-mono); color:var(--grey-1); width:120px; flex:none; }
+  .spr .bb { height:14px; background:var(--yel); }
+  .gridcol { display:grid; grid-template-columns:repeat(12,1fr); gap:var(--seam-thin); height:120px; }
+  .gridcol span { background:var(--ink-3); }
+  .gridcol span.hl { background:var(--yel); }
+
+  /* data entry */
+  .fgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--seam); }
+  .fc { background:var(--ink-2); padding:var(--s4); display:flex; flex-direction:column; gap:12px; }
+  .flab { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--yel); }
+  .fhint { font:500 11.5px/1.5 var(--font-ui); color:var(--grey-1); margin-top:auto; }
+  .field { background:transparent; border:none; border-bottom:3px solid var(--ink-3); color:var(--paper);
+    font:500 14px/1.4 var(--font-ui); padding:9px 0; outline:none; width:100%; transition:border-color var(--t) var(--ease); }
+  .field:focus { border-color:var(--yel); } .field::placeholder { color:var(--grey-1); }
+  .sw { display:flex; align-items:center; gap:10px; font:600 13px/1 var(--font-ui); color:var(--paper); cursor:pointer; }
+  .sw input { position:absolute; opacity:0; }
+  .sw .tk { width:42px; height:22px; background:var(--ink-3); position:relative; flex:none; transition:background var(--t) var(--ease); }
+  .sw .tk::after { content:""; position:absolute; top:3px; left:3px; width:16px; height:16px; background:var(--grey-2); transition:transform var(--t) var(--ease), background var(--t) var(--ease); }
+  .sw input:checked + .tk { background:var(--yel); } .sw input:checked + .tk::after { transform:translateX(20px); background:var(--ink); }
+  .ck { display:flex; align-items:center; gap:10px; font:600 13px/1 var(--font-ui); color:var(--paper); cursor:pointer; padding:3px 0; }
+  .ck input { appearance:none; -webkit-appearance:none; width:18px; height:18px; margin:0; background:var(--ink); border:2px solid var(--ink-3); position:relative; cursor:pointer; }
+  .ck input:checked { background:var(--yel); border-color:var(--yel); }
+  .ck input:checked::after { content:""; position:absolute; left:5px; top:1px; width:5px; height:10px; border:solid var(--ink); border-width:0 2.5px 2.5px 0; transform:rotate(45deg); }
+  .unit { position:relative; } .unit .field { text-align:right; padding-right:38px; font:500 14px/1.4 var(--font-mono); }
+  .unit .u { position:absolute; right:0; top:9px; font:600 12px/1 var(--font-mono); color:var(--grey-1); }
+
+  /* overlays */
+  .ov-grid { display:grid; grid-template-columns:1.25fr 1fr; gap:var(--seam); }
+  .ov-stage { position:relative; min-height:320px; display:flex; align-items:center; justify-content:center; background:var(--ink-2); overflow:hidden; }
+  .ov-stage::before { content:""; position:absolute; inset:0; background:rgba(14,13,10,0.66); }
+  .dlg { position:relative; width:380px; max-width:90%; background:var(--paper); color:var(--ink); }
+  .dlg .hd { height:var(--seam); background:var(--yel); }
+  .dlg .bd { padding:var(--s4); }
+  .dlg h5 { font:900 18px/1.1 var(--font-ui); letter-spacing:-0.03em; }
+  .dlg p { font:500 13px/1.6 var(--font-ui); color:var(--grey-1); margin:10px 0 18px; }
+  .dlg .acts { display:flex; gap:10px; align-items:center; }
+  .dlg .b1 { background:var(--ink); color:var(--yel); font:700 12.5px/1 var(--font-ui); padding:12px 18px; border:none; cursor:pointer; }
+  .dlg .b2 { background:none; color:var(--ink); font:700 12.5px/1 var(--font-ui); padding:12px 4px; text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:2.5px; border:none; cursor:pointer; }
+  .menu { position:relative; background:var(--paper); color:var(--ink); width:248px; }
+  .menu .mh2 { height:var(--seam-thin); background:var(--yel); }
+  .menu .mi { display:flex; align-items:center; gap:10px; padding:12px 14px; font:600 13px/1 var(--font-ui); border-top:1px solid rgba(14,13,10,0.08); }
+  .menu .mi:first-of-type { border-top:none; }
+  .menu .mi:hover { background:var(--yel); }
+  .menu .mi .k { margin-left:auto; font:600 10px/1 var(--font-mono); color:var(--grey-1); }
+  .menu .mi.danger { color:var(--red); }
+
+  /* brand applications */
+  .appgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--seam); }
+  .app { position:relative; min-height:230px; overflow:hidden; display:flex; }
+  .app .ct { position:relative; z-index:2; flex:1; padding:var(--s4); display:flex; flex-direction:column; }
+  .app .ct .k { font:700 10px/1 var(--font-mono); letter-spacing:0.14em; }
+  .app .ct b { font:900 26px/0.95 var(--font-ui); letter-spacing:-0.04em; margin-top:auto; }
+  .app.full img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .app.full::after { content:""; position:absolute; inset:0; background:linear-gradient(rgba(14,13,10,0.15), rgba(14,13,10,0.82)); }
+  .app .seamL { position:absolute; left:0; top:0; bottom:0; width:var(--seam); background:var(--yel); z-index:1; }
+
+  @media (max-width:880px){
+    .logo-stage, .seam-demos, .princ, .img-grid, .world, .illo-grid, .ov-grid, .fgrid, .appgrid { grid-template-columns:1fr; }
+    .planes, .subplanes, .mgrid { grid-template-columns:1fr 1fr; }
+    .icon-grid { grid-template-columns:repeat(3,1fr); }
+    .lrow { grid-template-columns:1fr; }
+  }
+
+  /* ===== LIGHT MODE — light ground + chrome ===== */
+  body { background:var(--bone); color:var(--grey-1); }
+  nav { background:rgba(244,240,228,0.92); border-bottom:1px solid rgba(14,13,10,0.12); }
+  .word { color:var(--ink); }
+  .ntab { color:var(--grey-1); } .ntab:hover { color:var(--ink); } .ntab.on { color:var(--ink); background:var(--yel); }
+  .fnav { background:rgba(244,240,228,0.95); } .fnav .cap { color:var(--grey-1); } .fnav a { color:var(--grey-1); } .fnav a:hover { color:var(--ink); } .fnav a::before { background:rgba(14,13,10,0.2); }
+  .page-head h1 { color:var(--ink); } .page-head p { color:var(--grey-1); }
+  .sb-head h2 { color:var(--ink); } .sb-head p { color:var(--grey-1); }
+
+  .hero h1 { color:var(--ink); } .hero .sub { color:var(--grey-1); }
+  .hero .meta b { color:var(--ink); } .hero .meta span { color:var(--grey-1); }
+  .hero .bar { background:rgba(14,13,10,0.12); }
+  section { border-top:1px solid rgba(14,13,10,0.12); }
+  h2 { color:var(--ink); } .sub { color:var(--grey-1); } .note { color:var(--grey-1); }
+  .ladder .lrow { border-top-color:rgba(14,13,10,0.12); }
+  .lrow .s { color:var(--ink); } .lrow .m { color:var(--grey-1); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-fill" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-fill" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="word" href="index.html"><svg width="22" height="23" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg>Asite</a>
+    <a class="ntab on" href="index.html">Language</a>
+    <a class="ntab" href="screens.html">Product</a>
+    <a class="ntab" href="web.html">Website</a>
+    <a class="ntab" href="slides.html">Slides</a>
+    <span class="nspace"></span>
+  </div>
+</nav>
+
+<aside class="fnav" aria-label="On this page">
+  <div class="cap">On this page</div>
+  <a href="#logo">Logo</a>
+  <a href="#color">Color</a>
+  <a href="#seam">The seam</a>
+  <a href="#type">Typography</a>
+  <a href="#icons">Iconography</a>
+  <a href="#illustration">Illustration</a>
+  <a href="#imagery">Imagery</a>
+  <a href="#motifs">Motifs</a>
+  <a href="#spacing">Spacing &amp; grid</a>
+  <a href="#buttons">Controls</a>
+  <a href="#inputs">Data entry</a>
+  <a href="#overlays">Overlays</a>
+  <a href="#register">Register</a>
+  <a href="#principles">Principles</a>
+  <a href="#world">Brand in the world</a>
+</aside>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="stencil ey">Asite · Visual Language · Direction 05</div>
+    <h1>Split <em>Field.</em></h1>
+    <p class="sub">Two planes, one seam. No borders, no shadows, no texture — mass meets mass and the seam does the talking. Built loud, set heavy, and carried by photography.</p>
+    <div class="meta">
+      <div><b>Idiom</b><span>Swiss modernism · planar</span></div>
+      <div><b>Field</b><span>Yellow · claim &amp; selection</span></div>
+      <div><b>Type</b><span>Inter Black · sentence case</span></div>
+      <div><b>Voice</b><span>Imagery first, line-art last</span></div>
+    </div>
+    <div class="bar"><i></i></div>
+  </div>
+</header>
+
+<section id="logo">
+  <div class="wrap">
+    <div class="idx">01 — Logo</div>
+    <h2>The mark, set in mass</h2>
+    <p class="sub">The Asite mark renders in a single plane colour — yellow on ink, ink on yellow. The wordmark is Inter Black at -5% tracking, sentence case: it reads as weight, not as a monument. No Cornerstone, anywhere.</p>
+    <div class="logo-stage">
+      <div class="lcell" style="background:var(--ink-2)">
+        <svg width="120" height="126" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg>
+      </div>
+      <div class="lcell" style="background:var(--yel)">
+        <svg width="54" height="57" viewBox="0 0 377 396" style="--mk:var(--ink)"><use href="#amark"/></svg>
+        <span class="lw" style="color:var(--ink)">Asite</span>
+      </div>
+    </div>
+    <p class="note">The lockup sits on a plane and never floats inside a border or a rounded chip. Separation is a change of plane; emphasis is a change of mass.</p>
+  </div>
+</section>
+
+<section id="color">
+  <div class="wrap">
+    <div class="idx">02 — Color</div>
+    <h2>Four planes, <em>three signals</em></h2>
+    <p class="sub">A colour is either there or it isn't — no tints, no washes, no gradients. Yellow is the field: claim and selection. Ink is the mass. Paper and bone are where the work lives. Signals are solid and used only as state.</p>
+    <div class="planes">
+      <div class="pl" style="background:var(--yel); color:var(--ink)"><span class="nm">Yellow — the field</span><span class="hx">#FFC60A</span></div>
+      <div class="pl" style="background:var(--ink); color:var(--paper)"><span class="nm">Ink — the mass</span><span class="hx">#0E0D0A</span></div>
+      <div class="pl" style="background:var(--paper); color:var(--ink)"><span class="nm">Paper — the work</span><span class="hx">#FFFFFF</span></div>
+      <div class="pl" style="background:var(--bone); color:var(--ink)"><span class="nm">Bone — warm neutral</span><span class="hx">#F4F0E4</span></div>
+    </div>
+    <div class="subplanes">
+      <div class="sp" style="background:var(--ink-2); color:var(--paper)"><span class="nm">Ink panel</span><span class="hx">#16140F</span></div>
+      <div class="sp" style="background:var(--ink-3); color:var(--paper)"><span class="nm">Hairline</span><span class="hx">#2A2822</span></div>
+      <div class="sp" style="background:var(--grey-1); color:#fff"><span class="nm">Grey 1</span><span class="hx">#55524A</span></div>
+      <div class="sp" style="background:var(--grey-2); color:var(--ink)"><span class="nm">Grey 2</span><span class="hx">#8F8B7E</span></div>
+      <div class="sp" style="background:var(--grey-3); color:var(--ink)"><span class="nm">Grey 3</span><span class="hx">#A6A294</span></div>
+    </div>
+    <div class="signals">
+      <span class="sig"><i style="background:var(--red)"></i>Hold / danger — #E0301E</span>
+      <span class="sig"><i style="background:var(--grn)"></i>Clear / pass — #1E7A4A</span>
+      <span class="sig"><i style="background:var(--blu)"></i>Mandatory / info — #1456B8</span>
+    </div>
+    <p class="note">Signals are solid blocks only — never a tinted row, never a soft badge. If a screen needs more colour than the field plus one signal, the screen is wrong.</p>
+  </div>
+</section>
+
+<section id="seam">
+  <div class="wrap">
+    <div class="idx">03 — The seam</div>
+    <h2>The only ornament, <em>and it isn't one</em></h2>
+    <p class="sub">A seam is where two planes meet. Give it a position and it stops being decoration and becomes a reading: progress, share, and NOW are all "how far the yellow travels." It is the brand's signature line — used for splits, dividers, and bars.</p>
+    <div class="seam-demos">
+      <div class="sd">
+        <div class="top"><div class="demo-split"><div class="a"></div><div class="b"></div></div></div>
+        <div class="cap"><b>The split</b><p>Two planes meet at a 10px seam. The divide is the layout — no border draws it.</p></div>
+      </div>
+      <div class="sd">
+        <div class="top"><div class="demo-prog"><div class="u-bar"><i style="width:64%"></i></div></div></div>
+        <div class="cap"><b>The bar</b><p>A seam given a position. The yellow travel is the data: progress, share, register health.</p></div>
+      </div>
+      <div class="sd">
+        <div class="top"><div class="demo-now"><div class="field"></div><div class="field b"></div><span class="lbl">NOW</span></div></div>
+        <div class="cap"><b>The now-line</b><p>On a timeline, the seam is the present moment — where poured meets planned.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="type">
+  <div class="wrap">
+    <div class="idx">04 — Typography</div>
+    <h2>Weight does <em>the talking</em></h2>
+    <p class="sub">One family — Inter — from Light to Black. Hierarchy is mass, not size alone; headlines are Inter Black set tight and in sentence case. JetBrains Mono is stencil duty only: refs, stamps, coordinates. There is no display face.</p>
+    <div class="ladder">
+      <div class="lrow"><div class="m">wall · 900 · -5% · sentence case</div><div class="s" style="font:900 64px/0.92 var(--font-ui); letter-spacing:-0.05em">Built to hold.</div></div>
+      <div class="lrow"><div class="m">display · 900 · -4.5%</div><div class="s" style="font:900 44px/0.95 var(--font-ui); letter-spacing:-0.045em">One source of truth</div></div>
+      <div class="lrow"><div class="m">h1 · 900 · -3%</div><div class="s" style="font:900 34px/1 var(--font-ui); letter-spacing:-0.03em">Heavy data, held to tolerance</div></div>
+      <div class="lrow"><div class="m">h2 · 800 · -3%</div><div class="s" style="font:800 24px/1.1 var(--font-ui); letter-spacing:-0.03em">Common data environment</div></div>
+      <div class="lrow"><div class="m">body · 500 · 15/1.6</div><div class="s wl-5" style="font-size:15px; line-height:1.6; max-width:560px; color:#C9C5B8">Every drawing revision, RFI, and field observation flows into a single environment — versioned, auditable, and visible from bid to handover.</div></div>
+      <div class="lrow"><div class="m">stencil · MONO · +16%</div><div class="s stencil" style="color:var(--yel)">MCG-TWRC-STR-DWG-0412 · REV C03</div></div>
+    </div>
+    <p class="note">The trade-off is deliberate: dropping a display face means the system's voice is weight and colour, not letterforms. That is the point — it scales from app to billboard without translation.</p>
+  </div>
+</section>
+
+<section id="icons">
+  <div class="wrap">
+    <div class="idx">05 — Iconography</div>
+    <h2>Drawn bold, <em>cut square</em></h2>
+    <p class="sub">Icons are geometric and heavy — a 24px grid, 2.5px strokes, butt caps and mitred joins. No rounded corners, no hairlines. They inherit text colour; only the hold diamond carries the field.</p>
+    <div class="icon-grid">
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 24 24"><path d="M4 11 L12 4 L20 11 V20 H4 Z"/></svg><span>Today</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 24 24"><path d="M4 6 H20 M4 12 H20 M4 18 H14"/></svg><span>Register</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 24 24"><path d="M4 6 H10 L12 8 H20 V19 H4 Z"/></svg><span>Files</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 24 24"><path d="M6 3 H15 L19 7 V21 H6 Z"/><path d="M15 3 V7 H19"/></svg><span>Docs</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16 L21 21"/></svg><span>Search</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16"/><path d="M4 10 H20 M9 3 V7 M15 3 V7"/></svg><span>Schedule</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7 V12 L16 14"/></svg><span>Recent</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 24 24"><path d="M12 16 V4 M6 10 L12 4 L18 10 M4 20 H20"/></svg><span>Upload</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 24 24"><path d="M12 3 L20 7.5 V16.5 L12 21 L4 16.5 V7.5 Z"/><path d="M4 7.5 L12 12 L20 7.5 M12 12 V21"/></svg><span>Model</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 24 24"><path d="M4 6 H20 V18 H4 Z M4 6 L12 13 L20 6"/></svg><span>aMail</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 24 24"><path d="M5 20 V12 M12 20 V5 M19 20 V9"/></svg><span>Reports</span></div>
+      <div class="icell hold"><svg width="32" height="32" viewBox="0 0 24 24"><path d="M12 4 L20 12 L12 20 L4 12 Z"/></svg><span>Hold</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="illustration">
+  <div class="wrap">
+    <div class="idx">06 — Illustration</div>
+    <h2>Flat shapes, <em>thick rods</em></h2>
+    <p class="sub">When a photograph won't do, illustration is flat geometric shapes in plane colours — no gradients, no fine line-art. Lines, when they appear, are thick and bold: the rod and the seam doing structural work.</p>
+    <div class="illo-grid">
+      <div class="illo">
+        <div class="st"><svg width="200" height="150" viewBox="0 0 200 150"><rect x="40" y="98" width="120" height="32" fill="#2A2822"/><rect x="40" y="62" width="120" height="32" fill="#55524A"/><rect x="40" y="26" width="120" height="32" fill="#FFC60A"/></svg></div>
+        <div class="ct"><b>Flat stack</b><p>Solid blocks, one yellow — mass over outline.</p></div>
+      </div>
+      <div class="illo">
+        <div class="st"><svg width="200" height="150" viewBox="0 0 200 150"><rect x="28" y="84" width="58" height="46" fill="#2A2822"/><rect x="110" y="58" width="58" height="72" fill="#55524A"/><rect x="16" y="70" width="168" height="13" fill="#FFC60A"/><circle cx="184" cy="76" r="10" fill="#FFC60A"/></svg></div>
+        <div class="ct"><b>The rod</b><p>A thick yellow bar crosses the mass — beam, datum, seam.</p></div>
+      </div>
+      <div class="illo">
+        <div class="st"><svg width="200" height="150" viewBox="0 0 200 150"><rect x="30" y="40" width="13" height="100" fill="#FFC60A"/><rect x="30" y="33" width="124" height="13" fill="#FFC60A"/><rect x="120" y="46" width="8" height="28" fill="#2A2822"/><rect x="96" y="92" width="74" height="48" fill="#55524A"/><rect x="96" y="92" width="74" height="11" fill="#2A2822"/></svg></div>
+        <div class="ct"><b>Geometric site</b><p>A crane and tower built from flat shapes only.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="imagery">
+  <div class="wrap">
+    <div class="idx">07 — Imagery</div>
+    <h2>Photography carries <em>the emotion</em></h2>
+    <p class="sub">Split Field is built on good imagery more than line-art. Photographs run full-bleed and full-colour — real sites, real people, real cranes — cropped bold and framed by a plane and a seam. Type carries the argument; the picture carries the feeling.</p>
+    <div class="img-rule">
+      <div><b><i>FULL COLOUR</i>No filters</b><p>Photos run in their actual colours. No duotone, no grayscale — the yellow plane is enough brand signal beside them.</p></div>
+      <div><b><i>SEAM FRAME</i>One yellow edge</b><p>An image meets the layout through a single 10px yellow seam — top or side. Never a full border, never a rounded corner.</p></div>
+      <div><b><i>THE STAMP</i>Mono on yellow</b><p>Captions are a solid yellow stamp with ink mono — a site reference, a grid, a stage. It sits flush to an edge.</p></div>
+    </div>
+    <div class="img-grid">
+      <div class="ish"><img src="https://images.unsplash.com/photo-1751808830304-51c95ed33b10?w=1100&q=72&auto=format&fit=crop" alt="Tower cranes against the sky"><span class="stamp">On site · Grid 04</span></div>
+      <div class="ish"><img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=900&q=72&auto=format&fit=crop" alt="Civil engineer on a construction site"><span class="stamp">The people who build</span></div>
+      <div class="ish"><img src="https://images.unsplash.com/photo-1691435006749-c9485d527d44?w=900&q=72&auto=format&fit=crop" alt="Transit tunnel infrastructure"><span class="stamp">Infrastructure</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="motifs">
+  <div class="wrap">
+    <div class="idx">08 — Motifs</div>
+    <h2>The recurring <em>devices</em></h2>
+    <p class="sub">A small kit of plane-and-seam devices that recur across the system — each one a way the field meets the mass.</p>
+    <div class="mgrid">
+      <div class="mo"><div class="st"><span class="stampbig">ON SITE · GRID 04</span></div><div class="ct"><b>The stamp</b><p>Mono on a solid yellow block, flush to an edge.</p></div></div>
+      <div class="mo"><div class="st"><div class="metre"></div></div><div class="ct"><b>The metre band</b><p>Yellow/ink in equal steps — scale read from any distance.</p></div></div>
+      <div class="mo"><div class="st"><span class="bignum">98%</span></div><div class="ct"><b>The oversize number</b><p>One figure, set huge in the field colour.</p></div></div>
+      <div class="mo"><div class="st"><div class="wedge"></div></div><div class="ct"><b>The wedge</b><p>A diagonal where two planes cut — motion and emphasis.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="spacing">
+  <div class="wrap">
+    <div class="idx">09 — Spacing &amp; grid</div>
+    <h2>8px base, <em>poster margins</em></h2>
+    <p class="sub">Planes breathe. Space runs on an 8px base with generous, poster-scale section margins. Layout sits on a twelve-column grid; the split is simply where the columns break.</p>
+    <div class="spscale">
+      <div class="spr"><span class="tk">--s1 · 8</span><div class="bb" style="width:8px"></div></div>
+      <div class="spr"><span class="tk">--s2 · 16</span><div class="bb" style="width:16px"></div></div>
+      <div class="spr"><span class="tk">--s3 · 24</span><div class="bb" style="width:24px"></div></div>
+      <div class="spr"><span class="tk">--s4 · 32</span><div class="bb" style="width:32px"></div></div>
+      <div class="spr"><span class="tk">--s6 · 48</span><div class="bb" style="width:48px"></div></div>
+      <div class="spr"><span class="tk">--s8 · 64</span><div class="bb" style="width:64px"></div></div>
+      <div class="spr"><span class="tk">--s12 · 96</span><div class="bb" style="width:96px"></div></div>
+      <div class="spr"><span class="tk">--s16 · 128</span><div class="bb" style="width:128px"></div></div>
+    </div>
+    <div class="gridcol">
+      <span></span><span></span><span></span><span></span><span class="hl"></span><span class="hl"></span><span class="hl"></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <p class="note">The split field is a column decision: the field takes the columns it needs, the mass takes the rest, and the seam falls on the gutter between.</p>
+  </div>
+</section>
+
+<section id="buttons">
+  <div class="wrap">
+    <div class="idx">10 — Controls</div>
+    <h2>Square, with mass</h2>
+    <p class="sub">Zero radius, zero chrome. A primary action is a solid plane; a secondary is an underline with weight. Inputs lose their box and keep a single seam underneath, lit yellow on focus. Tags and pills are solid blocks of signal.</p>
+    <div class="stage">
+      <div class="row">
+        <a class="btn btn-yel" href="#buttons">Book a demo</a>
+        <a class="btn btn-line" href="#buttons">See pricing</a>
+        <span class="ann">primary plane · underline action</span>
+      </div>
+      <div class="row">
+        <input class="inp" type="text" placeholder="Search the register…">
+        <span class="ann">no box · seam underline · yellow on focus</span>
+      </div>
+      <div class="row">
+        <span class="tag" style="background:var(--yel); color:var(--ink)">CDE</span>
+        <span class="tag" style="background:var(--ink); color:var(--yel)">ISO 19650</span>
+        <span class="pill hold">HOLD</span>
+        <span class="pill due">DUE FRI</span>
+        <span class="pill ok">CLEARED</span>
+        <span class="ann">tags &amp; pills — solid blocks, never outlines</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="inputs">
+  <div class="wrap">
+    <div class="idx">11 — Data entry</div>
+    <h2>Every value has <em>a correct field</em></h2>
+    <p class="sub">Inputs drop the box and keep one seam underneath, lit yellow on focus. Toggles, checks, and units are square and solid. A form is planes and hairlines — never a sea of outlines.</p>
+    <div class="fgrid">
+      <div class="fc">
+        <span class="flab">RFI title</span>
+        <input class="field" type="text" placeholder="Core wall cover clash · L26">
+        <span class="fhint">Seam underline · yellow on focus</span>
+      </div>
+      <div class="fc">
+        <span class="flab">Tolerance</span>
+        <div class="unit"><input class="field" type="text" value="0.5"><span class="u">mm</span></div>
+        <span class="fhint">Mono · right-aligned · unit pinned</span>
+      </div>
+      <div class="fc">
+        <span class="flab">Distribution</span>
+        <label class="sw"><input type="checkbox" checked><span class="tk"></span>Notify the design lead</label>
+        <label class="ck"><input type="checkbox" checked>Add to weekly register</label>
+        <label class="ck"><input type="checkbox">Mark as mandatory</label>
+        <span class="fhint">Square toggle · square checks</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="overlays">
+  <div class="wrap">
+    <div class="idx">12 — Overlays &amp; dialogues</div>
+    <h2>Decisions, <em>brought forward</em></h2>
+    <p class="sub">A dialogue is a paper plane lifted over a dimmed field — capped by a seam, never floated by a shadow. Menus follow: solid planes, hairline rows, the field on hover.</p>
+    <div class="ov-grid">
+      <div class="ov-stage">
+        <div class="dlg">
+          <div class="hd"></div>
+          <div class="bd">
+            <h5>Release the hold?</h5>
+            <p>RFI-0847 clears and the L26 pour returns to the programme. This is logged to the register.</p>
+            <div class="acts"><button class="b1">Release hold</button><button class="b2">Cancel</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="ov-stage" style="background:var(--ink)">
+        <div class="menu">
+          <div class="mh2"></div>
+          <div class="mi">Open in register<span class="k">↵</span></div>
+          <div class="mi">Assign to me<span class="k">A</span></div>
+          <div class="mi">Add to pour card<span class="k">P</span></div>
+          <div class="mi danger">Delete RFI<span class="k">⌫</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="register">
+  <div class="wrap">
+    <div class="idx">13 — The register</div>
+    <h2>Rows, not spreadsheets</h2>
+    <p class="sub">The project record is a list of refs, plain titles, and a single state block. Hairlines separate rows; the yellow ref and the solid pill are the only colour. Mono carries every reference and stamp.</p>
+    <div class="reg">
+      <div class="r"><span class="ref">RFI-0847</span><span class="t">Core wall cover clash · L26</span><span class="meta">2D OVER</span><span class="pill hold">HOLD</span></div>
+      <div class="r"><span class="ref dim">P-1128</span><span class="t" style="color:var(--grey-2)">Pour card · L24 core</span><span class="meta">FRI</span><span class="pill due">DUE</span></div>
+      <div class="r"><span class="ref dim">DWG-0412</span><span class="t" style="color:var(--grey-2)">Tower C · structural · rev C03</span><span class="meta">APPROVED</span><span class="pill ok">CLEARED</span></div>
+      <div class="r"><span class="ref dim">OBS-2231</span><span class="t" style="color:var(--grey-2)">Field observation · podium slab</span><span class="meta">WK 24</span><span class="pill" style="background:var(--blu); color:#fff">INFO</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="principles">
+  <div class="wrap">
+    <div class="idx">14 — Principles</div>
+    <h2>The craft contract</h2>
+    <p class="sub">Six rules keep Split Field loud without becoming noisy.</p>
+    <div class="princ">
+      <div class="pc"><b>Planes, not boxes</b><p>Separation is a change of plane. Nothing is contained by a border or lifted by a shadow.</p></div>
+      <div class="pc"><b>The seam carries data</b><p>Every divider has a position, and the position means something — progress, share, or now.</p></div>
+      <div class="pc"><b>Weight does the talking</b><p>Hierarchy is mass. Inter Black for the claim, set tight, sentence case — never wide caps.</p></div>
+      <div class="pc"><b>Photography carries emotion</b><p>Lead with real, full-colour imagery. Line-art is the exception, not the rule.</p></div>
+      <div class="pc"><b>A colour is there or it isn't</b><p>No tints or washes. Yellow is the field; signals are solid; everything else is ink and grey.</p></div>
+      <div class="pc"><b>Zero chrome</b><p>Zero radius, zero shadow, zero texture. The page is mass, type, photograph, seam.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="world">
+  <div class="wrap">
+    <div class="idx">15 — Brand in the world</div>
+    <h2>The field, <em>on site</em></h2>
+    <p class="sub">Yellow and ink were made for the world the product lives in — hoardings, hard hats, passes, and screens. The planes scale from app icon to billboard without translation.</p>
+    <div class="appgrid">
+      <div class="app full"><img src="https://images.unsplash.com/photo-1664190425588-a2c96bc61abb?w=1100&q=72&auto=format&fit=crop" alt="Site hoarding"><div class="ct"><span class="k" style="color:var(--yel)">SITE HOARDING</span><b style="color:var(--paper)">Built here.</b></div></div>
+      <div class="app" style="background:var(--yel)"><div class="ct"><span class="k" style="color:var(--ink)">APP ICON</span><svg width="62" height="65" viewBox="0 0 377 396" style="--mk:var(--ink); margin-top:auto"><use href="#amark"/></svg></div></div>
+      <div class="app" style="background:var(--ink-2)"><span class="seamL"></span><div class="ct"><span class="k" style="color:var(--yel)">SITE PASS</span><b style="color:var(--paper)">Asite</b><span style="font:600 11px/1.5 var(--font-mono); color:var(--grey-2); margin-top:6px">VISITOR · GRID 04 · WK 24</span></div></div>
+      <div class="app" style="background:var(--ink)"><div class="ct"><span class="k" style="color:var(--yel)">HARD HAT</span><svg width="38" height="40" viewBox="0 0 377 396" style="--mk:var(--yel); margin-top:auto"><use href="#amark"/></svg><b style="color:var(--paper); font-size:20px; margin-top:8px">Asite</b></div></div>
+      <div class="app"><div class="metre" style="position:absolute; inset:0"></div><div class="ct"><span class="k" style="color:var(--ink); background:var(--paper); padding:4px 7px; align-self:flex-start">SAFETY BAND</span></div></div>
+      <div class="app" style="background:var(--paper)"><span class="seamL" style="left:auto; right:0"></span><div class="ct"><span class="k" style="color:var(--grey-1)">BUSINESS CARD</span><b style="color:var(--ink); margin-top:auto">Asite</b><span style="font:600 11px/1.5 var(--font-mono); color:var(--grey-1); margin-top:4px">One source of truth.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>ASITE · DIRECTION 05 · SPLIT FIELD</span>
+    <span>YELLOW = THE FIELD · INK = THE MASS · SEAM = THE DATA</span>
+  </div>
+</footer>
+
+</body>
+</html>

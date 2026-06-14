@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Product Interface · Split Field</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ink); color:#C9C5B8; font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:var(--yel); color:var(--ink); }
+  .wrap { max-width:1240px; margin:0 auto; padding:0 var(--s4); }
+  .m-fill { fill:var(--mk, var(--yel)); }
+  .stencil { font:var(--text-stencil); letter-spacing:var(--track-stencil); text-transform:uppercase; }
+
+  nav { position:sticky; top:0; z-index:50; background:rgba(14,13,10,0.9); backdrop-filter:blur(16px); border-bottom:1px solid var(--ink-3); }
+  nav .wrap { display:flex; align-items:center; gap:var(--s2); height:60px; }
+  .word { display:flex; align-items:center; gap:10px; font:900 19px/1 var(--font-ui); letter-spacing:-0.04em; color:var(--paper); text-decoration:none; margin-right:var(--s4); }
+  .ntab { font:700 12.5px/1 var(--font-ui); letter-spacing:-0.01em; color:var(--grey-2); text-decoration:none; padding:8px 12px; }
+  .ntab:hover { color:var(--paper); } .ntab.on { color:var(--ink); background:var(--yel); }
+  .nspace { margin-left:auto; }
+  .nwild { font:700 12px/1 var(--font-mono); letter-spacing:0.06em; color:var(--yel); text-decoration:none; }
+
+  .fnav { position:fixed; top:50%; right:16px; transform:translateY(-50%); z-index:60; display:flex; flex-direction:column; gap:1px;
+    padding:10px 8px; max-height:84vh; overflow:auto; background:rgba(22,20,15,0.92); backdrop-filter:blur(12px); }
+  .fnav .cap { font:var(--text-stencil); letter-spacing:0.14em; text-transform:uppercase; color:var(--grey-1); padding:2px 8px 8px; }
+  .fnav a { display:flex; align-items:center; gap:8px; font:600 11.5px/1 var(--font-ui); color:var(--grey-2); text-decoration:none; padding:6px 8px; white-space:nowrap; }
+  .fnav a::before { content:""; width:7px; height:3px; background:var(--ink-3); flex:none; }
+  .fnav a:hover { color:var(--paper); } .fnav a:hover::before { background:var(--yel); }
+  @media (max-width:1360px){ .fnav { display:none; } }
+
+  .page-head { padding:110px 0 var(--s6); }
+  .page-head .idx { font:700 12px/1.4 var(--font-mono); letter-spacing:0.06em; color:var(--yel); margin-bottom:var(--s2); }
+  .page-head h1 { font:var(--text-display); letter-spacing:var(--track-display); color:var(--paper); }
+  .page-head p { max-width:660px; margin-top:var(--s3); font:500 16px/1.6 var(--font-ui); color:var(--grey-3); }
+
+  .sb { padding:var(--s12) 0 0; }
+  .sb-head { display:flex; align-items:baseline; gap:var(--s3); margin-bottom:var(--s4); }
+  .sb-head .num { font:700 12px/1.4 var(--font-mono); color:var(--yel); }
+  .sb-head h2 { font:var(--text-h2); letter-spacing:var(--track-h); color:var(--paper); }
+  .sb-head p { font:500 13px/1.5 var(--font-ui); color:var(--grey-2); margin-left:auto; max-width:400px; text-align:right; }
+
+  /* ===== app frame ===== */
+  .app { width:min(1280px, calc(100vw - 40px)); position:relative; left:50%; transform:translateX(-50%);
+    background:var(--bone); overflow:hidden; border-top:var(--seam) solid var(--yel); font-size:13px; }
+  .ashell { display:grid; grid-template-columns:232px 1fr; min-height:640px; }
+
+  /* rail */
+  .rail { background:var(--ink); padding:var(--s3); display:flex; flex-direction:column; gap:1px; }
+  .rail .ws { display:flex; align-items:center; gap:10px; padding:8px 10px 16px; margin-bottom:14px; border-bottom:1px solid var(--ink-3); }
+  .rail .ws b { font:900 16px/1 var(--font-ui); letter-spacing:-0.04em; color:var(--paper); }
+  .rail .ws .k { margin-left:auto; font:700 9px/1 var(--font-mono); color:var(--grey-1); background:var(--ink-3); padding:4px 5px; }
+  .rail .grp { font:700 9px/1 var(--font-mono); letter-spacing:0.14em; color:var(--grey-1); padding:15px 10px 7px; }
+  .rail a { display:flex; align-items:center; gap:10px; padding:8px 10px; font:600 13px/1 var(--font-ui); color:var(--grey-2); text-decoration:none; }
+  .rail a .ic { width:16px; height:16px; flex:none; }
+  .rail a .b { margin-left:auto; font:700 10px/1 var(--font-mono); color:var(--grey-1); }
+  .rail a:hover { color:var(--paper); }
+  .rail a.on { background:var(--yel); color:var(--ink); font-weight:800; }
+  .rail a.on .b { color:var(--ink); }
+  .rail a.warn .b { color:var(--yel); }
+  .rail .foot { margin-top:auto; padding:10px; font:600 10px/1.6 var(--font-mono); color:var(--grey-1); }
+  .ic { stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:butt; stroke-linejoin:miter; }
+
+  .work { background:var(--bone); color:var(--ink); display:flex; flex-direction:column; min-width:0; position:relative; }
+  .top { display:flex; align-items:center; gap:var(--s3); padding:12px var(--s4); background:var(--paper); border-bottom:1px solid rgba(14,13,10,0.1); }
+  .crumb { font:800 14px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--ink); }
+  .crumb span { color:var(--grey-1); font-weight:600; }
+  .cnt { font:700 11px/1 var(--font-mono); color:var(--grey-1); }
+  .tsp { margin-left:auto; display:flex; align-items:center; gap:8px; }
+  .tsearch { display:flex; align-items:center; gap:8px; background:var(--bone); padding:8px 12px; min-width:180px; font:600 12px/1 var(--font-mono); color:var(--grey-1); }
+  .tbtn { background:var(--ink); color:var(--yel); font:700 12px/1 var(--font-ui); padding:9px 14px; border:none; cursor:pointer; }
+  .tbtn.sec { background:var(--bone); color:var(--ink); }
+  .seg { display:flex; background:var(--bone); }
+  .seg span { padding:7px 12px; font:700 11.5px/1 var(--font-ui); color:var(--grey-1); cursor:pointer; }
+  .seg span.on { background:var(--ink); color:var(--yel); }
+  .prop { display:inline-flex; align-items:center; gap:7px; font:700 11px/1 var(--font-ui); color:var(--ink); background:var(--bone); padding:7px 10px; }
+  .kbd { font:700 10px/1 var(--font-mono); color:var(--ink); background:var(--yel); padding:4px 6px; }
+
+  /* signals */
+  .dot { width:11px; height:11px; flex:none; }
+  .d-hold { background:var(--red); } .d-due { background:var(--yel); } .d-ok { background:var(--grn); } .d-info { background:var(--blu); } .d-idle { background:#CFC9B6; }
+  .pill { font:700 10px/1 var(--font-ui); padding:5px 8px; white-space:nowrap; }
+  .pill.hold { background:var(--red); color:#fff; } .pill.due { background:var(--yel); color:var(--ink); }
+  .pill.ok { background:var(--grn); color:#fff; } .pill.info { background:var(--blu); color:#fff; }
+  .seamtrack { height:var(--seam); background:#E4DFCF; } .seamtrack > i { display:block; height:100%; background:var(--yel); }
+  .av { width:22px; height:22px; flex:none; background:var(--ink); color:var(--paper); font:800 9px/22px var(--font-ui); text-align:center; }
+  .av.y { background:var(--yel); color:var(--ink); }
+
+  /* statline */
+  .statline { display:flex; align-items:center; gap:var(--s6); padding:var(--s4); background:var(--paper); border-bottom:1px solid rgba(14,13,10,0.1); }
+  .stt .n { font:900 30px/0.9 var(--font-ui); letter-spacing:-0.04em; color:var(--ink); }
+  .stt .n.y { color:var(--ink); }
+  .stt .l { font:600 11px/1.4 var(--font-ui); color:var(--grey-1); margin-top:6px; }
+  .stt.r { margin-left:auto; text-align:right; }
+
+  /* KPI band */
+  .band { padding:var(--s4); display:grid; grid-template-columns:repeat(4,1fr); gap:var(--seam); }
+  .kpi { background:var(--paper); padding:var(--s3); }
+  .kpi.field { background:var(--yel); }
+  .kpi .v { font:900 36px/0.9 var(--font-ui); letter-spacing:-0.04em; color:var(--ink); }
+  .kpi .l { font:600 11px/1.4 var(--font-ui); color:var(--grey-1); margin-top:8px; }
+  .kpi.field .l { color:var(--ink); opacity:0.75; }
+
+  /* section + rows */
+  .ghead { display:flex; align-items:center; gap:10px; padding:13px var(--s4) 11px; background:var(--paper); border-bottom:1px solid rgba(14,13,10,0.1); }
+  .ghead b { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--ink); }
+  .ghead .c { margin-left:auto; font:700 11px/1 var(--font-mono); color:var(--grey-1); }
+  .rowi { display:flex; align-items:center; gap:var(--s3); padding:12px var(--s4); background:var(--paper); border-top:1px solid rgba(14,13,10,0.07); position:relative; }
+  .rowi .ref { font:700 12px/1 var(--font-mono); color:var(--ink); width:96px; flex:none; }
+  .rowi .t { font:600 13px/1.3 var(--font-ui); color:var(--ink); min-width:0; }
+  .rowi .t span { color:var(--grey-1); font-weight:500; }
+  .rowi .pr { margin-left:auto; display:flex; align-items:center; gap:10px; }
+  .rowi .m { font:600 10.5px/1 var(--font-mono); color:var(--grey-1); }
+  .rowi.sel { background:#FBF7EA; } .rowi.sel::before { content:""; position:absolute; left:0; top:0; bottom:0; width:var(--seam); background:var(--yel); }
+  .wfoot { display:flex; gap:var(--s4); padding:11px var(--s4); background:var(--ink); color:var(--grey-2); font:600 10px/1.4 var(--font-mono); letter-spacing:0.04em; }
+  .wfoot .r { margin-left:auto; }
+  .wfoot em { color:var(--yel); font-style:normal; }
+  .rgrp { padding:14px var(--s4) 7px; background:var(--bone); font:var(--text-stencil); letter-spacing:0.14em; text-transform:uppercase; color:var(--grey-1); }
+
+  /* two-pane */
+  .split2 { display:grid; grid-template-columns:1.3fr 1fr; flex:1; min-height:0; }
+  .split2 > .l { border-right:1px solid rgba(14,13,10,0.1); }
+  .pcol { padding:var(--s4); display:flex; flex-direction:column; gap:var(--seam); }
+  .pcard { background:var(--paper); padding:var(--s3); }
+  .pcard .lbl { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--grey-1); margin-bottom:12px; }
+  .feed { display:flex; align-items:center; gap:10px; padding:7px 0; font:600 12px/1.4 var(--font-ui); color:var(--grey-1); }
+  .feed b { color:var(--ink); }
+  .feed .tm { margin-left:auto; font:700 9.5px/1 var(--font-mono); color:var(--grey-1); white-space:nowrap; }
+  .week { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; align-items:end; height:60px; }
+  .week i { background:#E4DFCF; } .week i.hot { background:var(--yel); }
+  .wlbl { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; font:700 9px/1 var(--font-mono); color:var(--grey-1); text-align:center; margin-top:6px; }
+
+  /* heroband (skyline) */
+  .heroband { position:relative; padding:34px var(--s4) 26px; overflow:hidden; min-height:230px; display:flex; flex-direction:column; justify-content:flex-end; border-bottom:var(--seam) solid var(--yel); }
+  .heroband img.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .heroband::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgba(14,13,10,0.92), rgba(14,13,10,0.5) 62%, rgba(14,13,10,0.28)), linear-gradient(rgba(14,13,10,0.15), rgba(14,13,10,0.62)); }
+  .heroband img.bg { object-position:center 62%; }
+  .heroband > * { position:relative; z-index:2; }
+  .heroband .ovl { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--yel); }
+  .heroband h2 { font:900 30px/1 var(--font-ui); letter-spacing:-0.04em; color:var(--paper); margin-top:10px; }
+  .gstats { display:flex; gap:36px; margin-top:18px; }
+  .gstats .n { font:900 22px/1 var(--font-ui); letter-spacing:-0.03em; color:var(--paper); }
+  .gstats .l { font:600 11px/1.4 var(--font-ui); color:#CFC9B6; margin-top:4px; }
+
+  /* project grid */
+  .pjgrid { padding:var(--s4); display:grid; grid-template-columns:repeat(3,1fr); gap:var(--seam); }
+  .pj { background:var(--paper); padding:var(--s3); }
+  .pj .nm { display:flex; align-items:center; gap:8px; font:800 14px/1.2 var(--font-ui); letter-spacing:-0.02em; color:var(--ink); }
+  .pj .loc { font:600 11px/1.4 var(--font-mono); color:var(--grey-1); margin:4px 0 12px; }
+  .pj .meta { display:flex; gap:12px; margin-top:8px; font:700 10px/1 var(--font-mono); color:var(--grey-1); }
+  .pj .meta em { color:#B0391C; font-style:normal; }
+
+  /* milestone */
+  .mlbl { padding:18px var(--s4) 2px; font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--grey-1); }
+  .mil { display:flex; padding:var(--s4); }
+  .mil .ms { flex:1; position:relative; padding-top:22px; }
+  .mil .ms::before { content:""; position:absolute; top:6px; left:0; right:0; height:var(--seam-thin); background:#E4DFCF; }
+  .mil .ms.done::before { background:var(--ink); }
+  .mil .ms i { position:absolute; top:0; left:0; width:14px; height:14px; background:#E4DFCF; }
+  .mil .ms.done i { background:var(--ink); }
+  .mil .ms.now i { background:var(--yel); width:var(--seam); height:18px; top:-2px; }
+  .mil .ms b { font:800 11.5px/1.3 var(--font-ui); color:var(--ink); display:block; }
+  .mil .ms span { font:600 9.5px/1.3 var(--font-mono); color:var(--grey-1); }
+  .mil .ms.now span { color:#B0391C; }
+
+  /* analytics charts */
+  .chgrid { padding:var(--s4); display:grid; grid-template-columns:1fr 1fr; gap:var(--seam); }
+  .ch { background:var(--paper); padding:var(--s3); }
+  .ch .lbl { display:flex; font:var(--text-stencil); letter-spacing:0.1em; text-transform:uppercase; color:var(--grey-1); margin-bottom:12px; }
+  .ch .lbl .v { margin-left:auto; font:700 11px/1 var(--font-mono); color:var(--ink); text-transform:none; letter-spacing:0; }
+  .legend { display:flex; gap:16px; margin-top:10px; font:600 11px/1 var(--font-ui); color:var(--grey-1); }
+  .legend i { width:10px; height:10px; display:inline-block; margin-right:6px; vertical-align:-1px; }
+  .heat { display:grid; grid-template-columns:repeat(14,1fr); gap:4px; }
+  .heat i { aspect-ratio:1; background:#E4DFCF; }
+
+  /* files */
+  .fbar { display:flex; align-items:center; gap:8px; padding:10px var(--s4); background:var(--paper); border-bottom:1px solid rgba(14,13,10,0.1); }
+  .fsec { padding:16px var(--s4) 8px; font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--grey-1); }
+  .fgrid { padding:0 var(--s4) var(--s4); display:grid; grid-template-columns:repeat(4,1fr); gap:var(--seam); }
+  .fcard { background:var(--paper); padding:var(--s3); cursor:pointer; position:relative; min-width:0; }
+  .fcard.sel { background:#FBF7EA; } .fcard.sel::before { content:""; position:absolute; left:0; top:0; bottom:0; width:var(--seam); background:var(--yel); }
+  .fcard b { display:block; font:700 12.5px/1.3 var(--font-ui); color:var(--ink); margin-top:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .fcard .meta { display:flex; align-items:center; gap:6px; font:600 10px/1.4 var(--font-mono); color:var(--grey-1); margin-top:4px; }
+  .thumb { height:84px; background:var(--bone); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .ficon { width:34px; height:42px; background:var(--ink); color:var(--yel); font:800 8px/42px var(--font-mono); text-align:center; }
+  .fold { width:30px; height:24px; background:var(--yel); } .fold.q { background:var(--ink); }
+
+  /* document canvas */
+  .doctop { display:flex; align-items:center; gap:10px; padding:11px var(--s4); background:var(--paper); border-bottom:1px solid rgba(14,13,10,0.1); }
+  .canvas { display:grid; grid-template-columns:1fr 300px; min-height:520px; }
+  .sheet { background:#E9E5D8; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .zoom { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:1px; background:var(--ink); }
+  .zoom span { padding:7px 11px; font:700 11px/1 var(--font-mono); color:var(--paper); cursor:pointer; }
+  .zoom span.on { background:var(--yel); color:var(--ink); }
+  .pin { position:absolute; width:24px; height:24px; background:var(--yel); color:var(--ink); font:800 11px/24px var(--font-ui); text-align:center; cursor:pointer; }
+  .pin.mut { background:var(--ink); color:var(--paper); }
+  .cpanel { background:var(--paper); border-left:1px solid rgba(14,13,10,0.12); display:flex; flex-direction:column; }
+  .cpanel .ch2 { padding:13px var(--s3); border-bottom:1px solid rgba(14,13,10,0.1); font:800 13px/1 var(--font-ui); color:var(--ink); display:flex; }
+  .cpanel .ch2 .c { margin-left:auto; font:700 11px/1 var(--font-mono); color:var(--grey-1); }
+  .cm { padding:13px var(--s3); border-bottom:1px solid rgba(14,13,10,0.07); }
+  .cm.lit { background:#FBF7EA; border-left:var(--seam) solid var(--yel); }
+  .cm .who { display:flex; align-items:center; gap:8px; font:700 12px/1 var(--font-ui); color:var(--ink); }
+  .cm .who .num { width:18px; height:18px; background:var(--yel); color:var(--ink); font:800 10px/18px var(--font-ui); text-align:center; }
+  .cm .who .tm { margin-left:auto; font:600 9.5px/1 var(--font-mono); color:var(--grey-1); }
+  .cm p { font:500 12px/1.55 var(--font-ui); color:var(--grey-1); margin-top:7px; padding-left:26px; }
+  .cm .act { padding-left:26px; margin-top:8px; font:700 11px/1 var(--font-ui); color:#B0391C; }
+
+  /* mail */
+  .msplit { display:grid; grid-template-columns:200px 360px 1fr; min-height:580px; }
+  .macct { background:var(--ink); padding:var(--s3); }
+  .macct .grp { font:700 9px/1 var(--font-mono); letter-spacing:0.14em; color:var(--grey-1); padding:8px 8px 8px; }
+  .macct .ac { padding:8px; }
+  .macct .ac .em { display:flex; align-items:center; gap:8px; font:700 11.5px/1.2 var(--font-ui); color:var(--paper); }
+  .macct .ac .sy { font:600 9px/1.4 var(--font-mono); color:var(--grey-1); padding-left:14px; margin-top:4px; }
+  .macct .ac.on { background:var(--yel); } .macct .ac.on .em { color:var(--ink); } .macct .ac.on .sy { color:var(--ink); }
+  .mlist { background:var(--paper); border-right:1px solid rgba(14,13,10,0.12); }
+  .mband { padding:9px var(--s3); font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--grey-1); border-bottom:1px solid rgba(14,13,10,0.1); }
+  .mrow { padding:12px var(--s3); border-top:1px solid rgba(14,13,10,0.07); cursor:pointer; position:relative; }
+  .mrow.sel { background:#FBF7EA; } .mrow.sel::before { content:""; position:absolute; left:0; top:0; bottom:0; width:var(--seam); background:var(--yel); }
+  .mrow .l1 { display:flex; align-items:center; gap:8px; font:800 12.5px/1.3 var(--font-ui); color:var(--ink); }
+  .mrow .l1 .tm { margin-left:auto; font:600 9.5px/1 var(--font-mono); color:var(--grey-1); }
+  .mrow .l2 { font:600 12px/1.4 var(--font-ui); color:var(--grey-1); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .fchip { display:inline-block; font:700 9px/1 var(--font-mono); letter-spacing:0.04em; padding:3px 6px; margin-top:6px; background:var(--ink); color:var(--paper); }
+  .fchip.unf { background:var(--yel); color:var(--ink); }
+  .mread { padding:var(--s4); display:flex; flex-direction:column; gap:12px; min-width:0; }
+  .mread h4 { font:900 18px/1.2 var(--font-ui); letter-spacing:-0.03em; color:var(--ink); }
+  .msg { background:var(--paper); padding:14px; }
+  .msg .mh { display:flex; align-items:center; gap:8px; font:700 12px/1 var(--font-ui); color:var(--ink); margin-bottom:8px; }
+  .msg .mh .tm { margin-left:auto; font:600 9.5px/1 var(--font-mono); color:var(--grey-1); }
+  .msg p { font:500 12.5px/1.65 var(--font-ui); color:var(--grey-1); }
+  .att { display:flex; align-items:center; gap:10px; background:var(--bone); padding:10px 12px; font:700 12px/1 var(--font-ui); color:var(--ink); }
+  .att .sz { font:600 10px/1 var(--font-mono); color:var(--grey-1); }
+  .att .fchip { margin-left:auto; margin-top:0; }
+
+  /* command palette */
+  .palstage { position:relative; min-height:560px; background:var(--ink-2); display:flex; align-items:flex-start; justify-content:center; padding-top:64px; overflow:hidden; }
+  .palstage::before { content:""; position:absolute; inset:0; background:rgba(14,13,10,0.7); }
+  .pal { position:relative; width:580px; max-width:92%; background:var(--paper); border-top:var(--seam) solid var(--yel); }
+  .pal .ph { display:flex; align-items:center; gap:10px; padding:16px var(--s4); border-bottom:1px solid rgba(14,13,10,0.12); }
+  .pal .ph input { border:none; outline:none; background:none; font:600 16px/1 var(--font-ui); color:var(--ink); width:100%; }
+  .pal .ph input::placeholder { color:var(--grey-2); }
+  .pal .ph .car { width:9px; height:20px; background:var(--yel); }
+  .pal .g2 { padding:10px var(--s4) 4px; font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--grey-1); }
+  .pal .pr { display:flex; align-items:center; gap:12px; padding:11px var(--s4); font:600 13px/1 var(--font-ui); color:var(--ink); }
+  .pal .pr.on { background:var(--yel); }
+  .pal .pr .ref { font:700 11px/1 var(--font-mono); color:var(--grey-1); width:64px; flex:none; }
+  .pal .pr.on .ref { color:var(--ink); }
+  .pal .pr .k { margin-left:auto; font:700 10px/1 var(--font-mono); color:var(--grey-1); }
+  .pal .pf { display:flex; padding:10px var(--s4); border-top:1px solid rgba(14,13,10,0.1); font:600 10px/1 var(--font-mono); color:var(--grey-1); gap:14px; }
+
+  /* AI assistant */
+  .ai { position:absolute; right:18px; bottom:18px; z-index:9; display:flex; align-items:flex-end; gap:10px; }
+  .ai .tag { font:700 11px/1 var(--font-ui); color:var(--ink); background:var(--yel); padding:10px 12px; align-self:center; }
+  .ai .orb { width:46px; height:46px; background:var(--yel); border:none; cursor:pointer; font:900 20px/1 var(--font-ui); color:var(--ink); }
+  .ai .panel { position:absolute; right:0; bottom:58px; width:372px; background:var(--paper); color:var(--ink); border-top:var(--seam) solid var(--yel); }
+  .ai .ah { display:flex; align-items:center; gap:9px; padding:12px var(--s3); border-bottom:1px solid rgba(14,13,10,0.1); }
+  .ai .ah b { font:800 13px/1 var(--font-ui); color:var(--ink); }
+  .ai .ah .s { margin-left:auto; font:700 9px/1 var(--font-mono); letter-spacing:0.1em; color:var(--grey-1); }
+  .ai .ab { padding:var(--s3); display:flex; flex-direction:column; gap:10px; }
+  .ai .q { align-self:flex-end; max-width:86%; background:var(--ink); color:var(--paper); font:600 12px/1.5 var(--font-ui); padding:9px 12px; }
+  .ai .a { font:500 12.5px/1.6 var(--font-ui); color:var(--grey-1); } .ai .a b { color:var(--ink); }
+  .ai .rd { display:flex; align-items:center; gap:8px; background:var(--bone); padding:9px 10px; font:600 12px/1 var(--font-ui); color:var(--ink); }
+  .ai .rd .rf { font:700 10px/1 var(--font-mono); color:var(--grey-1); } .ai .rd .tm { margin-left:auto; font:700 9px/1 var(--font-mono); color:var(--grey-1); }
+  .ai .sg { display:flex; flex-direction:column; gap:7px; }
+  .ai .sg span { font:600 12px/1.3 var(--font-ui); color:var(--ink); background:var(--bone); padding:9px 11px; cursor:pointer; }
+  .ai .src { font:700 9px/1.5 var(--font-mono); letter-spacing:0.06em; color:var(--grey-1); }
+  .ai .acts { display:flex; gap:8px; } .ai .acts button { border:none; cursor:pointer; font:700 11.5px/1 var(--font-ui); padding:9px 12px; }
+  .ai .acts .p { background:var(--ink); color:var(--yel); } .ai .acts .s { background:var(--bone); color:var(--ink); }
+  .ai .in { display:flex; align-items:center; padding:11px var(--s3); border-top:1px solid rgba(14,13,10,0.1); font:600 12px/1 var(--font-ui); color:var(--grey-1); }
+  .ai .in .kbd { margin-left:auto; }
+
+  /* === planar product language — planes split by seams, not floating cards === */
+  .phead { display:flex; align-items:stretch; background:var(--ink); }
+  .phead .l { flex:1; padding:var(--s4) var(--s4) var(--s4); display:flex; flex-direction:column; justify-content:center; }
+  .phead .ov { font:var(--text-stencil); letter-spacing:0.14em; text-transform:uppercase; color:var(--grey-1); margin-bottom:10px; }
+  .phead h3 { font:900 clamp(26px,3vw,38px)/0.92 var(--font-ui); letter-spacing:-0.04em; color:var(--paper); }
+  .phead h3 em { font-style:normal; color:var(--yel); }
+  .phead .fv { background:var(--yel); color:var(--ink); padding:var(--s4) var(--s6); display:flex; flex-direction:column; justify-content:center; align-items:flex-end; min-width:210px; }
+  .phead .fv .v { font:900 clamp(40px,5.2vw,68px)/0.8 var(--font-ui); letter-spacing:-0.05em; }
+  .phead .fv .l2 { font:700 10.5px/1.3 var(--font-ui); text-transform:uppercase; letter-spacing:0.05em; margin-top:8px; text-align:right; }
+
+  .metband { display:flex; }
+  .metband .m { flex:1; padding:var(--s4); background:var(--paper); }
+  .metband .m:nth-child(even) { background:var(--bone); }
+  .metband .m + .m { border-left:var(--seam-thin) solid var(--yel); }
+  .metband .m .v { font:900 40px/0.82 var(--font-ui); letter-spacing:-0.04em; color:var(--ink); }
+  .metband .m .l { font:600 11px/1.3 var(--font-ui); color:var(--grey-1); margin-top:9px; }
+  .metband .m.hot { background:var(--yel); }
+
+  .field2 { display:grid; grid-template-columns:1.45fr 1fr; flex:1; min-height:0; }
+  .field2 > .rt { background:var(--ink); border-left:var(--seam) solid var(--yel); color:var(--paper); display:flex; flex-direction:column; }
+  .ophoto { position:relative; min-height:236px; overflow:hidden; border-bottom:var(--seam) solid var(--yel); display:flex; }
+  .ophoto img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .ophoto::after { content:""; position:absolute; inset:0; background:linear-gradient(rgba(14,13,10,0.04), rgba(14,13,10,0.84)); }
+  .ophoto .stamp { position:absolute; left:0; top:0; z-index:2; background:var(--yel); color:var(--ink); font:700 10px/1 var(--font-mono); letter-spacing:0.12em; padding:7px 11px; }
+  .ophoto .ov2 { position:relative; z-index:2; align-self:flex-end; padding:var(--s4); width:100%; }
+  .ophoto .ov2 .lbl { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--yel); }
+  .ophoto .ov2 .big { font:900 clamp(42px,5vw,56px)/0.8 var(--font-ui); letter-spacing:-0.05em; color:var(--paper); margin-top:2px; }
+  .ophoto .ov2 .ln { font:600 12.5px/1.5 var(--font-ui); color:#E8E4D7; margin-top:5px; }
+  .thumb.ph { padding:0; } .thumb.ph img { width:100%; height:100%; object-fit:cover; display:block; }
+
+  .qhead { display:flex; align-items:center; padding:14px var(--s4) 12px; background:var(--paper); }
+  .qhead b { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--ink); }
+  .qhead .c { margin-left:auto; font:700 11px/1 var(--font-mono); color:var(--grey-1); }
+  .qrow { display:grid; grid-template-columns:178px 1fr auto; align-items:stretch; background:var(--paper); border-top:2px solid rgba(14,13,10,0.16); }
+  .qrow .qr { display:flex; align-items:center; gap:9px; padding:14px var(--s3); background:var(--bone); border-right:1px solid rgba(14,13,10,0.12); font:800 12px/1 var(--font-mono); color:var(--ink); white-space:nowrap; }
+  .qrow .qt { display:flex; align-items:center; padding:0 var(--s3); font:600 13px/1.3 var(--font-ui); color:var(--ink); min-width:0; }
+  .qrow .qx { display:flex; align-items:center; gap:10px; padding:0 var(--s4); }
+  .qrow .qx .m { font:700 10px/1 var(--font-mono); color:var(--grey-1); }
+  .qrow.sel .qr { background:var(--yel); }
+
+  .onsite { padding:var(--s4); display:flex; flex-direction:column; gap:var(--s3); height:100%; }
+  .onsite .lbl { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--grey-1); }
+  .onsite .big { font:900 clamp(40px,5vw,56px)/0.8 var(--font-ui); letter-spacing:-0.05em; color:var(--yel); margin-top:2px; }
+  .onsite .ln { font:600 13px/1.55 var(--font-ui); color:#C9C5B8; } .onsite .ln b { color:var(--paper); }
+  .onsite .sep { height:var(--seam-thin); background:var(--ink-3); margin:var(--s1) 0; }
+  .wk2 { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; align-items:end; height:48px; }
+  .wk2 i { background:var(--ink-3); } .wk2 i.hot { background:var(--yel); }
+  .onsite .fd { display:flex; align-items:center; gap:10px; padding:8px 0; border-top:1px solid var(--ink-3); font:600 12px/1.3 var(--font-ui); color:var(--grey-2); }
+  .onsite .fd.f0 { border-top:none; } .onsite .fd b { color:var(--paper); } .onsite .fd .tm { margin-left:auto; font:700 9.5px/1 var(--font-mono); color:var(--grey-1); }
+
+  /* planar onboarding */
+  .onbd { display:grid; grid-template-columns:1fr 1.05fr; min-height:580px; }
+  .onbd .yp { background:var(--yel); color:var(--ink); padding:var(--s8); display:flex; flex-direction:column; }
+  .onbd .yp .step { font:700 11px/1 var(--font-mono); letter-spacing:0.06em; }
+  .onbd .yp h3 { font:900 clamp(38px,5vw,60px)/0.9 var(--font-ui); letter-spacing:-0.05em; margin-top:auto; }
+  .onbd .yp p { font:600 14px/1.5 var(--font-ui); margin-top:18px; max-width:300px; }
+  .onbd .yp .steps { display:flex; gap:6px; margin-top:26px; }
+  .onbd .yp .steps i { height:8px; flex:1; background:rgba(14,13,10,0.22); }
+  .onbd .yp .steps i.on { background:var(--ink); }
+  .onbd .ip { background:var(--ink); padding:var(--s8); display:flex; flex-direction:column; justify-content:center; }
+  .onbd .fl { margin-bottom:22px; }
+  .onbd .fl .lab { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--yel); margin-bottom:8px; }
+  .onbd .fl .in { display:flex; border-bottom:3px solid var(--ink-3); padding:10px 0; font:700 16px/1 var(--font-ui); color:var(--paper); }
+  .onbd .fl .in.lit { border-color:var(--yel); }
+  .onbd .fl .in span { margin-left:auto; color:var(--grey-1); }
+  .onbd .go { background:var(--yel); color:var(--ink); border:none; padding:16px; font:800 15px/1 var(--font-ui); cursor:pointer; width:100%; margin-top:4px; }
+  .onbd .alt { text-align:center; margin-top:16px; font:600 11.5px/1.4 var(--font-ui); color:var(--grey-2); }
+  .onbd .alt b { color:var(--yel); font-weight:700; }
+
+  /* planar data */
+  .dsec { padding:var(--s4); background:var(--paper); }
+  .dsec + .dsec { border-top:var(--seam) solid var(--yel); }
+  .dsec .dl { display:flex; align-items:baseline; margin-bottom:16px; }
+  .dsec .dl b { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--ink); }
+  .dsec .dl .v { margin-left:auto; font:700 11px/1 var(--font-mono); color:var(--grey-1); }
+  .stackbar { display:flex; height:72px; }
+  .stackbar i { display:flex; align-items:flex-end; padding:11px 13px; font:700 11px/1 var(--font-mono); }
+  .stklbl { display:flex; gap:22px; margin-top:13px; font:700 10px/1 var(--font-mono); color:var(--grey-1); }
+  .stklbl i { width:10px; height:10px; display:inline-block; margin-right:6px; vertical-align:-1px; }
+  .ddual { display:grid; grid-template-columns:1fr 1fr; }
+  .ddual > div { padding:var(--s4); } .ddual > div + div { border-left:var(--seam) solid var(--yel); }
+  .bars .br { display:grid; grid-template-columns:42px 1fr 36px; align-items:center; gap:12px; padding:8px 0; }
+  .bars .br .nm { font:800 11px/1 var(--font-mono); color:var(--grey-1); }
+  .bars .br .bar { height:20px; background:var(--ink); }
+  .bars .br .bar.hot { background:var(--yel); }
+  .bars .br .vv { font:800 12px/1 var(--font-mono); color:var(--ink); text-align:right; }
+  .heatbig { display:grid; grid-template-columns:repeat(14,1fr); gap:5px; }
+  .heatbig i { aspect-ratio:1; background:#E4DFCF; }
+
+  /* on-site-primary dashboard */
+  .sitehero { position:relative; min-height:300px; overflow:hidden; border-bottom:var(--seam) solid var(--yel); display:flex; }
+  .sitehero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 58%; }
+  .sitehero::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgba(14,13,10,0.9), rgba(14,13,10,0.35) 58%, rgba(14,13,10,0.12)), linear-gradient(rgba(14,13,10,0.06), rgba(14,13,10,0.58)); }
+  .sitehero .stamp { position:absolute; left:0; top:0; z-index:2; background:var(--yel); color:var(--ink); font:700 10px/1 var(--font-mono); letter-spacing:0.12em; padding:8px 12px; }
+  .sitehero .ov2 { position:relative; z-index:2; align-self:flex-end; padding:var(--s6) var(--s4); max-width:580px; }
+  .sitehero .ov2 .lbl { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--yel); }
+  .sitehero .ov2 h3 { font:900 clamp(30px,4vw,46px)/0.9 var(--font-ui); letter-spacing:-0.04em; color:var(--paper); margin-top:8px; }
+  .sitehero .ov2 p { font:600 13px/1.55 var(--font-ui); color:#E8E4D7; margin-top:10px; max-width:440px; } .sitehero .ov2 p b { color:#fff; }
+  .accbody { display:grid; grid-template-columns:1fr auto; gap:var(--s4); align-items:center; background:var(--bone); border-top:1px solid rgba(14,13,10,0.08); padding:var(--s4); }
+  .accbody .det { font:600 13px/1.6 var(--font-ui); color:var(--ink); } .accbody .det b { color:#B0391C; }
+  .accbody .acts { display:flex; gap:8px; }
+  .chev { font:800 11px/1 var(--font-mono); color:var(--grey-1); }
+  .actstrip { display:flex; align-items:center; gap:var(--s6); padding:13px var(--s4); background:var(--paper); border-top:1px solid rgba(14,13,10,0.08); flex-wrap:wrap; }
+  .actstrip .lbl { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--grey-1); }
+  .actstrip .a1 { display:flex; align-items:center; gap:8px; font:600 12px/1 var(--font-ui); color:var(--grey-1); } .actstrip .a1 b { color:var(--ink); }
+
+  /* site diary photo strip */
+  .photostrip { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--seam); padding:var(--s4); }
+  .photostrip .pc2 { position:relative; aspect-ratio:4/3; overflow:hidden; }
+  .photostrip .pc2 img { width:100%; height:100%; object-fit:cover; }
+  .photostrip .pc2 .cap { position:absolute; left:0; bottom:0; background:var(--yel); color:var(--ink); font:700 9px/1 var(--font-mono); padding:5px 7px; }
+
+  /* convert */
+  .dropzone { margin:var(--s4); background:var(--bone); border-top:var(--seam) solid var(--yel); padding:46px; text-align:center; }
+  .dropzone .ig { width:54px; height:54px; background:var(--ink); margin:0 auto 16px; position:relative; }
+  .dropzone .ig::after { content:"↑"; position:absolute; inset:0; color:var(--yel); font:800 26px/54px var(--font-ui); text-align:center; }
+  .dropzone h4 { font:900 20px/1.1 var(--font-ui); letter-spacing:-0.03em; color:var(--ink); }
+  .dropzone p { font:600 12.5px/1.5 var(--font-ui); color:var(--grey-1); margin-top:6px; }
+  .cvr { display:grid; grid-template-columns:40px 1fr 200px 96px; gap:var(--s3); align-items:center; padding:13px var(--s4); background:var(--paper); border-top:1px solid rgba(14,13,10,0.08); }
+  .cvr .fi2 { width:30px; height:38px; background:var(--ink); color:var(--yel); font:800 7px/38px var(--font-mono); text-align:center; }
+  .cvr .fn { font:700 13px/1.3 var(--font-ui); color:var(--ink); } .cvr .fm { font:600 10px/1.4 var(--font-mono); color:var(--grey-1); }
+  .verify { display:grid; grid-template-columns:1fr 1fr; }
+  .verify > .vsrc { padding:var(--s6); border-right:var(--seam) solid var(--yel); background:var(--bone); display:flex; align-items:center; justify-content:center; }
+  .verify > .vf { padding:var(--s4); background:var(--paper); }
+  .xf { padding:12px 0; border-top:1px solid rgba(14,13,10,0.08); } .xf:first-child { border-top:none; }
+  .xf .xl { display:flex; align-items:center; gap:8px; font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--grey-1); margin-bottom:6px; }
+  .xf .xv { font:700 14px/1.4 var(--font-ui); color:var(--ink); } .xf .xv.lo { background:var(--yel); padding:2px 6px; display:inline-block; }
+  .conf { font:700 9px/1 var(--font-mono); padding:3px 6px; } .conf.hi { background:var(--grn); color:#fff; } .conf.md { background:var(--yel); color:var(--ink); } .conf.lo { background:var(--red); color:#fff; }
+
+  /* native doc editor */
+  .doc { max-width:680px; margin:0 auto; padding:40px var(--s6) 60px; background:var(--paper); width:100%; }
+  .doc h1 { font:900 30px/1.15 var(--font-ui); letter-spacing:-0.03em; color:var(--ink); }
+  .doc .props { display:flex; gap:8px; margin:14px 0 26px; flex-wrap:wrap; }
+  .doc h4 { font:800 16px/1.3 var(--font-ui); color:var(--ink); margin:22px 0 8px; }
+  .doc p { font:500 14px/1.7 var(--font-ui); color:var(--grey-1); }
+  .doc .hl { background:var(--yel); color:var(--ink); padding:0 3px; }
+  .todo { display:flex; gap:10px; align-items:flex-start; padding:5px 0; font:500 14px/1.6 var(--font-ui); color:var(--grey-1); }
+  .todo .bx { width:16px; height:16px; background:var(--bone); flex:none; margin-top:2px; }
+  .todo .bx.ck { background:var(--yel); position:relative; } .todo .bx.ck::after { content:"✓"; position:absolute; inset:0; color:var(--ink); font:800 11px/16px var(--font-ui); text-align:center; }
+  .todo .dn { text-decoration:line-through; color:var(--grey-2); }
+  .callout { background:var(--bone); border-left:var(--seam) solid var(--yel); padding:14px 16px; margin:16px 0; font:600 13.5px/1.6 var(--font-ui); color:var(--ink); }
+  .mtbl { width:100%; border-collapse:collapse; margin:12px 0; }
+  .mtbl th { text-align:left; font:var(--text-stencil); letter-spacing:0.1em; text-transform:uppercase; color:var(--grey-1); padding:8px 10px; border-bottom:2px solid var(--ink); }
+  .mtbl td { padding:9px 10px; border-bottom:1px solid rgba(14,13,10,0.08); font:600 13px/1.4 var(--font-ui); color:var(--ink); }
+  .mtbl td.rf { font-family:var(--font-mono); font-size:11.5px; }
+
+  /* daily briefing email */
+  .emailwrap { background:var(--ink-2); padding:var(--s8); display:flex; justify-content:center; }
+  .email { width:560px; max-width:100%; background:var(--paper); }
+  .email .eh { background:var(--yel); color:var(--ink); padding:var(--s4); }
+  .email .eh .k { font:700 10px/1 var(--font-mono); letter-spacing:0.14em; }
+  .email .eh h3 { font:900 26px/0.95 var(--font-ui); letter-spacing:-0.04em; margin-top:8px; }
+  .email .es { padding:var(--s4); border-top:1px solid rgba(14,13,10,0.08); }
+  .email .sl { font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--grey-1); margin-bottom:12px; }
+  .email .er { display:flex; align-items:center; gap:10px; padding:8px 0; font:600 13px/1.3 var(--font-ui); color:var(--ink); }
+  .email .er .ref { font:700 11px/1 var(--font-mono); color:var(--grey-1); width:88px; flex:none; }
+  .email .er .m { margin-left:auto; font:700 10px/1 var(--font-mono); color:var(--grey-1); }
+  .email .efoot { padding:var(--s4); background:var(--ink); color:var(--grey-2); font:600 10px/1.6 var(--font-mono); } .email .efoot b { color:var(--yel); }
+
+  /* control-room wall */
+  .wall { position:relative; background:var(--ink); color:var(--paper); padding:var(--s8); min-height:540px; overflow:hidden; display:flex; flex-direction:column; }
+  .wall img.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.2; }
+  .wall::after { content:""; position:absolute; inset:0; background:linear-gradient(rgba(14,13,10,0.5), rgba(14,13,10,0.86)); }
+  .wall > * { position:relative; z-index:2; }
+  .wall .wh { display:flex; align-items:baseline; }
+  .wall .wh .k { font:700 12px/1 var(--font-mono); letter-spacing:0.14em; color:var(--yel); }
+  .wall .wh .t { margin-left:auto; font:700 12px/1 var(--font-mono); color:var(--grey-2); }
+  .wall .whealth { font:900 clamp(80px,14vw,170px)/0.82 var(--font-ui); letter-spacing:-0.05em; color:var(--yel); margin:auto 0; }
+  .wall .whealth small { font:700 13px/1 var(--font-mono); color:var(--grey-2); letter-spacing:0.1em; display:block; margin-bottom:10px; }
+  .wall .wband { display:flex; gap:var(--seam); }
+  .wall .wb { flex:1; background:var(--ink-2); padding:var(--s4); }
+  .wall .wb .v { font:900 36px/0.85 var(--font-ui); letter-spacing:-0.04em; color:var(--paper); } .wall .wb .v.hot { color:var(--yel); }
+  .wall .wb .l { font:700 10px/1.3 var(--font-mono); color:var(--grey-1); margin-top:8px; text-transform:uppercase; letter-spacing:0.08em; }
+
+  @media (max-width:860px){
+    .band, .chgrid { grid-template-columns:1fr 1fr; } .pjgrid, .fgrid { grid-template-columns:1fr 1fr; }
+    .ashell { grid-template-columns:1fr; } .rail, .macct { display:none; }
+    .canvas, .split2, .msplit, .verify { grid-template-columns:1fr; }
+    .onbd, .field2, .ddual { grid-template-columns:1fr; }
+    .field2 > .rt, .ddual > div + div { border-left:none; border-top:var(--seam) solid var(--yel); }
+    .verify > .vsrc { border-right:none; border-bottom:var(--seam) solid var(--yel); }
+    .phead { flex-direction:column; } .phead .fv { align-items:flex-start; }
+    .photostrip { grid-template-columns:1fr 1fr; } .wall .wband { flex-wrap:wrap; }
+  }
+
+  /* ===== LIGHT MODE — light ground + chrome ===== */
+  body { background:var(--bone); color:var(--grey-1); }
+  nav { background:rgba(244,240,228,0.92); border-bottom:1px solid rgba(14,13,10,0.12); }
+  .word { color:var(--ink); }
+  .ntab { color:var(--grey-1); } .ntab:hover { color:var(--ink); } .ntab.on { color:var(--ink); background:var(--yel); }
+  .fnav { background:rgba(244,240,228,0.95); } .fnav .cap { color:var(--grey-1); } .fnav a { color:var(--grey-1); } .fnav a:hover { color:var(--ink); } .fnav a::before { background:rgba(14,13,10,0.2); }
+  .page-head h1 { color:var(--ink); } .page-head p { color:var(--grey-1); }
+  .sb-head h2 { color:var(--ink); } .sb-head p { color:var(--grey-1); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-fill" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-fill" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="word" href="index.html"><svg width="22" height="23" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg>Asite</a>
+    <a class="ntab" href="index.html">Language</a>
+    <a class="ntab on" href="screens.html">Product</a>
+    <a class="ntab" href="web.html">Website</a>
+    <a class="ntab" href="slides.html">Slides</a>
+    <span class="nspace"></span>
+  </div>
+</nav>
+
+<aside class="fnav" aria-label="On this page">
+  <div class="cap">Screens</div>
+  <a href="#onboard">Onboarding</a>
+  <a href="#briefing">Morning briefing</a>
+  <a href="#overview">Programme overview</a>
+  <a href="#analytics">Analytics</a>
+  <a href="#project">Project dashboard</a>
+  <a href="#files">Files workspace</a>
+  <a href="#canvas">Document canvas</a>
+  <a href="#rfis">RFI register</a>
+  <a href="#mail">aMail</a>
+  <a href="#palette">Command palette</a>
+  <a href="#exec">Executive</a>
+  <a href="#diary">Site diary</a>
+  <a href="#convert">Convert</a>
+  <a href="#editor">Doc editor</a>
+  <a href="#brief">Daily briefing</a>
+  <a href="#wall">Control room</a>
+</aside>
+
+<div class="wrap">
+  <header class="page-head">
+    <div class="idx">Direction 05 · Split Field</div>
+    <h1>Product interface</h1>
+    <p>The work lives on paper; the rail is mass; selection is the field; every divider is a seam. Asite Intelligence rides bottom-right, citing the register and writing nothing without you. Signals are solid, references are mono — the same planes as the brand, read at working distance.</p>
+  </header>
+</div>
+
+<!-- 01 ONBOARDING -->
+<div class="wrap"><div class="sb" id="onboard">
+  <div class="sb-head"><span class="num">01</span><h2>Onboarding · create workspace</h2><p>No centred card. Two planes meet at the seam — the claim on yellow, the form on ink.</p></div>
+</div></div>
+<div class="app">
+  <div class="onbd">
+    <div class="yp">
+      <div style="display:flex; align-items:center; justify-content:space-between">
+        <svg width="30" height="32" viewBox="0 0 377 396" style="--mk:var(--ink)"><use href="#amark"/></svg>
+        <span class="step">SET UP · 01 / 03</span>
+      </div>
+      <h3>Stand up your workspace.</h3>
+      <p>The root of numbering and audit. Everything that follows references this one line.</p>
+      <div class="steps"><i class="on"></i><i></i><i></i></div>
+    </div>
+    <div class="ip">
+      <div class="fl"><div class="lab">Organisation</div><div class="in lit">Meridian Construction Group</div></div>
+      <div class="fl"><div class="lab">Region · data residency</div><div class="in">United Kingdom · London<span>▾</span></div></div>
+      <button class="go">Continue →</button>
+      <div class="alt">3 teammates already use Asite — <b>join their workspace</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- 02 MORNING BRIEFING -->
+<div class="wrap"><div class="sb" id="briefing">
+  <div class="sb-head"><span class="num">02</span><h2>Dashboard · the morning briefing</h2><p>No card grid. A plane-head carries the field metric, a metre-band of counts, then paper queue meets ink site at the seam.</p></div>
+</div></div>
+<div class="app">
+  <div class="ashell">
+    <div class="rail">
+      <div class="ws"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg><b>Mer Tower C</b><span class="k">⌘O</span></div>
+      <a class="on"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 7 L8 2 L14 7 V14 H2 Z"/></svg>Today</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H14 M2 8 H14 M2 12 H9"/></svg>RFIs<span class="b">47</span></a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H7 L9 6 H14 V13 H2 Z"/></svg>Files</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M4 2 H10 L13 5 V14 H4 Z"/></svg>Docs</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M3 6 H11 M13 10 H5"/></svg>Convert</a>
+      <div class="grp">Views</div>
+      <a class="warn"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/></svg>Awaiting me<span class="b">6</span></a>
+      <a class="warn"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M8 2 L14 13 H2 Z"/></svg>Holding pours<span class="b">2</span></a>
+      <div class="foot">WK 24 · 2026<br>AUDIT RUNNING</div>
+    </div>
+    <div class="work">
+      <div class="phead">
+        <div class="l"><span class="ov">Wed 11 Jun · WK 24</span><h3>Good morning, Charles.</h3></div>
+        <div class="fv"><span class="v">98.4%</span><span class="l2">Register health</span></div>
+      </div>
+      <div class="sitehero">
+        <img src="https://images.unsplash.com/photo-1684497404598-6e844dff9cde?w=1280&q=72&auto=format&fit=crop" alt="Tower C, this morning">
+        <span class="stamp">ON SITE · GRID 04 · 06:40</span>
+        <div class="ov2">
+          <span class="lbl">On site now · Tower C</span>
+          <h3>Pouring L24.<br>Lift window to 13:30.</h3>
+          <p>14° · rain from 14:00. <b>Crane window closes 13:30</b> — pour P-1128 unaffected. 212 on site, zero incidents.</p>
+        </div>
+      </div>
+      <div class="metband">
+        <div class="m"><div class="v">212</div><div class="l">crew on site</div></div>
+        <div class="m"><div class="v">14°</div><div class="l">rain from 14:00</div></div>
+        <div class="m"><div class="v">L24</div><div class="l">core pour today</div></div>
+        <div class="m"><div class="v">0</div><div class="l">incidents</div></div>
+      </div>
+      <div class="qhead"><b>Needs you</b><span class="c">6 · TAP TO EXPAND</span></div>
+      <div class="qrow sel"><div class="qr"><span class="dot d-hold"></span>RFI-0847</div><div class="qt">Respond — core wall cover clash L26</div><div class="qx"><span class="pill hold">HOLD</span><span class="chev">▾</span></div></div>
+      <div class="accbody">
+        <div class="det">Arup's reply landed 09:12 — cover verified at 40&nbsp;mm. <b>Releasing this hold clears P-1131, the L24 pour.</b> Sign the release note to close it out.</div>
+        <div class="acts"><button class="tbtn">Release hold</button><button class="tbtn sec">Open RFI</button></div>
+      </div>
+      <div class="qrow"><div class="qr"><span class="dot d-due"></span>STR-CAL-0098</div><div class="qt">Review — transfer beam load calc B02</div><div class="qx"><span class="m">DUE TODAY</span><span class="chev">▸</span></div></div>
+      <div class="qrow"><div class="qr"><span class="dot d-due"></span>P-1128</div><div class="qt">Sign — pour card, L24 core, 412m³</div><div class="qx"><span class="m">DUE FRI</span><span class="chev">▸</span></div></div>
+      <div class="qrow"><div class="qr"><span class="dot d-info"></span>TX-0204</div><div class="qt">Approve — transmittal to Arup, 14 files</div><div class="qx"><span class="m">TODAY</span><span class="chev">▸</span></div></div>
+      <div class="qrow"><div class="qr"><span class="dot d-info"></span>DOC-0091</div><div class="qt">Co-edit — site quality plan §2</div><div class="qx"><span class="m">2 OPEN</span><span class="chev">▸</span></div></div>
+      <div class="qrow"><div class="qr"><span class="dot d-idle"></span>CONV-018</div><div class="qt">Verify — converted subcontractor brief</div><div class="qx"><span class="m">LOW CONF.</span><span class="chev">▸</span></div></div>
+      <div class="actstrip"><span class="lbl">Activity</span><span class="a1"><span class="av y">KD</span><b>Kofi</b> replied · RFI-0847</span><span class="a1"><span class="av">SJ</span><b>Sonia</b> +4 plans</span><span class="a1"><span class="av">AB</span><b>Anaya</b> resolved 2</span></div>
+      <div class="wfoot"><span>QUEUE SORTED BY IMPACT</span><span class="r">J / K TO MOVE · ↵ TO OPEN</span></div>
+      <div class="ai"><span class="tag">Ask Asite Intelligence</span><button class="orb">✦</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 PROGRAMME OVERVIEW -->
+<div class="wrap"><div class="sb" id="overview">
+  <div class="sb-head"><span class="num">03</span><h2>Programme overview</h2><p>Portfolio level. The skyline is drawn in the flat-shape grammar; one beam lands.</p></div>
+</div></div>
+<div class="app">
+  <div class="ashell">
+    <div class="rail">
+      <div class="ws"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg><b>Portfolio</b><span class="k">⌘O</span></div>
+      <a class="on"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 7 L8 2 L14 7 V14 H2 Z"/></svg>Overview</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H14 M2 8 H14 M2 12 H9"/></svg>RFIs</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H7 L9 6 H14 V13 H2 Z"/></svg>Files</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M8 2 L14 5 V11 L8 14 L2 11 V5 Z"/></svg>Models</a>
+      <div class="grp">Regions</div>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10"/></svg>UK &amp; Europe<span class="b">7</span></a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10"/></svg>Middle East<span class="b">3</span></a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10"/></svg>APAC<span class="b">2</span></a>
+      <div class="foot">SYNCED 0.4S AGO</div>
+    </div>
+    <div class="work">
+      <div class="top"><span class="crumb">Portfolio <span>/ all programmes</span></span><span class="tsp"><span class="tsearch">Search the register…</span><button class="tbtn">+ New</button></span></div>
+      <div class="heroband">
+        <img class="bg" src="https://images.unsplash.com/photo-1664190425588-a2c96bc61abb?w=1200&q=72&auto=format&fit=crop" alt="Portfolio — programmes under construction">
+        <span class="ovl">Portfolio · WK 24</span>
+        <h2>Twelve sites, one register.</h2>
+        <div class="gstats">
+          <div><div class="n">12</div><div class="l">active projects</div></div>
+          <div><div class="n">84,210</div><div class="l">controlled documents</div></div>
+          <div><div class="n">97.9%</div><div class="l">portfolio health</div></div>
+          <div><div class="n" style="color:#B0391C">3</div><div class="l">holds across portfolio</div></div>
+        </div>
+      </div>
+      <div class="pjgrid">
+        <div class="pj"><div class="nm"><span class="dot d-due"></span>Meridian Tower C</div><div class="loc">LONDON · COMMERCIAL HIGH-RISE</div><div class="seamtrack"><i style="width:64%"></i></div><div class="meta"><span>64%</span><span>47 RFIs</span><em>1 HOLD</em></div></div>
+        <div class="pj"><div class="nm"><span class="dot d-ok"></span>City Hospital</div><div class="loc">MANCHESTER · HEALTHCARE</div><div class="seamtrack"><i style="width:81%"></i></div><div class="meta"><span>81%</span><span>12 RFIs</span></div></div>
+        <div class="pj"><div class="nm"><span class="dot d-hold"></span>JM Mall Complex</div><div class="loc">DUBAI · RETAIL</div><div class="seamtrack"><i style="width:38%"></i></div><div class="meta"><span>38%</span><span>61 RFIs</span><em>2 HOLDS</em></div></div>
+        <div class="pj"><div class="nm"><span class="dot d-due"></span>Crossway Depot</div><div class="loc">LEEDS · INFRASTRUCTURE</div><div class="seamtrack"><i style="width:52%"></i></div><div class="meta"><span>52%</span><span>23 RFIs</span></div></div>
+        <div class="pj"><div class="nm"><span class="dot d-ok"></span>Harbour Quarter</div><div class="loc">SYDNEY · MIXED USE</div><div class="seamtrack"><i style="width:90%"></i></div><div class="meta"><span>90%</span><span>6 RFIs</span></div></div>
+        <div class="pj" style="display:flex; align-items:center; justify-content:center; background:var(--ink)"><span style="font:800 13px/1 var(--font-ui); color:var(--yel)">View all 12 →</span></div>
+      </div>
+      <div class="wfoot"><span>SORTED BY RISK</span><span class="r">SYNCED 0.4S AGO</span></div>
+      <div class="ai"><span class="tag">Ask Asite Intelligence</span><button class="orb">✦</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 ANALYTICS -->
+<div class="wrap"><div class="sb" id="analytics">
+  <div class="sb-head"><span class="num">04</span><h2>Analytics</h2><p>Trends, distribution, cadence, a year of activity — ink and grey until something needs you, then the field.</p></div>
+</div></div>
+<div class="app">
+  <div class="ashell">
+    <div class="rail">
+      <div class="ws"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg><b>Mer Tower C</b><span class="k">⌘O</span></div>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 7 L8 2 L14 7 V14 H2 Z"/></svg>Today</a>
+      <a class="on"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M3 13 V8 M8 13 V4 M13 13 V6"/></svg>Analytics</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H14 M2 8 H14 M2 12 H9"/></svg>RFIs</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H7 L9 6 H14 V13 H2 Z"/></svg>Files</a>
+      <div class="grp">Reports</div>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M4 2 H12 V14 H4 Z M6 6 H10 M6 9 H10"/></svg>Weekly digest</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M4 2 H12 V14 H4 Z M6 6 H10 M6 9 H10"/></svg>QPR pack</a>
+      <div class="foot">EXPORT FEEDS QPR</div>
+    </div>
+    <div class="work">
+      <div class="top"><span class="crumb">Analytics <span>/ Tower C</span></span><span class="cnt">LAST 12 WEEKS</span><span class="tsp"><div class="seg"><span>4w</span><span class="on">12w</span><span>YTD</span></div><button class="tbtn">Export</button></span></div>
+      <div class="phead">
+        <div class="l"><span class="ov">Tower C · last 12 weeks</span><h3>Readings, <em>not reports.</em></h3></div>
+        <div class="fv"><span class="v">1.8d</span><span class="l2">Median RFI response ↓</span></div>
+      </div>
+      <div class="dsec">
+        <div class="dl"><b>Workflow distribution</b><span class="v">register health 98.4%</span></div>
+        <div class="stackbar"><i style="flex:60; background:#0E0D0A; color:#fff">PUBLISHED · 60%</i><i style="flex:25; background:#8F8B7E; color:#0E0D0A">IN REVIEW · 25%</i><i style="flex:5; background:#FFC60A"></i><i style="flex:10; background:#CFC9B6"></i></div>
+        <div class="stklbl"><span><i style="background:#0E0D0A"></i>Published</span><span><i style="background:#8F8B7E"></i>In review</span><span><i style="background:#FFC60A"></i>Held · 5%</span><span><i style="background:#CFC9B6"></i>Draft · 10%</span></div>
+      </div>
+      <div class="dsec" style="padding:0">
+        <div class="ddual">
+          <div>
+            <div class="dl"><b>RFI response · 12 weeks</b><span class="v">structural ↑ watch</span></div>
+            <svg width="100%" height="132" viewBox="0 0 440 132" preserveAspectRatio="none">
+              <polygon points="0,92 40,84 80,98 120,80 160,86 200,72 240,78 280,64 320,70 360,56 400,60 440,50 440,132 0,132" fill="#CFC9B6"/>
+              <polyline points="0,92 40,84 80,98 120,80 160,86 200,72 240,78 280,64 320,70 360,56 400,60 440,50" fill="none" stroke="#0E0D0A" stroke-width="3"/>
+              <rect x="430" y="42" width="14" height="14" fill="#FFC60A"/>
+            </svg>
+            <div class="stklbl"><span><i style="background:#CFC9B6"></i>all disciplines</span><span><i style="background:#0E0D0A"></i>median trend</span></div>
+          </div>
+          <div>
+            <div class="dl"><b>Documents by discipline</b><span class="v">230 total</span></div>
+            <div class="bars">
+              <div class="br"><span class="nm">STR</span><div class="bar hot" style="width:100%"></div><span class="vv">88</span></div>
+              <div class="br"><span class="nm">MEP</span><div class="bar" style="width:75%"></div><span class="vv">66</span></div>
+              <div class="br"><span class="nm">CIV</span><div class="bar" style="width:52%"></div><span class="vv">46</span></div>
+              <div class="br"><span class="nm">ARC</span><div class="bar" style="width:34%"></div><span class="vv">30</span></div>
+            </div>
+            <div class="stklbl"><span><i style="background:#FFC60A"></i>structural · watch</span><span><i style="background:#0E0D0A"></i>others</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="dsec">
+        <div class="dl"><b>Activity · 14 weeks</b><span class="v">peak Wed · record 412m³ pour day</span></div>
+        <div class="heatbig">
+          <i></i><i style="background:#CFC9B6"></i><i style="background:#B7B19E"></i><i style="background:#CFC9B6"></i><i style="background:#8F8B7E"></i><i style="background:#B7B19E"></i><i></i><i style="background:#CFC9B6"></i><i style="background:#B7B19E"></i><i style="background:#6E6A5E"></i><i style="background:#B7B19E"></i><i style="background:#CFC9B6"></i><i></i><i style="background:#CFC9B6"></i>
+          <i style="background:#CFC9B6"></i><i style="background:#B7B19E"></i><i style="background:#6E6A5E"></i><i style="background:#B7B19E"></i><i style="background:#CFC9B6"></i><i style="background:#8F8B7E"></i><i style="background:#CFC9B6"></i><i style="background:#B7B19E"></i><i style="background:#6E6A5E"></i><i style="background:#55524A"></i><i style="background:#8F8B7E"></i><i style="background:#B7B19E"></i><i style="background:#CFC9B6"></i><i></i>
+          <i style="background:#B7B19E"></i><i style="background:#6E6A5E"></i><i style="background:#55524A"></i><i style="background:#6E6A5E"></i><i style="background:#B7B19E"></i><i style="background:#6E6A5E"></i><i style="background:#B7B19E"></i><i style="background:#6E6A5E"></i><i style="background:#55524A"></i><i style="background:#FFC60A"></i><i style="background:#6E6A5E"></i><i style="background:#8F8B7E"></i><i style="background:#B7B19E"></i><i style="background:#CFC9B6"></i>
+        </div>
+        <div class="stklbl"><span><i style="background:#CFC9B6"></i>quiet</span><span><i style="background:#55524A"></i>busy</span><span><i style="background:#FFC60A"></i>record</span></div>
+      </div>
+      <div class="wfoot"><span>ALL FIGURES LIVE FROM REGISTER</span><span class="r">EXPORT FEEDS QPR PACK</span></div>
+      <div class="ai"><span class="tag">Ask Asite Intelligence</span><button class="orb">✦</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- 05 PROJECT DASHBOARD -->
+<div class="wrap"><div class="sb" id="project">
+  <div class="sb-head"><span class="num">05</span><h2>Project dashboard · Tower C</h2><p>One project's pulse. The hold sits in the timeline where it actually is; Intelligence is open, citing the register.</p></div>
+</div></div>
+<div class="app">
+  <div class="ashell">
+    <div class="rail">
+      <div class="ws"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg><b>Mer Tower C</b><span class="k">⌘O</span></div>
+      <a class="on"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 7 L8 2 L14 7 V14 H2 Z"/></svg>Project</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H14 M2 8 H14 M2 12 H9"/></svg>RFIs<span class="b">47</span></a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H7 L9 6 H14 V13 H2 Z"/></svg>Files</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M4 2 H10 L13 5 V14 H4 Z"/></svg>Docs</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M3 6 H11 M13 10 H5"/></svg>Convert</a>
+      <div class="foot">GRID 04 · +14.200 AOD</div>
+    </div>
+    <div class="work">
+      <div class="phead">
+        <div class="l"><span class="ov">Meridian · London · WK 24 / 92</span><h3>Tower C.</h3></div>
+        <div class="fv"><span class="v">64%</span><span class="l2">Complete · on programme +2.1d</span></div>
+      </div>
+      <div class="metband">
+        <div class="m"><div class="v">47</div><div class="l">open RFIs</div></div>
+        <div class="m"><div class="v">9</div><div class="l">pending tasks</div></div>
+        <div class="m"><div class="v" style="color:#B0391C">1</div><div class="l">active hold</div></div>
+        <div class="m"><div class="v">L24</div><div class="l">core at level</div></div>
+      </div>
+      <div class="mlbl">Milestones</div>
+      <div class="mil">
+        <div class="ms done"><i></i><b>Substructure</b><span>DONE · WK 18</span></div>
+        <div class="ms done"><i></i><b>Core to L20</b><span>DONE · WK 22</span></div>
+        <div class="ms now"><i></i><b>Core L24–L28</b><span>HOLD · RFI-0847</span></div>
+        <div class="ms"><i></i><b>Facade start</b><span>WK 30</span></div>
+        <div class="ms"><i></i><b>Topping out</b><span>WK 41</span></div>
+      </div>
+      <div class="split2" style="border-top:1px solid rgba(14,13,10,0.1)">
+        <div class="l">
+          <div class="ghead"><b>Pending tasks</b><span class="c">9</span></div>
+          <div class="rowi"><span class="dot d-due"></span><span class="ref">P-1128</span><span class="t">Sign pour card — L24 core</span><span class="pr"><span class="m">DUE FRI</span></span></div>
+          <div class="rowi"><span class="dot d-info"></span><span class="ref">TX-0204</span><span class="t">Approve transmittal to Arup</span><span class="pr"><span class="m">TODAY</span></span></div>
+          <div class="rowi"><span class="dot d-idle"></span><span class="ref">ITP-044</span><span class="t">Schedule L25 rebar inspection</span><span class="pr"><span class="m">WK 25</span></span></div>
+        </div>
+        <div>
+          <div class="ghead"><b>Open requests</b><span class="c">LATEST</span></div>
+          <div class="rowi sel"><span class="dot d-hold"></span><span class="ref">RFI-0847</span><span class="t">Core wall cover clash L26</span><span class="pr"><span class="av y">KD</span><span class="m">2D OVER</span></span></div>
+          <div class="rowi"><span class="dot d-due"></span><span class="ref">RFI-0851</span><span class="t">Link detail revision L26</span><span class="pr"><span class="av">CN</span><span class="m">13 JUN</span></span></div>
+          <div class="rowi"><span class="dot d-info"></span><span class="ref">RFI-0842</span><span class="t">Pile cap substitution PC-07</span><span class="pr"><span class="av">LR</span><span class="m">REVIEW</span></span></div>
+        </div>
+      </div>
+      <div class="wfoot"><span>TEAM ON SITE · 212</span><span>NEXT POUR · P-1131 · 16 JUN</span><span class="r"><em>WEATHER WINDOW CLOSES 13:30</em></span></div>
+      <div class="ai">
+        <div class="panel">
+          <div class="ah"><span style="font:900 14px/1 var(--font-ui); color:var(--ink)">✦</span><b>Asite Intelligence</b><span class="s">CITES THE REGISTER</span></div>
+          <div class="ab">
+            <div class="q">What's holding the L24 pour?</div>
+            <div class="a">One hold. <b>RFI-0847 — cover clash at L26.</b> Arup's reply landed 09:12; cover verified at 40&nbsp;mm. P-1131 releases on sign-off.</div>
+            <div class="rd"><span class="dot d-hold"></span><span class="rf">RFI-0847</span>Cover clash L26<span class="tm">REPLY 09:12</span></div>
+            <div class="rd"><span class="dot d-info"></span><span class="rf">P-1131</span>L24 core pour<span class="tm">AWAITS SIGN-OFF</span></div>
+            <div class="acts"><button class="p">Open RFI-0847</button><button class="s">Draft release note</button></div>
+            <div class="src">SOURCES · RFI REGISTER · POUR PLAN REV C — NOTHING WRITES WITHOUT YOU</div>
+          </div>
+          <div class="in">Ask about this project…<span class="kbd">⌘I</span></div>
+        </div>
+        <button class="orb">✦</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 06 FILES -->
+<div class="wrap"><div class="sb" id="files">
+  <div class="sb-head"><span class="num">06</span><h2>Files workspace</h2><p>A working top bar — search, filter, sort, import — and a list ⇄ grid switch. Folders first, then live previews.</p></div>
+</div></div>
+<div class="app">
+  <div class="ashell">
+    <div class="rail">
+      <div class="ws"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg><b>City Hospital</b><span class="k">⌘O</span></div>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 7 L8 2 L14 7 V14 H2 Z"/></svg>Today</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H14 M2 8 H14 M2 12 H9"/></svg>RFIs</a>
+      <a class="on"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H7 L9 6 H14 V13 H2 Z"/></svg>Files</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M4 2 H10 L13 5 V14 H4 Z"/></svg>Docs</a>
+      <div class="grp">Smart views</div>
+      <a class="warn"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/></svg>Awaiting me<span class="b">2</span></a>
+      <a class="warn"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M8 2 L14 13 H2 Z"/></svg>Overdue<span class="b">2</span></a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M3 8 A5 5 0 1 1 5 12 M3 8 V11 M3 8 H6"/></svg>Recently converted</a>
+      <div class="foot">AUDIT · COMPLETE</div>
+    </div>
+    <div class="work">
+      <div class="top"><span class="crumb">Files <span>/ Civil</span></span><span class="cnt">230 controlled</span><span class="tsp"><span class="tsearch">Search files…<span class="kbd">/</span></span><div class="seg"><span>List</span><span class="on">Grid</span></div><button class="tbtn">Upload</button></span></div>
+      <div class="fbar"><span class="prop">Folder: Civil ✕</span><span class="prop"><span class="dot d-ok"></span>Distributed ✕</span><span class="prop" style="color:var(--grey-1)">+ Add filter</span><span class="prop" style="margin-left:auto">Select all</span></div>
+      <div class="fsec">Folders</div>
+      <div class="fgrid">
+        <div class="fcard"><div class="thumb"><div class="fold"></div></div><b>Civil</b><div class="meta">64 files · 2 awaiting</div></div>
+        <div class="fcard"><div class="thumb"><div class="fold q"></div></div><b>Architecture</b><div class="meta">41 files</div></div>
+        <div class="fcard"><div class="thumb"><div class="fold"></div></div><b>Structure</b><div class="meta"><span class="dot d-hold" style="width:7px;height:7px"></span>88 · 1 hold</div></div>
+        <div class="fcard"><div class="thumb"><div class="fold q"></div></div><b>Interior</b><div class="meta">37 files</div></div>
+      </div>
+      <div class="fsec">Files · Civil</div>
+      <div class="fgrid">
+        <div class="fcard sel"><div class="thumb"><svg width="120" height="68" viewBox="0 0 120 68"><rect x="16" y="10" width="88" height="48" fill="#D8D2C0"/><rect x="22" y="16" width="32" height="18" fill="#0E0D0A"/><rect x="60" y="16" width="38" height="28" fill="#8F8B7E"/><rect x="22" y="40" width="32" height="6" fill="#FFC60A"/></svg></div><b>Main electrical layout</b><div class="meta"><span class="dot d-ok" style="width:7px;height:7px"></span>ELE-RPT-0118 · r3</div></div>
+        <div class="fcard"><div class="thumb"><svg width="120" height="68" viewBox="0 0 120 68"><rect x="16" y="10" width="88" height="48" fill="#D8D2C0"/><rect x="16" y="10" width="44" height="48" fill="#8F8B7E"/><rect x="60" y="10" width="44" height="24" fill="#0E0D0A"/><rect x="60" y="40" width="22" height="18" fill="#FFC60A"/></svg></div><b>Floorplan 4</b><div class="meta">CIV-RPT-0214 · r1</div></div>
+        <div class="fcard"><div class="thumb"><div class="ficon">PDF</div></div><b>Pile integrity report</b><div class="meta">CIV-RPT-0033 · C01</div></div>
+        <div class="fcard"><div class="thumb"><svg width="120" height="68" viewBox="0 0 120 68"><rect x="16" y="10" width="88" height="48" fill="#CFC9B6"/><rect x="84" y="16" width="12" height="12" fill="#FFC60A"/><polygon points="16,58 46,30 64,44 86,22 104,40 104,58" fill="#0E0D0A"/></svg></div><b>Pour L24 · east</b><div class="meta"><span class="dot d-due" style="width:7px;height:7px"></span>CIV-IMG-0112 · capture</div></div>
+        <div class="fcard"><div class="thumb"><svg width="120" height="68" viewBox="0 0 120 68"><rect x="16" y="12" width="88" height="44" fill="#D8D2C0"/><rect x="16" y="12" width="88" height="10" fill="#0E0D0A"/><rect x="22" y="28" width="76" height="5" fill="#8F8B7E"/><rect x="22" y="38" width="76" height="5" fill="#8F8B7E"/><rect x="22" y="48" width="40" height="5" fill="#FFC60A"/></svg></div><b>Drainage schedule</b><div class="meta">CIV-SCH-0021 · rB</div></div>
+        <div class="fcard"><div class="thumb"><div class="ficon">DOC</div></div><b>Earthworks method</b><div class="meta"><span class="dot d-due" style="width:7px;height:7px"></span>in review</div></div>
+        <div class="fcard"><div class="thumb"><svg width="120" height="68" viewBox="0 0 120 68"><rect x="16" y="10" width="88" height="48" fill="#CFC9B6"/><rect x="24" y="20" width="11" height="38" fill="#0E0D0A"/><rect x="24" y="20" width="42" height="8" fill="#FFC60A"/><rect x="74" y="30" width="22" height="28" fill="#8F8B7E"/></svg></div><b>Steel erection · L25</b><div class="meta">STR-IMG-0231 · capture</div></div>
+        <div class="fcard" style="background:var(--ink)"><div class="thumb" style="background:var(--ink-2)"><span style="font:800 11px/1 var(--font-mono); color:var(--yel)">+ NEW</span></div><b style="color:var(--paper)">Create document</b><div class="meta" style="color:var(--grey-2)">native · versioned</div></div>
+      </div>
+      <div class="wfoot"><span>SHOWING 1–8 OF 64 · CIVIL</span><span class="r">G THEN L · LIST VIEW</span></div>
+      <div class="ai"><span class="tag">Ask Asite Intelligence</span><button class="orb">✦</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- 07 DOCUMENT CANVAS -->
+<div class="wrap"><div class="sb" id="canvas">
+  <div class="sb-head"><span class="num">07</span><h2>Document canvas · preview &amp; annotate</h2><p>The drawing on a paper sheet — pins, a thread that resolves, and a hold raised straight from the sheet.</p></div>
+</div></div>
+<div class="app">
+  <div class="work">
+    <div class="doctop"><span class="crumb" style="font-size:13px">Files / Structure / <span style="color:var(--ink)">STR-DWG-0412 — Core Wall L24–L28</span></span><span class="prop"><span class="dot d-ok"></span>Rev C03 · S4</span><span class="tsp"><div class="seg"><span class="on">Annotate</span><span>Measure</span><span>Compare</span></div><button class="tbtn sec">Share</button><button class="tbtn">Raise RFI</button></span></div>
+    <div class="canvas">
+      <div class="sheet">
+        <svg width="90%" height="86%" viewBox="0 0 520 360" fill="none" preserveAspectRatio="xMidYMid meet">
+          <rect x="40" y="40" width="440" height="280" stroke="#0E0D0A" stroke-width="2"/>
+          <rect x="40" y="40" width="220" height="160" stroke="#0E0D0A" stroke-width="1.3"/>
+          <line x1="260" y1="40" x2="260" y2="320" stroke="#0E0D0A" stroke-width="1.3"/>
+          <line x1="40" y1="200" x2="480" y2="200" stroke="#0E0D0A" stroke-width="1.3"/>
+          <rect x="300" y="80" width="120" height="80" stroke="#0E0D0A" stroke-width="1.3"/>
+          <line x1="300" y1="80" x2="420" y2="160" stroke="#0E0D0A" stroke-width="0.9"/>
+          <rect x="70" y="240" width="60" height="50" fill="#0E0D0A"/>
+          <circle cx="395" cy="120" r="3" fill="#0E0D0A"/>
+          <text x="44" y="32" font-family="JetBrains Mono, monospace" font-size="11" fill="#55524A">L26 · CORE + WEST WING · 1:100</text>
+          <text x="392" y="338" font-family="JetBrains Mono, monospace" font-size="10" fill="#55524A">REV C03 · S4</text>
+        </svg>
+        <span class="pin" style="left:44%; top:30%">1</span>
+        <span class="pin" style="left:64%; top:52%">2</span>
+        <span class="pin mut" style="left:22%; top:72%">3</span>
+        <div class="zoom"><span>−</span><span class="on">100%</span><span>+</span><span>Fit</span></div>
+      </div>
+      <div class="cpanel">
+        <div class="ch2">Comments<span class="c">3 · 1 OPEN</span></div>
+        <div class="cm lit"><div class="who"><span class="num">1</span>S. Okafor<span class="tm">2h</span></div><p>Cover to core wall reads 35&nbsp;mm here — clashes with the duct run at gridline E. Raising RFI-0847.</p><div class="act">→ Linked to RFI-0847</div></div>
+        <div class="cm"><div class="who"><span class="num">2</span>D. Mensah<span class="tm">1h</span></div><p>Confirmed against MEP rev B11. Hold the L26 pour until resolved.</p></div>
+        <div class="cm"><div class="who"><span class="num">3</span>You<span class="tm">12m</span></div><p>Answer drafted. Releasing the hold once design lead signs.</p></div>
+      </div>
+    </div>
+    <div class="ai"><span class="tag">Ask Asite Intelligence</span><button class="orb">✦</button></div>
+  </div>
+</div>
+
+<!-- 08 RFI REGISTER -->
+<div class="wrap"><div class="sb" id="rfis">
+  <div class="sb-head"><span class="num">08</span><h2>RFI register</h2><p>Refs, plain titles, one solid state block. Grouped by status, sorted by age, every row carrying its owner.</p></div>
+</div></div>
+<div class="app">
+  <div class="ashell">
+    <div class="rail">
+      <div class="ws"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg><b>Mer Tower C</b><span class="k">⌘O</span></div>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 7 L8 2 L14 7 V14 H2 Z"/></svg>Today</a>
+      <a class="on"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H14 M2 8 H14 M2 12 H9"/></svg>Register</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H7 L9 6 H14 V13 H2 Z"/></svg>Files</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M8 2 L14 5 V11 L8 14 L2 11 V5 Z"/></svg>Models</a>
+      <div class="grp">Filters</div>
+      <a class="on"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10"/></svg>All open<span class="b">47</span></a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10"/></svg>Assigned to me<span class="b">6</span></a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10"/></svg>This week<span class="b">9</span></a>
+      <div class="foot">47 OPEN · 12 HELD</div>
+    </div>
+    <div class="work">
+      <div class="top"><span class="crumb">Register <span>/ RFIs / open</span></span><span class="cnt">47 OPEN</span><span class="tsp"><span class="tsearch">Search refs…<span class="kbd">/</span></span><div class="seg"><span class="on">Age</span><span>Discipline</span></div><button class="tbtn">+ Raise RFI</button></span></div>
+      <div class="rgrp">Held · 2</div>
+      <div class="rowi sel"><span class="dot d-hold"></span><span class="ref">RFI-0847</span><span class="t">Core wall cover clash · L26</span><span class="pr"><span class="m">STR</span><span class="av y">KD</span><span class="m">2D OVER</span><span class="pill hold">HOLD</span></span></div>
+      <div class="rowi"><span class="dot d-hold"></span><span class="ref">RFI-0839</span><span class="t">Façade bracket setting-out · L18</span><span class="pr"><span class="m">ARC</span><span class="av">MN</span><span class="m">5D OVER</span><span class="pill hold">HOLD</span></span></div>
+      <div class="rgrp">Due this week · 2</div>
+      <div class="rowi"><span class="dot d-due"></span><span class="ref">P-1128</span><span class="t">Pour card · L24 core</span><span class="pr"><span class="m">STR</span><span class="av">CN</span><span class="m">FRI</span><span class="pill due">DUE</span></span></div>
+      <div class="rowi"><span class="dot d-due"></span><span class="ref">RFI-0851</span><span class="t">Riser penetration coordination · L22</span><span class="pr"><span class="m">MEP</span><span class="av">LR</span><span class="m">THU</span><span class="pill due">DUE</span></span></div>
+      <div class="rgrp">In review · 1</div>
+      <div class="rowi"><span class="dot d-info"></span><span class="ref">RFI-0842</span><span class="t">Pile cap substitution · PC-07</span><span class="pr"><span class="m">CIV</span><span class="av">LR</span><span class="m">2D</span><span class="pill info">REVIEW</span></span></div>
+      <div class="rgrp">Cleared · 1</div>
+      <div class="rowi"><span class="dot d-ok"></span><span class="ref">RFI-0844</span><span class="t">Stair pressurisation duct route</span><span class="pr"><span class="m">MEP</span><span class="av">DM</span><span class="m">WK 23</span><span class="pill ok">CLEARED</span></span></div>
+      <div class="wfoot"><span>SORTED BY AGE</span><span class="r">J / K TO MOVE · ↵ TO OPEN</span></div>
+      <div class="ai"><span class="tag">Ask Asite Intelligence</span><button class="orb">✦</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- 09 aMAIL -->
+<div class="wrap"><div class="sb" id="mail">
+  <div class="sb-head"><span class="num">09</span><h2>aMail</h2><p>Three accounts, one register. Filed mail is quiet; unfiled wears the field. The thread keeps its attachments as secure links.</p></div>
+</div></div>
+<div class="app">
+  <div class="work">
+    <div class="top"><span class="crumb">aMail <span>/ Tower C / inbox</span></span><span class="cnt">3 ACCOUNTS SYNCED</span><span class="tsp"><span class="tsearch">Search mail…</span><button class="tbtn">Compose</button></span></div>
+    <div class="msplit">
+      <div class="macct">
+        <div class="grp">Accounts</div>
+        <div class="ac on"><div class="em"><span class="dot d-ok" style="width:8px;height:8px"></span>Tower C · project</div><div class="sy">SYNCED · 2,847 FILED</div></div>
+        <div class="ac"><div class="em"><span class="dot d-ok" style="width:8px;height:8px"></span>charles@mcg.co</div><div class="sy">OUTLOOK · SYNCED</div></div>
+        <div class="ac"><div class="em"><span class="dot d-info" style="width:8px;height:8px"></span>tenders@mcg.co</div><div class="sy">SHARED · 4 NEW</div></div>
+        <div class="grp">Folders</div>
+        <div class="ac"><div class="em" style="color:var(--grey-2)">Filed to register</div></div>
+        <div class="ac"><div class="em" style="color:var(--grey-2)">Unfiled · 3</div></div>
+      </div>
+      <div class="mlist">
+        <div class="mband">Today · 4</div>
+        <div class="mrow sel"><div class="l1">D. Mensah · Design lead<span class="tm">09:14</span></div><div class="l2">RE: RFI-0847 cover clash at L26</div><span class="fchip">FILED · RFI-0847</span></div>
+        <div class="mrow"><div class="l1">BAM Structures<span class="tm">08:50</span></div><div class="l2">Pour card L24 — ready for sign-off</div><span class="fchip">FILED · P-1128</span></div>
+        <div class="mrow"><div class="l1">M. Adeyemi · QS<span class="tm">08:31</span></div><div class="l2">Tender pack — package 4 civils</div><span class="fchip unf">UNFILED</span></div>
+        <div class="mrow"><div class="l1">Site office<span class="tm">07:58</span></div><div class="l2">Weather hold lifted — crane back up</div><span class="fchip">FILED · DIARY</span></div>
+      </div>
+      <div class="mread">
+        <h4>RE: RFI-0847 cover clash at L26</h4>
+        <div class="msg"><div class="mh"><span class="av y">DM</span>D. Mensah · Design lead<span class="tm">09:14</span></div><p>Confirmed against MEP rev B11 — the duct run wins, the wall takes the 35&nbsp;mm. You can release the hold once the pour card is signed. I've attached the marked-up section.</p></div>
+        <div class="att"><span>MCG-TWRC-STR-SK-0847.pdf</span><span class="sz">1.2 MB</span><span class="fchip">SECURE LINK</span></div>
+        <div class="msg"><div class="mh"><span class="av">CN</span>You<span class="tm">09:20</span></div><p>Filed to RFI-0847. Releasing the hold and notifying BAM. Thanks — fast turnaround.</p></div>
+      </div>
+    </div>
+    <div class="ai"><span class="tag">Ask Asite Intelligence</span><button class="orb">✦</button></div>
+  </div>
+</div>
+
+<!-- 10 COMMAND PALETTE -->
+<div class="wrap"><div class="sb" id="palette">
+  <div class="sb-head"><span class="num">10</span><h2>Command palette</h2><p>⌘K reaches every file, RFI, and action. The cursor is a yellow block; the selected row is the field.</p></div>
+</div></div>
+<div class="app">
+  <div class="palstage">
+    <div class="pal">
+      <div class="ph"><span class="car"></span><input value="cover clash" placeholder="Search files, RFIs, actions…"></div>
+      <div class="g2">RFIs</div>
+      <div class="pr on"><span class="ref">RFI-0847</span>Core wall cover clash · L26<span class="k">↵ OPEN</span></div>
+      <div class="pr"><span class="ref">RFI-0839</span>Façade bracket setting-out · L18<span class="k">HOLD</span></div>
+      <div class="g2">Files</div>
+      <div class="pr"><span class="ref">DWG</span>STR-DWG-0412 — Core Wall L24–L28<span class="k">C03</span></div>
+      <div class="g2">Actions</div>
+      <div class="pr"><span class="ref">⌁</span>Release hold on RFI-0847<span class="k">R</span></div>
+      <div class="pr"><span class="ref">⌁</span>Raise new RFI from drawing<span class="k">N</span></div>
+      <div class="pr"><span class="ref">⌁</span>Export QPR pack<span class="k">E</span></div>
+      <div class="pf"><span>↑ ↓ TO MOVE</span><span>↵ TO RUN</span><span style="margin-left:auto">ESC TO CLOSE</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 11 EXECUTIVE -->
+<div class="wrap"><div class="sb" id="exec">
+  <div class="sb-head"><span class="num">11</span><h2>Executive · board summary</h2><p>The portfolio at board scale — oversize figures, the orange layer of holds, no chrome.</p></div>
+</div></div>
+<div class="app">
+  <div class="ashell">
+    <div class="rail">
+      <div class="ws"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg><b>Portfolio</b><span class="k">⌘O</span></div>
+      <a class="on"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M3 13 V8 M8 13 V4 M13 13 V6"/></svg>Executive</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H14 M2 8 H14 M2 12 H9"/></svg>Programmes<span class="b">12</span></a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M4 2 H12 V14 H4 Z M6 6 H10 M6 9 H10"/></svg>QPR packs</a>
+      <div class="grp">Quarters</div>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10"/></svg>FY26 · Q3</a>
+      <div class="foot">FIGURES LIVE</div>
+    </div>
+    <div class="work">
+      <div class="phead">
+        <div class="l"><span class="ov">FY26 · Q3 · board summary</span><h3>Portfolio, poured solid.</h3></div>
+        <div class="fv"><span class="v">£2.1bn</span><span class="l2">Under management</span></div>
+      </div>
+      <div class="metband">
+        <div class="m"><div class="v">97.9%</div><div class="l">portfolio health</div></div>
+        <div class="m"><div class="v">12</div><div class="l">active programmes</div></div>
+        <div class="m"><div class="v">1,840</div><div class="l">docs made native · Q3</div></div>
+        <div class="m hot"><div class="v">3</div><div class="l">holds — the orange layer</div></div>
+      </div>
+      <div class="ghead"><b>The orange layer · holds</b><span class="c">3 ACROSS PORTFOLIO</span></div>
+      <div class="rowi sel"><span class="dot d-hold"></span><span class="ref">RFI-0847</span><span class="t">Tower C · cover clash L26</span><span class="pr"><span class="m">2D OVER</span><span class="pill hold">HOLD</span></span></div>
+      <div class="rowi"><span class="dot d-due"></span><span class="ref">PERMIT-CR</span><span class="t">JM Mall · crane permit</span><span class="pr"><span class="m">WK 25</span><span class="pill due">DUE</span></span></div>
+      <div class="rowi"><span class="dot d-info"></span><span class="ref">MAT-019</span><span class="t">JM Mall · material substitution</span><span class="pr"><span class="m">2D</span><span class="pill info">REVIEW</span></span></div>
+      <div class="ghead"><b>Poured this quarter</b><span class="c">Q3 DELIVERY</span></div>
+      <div class="rowi"><span class="dot d-ok"></span><span class="ref">CONVERT</span><span class="t">1,840 documents made native</span><span class="pr"><span class="m">SHIPPED</span></span></div>
+      <div class="rowi"><span class="dot d-ok"></span><span class="ref">ONBOARD</span><span class="t">Two programmes brought on</span><span class="pr"><span class="m">DONE</span></span></div>
+      <div class="rowi"><span class="dot d-due"></span><span class="ref">AUTO-HP</span><span class="t">Hold-point automation</span><span class="pr"><span class="m">POURING</span></span></div>
+      <div class="wfoot"><span>FIGURES LIVE FROM THE REGISTER</span><span class="r">EXPORT · QPR PACK · 22 SLIDES</span></div>
+      <div class="ai"><span class="tag">Ask Asite Intelligence</span><button class="orb">✦</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- 12 SITE DIARY -->
+<div class="wrap"><div class="sb" id="diary">
+  <div class="sb-head"><span class="num">12</span><h2>Site diary</h2><p>The human view, photo-led. The day on site captured, signed, and filed as the daily record.</p></div>
+</div></div>
+<div class="app">
+  <div class="ashell">
+    <div class="rail">
+      <div class="ws"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg><b>Mer Tower C</b><span class="k">⌘O</span></div>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 7 L8 2 L14 7 V14 H2 Z"/></svg>Today</a>
+      <a class="on"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M4 2 H12 V14 H4 Z M6 6 H10 M6 9 H10"/></svg>Site diary</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M3 8 L7 12 L13 4"/></svg>Field</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H7 L9 6 H14 V13 H2 Z"/></svg>Files</a>
+      <div class="foot">PDF AT 18:00 · AUTO</div>
+    </div>
+    <div class="work">
+      <div class="sitehero">
+        <img src="https://images.unsplash.com/photo-1751808830304-51c95ed33b10?w=1280&q=72&auto=format&fit=crop" alt="Tower C, today">
+        <span class="stamp">SITE DIARY · WED 11 JUN · WK 24</span>
+        <div class="ov2"><span class="lbl">Today on site</span><h3>Pour day. Clear run.</h3><p>L24 core poured on schedule. Crane down at 13:30 for weather. <b>Zero incidents.</b></p></div>
+      </div>
+      <div class="metband">
+        <div class="m"><div class="v">212</div><div class="l">crew on site</div></div>
+        <div class="m"><div class="v">14°</div><div class="l">rain from 14:00</div></div>
+        <div class="m"><div class="v">2</div><div class="l">pours scheduled</div></div>
+        <div class="m"><div class="v">0</div><div class="l">incidents</div></div>
+      </div>
+      <div class="ghead"><b>Diary · entries write themselves</b><span class="c">5</span></div>
+      <div class="rowi"><span class="dot d-ok"></span><span class="ref">07:02</span><span class="t">Toolbox talk — L24 pour sequence, 38 attended</span><span class="pr"><span class="av">CN</span></span></div>
+      <div class="rowi"><span class="dot d-ok"></span><span class="ref">09:41</span><span class="t">Pour P-1128 started — L24 core, C50/60</span><span class="pr"><span class="m">AUTO · FIELD</span></span></div>
+      <div class="rowi sel"><span class="dot d-due"></span><span class="ref">11:20</span><span class="t">Crane window note — rain 14:00, last lift 13:30</span><span class="pr"><span class="m">WEATHER FEED</span></span></div>
+      <div class="rowi"><span class="dot d-info"></span><span class="ref">12:05</span><span class="t">Rebar inspection L25 — passed with comment</span><span class="pr"><span class="av">KD</span></span></div>
+      <div class="ghead"><b>Site photos · today</b><span class="c">12 CAPTURED</span></div>
+      <div class="photostrip">
+        <div class="pc2"><img src="https://images.unsplash.com/photo-1684497404598-6e844dff9cde?w=420&q=70&auto=format&fit=crop" alt=""><span class="cap">L24 POUR · 09:48</span></div>
+        <div class="pc2"><img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=420&q=70&auto=format&fit=crop" alt=""><span class="cap">REBAR · L25</span></div>
+        <div class="pc2"><img src="https://images.unsplash.com/photo-1664190425588-a2c96bc61abb?w=420&q=70&auto=format&fit=crop" alt=""><span class="cap">CORE · WEST</span></div>
+        <div class="pc2"><img src="https://images.unsplash.com/photo-1762896498171-32c406e0144f?w=420&q=70&auto=format&fit=crop" alt=""><span class="cap">CRANE · GRID 04</span></div>
+      </div>
+      <div class="wfoot"><span>SIGNED ENTRIES BECOME THE DAILY RECORD</span><span class="r">PDF AT 18:00 · AUTO</span></div>
+      <div class="ai"><span class="tag">Ask Asite Intelligence</span><button class="orb">✦</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- 13 CONVERT -->
+<div class="wrap"><div class="sb" id="convert">
+  <div class="sb-head"><span class="num">13</span><h2>Convert · site paper to data</h2><p>Drop site paper in, structured fields out — confidence scored, human confirmed.</p></div>
+</div></div>
+<div class="app">
+  <div class="ashell">
+    <div class="rail">
+      <div class="ws"><svg width="20" height="21" viewBox="0 0 377 396" style="--mk:var(--yel)"><use href="#amark"/></svg><b>Mer Tower C</b><span class="k">⌘O</span></div>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 7 L8 2 L14 7 V14 H2 Z"/></svg>Today</a>
+      <a class="on"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M3 6 H11 M13 10 H5"/></svg>Convert</a>
+      <a><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><path d="M2 4 H7 L9 6 H14 V13 H2 Z"/></svg>Files</a>
+      <div class="grp">Queue</div>
+      <a class="warn"><svg class="ic" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/></svg>To verify<span class="b">3</span></a>
+      <div class="foot">OCR · 97% AVG</div>
+    </div>
+    <div class="work">
+      <div class="top"><span class="crumb">Convert <span>/ intake</span></span><span class="cnt">3 IN QUEUE</span><span class="tsp"><button class="tbtn">Upload paper</button></span></div>
+      <div class="dropzone"><div class="ig"></div><h4>Drop site paper here</h4><p>PDF, photo, or scan — Convert reads it into structured fields you confirm.</p></div>
+      <div class="ghead"><b>Converting</b><span class="c">3</span></div>
+      <div class="cvr"><div class="fi2">PDF</div><div><div class="fn">Subcontractor brief — package 4</div><div class="fm">CONV-018 · 6 pages</div></div><div class="seamtrack"><i style="width:100%"></i></div><span class="conf lo">62% LOW</span></div>
+      <div class="cvr"><div class="fi2">JPG</div><div><div class="fn">Pour card — L24 core (photo)</div><div class="fm">CONV-019 · 1 page</div></div><div class="seamtrack"><i style="width:100%"></i></div><span class="conf hi">97% HIGH</span></div>
+      <div class="cvr"><div class="fi2">PDF</div><div><div class="fn">Delivery ticket — rebar batch</div><div class="fm">CONV-020 · 2 pages</div></div><div class="seamtrack"><i style="width:64%"></i></div><span class="conf md">READING…</span></div>
+      <div class="ghead"><b>Verify &amp; store · CONV-018</b><span class="c">LOW CONFIDENCE — CONFIRM</span></div>
+      <div class="verify">
+        <div class="vsrc">
+          <svg width="200" height="150" viewBox="0 0 200 150"><rect x="20" y="14" width="160" height="122" fill="#fff"/><rect x="20" y="14" width="160" height="14" fill="#0E0D0A"/><rect x="34" y="40" width="92" height="7" fill="#8F8B7E"/><rect x="34" y="56" width="132" height="6" fill="#CFC9B6"/><rect x="34" y="70" width="132" height="6" fill="#CFC9B6"/><rect x="34" y="88" width="70" height="10" fill="#FFC60A"/><rect x="34" y="108" width="132" height="6" fill="#CFC9B6"/></svg>
+        </div>
+        <div class="vf">
+          <div class="xf"><div class="xl">Package <span class="conf hi">HIGH</span></div><div class="xv">Package 4 — Civils</div></div>
+          <div class="xf"><div class="xl">Value <span class="conf hi">HIGH</span></div><div class="xv">£1,240,000</div></div>
+          <div class="xf"><div class="xl">Return date <span class="conf lo">LOW · CHECK</span></div><div class="xv lo">14 Jul 2026</div></div>
+          <div class="xf"><div class="xl">Counterparty <span class="conf md">MEDIUM</span></div><div class="xv">BAM Structures Ltd</div></div>
+          <div style="display:flex; gap:8px; margin-top:16px"><button class="tbtn">Confirm &amp; file</button><button class="tbtn sec">Edit fields</button></div>
+        </div>
+      </div>
+      <div class="wfoot"><span>NOTHING STORES WITHOUT CONFIRMATION</span><span class="r">FILED TO REGISTER ON CONFIRM</span></div>
+      <div class="ai"><span class="tag">Ask Asite Intelligence</span><button class="orb">✦</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- 14 NATIVE DOC EDITOR -->
+<div class="wrap"><div class="sb" id="editor">
+  <div class="sb-head"><span class="num">14</span><h2>Native doc editor</h2><p>Specifications written in the product — versioned, referenced, alive. Yellow is the highlight; the callout carries the seam.</p></div>
+</div></div>
+<div class="app">
+  <div class="work">
+    <div class="doctop"><span class="crumb" style="font-size:13px">Docs / <span style="color:var(--ink)">Site Quality Plan — Tower C</span></span><span class="prop"><span class="dot d-info"></span>Rev B11 · review</span><span class="tsp"><span class="prop">KD</span><span class="prop">AB</span><div class="seg"><span class="on">Edit</span><span>Suggest</span></div><button class="tbtn">Share</button></span></div>
+    <div style="background:var(--bone); padding:var(--s6) 0">
+      <div class="doc">
+        <div style="font:var(--text-stencil); letter-spacing:0.12em; text-transform:uppercase; color:var(--yel)">MCG-TWRC-QA-PLN-0007</div>
+        <h1>Site Quality Plan — Tower C</h1>
+        <div class="props"><span class="prop">Owner · A. Boateng</span><span class="prop">ISO 19650</span><span class="prop"><span class="dot d-info"></span>In review</span></div>
+        <h4>2 · Inspection &amp; test regime</h4>
+        <p>All structural pours follow the hold-point regime below. No pour proceeds until the preceding inspection is <span class="hl">signed in the register</span> and any linked RFI is cleared.</p>
+        <div class="todo"><span class="bx ck"></span><span class="dn">2.1 Rebar inspection booked 24h ahead of pour</span></div>
+        <div class="todo"><span class="bx ck"></span><span class="dn">2.2 Cover meter survey logged against drawing rev</span></div>
+        <div class="todo"><span class="bx"></span><span>2.3 Pour card signed before concrete is ordered</span></div>
+        <div class="callout">Hold point — L24 core pour (P-1131) is held pending <b>RFI-0847</b>. Cover verified at 40&nbsp;mm; release on design-lead sign-off.</div>
+        <h4>3 · Concrete classes</h4>
+        <table class="mtbl">
+          <tr><th>Element</th><th>Class</th><th>Cover</th></tr>
+          <tr><td class="rf">Core walls</td><td>C50/60</td><td>40 mm</td></tr>
+          <tr><td class="rf">Transfer slab</td><td>C40/50</td><td>45 mm</td></tr>
+          <tr><td class="rf">Columns</td><td>C50/60</td><td>35 mm</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="ai"><span class="tag">Ask Asite Intelligence</span><button class="orb">✦</button></div>
+  </div>
+</div>
+
+<!-- 15 DAILY BRIEFING EMAIL -->
+<div class="wrap"><div class="sb" id="brief">
+  <div class="sb-head"><span class="num">15</span><h2>Daily briefing · email</h2><p>The morning briefing as it lands in the inbox — the same planes, off the screen.</p></div>
+</div></div>
+<div class="app">
+  <div class="emailwrap">
+    <div class="email">
+      <div class="eh"><div class="k">ASITE · DAILY BRIEFING</div><h3>Wed 11 Jun — what needs you.</h3></div>
+      <div class="es"><div class="sl">Needs you · 3</div>
+        <div class="er"><span class="dot d-hold"></span><span class="ref">RFI-0847</span>Core wall cover clash L26<span class="m">HOLD</span></div>
+        <div class="er"><span class="dot d-due"></span><span class="ref">P-1128</span>Sign pour card · L24 core<span class="m">DUE FRI</span></div>
+        <div class="er"><span class="dot d-info"></span><span class="ref">TX-0204</span>Approve transmittal to Arup<span class="m">TODAY</span></div>
+      </div>
+      <div class="es"><div class="sl">On site</div>
+        <div class="er"><span class="dot d-ok"></span><span class="ref">WEATHER</span>14° · rain 14:00, crane window to 13:30<span class="m">OK</span></div>
+        <div class="er"><span class="dot d-ok"></span><span class="ref">POUR</span>P-1128 · L24 core, 412m³<span class="m">09:41</span></div>
+      </div>
+      <div class="es"><div class="sl">Overnight</div>
+        <div class="er"><span class="ref">+14</span>documents filed to the register<span class="m">AUTO</span></div>
+        <div class="er"><span class="ref">98.4%</span>register health<span class="m">↑ 0.2</span></div>
+      </div>
+      <div class="efoot">SENT 06:30 · <b>ASITE INTELLIGENCE</b> — DRAWN FROM THE REGISTER, NOTHING WRITTEN WITHOUT YOU</div>
+    </div>
+  </div>
+</div>
+
+<!-- 16 CONTROL ROOM -->
+<div class="wrap"><div class="sb" id="wall">
+  <div class="sb-head"><span class="num">16</span><h2>Control-room display</h2><p>The register on the site-office wall — one number, read across the room, the field doing the talking.</p></div>
+</div></div>
+<div class="app">
+  <div class="wall">
+    <img class="bg" src="https://images.unsplash.com/photo-1684497404598-6e844dff9cde?w=1280&q=72&auto=format&fit=crop" alt="">
+    <div class="wh"><span class="k">CONTROL ROOM · MERIDIAN TOWER C</span><span class="t">WED 11 JUN · 11:24 · WK 24</span></div>
+    <div class="whealth"><small>REGISTER HEALTH</small>98.4%</div>
+    <div class="wband">
+      <div class="wb"><div class="v hot">1</div><div class="l">Active hold · RFI-0847</div></div>
+      <div class="wb"><div class="v">L24</div><div class="l">Core at level</div></div>
+      <div class="wb"><div class="v">212</div><div class="l">Crew on site</div></div>
+      <div class="wb"><div class="v">16 Jun</div><div class="l">Next pour · P-1131</div></div>
+    </div>
+  </div>
+</div>
+
+<div style="height:90px"></div>
+
+</body>
+</html>

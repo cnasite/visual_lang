@@ -68,7 +68,7 @@
 
   /* PRODUCT SECTIONS — text plane meets a flat product mock at the seam */
   .prod { display:grid; grid-template-columns:0.92fr 1.08fr; }
-  .prod + .prod { border-top:1px solid var(--ink-3); }
+  .prod + .prod { border-top:1px solid rgba(14,13,10,0.12); }
   .prod .pt { background:var(--ink); color:var(--paper); padding:var(--s12) var(--s8); display:flex; flex-direction:column; justify-content:center; }
   .prod .pt .ey { color:var(--yel); margin-bottom:var(--s3); }
   .prod .pt h3 { font:900 clamp(28px,3.2vw,44px)/0.95 var(--font-ui); letter-spacing:-0.04em; color:var(--paper); }
@@ -211,12 +211,6 @@
 
   .backlink { position:fixed; left:16px; bottom:16px; z-index:70; background:var(--yel); color:var(--ink);
     font:700 10.5px/1 var(--font-mono); letter-spacing:0.06em; padding:9px 13px; text-decoration:none; }
-  .dock { position:fixed; left:16px; bottom:16px; z-index:70; display:flex; gap:8px; align-items:center; }
-  .dock .backlink { position:static; left:auto; bottom:auto; }
-  .lmsw { display:inline-flex; background:var(--ink-2); }
-  .lmsw a, .lmsw span { font:800 10px/1 var(--font-mono); letter-spacing:0.08em; padding:9px 11px; text-decoration:none; }
-  .lmsw .on { background:var(--yel); color:var(--ink); }
-  .lmsw a { color:var(--grey-2); } .lmsw a:hover { color:var(--paper); }
 
   /* STRIPE / METRE motif */
   .stripeband { max-width:1200px; margin:var(--s12) auto; height:16px; background:repeating-linear-gradient(90deg, var(--yel) 0 28px, var(--ink-3) 28px 56px); }
@@ -249,9 +243,32 @@
     .split-r { border-left:none; border-top:var(--seam) solid var(--yel); }
     .cards { grid-template-columns:1fr; } .cases { grid-template-columns:1fr; }
     .proof .wrap { flex-wrap:wrap; } .proof .names { flex-wrap:wrap; justify-content:flex-start; gap:var(--s4) var(--s6); }
-    .prod .pg { border-left:none; border-top:1px solid var(--ink-3); }
+    .prod .pg { border-left:none; border-top:1px solid rgba(14,13,10,0.12); }
     .prod.rev .pt { order:1; border-left:none; } .prod.rev .pg { order:2; }
   }
+
+  /* ============ LIGHT MODE ============ */
+  body { background:var(--bone); color:var(--grey-1); }
+  nav { background:rgba(14,13,10,0.92); border-bottom:1px solid var(--ink-3); }
+  nav .lnk { color:var(--grey-2); } nav .lnk:hover { color:var(--paper); }
+  .hero-l { background:var(--paper); }
+  .hero h1 { color:var(--ink); }
+  .hero .sub { color:var(--grey-1); }
+  .hero-l .btn-line { color:var(--ink) !important; }
+  .shead h2 { color:var(--ink); } .shead p { color:var(--grey-1); }
+  .card { background:var(--paper); } .card h3 { color:var(--ink); } .card p { color:var(--grey-1); }
+  .prod .pt { background:var(--bone); } .prod .pt h3 { color:var(--ink); } .prod .pt p { color:var(--grey-1); } .prod .pt li { color:var(--grey-1); }
+  .quote { background:var(--paper); } .quote blockquote { color:var(--ink); } .quote .by span { color:var(--grey-1); }
+  .case { background:var(--paper); } .case h3 { color:var(--ink); } .case p { color:var(--grey-1); } .case .who span { color:var(--grey-1); }
+  footer { background:var(--bone); } footer .col a.word { color:var(--ink); } footer .desc { color:var(--grey-1); } footer .col a { color:var(--grey-1); } footer .col a:hover { color:var(--ink); } footer .legal { color:var(--grey-1); border-top-color:rgba(14,13,10,0.14); }
+  /* the proof strip and the video reel stay dark on purpose — mono logos + media chrome */
+  /* dock + light/dark toggle */
+  .dock { position:fixed; left:16px; bottom:16px; z-index:70; display:flex; gap:8px; align-items:center; }
+  .dock .backlink { position:static; left:auto; bottom:auto; }
+  .lmsw { display:inline-flex; background:var(--ink); }
+  .lmsw a, .lmsw span { font:800 10px/1 var(--font-mono); letter-spacing:0.08em; padding:9px 11px; text-decoration:none; }
+  .lmsw .on { background:var(--yel); color:var(--ink); }
+  .lmsw a { color:var(--grey-2); } .lmsw a:hover { color:var(--paper); }
 </style>
 </head>
 <body>
@@ -521,7 +538,7 @@
 
 <div class="dock">
   <a class="backlink" href="index.html">‹ VISUAL LANGUAGE</a>
-  <div class="lmsw"><span class="on">DARK</span><a href="../splitfield_light/landing.html">LIGHT</a></div>
+  <div class="lmsw"><a href="../splitfield/landing.html">DARK</a><span class="on">LIGHT</span></div>
 </div>
 
 <script>

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Datum</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg-0); color:var(--t2); font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:var(--yel-soft); color:var(--t1); }
+  img { display:block; max-width:100%; }
+  a { color:inherit; }
+  .wrap { max-width:1140px; margin:0 auto; padding:0 var(--s6); }
+  .m-body { fill:var(--t1); } .m-arrow { fill:var(--yel); }
+
+  /* nav */
+  nav { position:sticky; top:0; z-index:50; background:rgba(10,10,8,0.82); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+  nav .wrap { display:flex; align-items:center; gap:var(--s2); height:58px; }
+  .word { display:flex; align-items:center; gap:10px; font:590 15px/1 var(--font-ui); letter-spacing:-0.01em; color:var(--t1); text-decoration:none; margin-right:var(--s6); }
+  .ntab { font:500 12.5px/1 var(--font-ui); color:var(--t2); text-decoration:none; padding:18px 2px; margin:0 11px; border-bottom:2px solid transparent; }
+  .ntab:hover { color:var(--t1); } .ntab.on { color:var(--t1); border-bottom-color:var(--yel); }
+  .nspace { margin-left:auto; }
+
+  /* floating section nav */
+  .fnav { position:fixed; top:50%; right:16px; transform:translateY(-50%); z-index:60; display:flex; flex-direction:column; gap:1px;
+    padding:10px 8px; max-height:84vh; overflow:auto; background:rgba(17,17,16,0.9); backdrop-filter:blur(12px); border:1px solid var(--border-soft); border-radius:var(--r-lg); }
+  .fnav .cap { font:var(--text-stencil); letter-spacing:var(--track-mono); text-transform:uppercase; color:var(--t3); padding:2px 8px 8px; }
+  .fnav a { display:flex; align-items:center; gap:8px; font:450 11.5px/1 var(--font-ui); color:var(--t2); text-decoration:none; padding:6px 9px; border-radius:var(--r-sm); white-space:nowrap; }
+  .fnav a::before { content:""; width:5px; height:5px; border:1px solid var(--t3); transform:rotate(45deg); flex:none; }
+  .fnav a:hover { color:var(--t1); background:var(--bg-3); } .fnav a:hover::before { border-color:var(--yel); }
+  @media (max-width:1340px){ .fnav { display:none; } }
+
+  /* hero */
+  header.hero { position:relative; padding:130px 0 110px; border-bottom:1px solid var(--border-soft); overflow:hidden; }
+  .hero .wrap { position:relative; }
+  .chip { display:inline-flex; align-items:center; gap:9px; font:var(--text-stencil); letter-spacing:var(--track-mono); text-transform:uppercase; color:var(--yel); margin-bottom:var(--s6); }
+  .chip i { width:6px; height:6px; border:1px solid var(--yel); transform:rotate(45deg); }
+  .hero h1 { font:var(--text-display); letter-spacing:var(--track-tight); color:var(--t1); max-width:780px; }
+  .hero h1 em { font-style:normal; color:var(--yel); }
+  .hero .sub { margin-top:var(--s6); max-width:560px; font:400 16px/1.7 var(--font-ui); color:var(--t2); }
+  .hero .datum { position:relative; margin:var(--s12) 0 0; height:1px; background:var(--yel); }
+  .hero .datum::before, .hero .datum::after { content:""; position:absolute; top:-4px; width:9px; height:9px; border:1px solid var(--yel); transform:rotate(45deg); background:var(--bg-0); }
+  .hero .datum::before { left:0; } .hero .datum::after { right:0; }
+  .hero .ticks { display:flex; justify-content:space-between; margin-top:10px; font:var(--text-mono); color:var(--t3); letter-spacing:0.08em; }
+  .hero .meta { margin-top:var(--s8); display:flex; gap:var(--s12); flex-wrap:wrap; }
+  .hero .meta b { display:block; font:560 13px/1.3 var(--font-ui); color:var(--t1); margin-bottom:4px; }
+  .hero .meta span { font:400 13px/1.5 var(--font-ui); color:var(--t2); }
+
+  /* sections */
+  section { padding:var(--s24) 0; border-bottom:1px solid var(--border-soft); }
+  .idx { font:var(--text-mono); color:var(--yel); letter-spacing:0.06em; margin-bottom:var(--s2); }
+  h2 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--t1); margin-bottom:var(--s3); }
+  h2 em { font-style:normal; color:var(--yel); }
+  .sub { max-width:620px; font:400 15px/1.65 var(--font-ui); color:var(--t2); margin-bottom:var(--s8); }
+  .note { font:400 13px/1.65 var(--font-ui); color:var(--t2); border-left:1px solid var(--yel); padding-left:var(--s3); max-width:600px; margin-top:var(--s6); }
+
+  /* card primitive — depth from border, never fill */
+  .card { background:var(--bg-1); border:1px solid var(--border-soft); border-radius:var(--r-md); }
+
+  /* logo */
+  .logo-stage { display:grid; grid-template-columns:1fr 1fr; gap:var(--s4); }
+  .lcell { min-height:230px; display:flex; align-items:center; justify-content:center; gap:var(--s4); }
+  .lcell.grid { background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:28px 28px; }
+  .lcell .lw { font:590 38px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--t1); }
+
+  /* color */
+  .ramp { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--s3); margin-bottom:var(--s6); }
+  .sw { height:120px; border:1px solid var(--border-soft); border-radius:var(--r-md); padding:var(--s3); display:flex; flex-direction:column; justify-content:flex-end; }
+  .sw .nm { font:500 13px/1.3 var(--font-ui); color:var(--t1); } .sw .hx { font:var(--text-mono); font-size:11px; color:var(--t3); }
+  .signal { border:1px solid var(--border); border-radius:var(--r-md); padding:var(--s6); margin-bottom:var(--s6); }
+  .signal .lab { font:var(--text-stencil); letter-spacing:var(--track-mono); text-transform:uppercase; color:var(--yel); margin-bottom:var(--s4); }
+  .signal-row { display:flex; align-items:center; gap:var(--s8); flex-wrap:wrap; }
+  .signal-row .item { display:flex; flex-direction:column; gap:8px; }
+  .ln { height:1px; width:120px; background:var(--yel); } .ln.thick { height:2px; }
+  .uline { font:500 14px/1 var(--font-ui); color:var(--t1); border-bottom:1px solid var(--yel); padding-bottom:5px; }
+  .dots { display:flex; gap:var(--s6); flex-wrap:wrap; }
+  .dots span { display:flex; align-items:center; gap:8px; font:var(--text-small); color:var(--t2); }
+
+  /* the datum line section */
+  .dgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s4); }
+  .dcard { border:1px solid var(--border-soft); border-radius:var(--r-md); overflow:hidden; }
+  .dcard .st { height:160px; position:relative; display:flex; align-items:center; justify-content:center; padding:var(--s6); }
+  .dcard .ct { padding:var(--s4); border-top:1px solid var(--border-soft); }
+  .dcard .ct b { display:block; font:560 14px/1.3 var(--font-ui); color:var(--t1); margin-bottom:4px; }
+  .dcard .ct p { font:400 12px/1.5 var(--font-ui); color:var(--t2); }
+  .dline { width:80%; height:1px; background:var(--yel); position:relative; }
+  .dline::before, .dline::after { content:""; position:absolute; top:-4px; width:8px; height:8px; border:1px solid var(--yel); transform:rotate(45deg); background:var(--bg-2); }
+  .dline::before { left:0; } .dline::after { right:0; }
+  .dtick { position:absolute; font:var(--text-mono); font-size:9px; color:var(--yel); letter-spacing:0.08em; }
+  .levels { width:80%; display:flex; flex-direction:column; gap:18px; }
+  .levels .lv { position:relative; height:1px; background:var(--border); }
+  .levels .lv.on { background:var(--yel); }
+  .levels .lv span { position:absolute; right:0; top:-7px; font:var(--text-mono); font-size:9px; color:var(--t3); }
+  .levels .lv.on span { color:var(--yel); }
+  .nowmark { width:80%; position:relative; height:60px; }
+  .nowmark .base { position:absolute; left:0; right:0; top:30px; height:1px; background:var(--border); }
+  .nowmark .now { position:absolute; left:58%; top:8px; bottom:8px; width:1px; background:var(--yel); }
+  .nowmark .now::before { content:""; position:absolute; top:-3px; left:-3px; width:7px; height:7px; background:var(--yel); border-radius:50%; }
+  .nowmark .lab { position:absolute; left:calc(58% + 8px); top:0; font:var(--text-mono); font-size:9px; color:var(--yel); letter-spacing:0.1em; }
+
+  /* type */
+  .ladder { display:flex; flex-direction:column; }
+  .lrow { display:grid; grid-template-columns:220px 1fr; gap:var(--s6); padding:var(--s4) 0; border-top:1px solid var(--border-soft); align-items:baseline; }
+  .lrow .m { font:var(--text-mono); font-size:11px; color:var(--t3); }
+  .lrow .s { color:var(--t1); }
+
+  /* brand wordmark — uppercase Exo 2 everywhere */
+  .word, .lcell .lw { font-family:var(--font-display); text-transform:uppercase; letter-spacing:0.06em; }
+
+  /* icons */
+  .icon-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:var(--s3); }
+  .icell { border:1px solid var(--border-soft); border-radius:var(--r-md); padding:var(--s4); display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .icell svg { stroke:var(--t2); fill:none; stroke-width:1.25; stroke-linecap:square; stroke-linejoin:miter; }
+  .icell:hover svg { stroke:var(--t1); } .icell.hot svg { stroke:var(--yel); }
+  .icell span { font:500 11px/1.3 var(--font-ui); color:var(--t3); }
+
+  /* illustration */
+  .illo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s4); }
+  .illo { border:1px solid var(--border-soft); border-radius:var(--r-md); overflow:hidden; }
+  .illo .st { background:var(--bg-1); padding:var(--s4); display:flex; align-items:center; justify-content:center; min-height:200px; }
+  .illo .ct { padding:var(--s4); border-top:1px solid var(--border-soft); }
+  .illo .ct b { display:block; font:560 14px/1.3 var(--font-ui); color:var(--t1); margin-bottom:4px; }
+  .illo .ct p { font:400 12px/1.5 var(--font-ui); color:var(--t2); }
+
+  /* imagery */
+  .img-grid { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:var(--s4); }
+  .ish { position:relative; border:1px solid var(--border-soft); border-radius:var(--r-md); overflow:hidden; min-height:300px; }
+  .ish img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .ish .ann { position:absolute; left:0; right:0; bottom:30px; height:1px; background:var(--yel); }
+  .ish .ann::before { content:""; position:absolute; left:14px; top:-4px; width:8px; height:8px; border:1px solid var(--yel); transform:rotate(45deg); background:rgba(10,10,8,0.7); }
+  .ish .tk { position:absolute; left:14px; bottom:12px; font:var(--text-mono); font-size:9px; color:var(--yel); letter-spacing:0.1em; background:rgba(10,10,8,0.6); padding:3px 6px; }
+  .img-rule { border:1px solid var(--border-soft); border-radius:var(--r-md); padding:var(--s6); margin-bottom:var(--s4); display:flex; gap:var(--s6); flex-wrap:wrap; }
+  .img-rule div { flex:1; min-width:200px; } .img-rule b { display:block; font:560 13px/1.3 var(--font-ui); color:var(--t1); margin-bottom:6px; }
+  .img-rule b i { font-style:normal; color:var(--yel); font:var(--text-mono); font-size:10px; letter-spacing:var(--track-mono); margin-right:8px; }
+  .img-rule p { font:400 12.5px/1.55 var(--font-ui); color:var(--t2); }
+
+  /* motifs */
+  .mgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--s4); }
+  .mo { border:1px solid var(--border-soft); border-radius:var(--r-md); overflow:hidden; }
+  .mo .st { height:120px; display:flex; align-items:center; justify-content:center; }
+  .mo .ct { padding:var(--s3); border-top:1px solid var(--border-soft); }
+  .mo .ct b { display:block; font:560 13px/1.2 var(--font-ui); color:var(--t1); } .mo .ct p { font:400 11.5px/1.5 var(--font-ui); color:var(--t2); margin-top:3px; }
+  .metre { display:flex; gap:0; } .metre i { width:14px; height:18px; } .metre i:nth-child(odd){ background:var(--yel); } .metre i:nth-child(even){ border:1px solid var(--yel); border-left:none; }
+  .coordbox { font:var(--text-mono); font-size:11px; color:var(--yel); letter-spacing:0.1em; text-align:center; line-height:1.7; }
+
+  /* spacing & grid */
+  .spscale { margin-bottom:var(--s6); }
+  .spr { display:flex; align-items:center; gap:var(--s3); padding:8px 0; border-top:1px solid var(--border-soft); }
+  .spr .tk { font:var(--text-mono); font-size:11px; color:var(--t3); width:120px; flex:none; }
+  .spr .bb { height:10px; background:var(--yel-soft); border:1px solid var(--yel); }
+  .gridshow { border:1px solid var(--border-soft); border-radius:var(--r-md); height:130px; background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:32px 32px; position:relative; }
+  .gridshow .col { position:absolute; top:0; bottom:0; width:1px; background:var(--border); }
+
+  /* controls */
+  .stage { border:1px solid var(--border-soft); border-radius:var(--r-md); padding:var(--s8); display:flex; flex-direction:column; gap:var(--s6); }
+  .row { display:flex; gap:var(--s4); align-items:center; flex-wrap:wrap; }
+  .btn { display:inline-flex; align-items:center; gap:9px; font:500 13px/1 var(--font-ui); padding:11px 18px; border-radius:var(--r-md); border:1px solid transparent; cursor:pointer; text-decoration:none; }
+  .btn-primary { background:var(--yel); color:var(--bg-0); }      /* the single rationed fill */
+  .btn-primary:hover { background:var(--yel-bright); }
+  .btn-line { background:none; color:var(--yel); border-color:var(--yel); }
+  .btn-line:hover { background:var(--yel-soft); }
+  .btn-ghost { background:none; color:var(--t2); padding:11px 4px; }
+  .btn-ghost:hover { color:var(--t1); }
+  .ulink { font:500 13px/1 var(--font-ui); color:var(--t1); border-bottom:1px solid var(--yel); padding-bottom:5px; text-decoration:none; }
+  .ann { font:400 12.5px/1.5 var(--font-ui); color:var(--t2); }
+  .tag { display:inline-flex; align-items:center; gap:7px; font:var(--text-mono); font-size:10.5px; letter-spacing:0.08em; color:var(--t2); border:1px solid var(--border); border-radius:var(--r-sm); padding:5px 9px; }
+
+  /* data entry */
+  .fgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s4); }
+  .fc { border:1px solid var(--border-soft); border-radius:var(--r-md); padding:var(--s4); display:flex; flex-direction:column; gap:12px; }
+  .flab { font:var(--text-stencil); letter-spacing:var(--track-mono); text-transform:uppercase; color:var(--t3); }
+  .inp { width:100%; background:var(--bg-0); border:1px solid var(--border-soft); border-radius:var(--r-md); color:var(--t1); font:400 13px/1.4 var(--font-ui); padding:10px 12px; outline:none; transition:border-color var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease); }
+  .inp:focus { border-color:var(--yel); box-shadow:0 0 0 3px var(--yel-soft); }
+  .inp.lit { border-color:var(--yel); box-shadow:0 0 0 3px var(--yel-soft); }
+  .inp.mono { font:400 12.5px/1.4 var(--font-mono); }
+  .unit { position:relative; } .unit .inp { text-align:right; padding-right:40px; font:400 12.5px/1.4 var(--font-mono); } .unit .u { position:absolute; right:12px; top:10px; font:var(--text-mono); font-size:11px; color:var(--t3); }
+  .tgl { display:flex; align-items:center; gap:10px; font:400 13px/1.4 var(--font-ui); color:var(--t1); cursor:pointer; }
+  .tgl input { position:absolute; opacity:0; }
+  .tgl .tk2 { width:34px; height:18px; border:1px solid var(--border); border-radius:999px; position:relative; flex:none; transition:border-color var(--t-base) var(--ease); }
+  .tgl .tk2::after { content:""; position:absolute; top:3px; left:3px; width:10px; height:10px; border-radius:50%; background:var(--t3); transition:transform var(--t-base) var(--ease), background var(--t-base) var(--ease); }
+  .tgl input:checked + .tk2 { border-color:var(--yel); } .tgl input:checked + .tk2::after { transform:translateX(16px); background:var(--yel); }
+  .ck { display:flex; align-items:center; gap:10px; font:400 13px/1.4 var(--font-ui); color:var(--t1); cursor:pointer; padding:3px 0; }
+  .ck input { appearance:none; -webkit-appearance:none; width:15px; height:15px; margin:0; background:var(--bg-0); border:1px solid var(--border); position:relative; cursor:pointer; }
+  .ck input:checked { border-color:var(--yel); } .ck input:checked::after { content:""; position:absolute; left:4.5px; top:1px; width:4px; height:8px; border:solid var(--yel); border-width:0 1.5px 1.5px 0; transform:rotate(45deg); }
+  .fhint { font:400 11.5px/1.5 var(--font-ui); color:var(--t3); margin-top:auto; }
+
+  /* overlays */
+  .ov-grid { display:grid; grid-template-columns:1.3fr 1fr; gap:var(--s4); }
+  .ov-stage { position:relative; min-height:320px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border-soft); border-radius:var(--r-md); overflow:hidden;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:28px 28px; }
+  .ov-stage::before { content:""; position:absolute; inset:0; background:var(--bg-over); }
+  .dlg { position:relative; width:360px; max-width:90%; background:var(--bg-2); border:1px solid var(--border); border-radius:var(--r-md); box-shadow:var(--shadow); }
+  .dlg .hd { display:flex; align-items:center; gap:9px; padding:13px var(--s4); border-bottom:1px solid var(--border-soft); }
+  .dlg .hd b { font:560 14px/1 var(--font-ui); color:var(--t1); }
+  .dlg .bd { padding:var(--s4); } .dlg p { font:400 13px/1.6 var(--font-ui); color:var(--t2); margin-bottom:var(--s4); }
+  .dlg .acts { display:flex; gap:10px; align-items:center; }
+  .menu { position:relative; width:240px; background:var(--bg-2); border:1px solid var(--border); border-radius:var(--r-md); box-shadow:var(--shadow); padding:5px; }
+  .menu .mi { display:flex; align-items:center; gap:10px; padding:9px 11px; border-radius:var(--r-sm); font:500 12.5px/1.4 var(--font-ui); color:var(--t2); }
+  .menu .mi:hover { background:var(--bg-3); color:var(--t1); } .menu .mi .k { margin-left:auto; font:var(--text-mono); font-size:10px; color:var(--t3); }
+  .menu .mi.danger { color:var(--st-hold); }
+
+  /* register */
+  .reg { border:1px solid var(--border-soft); border-radius:var(--r-md); overflow:hidden; }
+  .reg .rgrp { padding:13px var(--s4) 7px; font:var(--text-stencil); letter-spacing:var(--track-mono); text-transform:uppercase; color:var(--t3); }
+  .reg .r { display:flex; align-items:center; gap:var(--s3); padding:12px var(--s4); border-top:1px solid var(--border-soft); }
+  .reg .r .ref { font:var(--text-mono); font-size:12px; color:var(--yel); width:96px; flex:none; }
+  .reg .r .ref.dim { color:var(--t3); }
+  .reg .r .t { font:400 14px/1.3 var(--font-ui); color:var(--t1); }
+  .reg .r .meta { margin-left:auto; font:var(--text-mono); font-size:10.5px; color:var(--t3); }
+  .reg .r .pin { display:inline-flex; align-items:center; gap:6px; font:var(--text-mono); font-size:10px; letter-spacing:0.06em; color:var(--t2); border:1px solid var(--border); border-radius:var(--r-sm); padding:4px 8px; margin-left:14px; }
+
+  /* principles */
+  .princ { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s4); }
+  .pc { border:1px solid var(--border-soft); border-radius:var(--r-md); padding:var(--s6); border-top:2px solid var(--yel); }
+  .pc b { display:block; font:560 15px/1.3 var(--font-ui); color:var(--t1); margin-bottom:8px; }
+  .pc p { font:400 13px/1.6 var(--font-ui); color:var(--t2); }
+
+  /* in the world */
+  .world { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--s4); }
+  .wc { position:relative; overflow:hidden; min-height:230px; display:flex; align-items:flex-end; border:1px solid var(--border-soft); border-radius:var(--r-md); text-decoration:none; }
+  .wc img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .wc::after { content:""; position:absolute; inset:0; background:linear-gradient(rgba(10,10,8,0.15), rgba(10,10,8,0.86)); }
+  .wc .l { position:relative; z-index:2; padding:var(--s4); }
+  .wc .l span { font:var(--text-mono); font-size:10px; color:var(--yel); letter-spacing:0.1em; }
+  .wc .l b { display:block; font:590 22px/1.05 var(--font-ui); letter-spacing:-0.02em; color:var(--t1); margin-top:4px; }
+
+  footer { padding:var(--s8) 0; }
+  footer .wrap { display:flex; justify-content:space-between; font:var(--text-mono); font-size:11px; color:var(--t3); letter-spacing:0.06em; flex-wrap:wrap; gap:var(--s3); }
+  footer a { color:var(--yel); text-decoration:none; }
+
+  @media (max-width:880px){
+    .logo-stage, .dgrid, .illo-grid, .img-grid, .princ, .world, .ov-grid { grid-template-columns:1fr; }
+    .ramp, .mgrid { grid-template-columns:1fr 1fr; } .icon-grid { grid-template-columns:repeat(3,1fr); }
+    .fgrid { grid-template-columns:1fr; } .lrow { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-body" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-arrow" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="word" href="index.html"><svg width="22" height="23" viewBox="0 0 377 396"><use href="#amark"/></svg>Asite</a>
+    <a class="ntab on" href="index.html">Language</a>
+    <a class="ntab" href="screens.html">Product</a>
+    <a class="ntab" href="web.html">Website</a>
+    <a class="ntab" href="slides.html">Slides</a>
+    <span class="nspace"></span>
+  </div>
+</nav>
+
+<aside class="fnav" aria-label="On this page">
+  <div class="cap">On this page</div>
+  <a href="#logo">Logo</a>
+  <a href="#color">Color</a>
+  <a href="#datum">The datum line</a>
+  <a href="#type">Typography</a>
+  <a href="#icons">Iconography</a>
+  <a href="#illustration">Illustration</a>
+  <a href="#imagery">Imagery</a>
+  <a href="#motifs">Motifs</a>
+  <a href="#spacing">Spacing &amp; grid</a>
+  <a href="#controls">Controls</a>
+  <a href="#inputs">Data entry</a>
+  <a href="#overlays">Overlays</a>
+  <a href="#register">Register</a>
+  <a href="#principles">Principles</a>
+  <a href="#world">In the world</a>
+</aside>
+
+<header class="hero u-grid">
+  <div class="wrap">
+    <div class="chip"><i></i>Asite · Visual Language · Direction 05</div>
+    <h1>Datum<em>.</em></h1>
+    <p class="sub">The quiet instrument, re-keyed to yellow. Depth from borders and light, never from fills. One rationed signal — Survey Yellow — used as line-work: a datum that crosses everything, and every value measured from one line.</p>
+    <div class="datum"></div>
+    <div class="ticks"><span>DATUM +00.000 AOD</span><span>GRID 04</span><span>WK 24</span></div>
+    <div class="meta">
+      <div><b>Idiom</b><span>Surveying instrument · quiet</span></div>
+      <div><b>Signal</b><span>Survey Yellow · line-work</span></div>
+      <div><b>Type</b><span>Exo 2 display · Inter text</span></div>
+      <div><b>Depth</b><span>Borders &amp; light, never fills</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="logo">
+  <div class="wrap">
+    <div class="idx">01 — Logo</div>
+    <h2>The mark, set quiet</h2>
+    <p class="sub">The Asite mark in primary text — it behaves like type, not an object. The arrow is the only place the signal is permitted at brand level: a single yellow stroke. The wordmark is Inter 590, sentence case.</p>
+    <div class="logo-stage">
+      <div class="lcell card"><svg width="116" height="122" viewBox="0 0 377 396"><use href="#amark"/></svg></div>
+      <div class="lcell card grid"><svg width="52" height="55" viewBox="0 0 377 396"><use href="#amark"/></svg><span class="lw">Asite</span></div>
+    </div>
+    <p class="note">No caps, no wide tracking. The lockup reads as a product name, sitting on the grid the way a setting-out point sits on a drawing.</p>
+  </div>
+</section>
+
+<section id="color">
+  <div class="wrap">
+    <div class="idx">02 — Color</div>
+    <h2>A near-black ramp, <em>one signal in line</em></h2>
+    <p class="sub">Four near-black surfaces separated by single-digit value steps — depth comes from 1px borders and light, not from contrast between fills. Survey Yellow is the one signal, and it appears as line-work: the datum, hairlines, ticks, focus, underlines. Never a filled block — except a single primary action per screen.</p>
+    <div class="ramp">
+      <div class="sw" style="background:#0A0A08"><span class="nm">Canvas</span><span class="hx">#0A0A08</span></div>
+      <div class="sw" style="background:#111110"><span class="nm">Chrome</span><span class="hx">#111110</span></div>
+      <div class="sw" style="background:#161614"><span class="nm">Card</span><span class="hx">#161614</span></div>
+      <div class="sw" style="background:#1D1C18"><span class="nm">Raised</span><span class="hx">#1D1C18</span></div>
+    </div>
+    <div class="signal">
+      <div class="lab">Survey Yellow — #FFC60A — used as line</div>
+      <div class="signal-row">
+        <div class="item"><div class="ln"></div><span class="u-stencil">hairline / datum</span></div>
+        <div class="item"><div class="ln thick"></div><span class="u-stencil">emphasis line</span></div>
+        <div class="item"><span class="uline">Underline action</span><span class="u-stencil" style="margin-top:6px">link / focus</span></div>
+        <div class="item"><span class="u-cross"></span><span class="u-stencil">setting-out cross</span></div>
+      </div>
+    </div>
+    <div class="dots">
+      <span><i class="u-dot" style="background:var(--st-ok)"></i>Cleared</span>
+      <span><i class="u-dot" style="background:var(--st-warn)"></i>Due</span>
+      <span><i class="u-dot" style="background:var(--st-hold)"></i>Held</span>
+      <span><i class="u-dot" style="background:var(--st-info)"></i>In review</span>
+      <span><i class="u-dot" style="background:var(--st-idle)"></i>Backlog</span>
+    </div>
+    <p class="note">Status is a 7px dot plus plain text — never a filled pill, never a coloured row. The instrument stays calm until a reading needs you.</p>
+  </div>
+</section>
+
+<section id="datum">
+  <div class="wrap">
+    <div class="idx">03 — The datum line</div>
+    <h2>Everything measured <em>from one line</em></h2>
+    <p class="sub">The signature device. A yellow datum — a hairline with diamond end-caps — crosses the page and carries a reading: a level, a grid, the present moment. Give it a position and it stops being decoration and becomes a measurement.</p>
+    <div class="dgrid">
+      <div class="dcard">
+        <div class="st"><div class="dline"><span class="dtick" style="left:0; top:-18px">+00.000</span><span class="dtick" style="right:0; top:8px">DATUM</span></div></div>
+        <div class="ct"><b>The datum</b><p>One line everything references — set, captioned, ownable.</p></div>
+      </div>
+      <div class="dcard">
+        <div class="st"><div class="levels"><div class="lv"><span>L28</span></div><div class="lv on"><span>L24 · NOW</span></div><div class="lv"><span>L20</span></div><div class="lv"><span>L18</span></div></div></div>
+        <div class="ct"><b>Level marks</b><p>Stacked datums become a section — the reached level lit yellow.</p></div>
+      </div>
+      <div class="dcard">
+        <div class="st"><div class="nowmark"><div class="base"></div><div class="now"></div><span class="lab">NOW · WK 24</span></div></div>
+        <div class="ct"><b>The now mark</b><p>On a timeline the datum is the present — poured meets planned.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="type">
+  <div class="wrap">
+    <div class="idx">04 — Typography</div>
+    <h2>Three voices, <em>one instrument</em></h2>
+    <p class="sub">Display is <b style="color:var(--t1); font-weight:600">Exo 2</b> — a precise, technical geometric sans that reads like the lettering on an instrument face; reserved for headlines and large readouts only. Working text is Inter, Light to Semibold, at instrument density. JetBrains Mono carries every coordinate, reference, and tick — the engineering alphanumerics.</p>
+    <div class="ladder">
+      <div class="lrow"><div class="m">display · Exo 2 · 400 · -2%</div><div class="s" style="font:400 52px/1 var(--font-display); letter-spacing:-0.02em">Built to hold.</div></div>
+      <div class="lrow"><div class="m">display · Exo 2 + signal period</div><div class="s" style="font:400 52px/1 var(--font-display); letter-spacing:-0.02em">Measured<span style="color:var(--yel)">.</span></div></div>
+      <div class="lrow"><div class="m">h1 · 590 · 32/1.15</div><div class="s" style="font:var(--text-h1); letter-spacing:var(--track-h)">Heavy data, held to tolerance</div></div>
+      <div class="lrow"><div class="m">h2 · 560 · 22/1.25</div><div class="s" style="font:var(--text-h2)">Common data environment</div></div>
+      <div class="lrow"><div class="m">body · 400 · 15/1.6 · t2</div><div class="s" style="font:var(--text-body); color:var(--t2); max-width:560px">Every drawing revision, RFI, and field observation flows into a single environment — versioned, auditable, visible from bid to handover.</div></div>
+      <div class="lrow"><div class="m">mono · 12 · +14% · coordinates</div><div class="s" style="font:var(--text-mono); letter-spacing:var(--track-mono); color:var(--yel)">MCG-TWRC-STR-DWG-0412 · REV C03</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="icons">
+  <div class="wrap">
+    <div class="idx">05 — Iconography</div>
+    <h2>Drawn fine, <em>like instruments</em></h2>
+    <p class="sub">A 20px grid, 1.25px stroke, square caps and mitred joins — precise, not bold. Icons inherit text colour and never carry the signal, with one exception: the datum diamond, a reading by definition.</p>
+    <div class="icon-grid">
+      <div class="icell"><svg width="30" height="30" viewBox="0 0 20 20"><path d="M3 9 L10 3 L17 9 V17 H3 Z"/></svg><span>Today</span></div>
+      <div class="icell"><svg width="30" height="30" viewBox="0 0 20 20"><path d="M3 5 H17 M3 10 H17 M3 15 H11"/></svg><span>Register</span></div>
+      <div class="icell"><svg width="30" height="30" viewBox="0 0 20 20"><path d="M3 5 H8 L10 7 H17 V16 H3 Z"/></svg><span>Files</span></div>
+      <div class="icell"><svg width="30" height="30" viewBox="0 0 20 20"><path d="M5 3 H13 L16 6 V17 H5 Z"/><path d="M13 3 V6 H16"/></svg><span>Docs</span></div>
+      <div class="icell"><svg width="30" height="30" viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.5"/><path d="M13 13 L17 17"/></svg><span>Search</span></div>
+      <div class="icell"><svg width="30" height="30" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 5 V10 L13.5 12"/></svg><span>Recent</span></div>
+      <div class="icell"><svg width="30" height="30" viewBox="0 0 20 20"><path d="M10 14 V4 M6 8 L10 4 L14 8 M4 16 H16"/></svg><span>Upload</span></div>
+      <div class="icell"><svg width="30" height="30" viewBox="0 0 20 20"><path d="M10 3 L16 6.5 V13.5 L10 17 L4 13.5 V6.5 Z"/><path d="M4 6.5 L10 10 L16 6.5 M10 10 V17"/></svg><span>Model</span></div>
+      <div class="icell"><svg width="30" height="30" viewBox="0 0 20 20"><path d="M3 5 H17 V15 H3 Z M3 5 L10 11 L17 5"/></svg><span>aMail</span></div>
+      <div class="icell"><svg width="30" height="30" viewBox="0 0 20 20"><path d="M4 16 V11 M10 16 V5 M16 16 V8"/></svg><span>Analytics</span></div>
+      <div class="icell"><svg width="30" height="30" viewBox="0 0 20 20"><path d="M3 10 H17 M10 3 V17"/></svg><span>Setting-out</span></div>
+      <div class="icell hot"><svg width="30" height="30" viewBox="0 0 20 20"><path d="M10 3 L17 10 L10 17 L3 10 Z"/></svg><span>Datum</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="illustration">
+  <div class="wrap">
+    <div class="idx">06 — Illustration</div>
+    <h2>Line-art, <em>as a survey reads it</em></h2>
+    <p class="sub">When a photograph won't do, illustration is fine line-work: the site drawn in elevation and isometry, in grey lines with the signal reserved for the live point. Dashed where planned, solid where poured.</p>
+    <div class="illo-grid">
+      <div class="illo">
+        <div class="st">
+          <svg width="220" height="170" viewBox="0 0 220 170" fill="none" stroke-linecap="round">
+            <line x1="14" y1="150" x2="206" y2="150" stroke="#615F58" stroke-width="1"/>
+            <g stroke="#FFC60A" stroke-width="1.5"><line x1="30" y1="144" x2="42" y2="156"/><line x1="42" y1="144" x2="30" y2="156"/></g>
+            <rect x="92" y="92" width="64" height="58" stroke="#9A968A" stroke-width="1"/>
+            <line x1="92" y1="112" x2="156" y2="112" stroke="#615F58" stroke-width="0.8"/><line x1="92" y1="131" x2="156" y2="131" stroke="#615F58" stroke-width="0.8"/>
+            <rect x="92" y="62" width="64" height="30" stroke="#615F58" stroke-width="1" stroke-dasharray="4 4"/>
+            <line x1="176" y1="150" x2="176" y2="48" stroke="#FFC60A" stroke-width="1"/><circle cx="176" cy="45" r="3" fill="#FFC60A"/>
+            <text x="120" y="40" font-family="JetBrains Mono,monospace" font-size="8" fill="#FFC60A">L24 · HOLD</text>
+          </svg>
+        </div>
+        <div class="ct"><b>The site in elevation</b><p>Poured floors solid, planned floors dashed, the live point in yellow.</p></div>
+      </div>
+      <div class="illo">
+        <div class="st">
+          <svg width="220" height="170" viewBox="0 0 220 170" fill="none">
+            <polygon points="110,40 170,75 110,110 50,75" stroke="#9A968A" stroke-width="1"/>
+            <polygon points="110,90 170,125 110,160 50,125" stroke="#615F58" stroke-width="1"/>
+            <line x1="110" y1="40" x2="110" y2="20" stroke="#FFC60A" stroke-width="1"/><circle cx="110" cy="17" r="3" fill="#FFC60A"/>
+            <text x="120" y="20" font-family="JetBrains Mono,monospace" font-size="8" fill="#FFC60A">X12.4 · Y8.0</text>
+          </svg>
+        </div>
+        <div class="ct"><b>Isometric datum</b><p>Federated levels in line, the coordinate called out from the top.</p></div>
+      </div>
+      <div class="illo">
+        <div class="st">
+          <svg width="220" height="170" viewBox="0 0 220 170" fill="none" stroke-linecap="round">
+            <line x1="40" y1="30" x2="40" y2="150" stroke="#9A968A" stroke-width="1.2"/>
+            <line x1="40" y1="36" x2="150" y2="36" stroke="#9A968A" stroke-width="1.2"/>
+            <line x1="120" y1="36" x2="120" y2="70" stroke="#615F58" stroke-width="1"/>
+            <line x1="40" y1="150" x2="180" y2="150" stroke="#615F58" stroke-width="1"/>
+            <line x1="150" y1="150" x2="150" y2="90" stroke="#FFC60A" stroke-width="1"/><circle cx="150" cy="87" r="3" fill="#FFC60A"/>
+            <text x="158" y="92" font-family="JetBrains Mono,monospace" font-size="8" fill="#FFC60A">+24.20</text>
+          </svg>
+        </div>
+        <div class="ct"><b>The instrument</b><p>The total station and its beam — the line that takes the point.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="imagery">
+  <div class="wrap">
+    <div class="idx">07 — Imagery</div>
+    <h2>Photographs, <em>annotated</em></h2>
+    <p class="sub">Real sites in full colour — but read like a survey. A datum hairline and a mono tick caption sit over the image, locating it. The photograph carries the world; the instrument locates it.</p>
+    <div class="img-rule">
+      <div><b><i>FULL COLOUR</i>No filters</b><p>Photos run in their actual colours. The yellow signal stays a line on top, never a wash.</p></div>
+      <div><b><i>THE DATUM</i>One line across</b><p>A hairline with a diamond cap crosses the frame — the image, measured.</p></div>
+      <div><b><i>THE TICK</i>Mono caption</b><p>A coordinate or level in mono, flush to a corner — where and when.</p></div>
+    </div>
+    <div class="img-grid">
+      <div class="ish"><img src="https://images.unsplash.com/photo-1751808830304-51c95ed33b10?w=1100&q=72&auto=format&fit=crop" alt="Tower cranes"><div class="ann"></div><span class="tk">GRID 04 · +14.200 AOD</span></div>
+      <div class="ish"><img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=900&q=72&auto=format&fit=crop" alt="Civil engineer on site"><div class="ann"></div><span class="tk">STR · WK 24</span></div>
+      <div class="ish"><img src="https://images.unsplash.com/photo-1691435006749-c9485d527d44?w=900&q=72&auto=format&fit=crop" alt="Transit tunnel"><div class="ann"></div><span class="tk">CH 1+240</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="motifs">
+  <div class="wrap">
+    <div class="idx">08 — Motifs</div>
+    <h2>The instrument <em>kit</em></h2>
+    <p class="sub">A small set of survey devices that recur across the system — each one a way of measuring.</p>
+    <div class="mgrid">
+      <div class="mo"><div class="st"><span class="u-cross" style="width:26px;height:26px"></span></div><div class="ct"><b>Setting-out cross</b><p>The decision committed to the ground.</p></div></div>
+      <div class="mo"><div class="st"><span style="width:16px;height:16px;border:1px solid var(--yel);transform:rotate(45deg);display:block"></span></div><div class="ct"><b>The datum diamond</b><p>The node that caps every datum line.</p></div></div>
+      <div class="mo"><div class="st"><div class="metre"><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="ct"><b>The tick scale</b><p>Yellow line and gap — scale read at distance.</p></div></div>
+      <div class="mo"><div class="st"><div class="coordbox">X 12.400<br>Y 8.060<br>Z 9.300</div></div><div class="ct"><b>Coordinates</b><p>Every object can give its position in mono.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="spacing">
+  <div class="wrap">
+    <div class="idx">09 — Spacing &amp; grid</div>
+    <h2>On the <em>graph paper</em></h2>
+    <p class="sub">Layout sits on a faint graph-paper grid — the drawing sheet. Space runs on a 4/8px base; columns are where the setting-out falls.</p>
+    <div class="spscale">
+      <div class="spr"><span class="tk">--s1 · 4</span><div class="bb" style="width:4px"></div></div>
+      <div class="spr"><span class="tk">--s2 · 8</span><div class="bb" style="width:8px"></div></div>
+      <div class="spr"><span class="tk">--s3 · 12</span><div class="bb" style="width:12px"></div></div>
+      <div class="spr"><span class="tk">--s4 · 16</span><div class="bb" style="width:16px"></div></div>
+      <div class="spr"><span class="tk">--s6 · 24</span><div class="bb" style="width:24px"></div></div>
+      <div class="spr"><span class="tk">--s8 · 32</span><div class="bb" style="width:32px"></div></div>
+      <div class="spr"><span class="tk">--s12 · 48</span><div class="bb" style="width:48px"></div></div>
+      <div class="spr"><span class="tk">--s16 · 64</span><div class="bb" style="width:64px"></div></div>
+    </div>
+    <div class="gridshow"><span class="col" style="left:25%"></span><span class="col" style="left:50%; background:var(--yel)"></span><span class="col" style="left:75%"></span></div>
+    <p class="note">The sheet is always present, always faint. The one column that carries the datum is drawn in yellow.</p>
+  </div>
+</section>
+
+<section id="controls">
+  <div class="wrap">
+    <div class="idx">10 — Controls</div>
+    <h2>Quiet, with a <em>crosshair focus</em></h2>
+    <p class="sub">Controls are bordered, not filled — depth from a hairline. The one rationed fill is the single primary action per screen; everything else is a yellow outline or an underline. Focus is a yellow ring, like a crosshair landing.</p>
+    <div class="stage">
+      <div class="row">
+        <a class="btn btn-primary" href="#controls">Book a demo</a>
+        <a class="btn btn-line" href="#controls">See the platform</a>
+        <a class="btn btn-ghost" href="#controls">Underline action ↵</a>
+        <span class="ann">one fill · the rest in line</span>
+      </div>
+      <div class="row">
+        <span class="inp lit" style="max-width:280px">Search the register…</span>
+        <span class="ann">hairline border · yellow focus ring</span>
+      </div>
+      <div class="row">
+        <span class="tag"><i class="u-dot" style="background:var(--st-hold)"></i>HOLD · RFI-0847</span>
+        <span class="tag">ISO 19650</span>
+        <span class="tag">REV C03</span>
+        <span class="ann">tags — bordered, mono, never filled</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="inputs">
+  <div class="wrap">
+    <div class="idx">11 — Data entry</div>
+    <h2>Every value has <em>a correct field</em></h2>
+    <p class="sub">Inputs keep a hairline border and light yellow on focus. Toggles and checks are outlined; units are pinned in mono. The form is borders and light — never a sea of fills.</p>
+    <div class="fgrid">
+      <div class="fc"><span class="flab">RFI title</span><input class="inp" type="text" placeholder="Core wall cover clash · L26"><span class="fhint">Hairline · yellow focus ring</span></div>
+      <div class="fc"><span class="flab">Tolerance</span><div class="unit"><input class="inp" type="text" value="0.5"><span class="u">mm</span></div><span class="fhint">Mono · right-aligned · unit pinned</span></div>
+      <div class="fc"><span class="flab">Distribution</span>
+        <label class="tgl"><input type="checkbox" checked><span class="tk2"></span>Notify the design lead</label>
+        <label class="ck"><input type="checkbox" checked>Add to weekly register</label>
+        <label class="ck"><input type="checkbox">Mark as mandatory</label>
+        <span class="fhint">Outlined toggle · outlined checks</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="overlays">
+  <div class="wrap">
+    <div class="idx">12 — Overlays &amp; dialogues</div>
+    <h2>Brought forward, <em>over the sheet</em></h2>
+    <p class="sub">A dialogue is a bordered panel lifted over the dimmed grid — depth from a hairline and soft shadow, never a heavy fill. Menus follow: bordered, quiet rows, the signal on the active line.</p>
+    <div class="ov-grid">
+      <div class="ov-stage">
+        <div class="dlg">
+          <div class="hd"><span class="u-cross" style="width:12px;height:12px"></span><b>Release the hold?</b></div>
+          <div class="bd">
+            <p>RFI-0847 clears and the L24 pour returns to the programme. This is logged to the register.</p>
+            <div class="acts"><button class="btn btn-primary">Release hold</button><button class="btn btn-ghost">Cancel</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="ov-stage">
+        <div class="menu">
+          <div class="mi">Open in register<span class="k">↵</span></div>
+          <div class="mi">Assign to me<span class="k">A</span></div>
+          <div class="mi">Add to pour card<span class="k">P</span></div>
+          <div class="mi danger">Delete RFI<span class="k">⌫</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="register">
+  <div class="wrap">
+    <div class="idx">13 — The register</div>
+    <h2>Readings, <em>not spreadsheets</em></h2>
+    <p class="sub">The project record is refs, plain titles, and a single state dot. Hairlines separate rows; the yellow ref and the bordered stamp are the only signal. Mono carries every reference.</p>
+    <div class="reg">
+      <div class="rgrp">Held · 2</div>
+      <div class="r"><span class="u-dot" style="background:var(--st-hold)"></span><span class="ref">RFI-0847</span><span class="t">Core wall cover clash · L26</span><span class="meta">2D OVER</span><span class="pin">HOLD</span></div>
+      <div class="r"><span class="u-dot" style="background:var(--st-hold)"></span><span class="ref">RFI-0839</span><span class="t">Façade bracket setting-out · L18</span><span class="meta">5D OVER</span><span class="pin">HOLD</span></div>
+      <div class="rgrp">Due this week · 2</div>
+      <div class="r"><span class="u-dot" style="background:var(--st-warn)"></span><span class="ref dim">P-1128</span><span class="t">Pour card · L24 core</span><span class="meta">FRI</span><span class="pin">DUE</span></div>
+      <div class="r"><span class="u-dot" style="background:var(--st-warn)"></span><span class="ref dim">RFI-0851</span><span class="t">Riser penetration coordination · L22</span><span class="meta">THU</span><span class="pin">DUE</span></div>
+      <div class="rgrp">Cleared · 1</div>
+      <div class="r"><span class="u-dot" style="background:var(--st-ok)"></span><span class="ref dim">RFI-0844</span><span class="t">Stair pressurisation duct route</span><span class="meta">WK 23</span><span class="pin">CLEARED</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="principles">
+  <div class="wrap">
+    <div class="idx">14 — Principles</div>
+    <h2>The craft contract</h2>
+    <p class="sub">Six rules keep Datum quiet and exact.</p>
+    <div class="princ">
+      <div class="pc"><b>Borders &amp; light, never fills</b><p>Separation comes from a 1px line and a value step — not from blocks of colour.</p></div>
+      <div class="pc"><b>One signal, used as line</b><p>Survey Yellow is the datum, the hairline, the tick, the focus — line-work, not a field.</p></div>
+      <div class="pc"><b>Measured from one line</b><p>The datum crosses everything; every reading references it.</p></div>
+      <div class="pc"><b>One fill per screen</b><p>The single primary action may take the yellow fill. Nothing else does.</p></div>
+      <div class="pc"><b>Figures in mono</b><p>References, coordinates, and levels are JetBrains Mono — the engineering voice.</p></div>
+      <div class="pc"><b>Quiet until it matters</b><p>Status is a dot. The instrument stays calm until a value needs you.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="world" style="border-bottom:none">
+  <div class="wrap">
+    <div class="idx">15 — In the world</div>
+    <h2>The language, <em>applied</em></h2>
+    <p class="sub">The same datum carries across every surface.</p>
+    <div class="world">
+      <a class="wc" href="landing.html"><img src="https://images.unsplash.com/photo-1664190425588-a2c96bc61abb?w=1100&q=72&auto=format&fit=crop" alt="Airport terminal under construction"><span class="l"><span>THE WILD</span><b>Landing page →</b></span></a>
+      <a class="wc" href="screens.html"><img src="https://images.unsplash.com/photo-1758518732175-5d608ba3abdf?w=1100&q=72&auto=format&fit=crop" alt="Executives in a meeting"><span class="l"><span>PRODUCT</span><b>Interface screens →</b></span></a>
+      <a class="wc" href="web.html"><img src="https://images.unsplash.com/photo-1762896498171-32c406e0144f?w=1100&q=72&auto=format&fit=crop" alt="City skyline under construction"><span class="l"><span>WEBSITE</span><b>Web sections →</b></span></a>
+      <a class="wc" href="slides.html"><img src="https://images.unsplash.com/photo-1684497404598-6e844dff9cde?w=1100&q=72&auto=format&fit=crop" alt="Construction site at dusk"><span class="l"><span>SLIDES</span><b>Deck system →</b></span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>ASITE · DIRECTION 05 · DATUM</span>
+    <span><a href="../variations.html">‹ Back to variations</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
