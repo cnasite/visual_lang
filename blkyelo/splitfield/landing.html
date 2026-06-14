@@ -32,11 +32,17 @@
   nav .sp { margin-left:auto; display:flex; align-items:center; gap:var(--s3); }
 
   /* HERO — two planes meet at a yellow seam */
-  .hero { display:grid; grid-template-columns:1fr 1.06fr; min-height:calc(100vh - 64px); }
+  .vh { height:calc(100vh - 64px); min-height:640px; display:flex; flex-direction:column; }
+  /* hero stays full-bleed; the rest sit within the page content width and breathe */
+  .bleed, .split, .prod { max-width:1200px; margin-left:auto; margin-right:auto; }
+  .bleed, .split { margin-top:var(--s12); margin-bottom:var(--s12); }
+  .prod:first-of-type { margin-top:var(--s12); }
+  .prod:last-of-type { margin-bottom:var(--s12); }
+  .hero { display:grid; grid-template-columns:1fr 1.06fr; flex:1; min-height:0; overflow:hidden; }
   .hero-l { background:var(--ink); padding:var(--s8) var(--s8) var(--s8) 0; display:flex; flex-direction:column; }
   .hero-l .inset { max-width:560px; margin-left:auto; padding-left:var(--s4); display:flex; flex-direction:column; height:100%; }
   .hero .ey { color:var(--yel); margin-bottom:var(--s4); }
-  .hero h1 { font:var(--text-wall); letter-spacing:var(--track-wall); color:var(--paper); margin-top:auto; }
+  .hero h1 { font:900 clamp(42px, 4.8vw, 70px)/0.96 var(--font-ui); letter-spacing:var(--track-wall); color:var(--paper); margin-top:auto; }
   .hero h1 em { font-style:normal; color:var(--yel); }
   .hero .sub { font:500 18px/1.55 var(--font-ui); color:var(--grey-3); max-width:440px; margin-top:var(--s4); }
   .hero .cta { display:flex; align-items:center; gap:var(--s3); margin-top:var(--s6); }
@@ -50,15 +56,54 @@
     font:700 11px/1 var(--font-mono); letter-spacing:0.16em; text-transform:uppercase; padding:9px 14px 9px 16px; }
 
   /* PROOF — bold text band */
-  .proof { background:var(--ink-2); padding:var(--s6) 0; }
-  .proof .wrap { display:flex; align-items:center; gap:var(--s6); flex-wrap:wrap; }
-  .proof .big { font:800 clamp(20px,2.3vw,30px)/1.05 var(--font-ui); letter-spacing:-0.03em; color:var(--paper); flex:none; max-width:330px; }
+  .proof { background:var(--ink-2); padding:var(--s8) 0; }
+  .proof .wrap { display:flex; align-items:center; gap:var(--s8); }
+  .proof .big { font:800 clamp(17px,1.7vw,24px)/1.1 var(--font-ui); letter-spacing:-0.03em; color:var(--paper); flex:none; white-space:nowrap; }
   .proof .big em { font-style:normal; color:var(--yel); }
-  .proof .names { display:flex; flex-wrap:wrap; gap:var(--s2) var(--s6); margin-left:auto;
-    font:700 13px/1 var(--font-mono); letter-spacing:0.04em; color:var(--grey-2); }
+  .proof .names { flex:1; display:flex; align-items:center; justify-content:space-between; gap:var(--s6); }
+  .proof .names img { height:28px; max-width:130px; object-fit:contain; opacity:0.85; }
 
   /* SECTION shell */
   section { padding:var(--s16) 0; }
+
+  /* PRODUCT SECTIONS — text plane meets a flat product mock at the seam */
+  .prod { display:grid; grid-template-columns:0.92fr 1.08fr; }
+  .prod + .prod { border-top:var(--seam) solid var(--yel); }
+  .prod .pt { background:var(--ink); color:var(--paper); padding:var(--s12) var(--s8); display:flex; flex-direction:column; justify-content:center; }
+  .prod .pt .ey { color:var(--yel); margin-bottom:var(--s3); }
+  .prod .pt h3 { font:900 clamp(28px,3.2vw,44px)/0.95 var(--font-ui); letter-spacing:-0.04em; color:var(--paper); }
+  .prod .pt h3 em { font-style:normal; color:var(--yel); }
+  .prod .pt p { font:500 15px/1.6 var(--font-ui); color:var(--grey-3); margin-top:var(--s3); max-width:380px; }
+  .prod .pt ul { list-style:none; margin-top:var(--s5, 20px); display:flex; flex-direction:column; gap:11px; }
+  .prod .pt li { display:flex; gap:11px; font:600 13.5px/1.4 var(--font-ui); color:#C9C5B8; }
+  .prod .pt li::before { content:""; width:13px; height:13px; background:var(--yel); flex:none; margin-top:2px; }
+  .prod .pg { background:var(--bone); border-left:var(--seam) solid var(--yel); padding:var(--s6); display:flex; align-items:center; }
+  .prod.rev .pt { order:2; border-left:var(--seam) solid var(--yel); }
+  .prod.rev .pg { order:1; border-left:none; }
+
+  /* flat product mock */
+  .pm { width:100%; background:var(--paper); }
+  .pm .pbar { display:flex; align-items:center; gap:6px; padding:11px 13px; background:var(--ink); }
+  .pm .pbar i { width:8px; height:8px; background:var(--ink-3); } .pm .pbar i.y { background:var(--yel); }
+  .pm .pbar .u { margin-left:12px; font:700 9px/1 var(--font-mono); letter-spacing:0.08em; color:var(--grey-2); }
+  .pm .pbody { padding:18px; }
+  .pm .pk { display:flex; gap:var(--seam); margin-bottom:14px; }
+  .pm .pk .k { flex:1; background:var(--bone); padding:12px; } .pm .pk .k.hot { background:var(--yel); }
+  .pm .pk .v { font:900 26px/0.85 var(--font-ui); letter-spacing:-0.04em; color:var(--ink); } .pm .pk .l { font:600 9px/1.3 var(--font-mono); color:var(--grey-1); margin-top:7px; }
+  .pm .pr { display:flex; align-items:center; gap:10px; padding:10px 0; border-top:1px solid rgba(14,13,10,0.08); }
+  .pm .pr .rf { font:700 11px/1 var(--font-mono); color:var(--ink); width:78px; flex:none; }
+  .pm .pr .tt { font:600 12px/1.3 var(--font-ui); color:var(--ink); }
+  .pm .pr .pp { margin-left:auto; font:800 8px/1 var(--font-ui); padding:4px 7px; }
+  .pp.hold { background:var(--red); color:#fff; } .pp.due { background:var(--yel); color:var(--ink); } .pp.ok { background:var(--grn); color:#fff; } .pp.info { background:var(--blu); color:#fff; }
+  .pm .pgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--seam); }
+  .pm .pf { background:var(--bone); padding:12px; } .pm .pf .ic { height:46px; display:flex; align-items:flex-end; }
+  .pm .pf b { display:block; font:700 11px/1.3 var(--font-ui); color:var(--ink); margin-top:10px; } .pm .pf span { font:600 8.5px/1.3 var(--font-mono); color:var(--grey-1); }
+  .pm .fold2 { width:30px; height:24px; background:var(--yel); } .pm .doc2 { width:24px; height:30px; background:var(--ink); }
+  .pm .plan2 { width:46px; height:40px; background:#D8D2C0; position:relative; } .pm .plan2::after { content:""; position:absolute; left:6px; top:6px; width:14px; height:9px; background:var(--ink); } .pm .plan2::before { content:""; position:absolute; right:6px; bottom:6px; width:16px; height:6px; background:var(--yel); }
+  .pm .mrow2 { display:flex; flex-direction:column; gap:4px; padding:11px 0; border-top:1px solid rgba(14,13,10,0.08); }
+  .pm .mrow2 .l1 { display:flex; align-items:center; gap:8px; font:800 12px/1 var(--font-ui); color:var(--ink); } .pm .mrow2 .l1 .tm { margin-left:auto; font:700 9px/1 var(--font-mono); color:var(--grey-1); }
+  .pm .mrow2 .l2 { font:600 11.5px/1.3 var(--font-ui); color:var(--grey-1); }
+  .pm .chip2 { display:inline-block; font:700 8px/1 var(--font-mono); padding:3px 5px; margin-top:4px; background:var(--ink); color:var(--paper); } .pm .chip2.unf { background:var(--yel); color:var(--ink); }
   .shead { max-width:760px; }
   .shead .ey { color:var(--yel); margin-bottom:var(--s3); }
   .shead h2 { font:var(--text-display); letter-spacing:var(--track-display); color:var(--paper); }
@@ -159,6 +204,7 @@
   footer .mh { font:700 11px/1 var(--font-mono); letter-spacing:0.1em; color:var(--yel); margin-bottom:var(--s3); text-transform:uppercase; }
   footer .col a { display:block; font:600 13px/2.1 var(--font-ui); color:var(--grey-2); text-decoration:none; }
   footer .col a:hover { color:var(--paper); }
+  footer .col a.word { display:inline-flex; align-items:center; gap:11px; font:900 20px/1 var(--font-ui); color:var(--paper); margin-bottom:var(--s2); }
   footer .legal { display:flex; gap:var(--s4); margin-top:var(--s8); padding-top:var(--s4); border-top:1px solid var(--ink-3);
     font:700 10.5px/1.4 var(--font-mono); letter-spacing:0.05em; color:var(--grey-1); }
   footer .legal .r { margin-left:auto; }
@@ -166,13 +212,39 @@
   .backlink { position:fixed; left:16px; bottom:16px; z-index:70; background:var(--yel); color:var(--ink);
     font:700 10.5px/1 var(--font-mono); letter-spacing:0.06em; padding:9px 13px; text-decoration:none; }
 
+  /* STRIPE / METRE motif */
+  .stripeband { max-width:1200px; margin:var(--s12) auto; height:16px; background:repeating-linear-gradient(90deg, var(--yel) 0 28px, var(--ink-3) 28px 56px); }
+
+  /* NUMBERS / STATS band — oversize figures on alternating planes */
+  .nums { display:flex; max-width:1200px; margin:var(--s12) auto; }
+  .nums .nm { flex:1; padding:var(--s8) var(--s4); background:var(--paper); color:var(--ink); }
+  .nums .nm:nth-child(even) { background:var(--bone); }
+  .nums .nm + .nm { border-left:var(--seam-thin) solid var(--yel); }
+  .nums .nm.hot { background:var(--yel); }
+  .nums .nm .v { font:900 clamp(38px,5vw,64px)/0.82 var(--font-ui); letter-spacing:-0.05em; }
+  .nums .nm .l { font:600 12px/1.4 var(--font-ui); color:var(--grey-1); margin-top:12px; }
+  .nums .nm.hot .l { color:var(--ink); }
+
+  /* QUOTE — heavy pull-quote, the seam at its length */
+  .quote { max-width:1200px; margin:var(--s12) auto; background:var(--ink-2); padding:var(--s12) var(--s8); position:relative; }
+  .quote .bar { position:absolute; left:0; top:var(--s12); bottom:var(--s12); width:var(--seam); background:var(--yel); }
+  .quote blockquote { font:900 clamp(28px,3.6vw,46px)/1.08 var(--font-ui); letter-spacing:-0.03em; color:var(--paper); max-width:18ch; padding-left:var(--s6); }
+  .quote blockquote em { font-style:normal; color:var(--yel); }
+  .quote .by { display:flex; align-items:center; gap:12px; margin:var(--s6) 0 0 var(--s6); }
+  .quote .by .ln { width:34px; height:var(--seam-thin); background:var(--yel); }
+  .quote .by span { font:700 11px/1.4 var(--font-mono); letter-spacing:0.07em; color:var(--grey-2); }
+
   @media (max-width:900px){
-    .hero, .split { grid-template-columns:1fr; }
+    .nums { flex-wrap:wrap; } .nums .nm { flex:1 1 50%; } .nums .nm + .nm { border-left:none; }
+    .hero, .split, .prod { grid-template-columns:1fr; }
+    .vh, .hero { height:auto; }
     .hero-l { padding:var(--s6) 0; } .hero-l .inset { max-width:none; padding:0 var(--s4); }
     .hero-r { border-left:none; border-top:var(--seam) solid var(--yel); min-height:340px; }
     .split-r { border-left:none; border-top:var(--seam) solid var(--yel); }
     .cards { grid-template-columns:1fr; } .cases { grid-template-columns:1fr; }
-    .proof .names { margin-left:0; }
+    .proof .wrap { flex-wrap:wrap; } .proof .names { flex-wrap:wrap; justify-content:flex-start; gap:var(--s4) var(--s6); }
+    .prod .pg { border-left:none; border-top:var(--seam) solid var(--yel); }
+    .prod.rev .pt { order:1; border-left:none; } .prod.rev .pg { order:2; }
   }
 </style>
 </head>
@@ -200,20 +272,17 @@
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- HERO + LOGO BAND · ONE VIEWPORT -->
+<div class="vh">
 <header class="hero" id="top">
   <div class="hero-l">
     <div class="inset">
       <span class="stencil ey">Asite · Common Data Environment</span>
-      <h1>Built for the people who&nbsp;<em>build.</em></h1>
+      <h1>Built for those who&nbsp;<em>build tomorrow.</em></h1>
       <p class="sub">One platform for everything you build. Two million documents, zero ambiguity — connected from concept to completion.</p>
       <div class="cta">
         <a class="btn btn-yel" href="#cta">Book a demo</a>
         <a class="btn btn-line" href="#platform" style="color:var(--paper)">See the platform</a>
-      </div>
-      <div class="stat">
-        <div class="n"><em>84,000+</em></div>
-        <div class="c">companies build on Asite across live programmes worldwide.</div>
       </div>
     </div>
   </div>
@@ -226,38 +295,46 @@
 <!-- PROOF -->
 <div class="proof">
   <div class="wrap">
-    <div class="big">Trusted on the world's <em>most demanding</em> programmes.</div>
+    <div class="big">Trusted by the <em>world's best.</em></div>
     <div class="names">
-      <span>TRANSPORT FOR LONDON</span><span>LAING O'ROURKE</span><span>KIER</span>
-      <span>McLAREN</span><span>BERKELEY GROUP</span><span>ROYAL HASKONINGDHV</span>
+      <img src="assets/logos/TFL-mono.png" alt="Transport for London">
+      <img src="assets/logos/Laing-mono.png" alt="Laing O'Rourke">
+      <img src="assets/logos/Kier-mono.png" alt="Kier">
+      <img src="assets/logos/McLaren-mono.png" alt="McLaren">
+      <img src="assets/logos/Berkeley-mono.png" alt="Berkeley Group">
+      <img src="assets/logos/Royal-mono.png" alt="Royal HaskoningDHV">
     </div>
   </div>
 </div>
-
-<!-- IMAGE FEATURE -->
-<div class="bleed">
-  <img src="https://images.unsplash.com/photo-1664190425588-a2c96bc61abb?w=1600&q=72&auto=format&fit=crop" alt="Airport terminal under construction">
-  <div class="in">
-    <span class="stencil ey">The whole project</span>
-    <h2>See it <em>all.</em></h2>
-    <p>Every phase, every partner, every asset — design, build, and operate on one common data environment. The truth in one place, for everyone who needs it.</p>
-  </div>
 </div>
 
-<!-- SPLIT STAT -->
-<section style="padding:0">
-  <div class="split">
-    <div class="split-l">
-      <span class="stencil ey">The argument</span>
-      <h2>Heavy data,<br>held to <em>tolerance.</em></h2>
-      <p>The register is the project record — measured, audited, and controlled. Information that survives staff turnover, project end dates, and storage wipes.</p>
+<!-- VIDEO REEL · straight after the hero -->
+<section id="reel">
+  <div class="wrap">
+    <div class="shead">
+      <span class="stencil ey">See it work</span>
+      <h2>Two minutes <em>on site.</em></h2>
+      <p>How a hold is found, named, answered, and released — without one raised voice.</p>
     </div>
-    <div class="split-r">
-      <div class="huge">98.4%</div>
-      <div class="cap">register health across twelve live programmes — measured, not promised.</div>
-      <div class="reg">
-        <div class="row"><span class="ref">RFI-0847</span><span class="t">Cover clash · L26 core</span><span class="pill hold">HOLD</span></div>
-        <div class="row"><span class="ref dim">P-1128</span><span class="t" style="color:var(--grey-2)">Pour card · L24 core</span><span class="pill due">FRI</span></div>
+    <div class="reel-wrap">
+      <div class="vid" id="player">
+        <div class="stage">
+          <div class="reel">
+            <img class="frame on" src="https://images.unsplash.com/photo-1684497404598-6e844dff9cde?w=1400&q=72&auto=format&fit=crop" alt="Construction site at dusk">
+            <img class="frame" src="https://images.unsplash.com/photo-1758518732175-5d608ba3abdf?w=1400&q=72&auto=format&fit=crop" alt="Executives in a project meeting">
+            <img class="frame" src="https://images.unsplash.com/photo-1635712707475-6038e8bf5068?w=1400&q=72&auto=format&fit=crop" alt="Metro station infrastructure">
+            <img class="frame" src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=1400&q=72&auto=format&fit=crop" alt="Civil engineer on a construction site">
+            <img class="frame" src="https://images.unsplash.com/photo-1762896498171-32c406e0144f?w=1400&q=72&auto=format&fit=crop" alt="City skyline under construction">
+            <img class="frame" src="https://images.unsplash.com/photo-1716703435453-a7733d600d68?w=1400&q=72&auto=format&fit=crop" alt="Project team around a table">
+          </div>
+          <div class="vgrad"></div>
+          <button class="play" id="playToggle" type="button" aria-label="Play or pause the reel"></button>
+        </div>
+        <div class="vbar">
+          <b>Watch: the register holds the line</b>
+          <span class="mn">02:14 · PROGRAMME TOUR</span>
+          <span class="track"><i id="vprog"></i></span>
+        </div>
       </div>
     </div>
   </div>
@@ -303,37 +380,83 @@
   </div>
 </section>
 
-<!-- VIDEO REEL -->
-<section id="reel" style="padding-top:0">
-  <div class="wrap">
-    <div class="shead">
-      <span class="stencil ey">See it work</span>
-      <h2>Two minutes <em>on site.</em></h2>
-      <p>How a hold is found, named, answered, and released — without one raised voice.</p>
-    </div>
-    <div class="reel-wrap">
-      <div class="vid" id="player">
-        <div class="stage">
-          <div class="reel">
-            <img class="frame on" src="https://images.unsplash.com/photo-1684497404598-6e844dff9cde?w=1400&q=72&auto=format&fit=crop" alt="Construction site at dusk">
-            <img class="frame" src="https://images.unsplash.com/photo-1758518732175-5d608ba3abdf?w=1400&q=72&auto=format&fit=crop" alt="Executives in a project meeting">
-            <img class="frame" src="https://images.unsplash.com/photo-1635712707475-6038e8bf5068?w=1400&q=72&auto=format&fit=crop" alt="Metro station infrastructure">
-            <img class="frame" src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=1400&q=72&auto=format&fit=crop" alt="Civil engineer on a construction site">
-            <img class="frame" src="https://images.unsplash.com/photo-1762896498171-32c406e0144f?w=1400&q=72&auto=format&fit=crop" alt="City skyline under construction">
-            <img class="frame" src="https://images.unsplash.com/photo-1716703435453-a7733d600d68?w=1400&q=72&auto=format&fit=crop" alt="Project team around a table">
-          </div>
-          <div class="vgrad"></div>
-          <button class="play" id="playToggle" type="button" aria-label="Play or pause the reel"></button>
-        </div>
-        <div class="vbar">
-          <b>Watch: the register holds the line</b>
-          <span class="mn">02:14 · PROGRAMME TOUR</span>
-          <span class="track"><i id="vprog"></i></span>
-        </div>
+<!-- PRODUCT SECTIONS -->
+<div class="prod" id="product">
+  <div class="pt">
+    <span class="stencil ey">01 · The register</span>
+    <h3>One register, <em>in the open.</em></h3>
+    <p>Milestones, the active hold, register health — read at a glance, the same truth for everyone on the programme.</p>
+    <ul><li>Register health on every screen</li><li>The one active hold, where it sits</li><li>Figures feed the QPR pack directly</li></ul>
+  </div>
+  <div class="pg">
+    <div class="pm">
+      <div class="pbar"><i class="y"></i><i></i><i></i><span class="u">app.asite.com / tower-c / dashboard</span></div>
+      <div class="pbody">
+        <div class="pk"><div class="k hot"><div class="v">98.4%</div><div class="l">REGISTER HEALTH</div></div><div class="k"><div class="v">47</div><div class="l">OPEN RFIS</div></div><div class="k"><div class="v">L24</div><div class="l">CORE AT LEVEL</div></div></div>
+        <div class="pr"><span class="rf">RFI-0847</span><span class="tt">Core wall cover clash · L26</span><span class="pp hold">HOLD</span></div>
+        <div class="pr"><span class="rf">P-1128</span><span class="tt">Pour card · L24 core</span><span class="pp due">DUE FRI</span></div>
+        <div class="pr"><span class="rf">DWG-0412</span><span class="tt">Tower C · structural rev C03</span><span class="pp ok">CLEARED</span></div>
       </div>
     </div>
   </div>
-</section>
+</div>
+<div class="prod rev">
+  <div class="pt">
+    <span class="stencil ey">02 · Files</span>
+    <h3>Files to <em>fingertips.</em></h3>
+    <p>Folders first, controlled distribution, live previews — every document held under one numbering spine.</p>
+    <ul><li>ISO 19650 folder structure</li><li>Status on every file</li><li>Drawings, docs, and site captures together</li></ul>
+  </div>
+  <div class="pg">
+    <div class="pm">
+      <div class="pbar"><i class="y"></i><i></i><i></i><span class="u">app.asite.com / tower-c / files</span></div>
+      <div class="pbody">
+        <div class="pgrid">
+          <div class="pf"><div class="ic"><span class="fold2"></span></div><b>Structure</b><span>88 files</span></div>
+          <div class="pf"><div class="ic"><span class="plan2"></span></div><b>DWG-0412</b><span>rev C03</span></div>
+          <div class="pf"><div class="ic"><span class="doc2"></span></div><b>Method stmt</b><span>in review</span></div>
+        </div>
+        <div class="pr"><span class="rf">SCH-0021</span><span class="tt">Drainage schedule</span><span class="pp ok">rB</span></div>
+        <div class="pr"><span class="rf">IMG-0112</span><span class="tt">Pour L24 · east capture</span><span class="pp due">NEW</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="prod">
+  <div class="pt">
+    <span class="stencil ey">03 · aMail</span>
+    <h3>The inbox that <em>files itself.</em></h3>
+    <p>Every address that touches the project, filed to the register. The morning opens with a summary, not a pile.</p>
+    <ul><li>Three accounts, one register</li><li>Filed chips on every thread</li><li>Secure links — no downloads</li></ul>
+  </div>
+  <div class="pg">
+    <div class="pm">
+      <div class="pbar"><i class="y"></i><i></i><i></i><span class="u">amail.asite.com / tower-c / inbox</span></div>
+      <div class="pbody">
+        <div class="mrow2"><div class="l1">D. Mensah · Design lead<span class="tm">09:14</span></div><div class="l2">RE: RFI-0847 cover clash at L26</div><span class="chip2">FILED · RFI-0847</span></div>
+        <div class="mrow2"><div class="l1">BAM Structures<span class="tm">08:50</span></div><div class="l2">Pour card L24 — ready for sign-off</div><span class="chip2">FILED · P-1128</span></div>
+        <div class="mrow2"><div class="l1">M. Adeyemi · QS<span class="tm">08:31</span></div><div class="l2">Tender pack — package 4 civils</div><span class="chip2 unf">UNFILED</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stripeband"></div>
+
+<!-- NUMBERS / STATS -->
+<div class="nums">
+  <div class="nm hot"><div class="v">84k+</div><div class="l">companies build on Asite</div></div>
+  <div class="nm"><div class="v">2001</div><div class="l">defining the CDE category</div></div>
+  <div class="nm"><div class="v">70%</div><div class="l">saved on T5 tendering packages</div></div>
+  <div class="nm"><div class="v">1</div><div class="l">source of truth, every phase</div></div>
+</div>
+
+<!-- QUOTE -->
+<div class="quote">
+  <span class="bar"></span>
+  <blockquote>Two packages worth over £10m, tendered for <em>70% less</em> — by running them through Asite.</blockquote>
+  <div class="by"><span class="ln"></span><span>LAING O'ROURKE · HEATHROW TERMINAL 5</span></div>
+</div>
 
 <!-- CASE STUDIES -->
 <section id="cases" style="padding-top:0">
