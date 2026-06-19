@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="240" viewBox="0 0 480 300" fill="none">
+            <path d="M90 230 L240 155 L390 230 L240 305 Z" fill="#101214"/>
+            <path d="M160 202 L240 162 L320 202 L240 242 Z" fill="#26282C"/>
+            <path d="M160 202 L240 242 L240 260 L160 220 Z" fill="#141517"/>
+            <path d="M320 202 L240 242 L240 260 L320 220 Z" fill="#1A1B1E"/>
+            <!-- data plane: held, solid orange -->
+            <path d="M172 150 L240 116 L308 150 L240 184 Z" fill="#FF5C26"/>
+            <path d="M172 150 L240 184 L240 200 L172 166 Z" fill="#C8431A"/>
+            <path d="M308 150 L240 184 L240 200 L308 166 Z" fill="#E04E1F"/>
+            <!-- spark above, reading down -->
+            <g transform="translate(240,44)" fill="#FF7A4D"><path d="M0 -15 L2.6 -5.5 L12 0 L2.6 5.5 L0 15 L-2.6 5.5 L-12 0 L-2.6 -5.5 Z"/></g>
+            <line x1="240" y1="60" x2="240" y2="112" stroke="#FF5C26" stroke-width="1.1" stroke-dasharray="2 6"/>
+          </svg>

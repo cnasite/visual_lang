@@ -71,7 +71,8 @@
   .ramp .nm { font:500 13px/1.4 var(--font-ui); color:var(--text-1); }
   .ramp .hx { font:var(--text-mono); font-size:11px; color:var(--text-3); }
   .accent-row { display:grid; grid-template-columns:2fr 1fr 1fr; gap:var(--space-3); margin-bottom:var(--space-8); }
-  .rule-note { font:var(--text-small); color:var(--text-3); border-left:2px solid var(--intent); padding-left:var(--space-4); max-width:560px; }
+  .rule-note { display:flex; gap:11px; font:var(--text-small); color:var(--text-3); max-width:560px; }
+  .rule-note::before { content:""; flex:none; width:8px; height:8px; margin-top:5px; background:var(--intent); transform:rotate(45deg); border-radius:1px; }
   .dots { display:flex; gap:var(--space-6); flex-wrap:wrap; margin-bottom:var(--space-8); }
   .dots span { display:flex; align-items:center; gap:8px; font:var(--text-small); color:var(--text-2); }
 
@@ -279,6 +280,7 @@
     <a class="ntab" href="screens.html">Product</a>
     <a class="ntab" href="web.html">Website</a>
     <a class="ntab" href="slides.html">Slides</a>
+    <a class="ntab" href="ai-hub.html"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:5px"><path d="M12 2.5 L13.9 9 L20.5 11 L13.9 13 L12 21 L10.1 13 L3.5 11 L10.1 9 Z"/></svg>AI Hub</a>
     <span class="nspacer"></span>
   </div>
 </nav>
@@ -1045,7 +1047,7 @@
 <div class="dock">
   <div class="themeswitch" role="group" aria-label="Theme">
     <span class="ts-on">● DARK</span>
-    <a href="/tqi/light/index.html" aria-label="Switch to light theme">○ LIGHT</a>
+    <a href="light/index.html" aria-label="Switch to light theme">○ LIGHT</a>
   </div>
 </div>
 </body>

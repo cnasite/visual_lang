@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="220" viewBox="0 0 480 330" fill="none">
+            <!-- soft shadow -->
+            <ellipse cx="240" cy="296" rx="150" ry="22" fill="#000000" opacity="0.35"/>
+            <!-- platform -->
+            <path d="M90 250 L240 175 L390 250 L240 325 Z" fill="#101214"/>
+            <!-- slab 1 -->
+            <path d="M160 222 L240 182 L320 222 L240 262 Z" fill="#26282C"/>
+            <path d="M160 222 L240 262 L240 280 L160 240 Z" fill="#141517"/>
+            <path d="M320 222 L240 262 L240 280 L320 240 Z" fill="#1A1B1E"/>
+            <!-- slab 2: held, solid orange -->
+            <path d="M172 168 L240 134 L308 168 L240 202 Z" fill="#FF5C26"/>
+            <path d="M172 168 L240 202 L240 218 L172 184 Z" fill="#C8431A"/>
+            <path d="M308 168 L240 202 L240 218 L308 184 Z" fill="#E04E1F"/>
+            <!-- slab 3 -->
+            <path d="M184 118 L240 90 L296 118 L240 146 Z" fill="#26282C"/>
+            <path d="M184 118 L240 146 L240 161 L184 133 Z" fill="#141517"/>
+            <path d="M296 118 L240 146 L240 161 L296 133 Z" fill="#1A1B1E"/>
+            <!-- data plane chip -->
+            <path d="M204 42 L240 24 L276 42 L240 60 Z" fill="#1A1B1E"/>
+            <circle cx="240" cy="42" r="3.6" fill="#FF7A4D"/>
+            <!-- material cubes -->
+            <path d="M118 270 L142 258 L166 270 L142 282 Z" fill="#26282C"/>
+            <path d="M118 270 L142 282 L142 296 L118 284 Z" fill="#141517"/>
+            <path d="M166 270 L142 282 L142 296 L166 284 Z" fill="#1A1B1E"/>
+          </svg>

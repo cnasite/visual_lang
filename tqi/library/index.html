@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — The Quiet Instrument · Asset Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg-0); color:var(--text-2); font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:rgba(255,92,38,0.30); color:#F7F8F8; }
+  .wrap { max-width:1100px; margin:0 auto; padding:0 var(--space-8); }
+  a { color:var(--intent-bright); text-decoration:none; }
+
+  header.top { position:sticky; top:0; z-index:20; background:rgba(8,9,10,0.8); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+  header.top .wrap { display:flex; align-items:center; gap:11px; height:56px; }
+  header.top .mk { width:22px; height:23px; color:var(--text-1); } header.top b { font:590 14px/1 var(--font-ui); color:var(--text-1); }
+  header.top .meta { margin-left:auto; font:var(--text-mono); font-size:11px; color:var(--text-3); }
+
+  .hero { padding:80px 0 40px; }
+  .hero h1 { font:var(--text-display); letter-spacing:var(--track-display); color:var(--text-1); }
+  .hero p { max-width:600px; margin-top:16px; font-size:16px; line-height:1.65; color:var(--text-2); }
+
+  section { padding:var(--space-12) 0; border-top:1px solid var(--border); }
+  .idx { font:500 12px/1.4 var(--font-mono); color:var(--intent-bright); margin-bottom:var(--space-2); letter-spacing:0.04em; }
+  h2 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--text-1); margin-bottom:var(--space-2); }
+  .sub { max-width:620px; margin-bottom:var(--space-8); line-height:1.6; font-size:14px; color:var(--text-3); }
+
+  .grid-icons { display:grid; grid-template-columns:repeat(6,1fr); gap:var(--space-3); }
+  .icell { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-4); display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .icell svg { width:30px; height:30px; stroke:var(--text-2); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+  .icell.ai svg { stroke:var(--intent); }
+  .icell span { font:500 10.5px/1.3 var(--font-ui); color:var(--text-3); text-align:center; }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
+  .acard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); overflow:hidden; }
+  .astage { height:150px; background:var(--bg-2); display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--border); }
+  .astage img { max-width:78%; max-height:78%; }
+  .astage.tall { height:210px; }
+  .at { padding:var(--space-4); display:flex; align-items:center; gap:10px; }
+  .at b { font:560 13px/1.3 var(--font-ui); color:var(--text-1); }
+  .at .dl { margin-left:auto; font:var(--text-mono); font-size:10px; color:var(--text-3); display:flex; gap:8px; }
+
+  .logo-row { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
+  .logo-cell { border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-12); display:flex; align-items:center; justify-content:center; }
+  .logo-cell svg { width:64px; height:67px; }
+  .lc-dark { background:var(--bg-1); color:var(--text-1); } .lc-light { background:#F6F6F4; color:#16181C; } .lc-int { background:var(--bg-2); }
+
+  .marks { display:flex; gap:var(--space-4); flex-wrap:wrap; }
+  .mark-cell { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-8); display:flex; flex-direction:column; align-items:center; gap:14px; min-width:150px; }
+  .mark-cell img { height:48px; } .mark-cell .orb img { height:84px; } .mark-cell span { font:var(--text-mono); font-size:10px; color:var(--text-3); }
+
+  .files { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-3); }
+  .frow { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-4); }
+  .frow b { font:560 13px/1.3 var(--font-ui); color:var(--text-1); display:block; margin-bottom:4px; } .frow p { font:var(--text-mono); font-size:11px; color:var(--text-3); }
+  footer { padding:var(--space-12) 0 var(--space-16); font:var(--text-small); color:var(--text-3); border-top:1px solid var(--border); }
+  @media (max-width:880px){ .grid-icons{grid-template-columns:repeat(3,1fr);} .grid-2,.logo-row,.files{grid-template-columns:1fr 1fr;} }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="amark" viewBox="0 0 377 396"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/></symbol>
+</defs></svg>
+
+<header class="top"><div class="wrap"><svg class="mk" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Asite · TQI</b> <span style="color:var(--text-3); font:var(--text-small)">Asset library</span><span class="meta">SVG · CSS · PNG</span></div></header>
+
+<div class="wrap">
+  <div class="hero"><h1>The asset library.</h1><p>Everything The Quiet Instrument is built from, in one place — the mark, icons, illustrations, motifs, the Intelligence layer, and the component CSS. Each asset ships as SVG (and a 2× PNG). Source of truth: <a href="../index.html">the live build</a>.</p></div>
+
+  <!-- LOGO -->
+  <section><div class="idx">01 — Logo</div><h2>The mark</h2><p class="sub">currentColor SVG + two-tone variant. PNGs in <code>logo/png/</code>.</p>
+    <div class="logo-row">
+      <div class="logo-cell lc-dark"><svg viewBox="0 0 377 396"><use href="#amark"/></svg></div>
+      <div class="logo-cell lc-light"><svg viewBox="0 0 377 396"><use href="#amark"/></svg></div>
+      <div class="logo-cell lc-int"><img src="logo/asite-mark-intent.svg" style="width:64px" alt="two-tone mark"></div>
+    </div>
+  </section>
+
+  <!-- ICONS -->
+  <section><div class="idx">02 — Icons</div><h2>The icon set</h2><p class="sub">20/24px grid, 1.5px stroke, rounded joins. Product icons inherit text colour; the Intelligence set is shown in accent. Sprite: <code>icons/icons.svg</code>.</p>
+    <div class="grid-icons" id="icons"></div>
+  </section>
+
+  <!-- AI MARKS -->
+  <section><div class="idx">03 — Intelligence marks</div><h2>Spark &amp; orb</h2><p class="sub">The Asite Intelligence glyphs. In <code>ai/</code>.</p>
+    <div class="marks">
+      <div class="mark-cell"><img src="ai/spark.svg" style="filter:none" alt="spark"><span>spark · live</span></div>
+      <div class="mark-cell"><img src="ai/spark-line.svg" alt="spark line"><span>spark · quiet</span></div>
+      <div class="mark-cell orb"><img src="ai/orb.svg" alt="orb"><span>orb</span></div>
+    </div>
+  </section>
+
+  <!-- MOTIFS -->
+  <section><div class="idx">04 — Motifs</div><h2>The motifs</h2><p class="sub">Site gestures and Intelligence signals, abstracted. One per composition. In <code>motifs/</code>.</p>
+    <div class="grid-2" id="motifs"></div>
+  </section>
+
+  <!-- ILLUSTRATIONS -->
+  <section><div class="idx">05 — Illustration</div><h2>The four modes &amp; the agent</h2><p class="sub">Line or filled, elevation or isometry — plus the Intelligence layer drawn in the same grammar. In <code>illustrations/</code>.</p>
+    <div class="grid-2" id="illos"></div>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section><div class="idx">06 — Components (CSS)</div><h2>The component layer</h2><p class="sub">Framework-agnostic, token-driven, edge-bar-free. Compose from these; switch theme with <code>data-theme="light"</code>.</p>
+    <div class="files">
+      <div class="frow"><b>css/tokens.css</b><p>variables + fonts (dark + light)</p></div>
+      <div class="frow"><b>css/components.css</b><p>buttons, inputs, cards, status, table, rail, modal, palette, toast…</p></div>
+      <div class="frow"><b>css/ai.css</b><p>run states, agent card, stream, tool call, reasoning, confidence, citations, timeline, entry, async</p></div>
+    </div>
+    <p class="sub" style="margin-top:var(--space-6)">Live references: <a href="../index.html">Language</a> · <a href="../screens.html">Product</a> · <a href="../ai-hub.html">AI Hub</a></p>
+  </section>
+
+  <footer>ASITE · THE QUIET INSTRUMENT · ASSET LIBRARY — SVG sources render in any browser; 2× PNGs sit beside each in <code>/png/</code>. Compulsory rule: no edge bars; selection/active is a soft intent wash.</footer>
+</div>
+
+<script>
+  var ICONS=[['today','Today'],['rfis','RFIs'],['files','Files'],['docs','Docs'],['convert','Convert'],['models','Models'],['field','Field'],['search','Search'],['filter','Filter'],['upload','Upload'],['comment','Comment'],['hold-point','Hold point'],['intelligence','Intelligence',1],['run','Run',1],['tool-call','Tool call',1],['reasoning','Reasoning',1],['citation','Citation',1],['confidence','Confidence',1],['stream','Stream',1],['prompt','Prompt',1],['orchestrate','Orchestrate',1],['retry','Retry',1],['guardrail','Guardrail',1],['ask','Ask',1]];
+  document.getElementById('icons').innerHTML = ICONS.map(function(i){
+    return '<div class="icell'+(i[2]?' ai':'')+'"><svg><use href="icons/icons.svg#ico-'+i[0]+'"/></svg><span>'+i[1]+'</span></div>';
+  }).join('');
+  var MOTIFS=[['the-beam','The Beam'],['the-setting-out-cross','The Setting-out Cross'],['the-wash','The Wash'],['the-pulse','The Pulse'],['the-constellation','The Constellation'],['the-stream','The Stream'],['the-gauge','The Gauge'],['the-annotated-source','The Annotated Source'],['the-shimmer','The Shimmer']];
+  document.getElementById('motifs').innerHTML = MOTIFS.map(function(m){
+    return '<div class="acard"><div class="astage"><img src="motifs/'+m[0]+'.svg" alt="'+m[1]+'"></div><div class="at"><b>'+m[1]+'</b><span class="dl"><a href="motifs/'+m[0]+'.svg">svg</a><a href="motifs/png/'+m[0]+'.png">png</a></span></div></div>';
+  }).join('');
+  var ILLOS=[['the-site-in-elevation','The site, in elevation'],['the-register-as-object','The register, as object'],['the-site-as-substance','The site, as substance'],['the-object-made-solid','The object, made solid'],['the-agent-reading-the-site','The agent, reading the site'],['the-reading-made-object','The reading, made object']];
+  document.getElementById('illos').innerHTML = ILLOS.map(function(m){
+    return '<div class="acard"><div class="astage tall"><img src="illustrations/'+m[0]+'.svg" alt="'+m[1]+'"></div><div class="at"><b>'+m[1]+'</b><span class="dl"><a href="illustrations/'+m[0]+'.svg">svg</a><a href="illustrations/png/'+m[0]+'.png">png</a></span></div></div>';
+  }).join('');
+</script>
+</body>
+</html>

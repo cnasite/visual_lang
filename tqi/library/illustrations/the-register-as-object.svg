@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="220" viewBox="0 0 480 330" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M90 240 L240 165 L390 240 L240 315 Z" stroke="#26282C" stroke-width="1.5"/>
+            <path d="M160 215 L240 175 L320 215 L240 255 Z" fill="#1A1B1E" stroke="#33363B" stroke-width="1.5"/>
+            <path d="M160 215 L240 255 L240 272 L160 232 Z" fill="#101214" stroke="#33363B" stroke-width="1.5"/>
+            <path d="M320 215 L240 255 L240 272 L320 232 Z" fill="#141517" stroke="#33363B" stroke-width="1.5"/>
+            <path d="M172 162 L240 128 L308 162 L240 196 Z" fill="rgba(255,92,38,0.13)" stroke="#FF5C26" stroke-width="1.5"/>
+            <path d="M172 162 L240 196 L240 211 L172 177 Z" fill="#141517" stroke="#FF5C26" stroke-width="1.2" stroke-opacity="0.5"/>
+            <path d="M308 162 L240 196 L240 211 L308 177 Z" fill="#141517" stroke="#FF5C26" stroke-width="1.2" stroke-opacity="0.5"/>
+            <path d="M184 112 L240 84 L296 112 L240 140 Z" stroke="#33363B" stroke-width="1.3" stroke-dasharray="4 6"/>
+            <path d="M198 40 L240 19 L282 40 L240 61 Z" stroke="#62666D" stroke-width="1.2" stroke-dasharray="4 5"/>
+            <circle cx="240" cy="40" r="3.6" fill="#FF5C26"/>
+            <line x1="240" y1="46" x2="240" y2="78" stroke="#FF5C26" stroke-width="1.1" stroke-dasharray="2 6"/>
+            <line x1="312" y1="162" x2="380" y2="136" stroke="#62666D" stroke-width="1.2" stroke-dasharray="2 6"/>
+            <circle cx="384" cy="134" r="3" fill="#FF5C26"/>
+            <text x="394" y="138" font-family="JetBrains Mono, monospace" font-size="10" fill="#8A8F98">HOLD</text>
+          </svg>

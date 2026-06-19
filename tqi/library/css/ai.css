@@ -1,0 +1,125 @@
+/* ============================================================
+   ASITE — THE QUIET INSTRUMENT · AI / Orchestration surface kit
+   Patterns the base system doesn't cover yet: agent runs,
+   streaming, tool calls, reasoning, threads, confidence,
+   provenance, run timelines, the intelligence entry point,
+   and async states.
+   Requires: tokens.css + asite-tqi.css.
+
+   GUIDING RULE for agentic UI:
+   Orange is the only accent hue — use it with restraint. The most
+   natural place for it on an agentic surface is whatever is LIVE:
+   the running / streaming element (the one thing that may animate
+   in intent). Completed, queued and idle states stay monochrome
+   with dot-first status. Don't paint every step, tool or token
+   orange — but don't strip it to a lone dot either; let it lead
+   the eye to what's active and to the primary action.
+   ============================================================ */
+
+/* ---- run-state chip (dot-first, like base status) ---- */
+.run { display:inline-flex; align-items:center; gap:8px; font:var(--text-small); color:var(--text-1); }
+.run .dot { width:8px; height:8px; border-radius:50%; flex:none; }
+.run-queued  .dot { background:var(--st-backlog); }
+.run-running .dot, .run-streaming .dot { background:var(--intent); box-shadow:0 0 0 0 var(--intent-wash); animation:run-pulse 1.4s var(--ease) infinite; }
+.run-waiting .dot { background:var(--st-progress); }
+.run-blocked .dot { background:var(--st-blocked); }
+.run-done    .dot { background:var(--st-done); }
+.run-error   .dot { background:var(--st-blocked); }
+@keyframes run-pulse { 0%{ box-shadow:0 0 0 0 rgba(255,92,38,0.35);} 70%{ box-shadow:0 0 0 6px rgba(255,92,38,0);} 100%{ box-shadow:0 0 0 0 rgba(255,92,38,0);} }
+@media (prefers-reduced-motion: reduce){ .run-running .dot, .run-streaming .dot { animation:none; } }
+
+/* ---- agent run card ---- */
+.agent { background:var(--bg-2); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); overflow:hidden; }
+.agent .hd { display:flex; align-items:center; gap:11px; padding:13px 16px; border-bottom:1px solid var(--border); }
+.agent .hd .orb { width:26px; height:26px; border-radius:50%; flex:none; display:grid; place-items:center; color:var(--intent); box-shadow:inset 0 0 0 1px var(--intent-wash); }
+.agent .hd .name { font:560 14px/1 var(--font-ui); color:var(--text-1); }
+.agent .hd .who { font:var(--text-mono); font-size:11px; color:var(--text-3); }
+.agent .hd .spec { margin-left:auto; display:inline-flex; gap:14px; font:var(--text-mono); font-size:10.5px; color:var(--text-3); }
+.agent .bd { padding:14px 16px; display:flex; flex-direction:column; gap:12px; }
+
+/* ---- streaming text ---- */
+.stream { font:var(--text-body); color:var(--text-1); }
+.stream .caret { display:inline-block; width:7px; height:1.05em; vertical-align:-2px; margin-left:2px; background:var(--intent); animation:caret 1s steps(2) infinite; }
+@keyframes caret { 50%{ opacity:0; } }
+@media (prefers-reduced-motion: reduce){ .stream .caret { animation:none; } }
+
+/* ---- tool-call card ---- */
+.tool { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset); overflow:hidden; }
+.tool > summary, .tool .thd { display:flex; align-items:center; gap:10px; padding:11px 13px; cursor:pointer; list-style:none; }
+.tool > summary::-webkit-details-marker { display:none; }
+.tool .ic { width:16px; height:16px; color:var(--text-2); flex:none; }
+.tool .tname { font:var(--text-mono); font-size:12px; color:var(--text-1); }
+.tool .tstate { margin-left:auto; }
+.tool .tbody { padding:0 13px 13px; display:flex; flex-direction:column; gap:8px; }
+.tool .kv { font:var(--text-mono); font-size:11.5px; color:var(--text-2); white-space:pre-wrap; background:var(--bg-0); box-shadow:var(--inset); border-radius:var(--r-sm); padding:9px 11px; }
+.tool .kv .k { color:var(--text-3); }
+.tool .out { display:flex; align-items:center; gap:8px; font:var(--text-mono); font-size:11.5px; color:var(--text-1); }
+.tool .out::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--st-done); flex:none; }
+
+/* ---- reasoning disclosure (quiet, dimmed) ---- */
+.reason { background:transparent; }
+.reason > summary { display:inline-flex; align-items:center; gap:8px; cursor:pointer; list-style:none;
+  font:var(--text-micro); letter-spacing:0.04em; text-transform:uppercase; color:var(--text-3); }
+.reason > summary::-webkit-details-marker { display:none; }
+.reason > summary .chev { width:12px; height:12px; transition:transform var(--t-base) var(--ease); color:var(--text-3); }
+.reason[open] > summary .chev { transform:rotate(90deg); }
+.reason .rbody { margin-top:10px; padding-left:14px; border-left:1px solid var(--border); font:var(--text-mono); font-size:11.5px; line-height:1.65; color:var(--text-3); }
+
+/* ---- conversation thread ---- */
+.thread { display:flex; flex-direction:column; gap:18px; }
+.msg { display:flex; gap:12px; }
+.msg .av { width:26px; height:26px; border-radius:50%; flex:none; display:grid; place-items:center; box-shadow:var(--inset); font:600 10px/1 var(--font-ui); color:var(--text-2); }
+.msg-assistant .av { color:var(--intent); box-shadow:inset 0 0 0 1px var(--intent-wash); }
+.msg .body { min-width:0; }
+.msg .role { font:var(--text-micro); letter-spacing:0.04em; text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
+.msg .text { font:var(--text-body); color:var(--text-1); }
+.msg-user .text { color:var(--text-2); }
+.msg-system { font:var(--text-mono); font-size:11px; color:var(--text-3); text-align:center; }
+
+/* ---- confidence meter ---- */
+.conf { display:flex; align-items:center; gap:10px; font:var(--text-mono); font-size:11px; color:var(--text-3); }
+.conf .bar { width:120px; height:4px; border-radius:999px; background:var(--bg-3); box-shadow:var(--inset); overflow:hidden; }
+.conf .bar > i { display:block; height:100%; border-radius:999px; background:var(--text-2); }
+.conf.high .bar > i { background:var(--st-done); }
+.conf.med  .bar > i { background:var(--st-progress); }
+.conf.low  .bar > i { background:var(--st-blocked); }
+.conf .val { color:var(--text-1); }
+
+/* ---- provenance / source chips ---- */
+.cites { display:flex; flex-wrap:wrap; gap:7px; }
+.cite { display:inline-flex; align-items:center; gap:6px; font:var(--text-mono); font-size:10.5px; color:var(--text-2);
+  box-shadow:var(--inset); border-radius:var(--r-sm); padding:5px 9px; text-decoration:none; }
+.cite:hover { color:var(--text-1); }
+.cite .n { color:var(--intent); }
+
+/* ---- run timeline ---- */
+.timeline { display:flex; flex-direction:column; }
+.step { display:flex; gap:13px; padding-bottom:16px; position:relative; }
+.step::before { content:""; position:absolute; left:5px; top:14px; bottom:0; width:1px; background:var(--border); }
+.step:last-child::before { display:none; }
+.step .mk { width:11px; height:11px; border-radius:3px; transform:rotate(45deg); flex:none; margin-top:2px; box-shadow:var(--inset); background:var(--bg-3); position:relative; z-index:2; }
+.step.done .mk { background:var(--st-done); box-shadow:none; }
+.step.now  .mk { background:var(--intent); box-shadow:0 0 0 4px var(--intent-wash); }
+.step .lbl { font:var(--text-small); color:var(--text-2); }
+.step.now .lbl, .step.done .lbl { color:var(--text-1); }
+.step .sub { font:var(--text-mono); font-size:10px; color:var(--text-3); margin-top:3px; }
+
+/* ---- Ask Asite Intelligence entry point ---- */
+.ai-entry { display:flex; align-items:center; gap:11px; background:var(--bg-1); box-shadow:var(--inset); border-radius:999px; padding:8px 8px 8px 14px; }
+.ai-entry .spark { width:18px; height:18px; color:var(--intent); flex:none; }
+.ai-entry input { flex:1; background:transparent; border:0; outline:none; color:var(--text-1); font:var(--text-body); }
+.ai-entry input::placeholder { color:var(--text-3); }
+.ai-entry .go { width:30px; height:30px; border-radius:50%; border:0; cursor:pointer; background:var(--intent); color:#0B0B0D; display:grid; place-items:center; }
+.ai-orb { width:44px; height:44px; border-radius:50%; border:0; cursor:pointer; background:var(--bg-2); box-shadow:var(--inset); color:var(--intent); display:grid; place-items:center; }
+
+/* ---- async states ---- */
+.skeleton { background:linear-gradient(90deg, var(--bg-2) 25%, var(--bg-3) 37%, var(--bg-2) 63%); background-size:400% 100%; animation:shimmer 1.4s linear infinite; border-radius:var(--r-sm); height:12px; }
+@keyframes shimmer { 0%{ background-position:100% 0; } 100%{ background-position:0 0; } }
+@media (prefers-reduced-motion: reduce){ .skeleton { animation:none; } }
+.empty { text-align:center; padding:40px 24px; color:var(--text-3); }
+.empty .ic { width:30px; height:30px; color:var(--text-3); margin-bottom:12px; }
+.empty .h { font:var(--text-h3); color:var(--text-1); margin-bottom:6px; }
+.error-state { display:flex; align-items:flex-start; gap:11px; background:var(--bg-2); box-shadow:inset 0 0 0 1px rgba(235,110,110,0.4); border-radius:var(--r-md); padding:13px 15px; }
+.error-state .ic { color:var(--st-blocked); flex:none; width:18px; height:18px; margin-top:1px; }
+.error-state .h { font:var(--text-small); color:var(--text-1); }
+.error-state .d { font:var(--text-small); color:var(--text-3); margin-top:3px; }

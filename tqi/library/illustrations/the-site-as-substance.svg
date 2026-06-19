@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="380" height="220" viewBox="0 0 560 320" fill="none">
+            <!-- ground band -->
+            <rect x="30" y="288" width="500" height="7" rx="3.5" fill="#1A1B1E"/>
+            <!-- tower silhouettes -->
+            <rect x="220" y="84" width="150" height="204" fill="#1A1B1E"/>
+            <rect x="220" y="84" width="150" height="14" fill="#26282C"/>
+            <rect x="252" y="120" width="22" height="10" fill="#101214"/><rect x="296" y="120" width="22" height="10" fill="#101214"/>
+            <rect x="252" y="156" width="22" height="10" fill="#101214"/><rect x="296" y="156" width="22" height="10" fill="#101214"/>
+            <rect x="252" y="192" width="22" height="10" fill="#101214"/><rect x="296" y="192" width="22" height="10" fill="#101214"/>
+            <rect x="110" y="190" width="84" height="98" fill="#141517"/>
+            <rect x="110" y="190" width="84" height="10" fill="#1F2125"/>
+            <!-- crane silhouette -->
+            <rect x="404" y="58" width="11" height="230" fill="#26282C"/>
+            <rect x="318" y="52" width="190" height="9" rx="4" fill="#26282C"/>
+            <rect x="488" y="61" width="22" height="18" fill="#1A1B1E"/>
+            <rect x="346" y="61" width="3" height="48" fill="#33363B"/>
+            <rect x="338" y="109" width="19" height="16" fill="#FF5C26"/>
+            <!-- the surveyor's cap, foreground -->
+            <path d="M62 268 Q62 230 100 230 Q138 230 138 268 Z" fill="#FF5C26"/>
+            <path d="M92 230 Q92 222 100 222 Q108 222 108 230 L108 238 Q104 236 100 236 Q96 236 92 238 Z" fill="#FF7A4D"/>
+            <rect x="52" y="268" width="96" height="10" rx="5" fill="#FF5C26"/>
+            <path d="M80 237 Q76 250 76 268 M120 237 Q124 250 124 268" stroke="#C8431A" stroke-width="2" fill="none"/>
+            <!-- laser dot on tower -->
+            <circle cx="370" cy="160" r="3.5" fill="#F7F8F8"/>
+          </svg>
