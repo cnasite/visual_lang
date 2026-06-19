@@ -30,8 +30,8 @@
 
   .grid-icons { display:grid; grid-template-columns:repeat(6,1fr); gap:var(--space-3); }
   .icell { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-4); display:flex; flex-direction:column; align-items:center; gap:12px; }
-  .icell svg { width:30px; height:30px; stroke:var(--text-2); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
-  .icell.ai svg { stroke:var(--intent); }
+  .icell svg { width:30px; height:30px; color:var(--text-2); stroke:var(--text-2); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+  .icell.ai svg { color:var(--intent); stroke:var(--intent); }
   .icell span { font:500 10.5px/1.3 var(--font-ui); color:var(--text-3); text-align:center; }
 
   .grid-2 { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
@@ -61,7 +61,31 @@
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <symbol id="amark" viewBox="0 0 377 396"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/></symbol>
+  <symbol id="amark" viewBox="0 0 377 396"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/><path fill="#FF5C26" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/></symbol>
+  <symbol id="ico-today" viewBox="0 0 20 20"><path d="M3.5 9.5 L10 3.5 L16.5 9.5 V16 H12 V12 H8 V16 H3.5 Z"/></symbol>
+  <symbol id="ico-rfis" viewBox="0 0 20 20"><circle cx="10" cy="10" r="6.5"/><circle cx="10" cy="10" r="1.4" fill="currentColor" stroke="none"/><path d="M10 1.5 V3.5 M10 16.5 V18.5 M1.5 10 H3.5 M16.5 10 H18.5"/></symbol>
+  <symbol id="ico-files" viewBox="0 0 20 20"><path d="M4 3.5 H11 L16 8.5 V16.5 H4 Z"/><path d="M11 3.5 V8.5 H16"/></symbol>
+  <symbol id="ico-docs" viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="14" rx="1.5"/><path d="M7 7.5 H13 M7 10.5 H13 M7 13.5 H10.5"/></symbol>
+  <symbol id="ico-convert" viewBox="0 0 20 20"><path d="M4 7 H14 L11.5 4.5 M16 13 H6 L8.5 15.5"/></symbol>
+  <symbol id="ico-models" viewBox="0 0 20 20"><path d="M10 2.5 L16.5 6 V14 L10 17.5 L3.5 14 V6 Z M3.5 6 L10 9.5 L16.5 6 M10 9.5 V17.5"/></symbol>
+  <symbol id="ico-field" viewBox="0 0 20 20"><path d="M4.5 12 Q4.5 6 10 6 Q15.5 6 15.5 12 Z"/><path d="M3 12 H17 M8.5 6 Q8.5 3.5 10 3.5 Q11.5 3.5 11.5 6"/></symbol>
+  <symbol id="ico-search" viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.5"/><path d="M13.2 13.2 L17 17"/></symbol>
+  <symbol id="ico-filter" viewBox="0 0 20 20"><path d="M3.5 5 H16.5 L11.5 10.5 V15.5 L8.5 17 V10.5 Z"/></symbol>
+  <symbol id="ico-upload" viewBox="0 0 20 20"><path d="M10 13 V3.5 M6.5 7 L10 3.5 L13.5 7"/><path d="M4 13.5 V16.5 H16 V13.5"/></symbol>
+  <symbol id="ico-comment" viewBox="0 0 20 20"><path d="M4 4.5 H16 V13 H9.5 L6 16 V13 H4 Z"/></symbol>
+  <symbol id="ico-hold-point" viewBox="0 0 20 20"><rect x="5.5" y="5.5" width="9" height="9" transform="rotate(45 10 10)"/></symbol>
+  <symbol id="ico-intelligence" viewBox="0 0 24 24"><path d="M12 3 L13.8 9.2 L20 11 L13.8 12.8 L12 20 L10.2 12.8 L4 11 L10.2 9.2 Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+  <symbol id="ico-run" viewBox="0 0 20 20"><circle cx="10" cy="10" r="6.5"/><path d="M8 7 L13.5 10 L8 13 Z"/></symbol>
+  <symbol id="ico-tool-call" viewBox="0 0 20 20"><path d="M5 4 H15 V16 H5 Z"/><path d="M8 8 H12 M8 11 H12 M8 13.5 H10.5"/></symbol>
+  <symbol id="ico-reasoning" viewBox="0 0 20 20"><circle cx="6" cy="6.5" r="2.1"/><circle cx="14.5" cy="9" r="2.1"/><circle cx="8" cy="14.5" r="2.1"/><path d="M7.7 7.7 L12.6 8.4 M12.8 10.6 L9.2 12.7"/></symbol>
+  <symbol id="ico-citation" viewBox="0 0 20 20"><path d="M7 4 H13 L16 7 V16 H4 V7 Z"/><path d="M7 4 V7 H4 M7 11 H13 M7 13.5 H11"/></symbol>
+  <symbol id="ico-confidence" viewBox="0 0 20 20"><path d="M3 14 a7 7 0 0 1 14 0"/><path d="M10 14 L13.6 8.4"/><circle cx="10" cy="14" r="1.1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="ico-stream" viewBox="0 0 20 20"><path d="M3 10 h2.5 l1.5 -4 2.5 8 1.5 -4 H17"/></symbol>
+  <symbol id="ico-prompt" viewBox="0 0 20 20"><path d="M4 5.5 H16 M4 10 H16 M4 14.5 H11"/><circle cx="14.5" cy="14.5" r="1.6"/></symbol>
+  <symbol id="ico-orchestrate" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/><path d="M10 2 V4.5 M10 15.5 V18 M2 10 H4.5 M15.5 10 H18 M4.4 4.4 L6.2 6.2 M13.8 13.8 L15.6 15.6 M15.6 4.4 L13.8 6.2 M6.2 13.8 L4.4 15.6"/></symbol>
+  <symbol id="ico-retry" viewBox="0 0 20 20"><path d="M10 3 a7 7 0 1 1 -6 3.5"/><path d="M4 3.5 V6.5 H7"/></symbol>
+  <symbol id="ico-guardrail" viewBox="0 0 20 20"><path d="M10 3 L16.5 6 V11 Q16.5 15.5 10 17.5 Q3.5 15.5 3.5 11 V6 Z"/><path d="M7.5 10 L9.5 12 L13 8"/></symbol>
+  <symbol id="ico-ask" viewBox="0 0 20 20"><path d="M4 15 V5 a1 1 0 0 1 1 -1 H15 a1 1 0 0 1 1 1 V12 a1 1 0 0 1 -1 1 H8 Z"/><circle cx="8" cy="8.5" r="0.8" fill="currentColor" stroke="none"/><circle cx="11" cy="8.5" r="0.8" fill="currentColor" stroke="none"/></symbol>
 </defs></svg>
 
 <header class="top"><div class="wrap"><svg class="mk" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Asite · TQI</b> <span style="color:var(--text-3); font:var(--text-small)">Asset library</span><span class="meta">SVG · CSS · PNG</span></div></header>
@@ -74,7 +98,7 @@
     <div class="logo-row">
       <div class="logo-cell lc-dark"><svg viewBox="0 0 377 396"><use href="#amark"/></svg></div>
       <div class="logo-cell lc-light"><svg viewBox="0 0 377 396"><use href="#amark"/></svg></div>
-      <div class="logo-cell lc-int"><img src="logo/asite-mark-intent.svg" style="width:64px" alt="two-tone mark"></div>
+      <div class="logo-cell lc-int"><img src="logo/png/asite-mark-intent.png" style="width:64px" alt="two-tone mark"></div>
     </div>
   </section>
 
@@ -86,9 +110,9 @@
   <!-- AI MARKS -->
   <section><div class="idx">03 — Intelligence marks</div><h2>Spark &amp; orb</h2><p class="sub">The Asite Intelligence glyphs. In <code>ai/</code>.</p>
     <div class="marks">
-      <div class="mark-cell"><img src="ai/spark.svg" style="filter:none" alt="spark"><span>spark · live</span></div>
-      <div class="mark-cell"><img src="ai/spark-line.svg" alt="spark line"><span>spark · quiet</span></div>
-      <div class="mark-cell orb"><img src="ai/orb.svg" alt="orb"><span>orb</span></div>
+      <div class="mark-cell"><img src="ai/png/spark.png" style="filter:none" alt="spark"><span>spark · live</span></div>
+      <div class="mark-cell"><img src="ai/png/spark-line.png" alt="spark line"><span>spark · quiet</span></div>
+      <div class="mark-cell orb"><img src="ai/png/orb.png" alt="orb"><span>orb</span></div>
     </div>
   </section>
 
@@ -118,7 +142,7 @@
 <script>
   var ICONS=[['today','Today'],['rfis','RFIs'],['files','Files'],['docs','Docs'],['convert','Convert'],['models','Models'],['field','Field'],['search','Search'],['filter','Filter'],['upload','Upload'],['comment','Comment'],['hold-point','Hold point'],['intelligence','Intelligence',1],['run','Run',1],['tool-call','Tool call',1],['reasoning','Reasoning',1],['citation','Citation',1],['confidence','Confidence',1],['stream','Stream',1],['prompt','Prompt',1],['orchestrate','Orchestrate',1],['retry','Retry',1],['guardrail','Guardrail',1],['ask','Ask',1]];
   document.getElementById('icons').innerHTML = ICONS.map(function(i){
-    return '<div class="icell'+(i[2]?' ai':'')+'"><svg><use href="icons/icons.svg#ico-'+i[0]+'"/></svg><span>'+i[1]+'</span></div>';
+    return '<div class="icell'+(i[2]?' ai':'')+'"><svg><use href="#ico-'+i[0]+'"/></svg><span>'+i[1]+'</span></div>';
   }).join('');
   var MOTIFS=[['the-beam','The Beam'],['the-setting-out-cross','The Setting-out Cross'],['the-wash','The Wash'],['the-pulse','The Pulse'],['the-constellation','The Constellation'],['the-stream','The Stream'],['the-gauge','The Gauge'],['the-annotated-source','The Annotated Source'],['the-shimmer','The Shimmer']];
   document.getElementById('motifs').innerHTML = MOTIFS.map(function(m){
