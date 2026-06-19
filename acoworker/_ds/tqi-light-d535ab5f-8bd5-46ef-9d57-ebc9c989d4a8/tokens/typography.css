@@ -1,0 +1,31 @@
+/* ============================================================
+   TYPOGRAPHY — a cornerstone, then calm.
+   Cornerstone (blocky display) for large titles ONLY.
+   Inter Variable carries headings → body at medium weights,
+   tight tracking, instrument-panel density.
+   JetBrains Mono for engineering alphanumerics.
+   ============================================================ */
+
+:root {
+
+  /* ---- families ---- */
+  --font-display: 'Cornerstone', 'Inter', sans-serif;
+  --font-ui: 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+  /* ---- composite type tokens (font shorthand) ---- */
+  --text-display: 400 clamp(38px, 4.6vw, 58px)/1.1 var(--font-display);
+  --text-h1:      590 34px/1.15 var(--font-ui);
+  --text-h2:      560 22px/1.25 var(--font-ui);
+  --text-h3:      560 16px/1.35 var(--font-ui);
+  --text-body:    400 15px/1.6  var(--font-ui);
+  --text-small:   400 13px/1.55 var(--font-ui);
+  --text-micro:   500 11px/1.4  var(--font-ui);
+  --text-mono:    400 12.5px/1.5 var(--font-mono);
+
+  /* ---- tracking ---- */
+  --track-display: 0.015em;     /* Cornerstone breathes slightly */
+  --track-h: -0.012em;          /* headings tighten              */
+  --track-micro: 0.02em;        /* micro labels open up          */
+  --track-mono: 0.04em;         /* mono engineering labels       */
+}

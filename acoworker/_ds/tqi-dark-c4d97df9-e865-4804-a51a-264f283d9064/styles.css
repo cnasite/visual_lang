@@ -1,0 +1,16 @@
+/* ============================================================
+   ASITE — THE QUIET INSTRUMENT
+   Design-system entry point. Consumers link this one file.
+   It is a manifest of @imports only — no rules live here.
+
+   Visual language: a narrow monochrome surface ramp, one rationed
+   Survey-Orange signal, instrument-panel density, and depth from
+   borders & light — never from fills.
+   ============================================================ */
+
+@import url('tokens/fonts.css');
+@import url('tokens/colors.css');
+@import url('tokens/typography.css');
+@import url('tokens/geometry.css');
+@import url('tokens/motion.css');
+@import url('tokens/utilities.css');

@@ -1,0 +1,26 @@
+/* ============================================================
+   GEOMETRY — soft, machined-plastic radii (nothing sharp) and a
+   4-based spacing scale. Depth is borders + light, never fills.
+   ============================================================ */
+:root {
+  /* Corner radii — machined plastic, never sharp, never pill-by-default */
+  --r-sm: 6px;                  /* chips, kbd, small controls     */
+  --r-md: 8px;                  /* buttons, inputs, cards         */
+  --r-lg: 12px;                 /* panels, popovers, app frame    */
+  --r-xl: 16px;                 /* onboarding cards, large surfaces */
+  --r-pill: 999px;              /* status chips, avatars, toggles */
+
+  /* Spacing — 4px base unit */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  /* Standard borders */
+  --border-width: 1px;
+}

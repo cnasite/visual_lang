@@ -1,0 +1,60 @@
+/* ============================================================
+   GEOMETRY, SPACING, DEPTH & MOTION
+   Soft machined-plastic radii. An 8px-based spacing scale.
+   Depth from 1px inset borders + soft shadows, never fills.
+   Motion is instant and weightless: 50–150ms, fade + 2px rise.
+   ============================================================ */
+
+:root {
+
+  /* ---- radii — nothing sharp ---- */
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-pill: 999px;
+
+  /* ---- spacing scale (8px base) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  /* ---- borders ---- */
+  --border: rgba(22, 24, 28, 0.10);
+  --border-strong: rgba(22, 24, 28, 0.18);
+
+  /* ---- depth: inset hairline + soft shadows ---- */
+  --inset: inset 0 0 0 1px rgba(22, 24, 28, 0.07);
+  --shadow-card: 0 8px 28px rgba(22, 24, 28, 0.08);
+  --shadow-pop: 0 16px 56px rgba(22, 24, 28, 0.14);
+
+  /* ---- motion ---- */
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1); /* @kind other */
+  --t-fast: 80ms; /* @kind other */
+  --t-base: 140ms; /* @kind other */
+}
+
+/* ---------------- utilities ---------------- */
+
+.u-card {
+  background: var(--bg-2);
+  border-radius: var(--r-md);
+  box-shadow: var(--inset), var(--shadow-card);
+}
+
+.u-kbd {
+  font: 500 11px/1 var(--font-ui);
+  color: var(--text-2);
+  background: var(--bg-3);
+  border-radius: 4px;
+  box-shadow: var(--inset);
+  padding: 3px 6px;
+}
+
+.u-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
