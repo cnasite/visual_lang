@@ -175,10 +175,10 @@
      Depth comes from 1px inset borders and soft shadows,
      not from contrast between fills.
      ---------------------------------------------------------- */
-  --bg-0: #F6F6F4;              /* canvas                        */
+  --bg-0: #FCFCFD;              /* canvas                        */
   --bg-1: #FFFFFF;              /* app chrome, sidebars          */
-  --bg-2: #FBFBFA;              /* cards, popovers               */
-  --bg-3: #EEEEEB;              /* hover, raised                 */
+  --bg-2: #F7F8FA;              /* cards, popovers               */
+  --bg-3: #F3F4F6;              /* hover, raised                 */
   --bg-overlay: rgba(22, 24, 28, 0.35);
 
   --border: rgba(22, 24, 28, 0.10);

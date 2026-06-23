@@ -15,7 +15,7 @@
   .wrap { max-width:1100px; margin:0 auto; padding:0 var(--space-8); }
   .m-body { fill:var(--mkb, #16181C); } .m-arrow { fill:var(--mka, #E8501C); }
   .m-ink { --mkb:#16181C; --mka:#16181C; }
-  .m-lite { --mkb:#EEEEEB; --mka:#E8501C; }
+  .m-lite { --mkb:#F3F4F6; --mka:#E8501C; }
 
   nav { position:sticky; top:0; z-index:50; background:rgba(250,250,249,0.86); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
   nav .wrap { display:flex; align-items:center; gap:var(--space-2); height:56px; }
@@ -58,7 +58,7 @@
 
   /* logo */
   .logo-stage { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); }
-  .stage-cell { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-12);
+  .stage-cell { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-12);
     display:flex; align-items:center; justify-content:center; gap:var(--space-6); min-height:240px; }
   .stage-cell .word { font:590 40px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--text-1); }
   .logo-note { font:var(--text-small); color:var(--text-3); margin-top:var(--space-4); max-width:620px; }
@@ -78,7 +78,7 @@
 
   /* personality imagery */
   .img-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); }
-  .icard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); overflow:hidden; }
+  .icard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); overflow:hidden; }
   .icanvas { height:200px; background:var(--bg-2); display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--border); }
   .icard .itxt { padding:var(--space-6); }
   .icard .itxt b { font:560 14px/1.4 var(--font-ui); color:var(--text-1); display:block; }
@@ -89,7 +89,7 @@
 
   /* motifs (moved from expressions) */
   .mgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-4); }
-  .mcard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); overflow:hidden; }
+  .mcard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); overflow:hidden; }
   .mstage { height:150px; background:var(--bg-2); display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--border); }
   .mcard .mt { padding:var(--space-4); }
   .mcard .mt b { font:560 13px/1.4 var(--font-ui); color:var(--text-1); display:block; }
@@ -113,7 +113,7 @@
 
   /* icons */
   .icon-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:var(--space-3); }
-  .icell { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-4);
+  .icell { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-4);
     display:flex; flex-direction:column; align-items:center; gap:12px; }
   .icell svg { stroke:var(--text-2); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
   .icell:hover svg { stroke:var(--text-1); }
@@ -155,11 +155,11 @@
   .ov-stage { background:var(--bg-0); border-radius:var(--r-lg); box-shadow:var(--inset); min-height:340px;
     display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
   .ov-stage::before { content:""; position:absolute; inset:0; background:var(--bg-overlay); }
-  .dlg { position:relative; width:380px; background:var(--bg-2); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); padding:24px; }
+  .dlg { position:relative; width:380px; background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); padding:24px; }
   .dlg h5 { font:560 15px/1.4 var(--font-ui); color:var(--text-1); display:flex; align-items:center; gap:10px; }
   .dlg p { font:400 13px/1.6 var(--font-ui); color:var(--text-2); margin:10px 0 20px; }
   .dlg .acts { display:flex; gap:10px; justify-content:flex-end; align-items:center; }
-  .menu { width:230px; background:var(--bg-2); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); padding:6px; position:relative; }
+  .menu { width:230px; background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); padding:6px; position:relative; }
   .menu .mi { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:var(--r-sm);
     font:500 12.5px/1.4 var(--font-ui); color:var(--text-2); }
   .menu .mi:hover, .menu .mi.on { background:var(--bg-3); color:var(--text-1); }
@@ -168,7 +168,7 @@
   .menu .dv { height:1px; background:var(--border); margin:5px 6px; }
 
   /* table section */
-  .tblx { width:100%; border-collapse:collapse; background:var(--bg-1); border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--inset); }
+  .tblx { width:100%; border-collapse:collapse; background:var(--bg-1); border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--inset), var(--shadow-card); }
   .tblx thead th { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3);
     text-align:left; padding:11px 16px; border-bottom:1px solid var(--border-strong); background:var(--bg-1); }
   .tblx td { padding:11px 16px; border-bottom:1px solid var(--border); font:400 13px/1.5 var(--font-ui); color:var(--text-2); }
@@ -183,7 +183,7 @@
 
   /* data entry */
   .fgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
-  .fcard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-6); display:flex; flex-direction:column; gap:10px; }
+  .fcard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-6); display:flex; flex-direction:column; gap:10px; }
   .flab { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); }
   .frule { font:400 11.5px/1.55 var(--font-ui); color:var(--text-3); margin-top:auto; }
   .inp { width:100%; background:var(--bg-0); border:1px solid var(--border); border-radius:var(--r-md); color:var(--text-1);
@@ -214,7 +214,7 @@
   .selx { display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--bg-0); border:1px solid var(--border);
     border-radius:var(--r-md); color:var(--text-1); font:400 13px/1.4 var(--font-ui); padding:9px 12px; cursor:pointer; }
   .selx .car2 { font-size:9px; color:var(--text-3); }
-  .selmenu { margin-top:6px; background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:5px; }
+  .selmenu { margin-top:6px; background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:5px; }
   .selmenu div { font:400 12.5px/1.4 var(--font-ui); color:var(--text-2); padding:6px 9px; border-radius:var(--r-sm); }
   .selmenu div.on { background:var(--intent-wash); color:var(--text-1); }
   .lrow { display:flex; align-items:center; gap:10px; padding:7px 10px; background:var(--bg-0); border:1px solid var(--border); border-radius:var(--r-md); font:400 12.5px/1.4 var(--font-ui); color:var(--text-1); }
@@ -225,7 +225,7 @@
   @media (max-width:880px){ .fgrid{grid-template-columns:1fr;} }
 
   /* components */
-  .comp-stage { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-12);
+  .comp-stage { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-12);
     display:flex; flex-direction:column; gap:var(--space-8); }
   .row { display:flex; gap:var(--space-4); align-items:center; flex-wrap:wrap; }
   .btn { font:560 13px/1 var(--font-ui); padding:9px 16px; border-radius:var(--r-md); border:none; cursor:pointer;
@@ -245,7 +245,7 @@
 
   /* principles */
   .princ { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); }
-  .pcard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-6); }
+  .pcard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-6); }
   .pcard b { font:560 14px/1.5 var(--font-ui); color:var(--text-1); display:block; margin-bottom:6px; }
   .pcard p { font:var(--text-small); color:var(--text-2); line-height:1.6; }
 
@@ -358,10 +358,10 @@
     <p class="sub">Four surfaces separated by single-digit value steps. Three text grays. One orange. If a screen needs more color than that, the screen is wrong.</p>
 
     <div class="ramp">
-      <div class="cell" style="background:#F6F6F4"><span class="nm">Canvas</span><span class="hx">#F6F6F4</span></div>
+      <div class="cell" style="background:#FFFFFF"><span class="nm">Canvas</span><span class="hx">#FFFFFF</span></div>
       <div class="cell" style="background:#FFFFFF"><span class="nm">Chrome</span><span class="hx">#FFFFFF</span></div>
-      <div class="cell" style="background:#FBFBFA"><span class="nm">Card</span><span class="hx">#FBFBFA</span></div>
-      <div class="cell" style="background:#EEEEEB"><span class="nm">Raised</span><span class="hx">#EEEEEB</span></div>
+      <div class="cell" style="background:#F7F8FA"><span class="nm">Card</span><span class="hx">#FCFCFD</span></div>
+      <div class="cell" style="background:#F3F4F6"><span class="nm">Raised</span><span class="hx">#E7E9ED</span></div>
     </div>
     <div class="accent-row">
       <div class="cell ramp-cell" style="background:var(--intent); border-radius:var(--r-md); padding:var(--space-4); height:120px; display:flex; flex-direction:column; justify-content:flex-end">
@@ -553,12 +553,12 @@
         <div class="icanvas" style="height:260px">
           <svg width="340" height="220" viewBox="0 0 480 330" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path d="M90 240 L240 165 L390 240 L240 315 Z" stroke="#E3E4E0" stroke-width="1.5"/>
-            <path d="M160 215 L240 175 L320 215 L240 255 Z" fill="#EEEEEB" stroke="#CFD1CC" stroke-width="1.5"/>
+            <path d="M160 215 L240 175 L320 215 L240 255 Z" fill="#E7E9ED" stroke="#CFD1CC" stroke-width="1.5"/>
             <path d="M160 215 L240 255 L240 272 L160 232 Z" fill="#101214" stroke="#CFD1CC" stroke-width="1.5"/>
-            <path d="M320 215 L240 255 L240 272 L320 232 Z" fill="#FBFBFA" stroke="#CFD1CC" stroke-width="1.5"/>
+            <path d="M320 215 L240 255 L240 272 L320 232 Z" fill="#FCFCFD" stroke="#CFD1CC" stroke-width="1.5"/>
             <path d="M172 162 L240 128 L308 162 L240 196 Z" fill="rgba(232,80,28,0.13)" stroke="#E8501C" stroke-width="1.5"/>
-            <path d="M172 162 L240 196 L240 211 L172 177 Z" fill="#FBFBFA" stroke="#E8501C" stroke-width="1.2" stroke-opacity="0.5"/>
-            <path d="M308 162 L240 196 L240 211 L308 177 Z" fill="#FBFBFA" stroke="#E8501C" stroke-width="1.2" stroke-opacity="0.5"/>
+            <path d="M172 162 L240 196 L240 211 L172 177 Z" fill="#FCFCFD" stroke="#E8501C" stroke-width="1.2" stroke-opacity="0.5"/>
+            <path d="M308 162 L240 196 L240 211 L308 177 Z" fill="#FCFCFD" stroke="#E8501C" stroke-width="1.2" stroke-opacity="0.5"/>
             <path d="M184 112 L240 84 L296 112 L240 140 Z" stroke="#CFD1CC" stroke-width="1.3" stroke-dasharray="4 6"/>
             <path d="M198 40 L240 19 L282 40 L240 61 Z" stroke="#90949B" stroke-width="1.2" stroke-dasharray="4 5"/>
             <circle cx="240" cy="40" r="3.6" fill="#E8501C"/>
@@ -579,19 +579,19 @@
         <div class="icanvas" style="height:260px">
           <svg width="380" height="220" viewBox="0 0 560 320" fill="none">
             <!-- ground band -->
-            <rect x="30" y="288" width="500" height="7" rx="3.5" fill="#EEEEEB"/>
+            <rect x="30" y="288" width="500" height="7" rx="3.5" fill="#E7E9ED"/>
             <!-- tower silhouettes -->
-            <rect x="220" y="84" width="150" height="204" fill="#EEEEEB"/>
+            <rect x="220" y="84" width="150" height="204" fill="#E7E9ED"/>
             <rect x="220" y="84" width="150" height="14" fill="#E3E4E0"/>
             <rect x="252" y="120" width="22" height="10" fill="#101214"/><rect x="296" y="120" width="22" height="10" fill="#101214"/>
             <rect x="252" y="156" width="22" height="10" fill="#101214"/><rect x="296" y="156" width="22" height="10" fill="#101214"/>
             <rect x="252" y="192" width="22" height="10" fill="#101214"/><rect x="296" y="192" width="22" height="10" fill="#101214"/>
-            <rect x="110" y="190" width="84" height="98" fill="#FBFBFA"/>
+            <rect x="110" y="190" width="84" height="98" fill="#FCFCFD"/>
             <rect x="110" y="190" width="84" height="10" fill="#1F2125"/>
             <!-- crane silhouette -->
             <rect x="404" y="58" width="11" height="230" fill="#E3E4E0"/>
             <rect x="318" y="52" width="190" height="9" rx="4" fill="#E3E4E0"/>
-            <rect x="488" y="61" width="22" height="18" fill="#EEEEEB"/>
+            <rect x="488" y="61" width="22" height="18" fill="#E7E9ED"/>
             <rect x="346" y="61" width="3" height="48" fill="#CFD1CC"/>
             <rect x="338" y="109" width="19" height="16" fill="#E8501C"/>
             <!-- the surveyor's cap, foreground -->
@@ -619,23 +619,23 @@
             <path d="M90 250 L240 175 L390 250 L240 325 Z" fill="#101214"/>
             <!-- slab 1 -->
             <path d="M160 222 L240 182 L320 222 L240 262 Z" fill="#E3E4E0"/>
-            <path d="M160 222 L240 262 L240 280 L160 240 Z" fill="#FBFBFA"/>
-            <path d="M320 222 L240 262 L240 280 L320 240 Z" fill="#EEEEEB"/>
+            <path d="M160 222 L240 262 L240 280 L160 240 Z" fill="#FCFCFD"/>
+            <path d="M320 222 L240 262 L240 280 L320 240 Z" fill="#E7E9ED"/>
             <!-- slab 2: held, solid orange -->
             <path d="M172 168 L240 134 L308 168 L240 202 Z" fill="#E8501C"/>
             <path d="M172 168 L240 202 L240 218 L172 184 Z" fill="#C8431A"/>
             <path d="M308 168 L240 202 L240 218 L308 184 Z" fill="#E04E1F"/>
             <!-- slab 3 -->
             <path d="M184 118 L240 90 L296 118 L240 146 Z" fill="#E3E4E0"/>
-            <path d="M184 118 L240 146 L240 161 L184 133 Z" fill="#FBFBFA"/>
-            <path d="M296 118 L240 146 L240 161 L296 133 Z" fill="#EEEEEB"/>
+            <path d="M184 118 L240 146 L240 161 L184 133 Z" fill="#FCFCFD"/>
+            <path d="M296 118 L240 146 L240 161 L296 133 Z" fill="#E7E9ED"/>
             <!-- data plane chip -->
-            <path d="M204 42 L240 24 L276 42 L240 60 Z" fill="#EEEEEB"/>
+            <path d="M204 42 L240 24 L276 42 L240 60 Z" fill="#E7E9ED"/>
             <circle cx="240" cy="42" r="3.6" fill="#FF5C26"/>
             <!-- material cubes -->
             <path d="M118 270 L142 258 L166 270 L142 282 Z" fill="#E3E4E0"/>
-            <path d="M118 270 L142 282 L142 296 L118 284 Z" fill="#FBFBFA"/>
-            <path d="M166 270 L142 282 L142 296 L166 284 Z" fill="#EEEEEB"/>
+            <path d="M118 270 L142 282 L142 296 L118 284 Z" fill="#FCFCFD"/>
+            <path d="M166 270 L142 282 L142 296 L166 284 Z" fill="#E7E9ED"/>
           </svg>
         </div>
         <div class="itxt">

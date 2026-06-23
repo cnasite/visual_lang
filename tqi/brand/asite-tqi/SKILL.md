@@ -52,11 +52,13 @@ description: >
 
 | Group | Token | Value |
 |---|---|---|
-| surface | bg-0 / bg-1 / bg-2 / bg-3 | `#F6F6F4` / `#FFFFFF` / `#FBFBFA` / `#EEEEEB` |
+| surface | bg-0 / bg-1 / bg-2 / bg-3 | `#FCFCFD` / `#FFFFFF` / `#F7F8FA` / `#F3F4F6` |
 | border | border / border-strong | `rgba(22,24,28,.10)` / `rgba(22,24,28,.18)` |
 | text | text-1 / text-2 / text-3 | `#16181C` / `#5A5F66` / `#90949B` |
 | intent | intent / intent-bright / intent-wash | `#E8501C` / `#FF5C26` / `rgba(232,80,28,.10)` |
 | status | done / progress / blocked / review / backlog | `#2E9E68` / `#B98A1D` / `#D8504F` / `#5C84A0` / `#90949B` |
+
+**Surfaces in light — grey shell, white cards.** The **app shell / canvas is light grey** (`bg-0` `#FCFCFD`); **cards and chrome are white** (`bg-1` `#FFFFFF`) and lift off the grey with a *soft shadow* (`--shadow-card`) + 1px hairline — depth from light + borders. **Grey deepens for surfaces nested ON white** (`bg-2` `#F7F8FA`, `bg-3` `#F3F4F6`): recessed wells, inputs, nested stages, hover/active fills, secondary panels. Cards are **never grey** — a grey card on a grey shell disappears; flip any `var(--bg-2)` card surface to `var(--bg-1)` in light. Floating overlays (dialogs, menus, popovers, the AI panel) are **white + shadow** (raised). In dark, the ramp ascends to light as usual (cards `bg-2`).
 
 ## Type scale
 
@@ -79,7 +81,7 @@ Radius `6 / 8 / 12 / 16`. Space `4 8 12 16 24 32 48 64 96`. Motion: ease `cubic-
 .btn-primary{ background:var(--intent); color:#fff; font:560 13px/1 var(--font-ui); padding:9px 16px; border-radius:var(--r-md); border:0; }
 .btn-primary:hover{ background:var(--intent-bright); }
 .btn-secondary{ background:var(--bg-3); color:var(--text-1); box-shadow:var(--inset); border-radius:var(--r-md); padding:9px 16px; }
-.card{ background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-6); }
+.card{ background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-6); } /* dark: bg-2. LIGHT: cards are white — [data-theme="light"] .card{ background:var(--bg-1); } */
 .status{ display:inline-flex; align-items:center; gap:8px; color:var(--text-1); }   /* + 8px dot, never a filled pill */
 .input:focus{ border-color:var(--intent); box-shadow:0 0 0 3px var(--intent-wash); } /* focus ring = the one accent */
 .callout{ background:var(--bg-2); box-shadow:var(--inset); border-radius:var(--r-md); padding:14px 16px; } /* plain card; intent only on a small diamond */

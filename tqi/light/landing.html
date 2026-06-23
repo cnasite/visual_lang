@@ -87,7 +87,7 @@
 
   /* features */
   .feat { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); margin-top:40px; }
-  .fcard { position:relative; background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-6); }
+  .fcard { position:relative; background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-6); }
   .fcard.flag { background:var(--bg-2); }
   .fcard .cross { position:absolute; top:18px; right:18px; width:18px; height:18px; }
   .fcard .cross::before, .fcard .cross::after { content:""; position:absolute; background:var(--intent); }
@@ -187,7 +187,7 @@
 
   /* numbers */
   .nums { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-4); margin-top:40px; }
-  .num { padding:var(--space-6); background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); }
+  .num { padding:var(--space-6); background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); }
   .num.hot { background:var(--intent-wash); box-shadow:var(--inset), 0 0 0 1px rgba(232,80,28,0.3); }
   .num .v { font:590 34px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--text-1); }
   .num .l { font:400 12px/1.6 var(--font-ui); color:var(--text-2); margin-top:10px; }
@@ -195,7 +195,7 @@
 
   /* case studies */
   .cases { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); margin-top:40px; }
-  .case { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); overflow:hidden; position:relative; }
+  .case { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); overflow:hidden; position:relative; }
   .case .tag { font:500 10px/1 var(--font-mono); letter-spacing:0.12em; color:var(--text-3); }
   .case h3 { font:560 19px/1.35 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); margin:14px 0 10px; }
   .case p { font:400 13px/1.7 var(--font-ui); color:var(--text-2); }
@@ -205,7 +205,7 @@
 
   /* security band */
   .sec-band { display:flex; align-items:center; gap:var(--space-8); background:var(--bg-1); border-radius:var(--r-lg);
-    box-shadow:var(--inset); padding:var(--space-8); margin-top:40px; }
+    box-shadow:var(--inset), var(--shadow-card); padding:var(--space-8); margin-top:40px; }
   .sec-band .shield { flex:none; width:54px; height:60px; }
   .sec-band b { font:560 16px/1.45 var(--font-ui); color:var(--text-1); display:block; }
   .sec-band p { font:400 12.5px/1.6 var(--font-ui); color:var(--text-2); margin-top:6px; max-width:520px; }
@@ -341,10 +341,10 @@
       <!-- Filled Isometry: the federated scene — solid slabs from the ramp, the clash duct owns the orange -->
       <svg viewBox="0 0 920 440" fill="none">
         <!-- ground platforms -->
-        <polygon points="330,210 540,315 330,420 120,315" fill="#EEEEEB"/>
+        <polygon points="330,210 540,315 330,420 120,315" fill="#E7E9ED"/>
         <polygon points="330,420 540,315 540,327 330,432" fill="#DBDCD8"/>
         <polygon points="330,420 120,315 120,327 330,432" fill="#E3E4E0"/>
-        <polygon points="700,250 830,315 700,380 570,315" fill="#EEEEEB"/>
+        <polygon points="700,250 830,315 700,380 570,315" fill="#E7E9ED"/>
         <polygon points="700,380 830,315 830,325 700,390" fill="#DBDCD8"/>
         <polygon points="700,380 570,315 570,325 700,390" fill="#E3E4E0"/>
 

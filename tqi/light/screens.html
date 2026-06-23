@@ -60,7 +60,7 @@
   /* Asite Intelligence blob */
   .ai-blob { position:absolute; right:18px; bottom:18px; z-index:8; display:flex; align-items:center; gap:10px; cursor:pointer; }
   .ai-tag { display:flex; align-items:center; gap:8px; font:500 12px/1 var(--font-ui); color:var(--text-1);
-    background:var(--bg-2); box-shadow:var(--inset), var(--shadow-card); border-radius:999px; padding:8px 12px;
+    background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); border-radius:999px; padding:8px 12px;
     opacity:0; transform:translateX(6px); transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease); pointer-events:none; }
   .ai-blob:hover .ai-tag { opacity:1; transform:none; }
   .ai-orb { width:40px; height:40px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
@@ -72,7 +72,7 @@
   @keyframes ai-breathe { 0%,100% { opacity:0.45; } 50% { opacity:1; } }
 
   .ai-panel { position:absolute; right:0; bottom:54px; width:372px; text-align:left; cursor:default;
-    background:var(--bg-2); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop);
+    background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop);
     opacity:0; visibility:hidden; transform:translateY(8px);
     transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease), visibility var(--t-base); }
   .ai-blob.open .ai-panel { opacity:1; visibility:visible; transform:none; }
@@ -86,7 +86,7 @@
   .ai-q { align-self:flex-end; max-width:85%; background:var(--bg-3); box-shadow:var(--inset); border-radius:12px 12px 4px 12px;
     padding:8px 12px; font:400 12.5px/1.5 var(--font-ui); color:var(--text-1); }
   .ai-a { font:400 12.5px/1.6 var(--font-ui); color:var(--text-2); }
-  .ai-rd { display:flex; align-items:center; gap:8px; background:var(--bg-1); box-shadow:var(--inset); border-radius:var(--r-md);
+  .ai-rd { display:flex; align-items:center; gap:8px; background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); border-radius:var(--r-md);
     padding:8px 10px; font:400 12px/1.4 var(--font-ui); color:var(--text-2); }
   .ai-rd .rf2 { font:400 11px/1 var(--font-mono); color:var(--text-3); }
   .ai-rd .tm2 { margin-left:auto; font:400 9.5px/1 var(--font-mono); color:var(--text-3); }
@@ -126,7 +126,7 @@
   .invrow .who { font:500 12.5px/1.4 var(--font-ui); color:var(--text-1); flex:1; }
   .invrow .role { font:500 11.5px/1 var(--font-ui); color:var(--text-2); background:var(--bg-3); box-shadow:var(--inset); border-radius:var(--r-sm); padding:5px 9px; }
   .tmpl { display:flex; flex-direction:column; gap:8px; }
-  .tmpl .tc { display:flex; gap:12px; align-items:center; padding:13px 14px; border-radius:var(--r-md); background:var(--bg-2); box-shadow:var(--inset); cursor:pointer; }
+  .tmpl .tc { display:flex; gap:12px; align-items:center; padding:13px 14px; border-radius:var(--r-md); background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); cursor:pointer; }
   .tmpl .tc.on { background:var(--intent-wash); box-shadow:var(--inset), 0 0 0 1px rgba(232,80,28,0.4); }
   .tmpl .tc b { font:560 13px/1.4 var(--font-ui); color:var(--text-1); display:block; }
   .tmpl .tc span { font:400 11.5px/1.5 var(--font-ui); color:var(--text-3); }
@@ -140,7 +140,7 @@
   .heroband .gstats .n { font:590 22px/1.1 var(--font-ui); color:var(--text-1); }
   .heroband .gstats .l { font:400 12px/1.5 var(--font-ui); color:var(--text-3); }
   .pjgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); padding:var(--space-6); }
-  .pj { background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-4); cursor:pointer; }
+  .pj { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-4); cursor:pointer; }
   .pj:hover { background:var(--bg-3); }
   .pj .nm { font:560 13.5px/1.4 var(--font-ui); color:var(--text-1); display:flex; align-items:center; gap:8px; }
   .pj .loc { font:400 11.5px/1.5 var(--font-ui); color:var(--text-3); margin-bottom:12px; }
@@ -149,7 +149,7 @@
   .pj .bar i.hot { background:var(--intent); }
   .pj .meta { display:flex; gap:10px; font:400 10.5px/1.4 var(--font-mono); color:var(--text-3); }
   .chgrid { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-4); padding:var(--space-6); }
-  .ch { background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-4); }
+  .ch { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-4); }
   .ch .lbl { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); margin-bottom:12px; display:flex; gap:8px; }
   .ch .lbl .v { margin-left:auto; font:500 11px/1.4 var(--font-mono); color:var(--text-1); text-transform:none; }
   .legend { display:flex; gap:14px; margin-top:10px; font:400 11px/1.4 var(--font-ui); color:var(--text-3); }
@@ -193,12 +193,12 @@
   .fchip.unf { color:var(--intent-bright); background:var(--intent-wash); box-shadow:none; }
   .mread { padding:var(--space-6); display:flex; flex-direction:column; gap:14px; min-width:0; }
   .mread h4 { font:560 16px/1.35 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); }
-  .msg { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset); padding:14px 16px; }
+  .msg { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:14px 16px; }
   .msg .mh { display:flex; align-items:center; gap:9px; font:560 12px/1.4 var(--font-ui); color:var(--text-1); margin-bottom:7px; }
   .msg .mh span { font:400 10px/1 var(--font-mono); color:var(--text-3); }
   .msg .mh .tm { margin-left:auto; }
   .msg p { font:400 12.5px/1.65 var(--font-ui); color:var(--text-2); }
-  .att { display:flex; align-items:center; gap:10px; background:var(--bg-2); box-shadow:var(--inset); border-radius:var(--r-md);
+  .att { display:flex; align-items:center; gap:10px; background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); border-radius:var(--r-md);
     padding:9px 12px; font:500 12px/1.4 var(--font-ui); color:var(--text-1); }
   .att .sz { font:400 10px/1 var(--font-mono); color:var(--text-3); }
   .att .fchip { margin-left:auto; }
@@ -253,7 +253,7 @@
   .dash-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:0; flex:1; }
   .qcol { border-right:1px solid var(--border); }
   .pcol { display:flex; flex-direction:column; gap:var(--space-4); padding:var(--space-6); }
-  .pcard2 { background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-4); }
+  .pcard2 { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-4); }
   .pcard2 .lbl { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); margin-bottom:10px; }
   .feed { display:flex; gap:10px; padding:7px 0; font:400 12.5px/1.5 var(--font-ui); color:var(--text-2); }
   .feed b { color:var(--text-1); font-weight:560; }
@@ -266,7 +266,7 @@
   /* files grid view */
   .fsec { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); padding:18px var(--space-6) 8px; }
   .fgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-3); padding:0 var(--space-6) var(--space-4); }
-  .fcard { background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-4); cursor:pointer; min-width:0; }
+  .fcard { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-4); cursor:pointer; min-width:0; }
   .fcard:hover { background:var(--bg-3); }
   .fcard.sel { background:var(--intent-wash); }
   .fcard b { display:block; font:560 12.5px/1.4 var(--font-ui); color:var(--text-1); margin-top:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -277,7 +277,7 @@
   .canvas-grid { display:grid; grid-template-columns:1fr 290px; flex:1; min-height:0; }
   .canvas { position:relative; background:var(--bg-0); display:flex; align-items:center; justify-content:center; padding:28px; }
   .sheet { background:#EFEFEC; border-radius:6px; box-shadow:0 12px 40px rgba(22,24,28,0.10); position:relative; }
-  .zoom { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:2px; background:var(--bg-2);
+  .zoom { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:2px; background:var(--bg-1);
     border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:3px; font:500 11px/1 var(--font-ui); color:var(--text-2); }
   .zoom span { padding:6px 10px; border-radius:6px; cursor:pointer; }
   .zoom span:hover { background:var(--bg-3); color:var(--text-1); }
@@ -285,7 +285,7 @@
     color:#fff; font:560 10px/22px var(--font-ui); text-align:center; box-shadow:0 4px 12px rgba(232,80,28,0.4); }
   .pin.muted { background:var(--bg-3); color:var(--text-2); box-shadow:var(--shadow-card); }
   .cpanel { background:var(--bg-1); border-left:1px solid var(--border); padding:var(--space-4); display:flex; flex-direction:column; gap:var(--space-3); overflow:hidden; }
-  .cmt { background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-3); }
+  .cmt { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-3); }
   .cmt.lit { box-shadow:var(--inset), 0 0 0 1px rgba(232,80,28,0.4); }
   .cmt .hd { display:flex; gap:8px; align-items:center; margin-bottom:6px; }
   .cmt .hd b { font:560 12px/1 var(--font-ui); color:var(--text-1); }
@@ -313,7 +313,7 @@
   .todo .bx.ck { background:var(--intent); position:relative; }
   .todo .bx.ck::after { content:"✓"; position:absolute; inset:0; color:#fff; font-size:10px; line-height:15px; text-align:center; }
   .todo .done { text-decoration:line-through; color:var(--text-3); }
-  .callout { display:flex; gap:12px; background:var(--bg-2); box-shadow:var(--inset); border-radius:var(--r-md);
+  .callout { display:flex; gap:12px; background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); border-radius:var(--r-md);
     padding:14px 16px; margin:14px 0; }
   .callout p { font:400 13.5px/1.6 var(--font-ui); color:var(--text-1); }
   .slash { display:flex; gap:10px; align-items:center; color:var(--text-3); font:400 14px/1.6 var(--font-ui);
@@ -355,7 +355,7 @@
   .palette-stage { position:relative; }
   .dim { position:absolute; inset:0; background:var(--bg-overlay); backdrop-filter:blur(2px); z-index:2; }
   .palette { position:absolute; z-index:3; left:50%; top:80px; transform:translateX(-50%); width:560px;
-    background:var(--bg-2); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); overflow:hidden; }
+    background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); overflow:hidden; }
   .palette .pin2 { display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid var(--border); }
   .palette input { background:none; border:none; outline:none; color:var(--text-1); font:400 14px/1 var(--font-ui); flex:1; }
   .palette .sec { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); padding:10px 16px 4px; }
@@ -535,9 +535,9 @@
           <!-- platform -->
           <path d="M80 268 L240 188 L400 268 L240 348 Z" stroke="#E3E4E0" stroke-width="1.5"/>
           <!-- slab 1: poured (workspace) -->
-          <path d="M150 248 L240 203 L330 248 L240 293 Z" fill="#EEEEEB" stroke="#CFD1CC" stroke-width="1.5"/>
+          <path d="M150 248 L240 203 L330 248 L240 293 Z" fill="#E7E9ED" stroke="#CFD1CC" stroke-width="1.5"/>
           <path d="M150 248 L240 293 L240 310 L150 265 Z" fill="#101214" stroke="#CFD1CC" stroke-width="1.5"/>
-          <path d="M330 248 L240 293 L240 310 L330 265 Z" fill="#FBFBFA" stroke="#CFD1CC" stroke-width="1.5"/>
+          <path d="M330 248 L240 293 L240 310 L330 265 Z" fill="#FCFCFD" stroke="#CFD1CC" stroke-width="1.5"/>
           <text x="346" y="252" font-family="JetBrains Mono, monospace" font-size="9" fill="#4CB782">✓ WORKSPACE</text>
           <!-- slab 2: next (active, orange) -->
           <path d="M163 196 L240 157.5 L317 196 L240 234.5 Z" fill="rgba(232,80,28,0.13)" stroke="#E8501C" stroke-width="1.5" stroke-dasharray="5 4"/>
@@ -555,9 +555,9 @@
           <!-- setting-out cross -->
           <g stroke="#E8501C" stroke-width="3.6"><line x1="124" y1="296" x2="144" y2="306"/><line x1="144" y1="296" x2="124" y2="306"/></g>
           <!-- material cube -->
-          <path d="M368 296 L390 285 L412 296 L390 307 Z" fill="#FBFBFA" stroke="#CFD1CC" stroke-width="1.2"/>
+          <path d="M368 296 L390 285 L412 296 L390 307 Z" fill="#FCFCFD" stroke="#CFD1CC" stroke-width="1.2"/>
           <path d="M368 296 L390 307 L390 320 L368 309 Z" fill="#101214" stroke="#CFD1CC" stroke-width="1.2"/>
-          <path d="M412 296 L390 307 L390 320 L412 309 Z" fill="#FBFBFA" stroke="#CFD1CC" stroke-width="1.2"/>
+          <path d="M412 296 L390 307 L390 320 L412 309 Z" fill="#FCFCFD" stroke="#CFD1CC" stroke-width="1.2"/>
         </svg>
       </div>
       <!-- setup checklist + quick actions -->
@@ -757,7 +757,7 @@
         <div class="ch">
           <div class="lbl">RFI response time — days <span class="v">median 1.8d ↓</span></div>
           <svg width="100%" height="120" viewBox="0 0 440 120" preserveAspectRatio="none">
-            <line x1="0" y1="30" x2="440" y2="30" stroke="#EEEEEB"/><line x1="0" y1="60" x2="440" y2="60" stroke="#EEEEEB"/><line x1="0" y1="90" x2="440" y2="90" stroke="#EEEEEB"/>
+            <line x1="0" y1="30" x2="440" y2="30" stroke="#E7E9ED"/><line x1="0" y1="60" x2="440" y2="60" stroke="#E7E9ED"/><line x1="0" y1="90" x2="440" y2="90" stroke="#E7E9ED"/>
             <polyline points="0,52 40,44 80,58 120,40 160,48 200,34 240,42 280,30 320,38 360,26 400,30 440,22" fill="none" stroke="#90949B" stroke-width="1.5"/>
             <polyline points="0,84 40,80 80,88 120,72 160,78 200,64 240,70 280,58 320,62 360,52 400,55 440,46" fill="none" stroke="#E8501C" stroke-width="1.5"/>
             <circle cx="440" cy="46" r="3" fill="#E8501C"/>
@@ -786,7 +786,7 @@
           <div class="lbl">Workflow distribution <span class="v">register health 98.4%</span></div>
           <div style="display:flex; align-items:center; gap:24px">
             <svg width="110" height="110" viewBox="0 0 110 110" class="ring">
-              <circle cx="55" cy="55" r="46" fill="none" stroke="#EEEEEB" stroke-width="11"/>
+              <circle cx="55" cy="55" r="46" fill="none" stroke="#E7E9ED" stroke-width="11"/>
               <circle cx="55" cy="55" r="46" fill="none" stroke="#CFD1CC" stroke-width="11" stroke-dasharray="173 289" stroke-linecap="round"/>
               <circle cx="55" cy="55" r="46" fill="none" stroke="#90949B" stroke-width="11" stroke-dasharray="72 289" stroke-dashoffset="-178" stroke-linecap="round"/>
               <circle cx="55" cy="55" r="46" fill="none" stroke="#E8501C" stroke-width="11" stroke-dasharray="14 289" stroke-dashoffset="-256" stroke-linecap="round"/>
@@ -802,8 +802,8 @@
         <div class="ch">
           <div class="lbl">Activity — 14 weeks <span class="v">peak Wed</span></div>
           <div class="heat">
-            <i style="background:#EEEEEB"></i><i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#BFC2BC"></i><i style="background:#CFD1CC"></i><i style="background:#EEEEEB"></i><i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#EEEEEB"></i><i style="background:#E3E4E0"></i>
-            <i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#BFC2BC"></i><i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#999D96"></i><i style="background:#BFC2BC"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#EEEEEB"></i>
+            <i style="background:#F3F4F6"></i><i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#BFC2BC"></i><i style="background:#CFD1CC"></i><i style="background:#F3F4F6"></i><i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#F3F4F6"></i><i style="background:#E3E4E0"></i>
+            <i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#BFC2BC"></i><i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#999D96"></i><i style="background:#BFC2BC"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#F3F4F6"></i>
             <i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#999D96"></i><i style="background:#ACB0A9"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#999D96"></i><i style="background:#E8501C"></i><i style="background:#ACB0A9"></i><i style="background:#BFC2BC"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i>
           </div>
           <div class="legend" style="margin-top:12px"><span><i style="background:#E3E4E0"></i>quiet</span><span><i style="background:#ACB0A9"></i>busy</span><span><i style="background:#E8501C"></i>record — 412m³ pour day</span></div>
@@ -920,15 +920,15 @@
           <ellipse cx="240" cy="300" rx="150" ry="22" fill="#000000" opacity="0.35"/>
           <path d="M90 254 L240 179 L390 254 L240 329 Z" fill="#101214"/>
           <path d="M160 226 L240 186 L320 226 L240 266 Z" fill="#E3E4E0"/>
-          <path d="M160 226 L240 266 L240 284 L160 244 Z" fill="#FBFBFA"/>
-          <path d="M320 226 L240 266 L240 284 L320 244 Z" fill="#EEEEEB"/>
+          <path d="M160 226 L240 266 L240 284 L160 244 Z" fill="#FCFCFD"/>
+          <path d="M320 226 L240 266 L240 284 L320 244 Z" fill="#E7E9ED"/>
           <path d="M172 172 L240 138 L308 172 L240 206 Z" fill="#E8501C"/>
           <path d="M172 172 L240 206 L240 222 L172 188 Z" fill="#C8431A"/>
           <path d="M308 172 L240 206 L240 222 L308 188 Z" fill="#E04E1F"/>
           <path d="M184 122 L240 94 L296 122 L240 150 Z" fill="#E3E4E0"/>
-          <path d="M184 122 L240 150 L240 165 L184 137 Z" fill="#FBFBFA"/>
-          <path d="M296 122 L240 150 L240 165 L296 137 Z" fill="#EEEEEB"/>
-          <path d="M204 46 L240 28 L276 46 L240 64 Z" fill="#EEEEEB"/>
+          <path d="M184 122 L240 150 L240 165 L184 137 Z" fill="#FCFCFD"/>
+          <path d="M296 122 L240 150 L240 165 L296 137 Z" fill="#E7E9ED"/>
+          <path d="M204 46 L240 28 L276 46 L240 64 Z" fill="#E7E9ED"/>
           <circle cx="240" cy="46" r="3.6" fill="#FF5C26"/>
         </svg>
       </div>
@@ -996,16 +996,16 @@
           </div>
         </div>
         <svg style="position:absolute; right:24px; bottom:0" width="440" height="150" viewBox="0 0 560 190" fill="none">
-          <rect x="20" y="170" width="520" height="7" rx="3.5" fill="#EEEEEB"/>
-          <rect x="250" y="40" width="120" height="130" fill="#EEEEEB"/>
+          <rect x="20" y="170" width="520" height="7" rx="3.5" fill="#E7E9ED"/>
+          <rect x="250" y="40" width="120" height="130" fill="#E7E9ED"/>
           <rect x="250" y="40" width="120" height="11" fill="#E3E4E0"/>
           <rect x="274" y="66" width="18" height="8" fill="#101214"/><rect x="312" y="66" width="18" height="8" fill="#101214"/>
           <rect x="274" y="94" width="18" height="8" fill="#101214"/><rect x="312" y="94" width="18" height="8" fill="#101214"/>
           <rect x="274" y="122" width="18" height="8" fill="#101214"/><rect x="312" y="122" width="18" height="8" fill="#101214"/>
-          <rect x="150" y="110" width="70" height="60" fill="#FBFBFA"/>
+          <rect x="150" y="110" width="70" height="60" fill="#FCFCFD"/>
           <rect x="410" y="26" width="9" height="144" fill="#E3E4E0"/>
           <rect x="346" y="21" width="150" height="8" rx="4" fill="#E3E4E0"/>
-          <rect x="478" y="29" width="18" height="14" fill="#EEEEEB"/>
+          <rect x="478" y="29" width="18" height="14" fill="#E7E9ED"/>
           <rect x="368" y="29" width="3" height="34" fill="#CFD1CC"/>
           <rect x="361" y="63" width="16" height="13" fill="#FF5C26"/>
           <path d="M62 152 Q62 124 90 124 Q118 124 118 152 Z" fill="#E8501C"/>
@@ -1027,9 +1027,9 @@
           <div class="pcard2">
             <div class="lbl">Site photos — today</div>
             <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px">
-              <div style="aspect-ratio:1; border-radius:6px; background:#EEEEEB; display:flex; align-items:center; justify-content:center"><svg width="22" height="22" viewBox="0 0 20 20" stroke="#90949B" stroke-width="1.5" fill="none"><rect x="3" y="5" width="14" height="11" rx="2"/><circle cx="10" cy="10.5" r="3"/></svg></div>
-              <div style="aspect-ratio:1; border-radius:6px; background:#EEEEEB"></div>
-              <div style="aspect-ratio:1; border-radius:6px; background:#FBFBFA; display:flex; align-items:center; justify-content:center; font:500 11px/1 var(--font-ui); color:var(--text-3)">+9</div>
+              <div style="aspect-ratio:1; border-radius:6px; background:#F3F4F6; display:flex; align-items:center; justify-content:center"><svg width="22" height="22" viewBox="0 0 20 20" stroke="#90949B" stroke-width="1.5" fill="none"><rect x="3" y="5" width="14" height="11" rx="2"/><circle cx="10" cy="10.5" r="3"/></svg></div>
+              <div style="aspect-ratio:1; border-radius:6px; background:#F3F4F6"></div>
+              <div style="aspect-ratio:1; border-radius:6px; background:#F7F8FA; display:flex; align-items:center; justify-content:center; font:500 11px/1 var(--font-ui); color:var(--text-3)">+9</div>
             </div>
           </div>
           <div class="pcard2" style="flex:1">
@@ -1090,10 +1090,10 @@
 
       <div class="fsec">Folders</div>
       <div class="fgrid">
-        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#EEEEEB" stroke="#90949B" stroke-width="1.2"/></svg><b>Civil</b><div class="meta">64 files · 2 awaiting</div></div>
-        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#EEEEEB" stroke="#90949B" stroke-width="1.2"/></svg><b>Architecture</b><div class="meta">41 files</div></div>
-        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#EEEEEB" stroke="#E8501C" stroke-width="1.2"/></svg><b>Structure</b><div class="meta">88 files · <span style="color:var(--intent-bright)">1 blocked RFI</span></div></div>
-        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#EEEEEB" stroke="#90949B" stroke-width="1.2"/></svg><b>Interior Design</b><div class="meta">37 files</div></div>
+        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#E7E9ED" stroke="#90949B" stroke-width="1.2"/></svg><b>Civil</b><div class="meta">64 files · 2 awaiting</div></div>
+        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#E7E9ED" stroke="#90949B" stroke-width="1.2"/></svg><b>Architecture</b><div class="meta">41 files</div></div>
+        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#E7E9ED" stroke="#E8501C" stroke-width="1.2"/></svg><b>Structure</b><div class="meta">88 files · <span style="color:var(--intent-bright)">1 blocked RFI</span></div></div>
+        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#E7E9ED" stroke="#90949B" stroke-width="1.2"/></svg><b>Interior Design</b><div class="meta">37 files</div></div>
       </div>
 
       <div class="fsec">Files — Civil</div>
