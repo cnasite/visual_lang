@@ -123,3 +123,7 @@
 .error-state .ic { color:var(--st-blocked); flex:none; width:18px; height:18px; margin-top:1px; }
 .error-state .h { font:var(--text-small); color:var(--text-1); }
 .error-state .d { font:var(--text-small); color:var(--text-3); margin-top:3px; }
+
+/* ---- Light theme: the AI send button follows ink-primary ---- */
+[data-theme="light"] .ai-entry .go { background:var(--text-1); }
+[data-theme="light"] .ai-entry .go:hover { background:#000; }

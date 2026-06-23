@@ -39,7 +39,8 @@ tqi/brand/
 
 ## The rules that define the brand
 
-1. **Orange is the only accent** — the single brand hue, used with restraint to lead the eye; never wallpaper, never a lone dot. Status and banners are functional, not accents.
+1. **Orange is the only accent** — the single brand hue, used with restraint; never wallpaper. Status and banners are functional, not accents.
+2. **Primary action is theme-specific** — in **dark** it's filled orange; in **light** it's **ink** (`#16181C`) and orange becomes the accent only (focus, links, selection, the live AI signal). No large orange fills in light.
 2. **Depth from borders + light**, never competing fills.
 3. **Status is an 8px dot + text** — no filled pills.
 4. **Cornerstone for hero/slide titles only**; Inter for everything; JetBrains Mono for figures.

@@ -19,7 +19,8 @@ description: >
 
 ## Non-negotiable rules
 
-- **Orange is the only accent.** Survey Orange is the sole brand accent hue — no other decorative colours. Use it with restraint to lead the eye (primary action, key focus, the live element); never wallpaper, never a lone dot. Status and banners are *functional* colours, not accents.
+- **Orange is the only accent.** Survey Orange is the sole brand accent hue — no other decorative colours. Use it with restraint; never wallpaper, never a lone dot. Status and banners are *functional* colours, not accents.
+- **Primary action colour is theme-specific.** In **dark**, the primary action is filled Survey Orange. In **light**, the primary action is **ink** (`text-1`, `#16181C`) and orange is the accent only — focus, links, selection washes, status, and the live AI signal (orb, spark, run pulse, caret). No large orange fills in light (the marketing CTA band is an ink field with the button as the orange accent).
 - **Depth from borders + light, never competing fills.** Surfaces sit close in value; separation is a 1px inset hairline + soft shadow.
 - **Hierarchy by value, not weight alone.** Use the three text steps.
 - **Status is an 8px dot + plain text, never a filled pill.**

@@ -189,3 +189,7 @@
 
 /* ---- reduced motion ---- */
 @media (prefers-reduced-motion: reduce) { .tqi *, .btn, .input, .switch .track, .switch .track::after { transition:none !important; } }
+
+/* ---- Light theme: primary actions are INK, orange is the accent ---- */
+[data-theme="light"] .btn-primary { background:var(--text-1); color:#fff; }
+[data-theme="light"] .btn-primary:hover { background:#000; box-shadow:none; }

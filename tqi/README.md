@@ -63,7 +63,7 @@ asite-tqi/
 
 ## The five rules (full detail in `brand/`)
 
-1. **Orange is the only accent** — used with restraint to lead the eye; never wallpaper. Status + banners are functional colours, not accents.
+1. **Orange is the only accent** — used with restraint; never wallpaper. Status + banners are functional colours, not accents. **Primary action is theme-specific:** filled orange in dark, **ink** in light (orange becomes the accent only).
 2. **Depth from borders + light**, never competing fills.
 3. **Status is an 8px dot + text** — no filled pills.
 4. **Cornerstone for hero/slide titles only**; Inter for everything; JetBrains Mono for figures.

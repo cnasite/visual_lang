@@ -356,6 +356,20 @@
   .themeswitch a, .themeswitch span { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:999px; color:var(--text-3); text-decoration:none; }
   .themeswitch .ts-on { background:var(--intent); color:#fff; }
   .themeswitch a:hover { color:var(--text-1); }
+
+  /* ===== Light theme: INK primary, ORANGE accent =====
+     Primary actions are ink (#16181C). Survey Orange is the accent only —
+     focus, links, selection washes, status, and the live AI signal
+     (orb, spark, run pulse, caret). No large orange fills. */
+  .btn-primary { background:var(--text-1) !important; color:#fff !important; }
+  .btn-primary:hover { background:#000 !important; box-shadow:none !important; }
+  .ai-entry .go, .sc-input .go { background:var(--text-1) !important; }
+  .ai-entry .go:hover, .sc-input .go:hover { background:#000 !important; }
+  .ctafield { background:var(--text-1) !important; }
+  .ctafield h2 { color:#fff !important; }
+  .ctafield p { color:rgba(255,255,255,0.82) !important; }
+  .ctafield .mn { color:rgba(255,255,255,0.55) !important; }
+  .ctafield .btn-ink { background:var(--intent) !important; color:#fff !important; }
 </style>
 </head>
 <body>
