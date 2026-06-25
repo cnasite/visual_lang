@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — AI Hub (v4.0)</title>
+<meta name="description" content="The Asite Intelligence layer — the aqua spark and orb, how it behaves, its states, and how it speaks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);font-weight:300;font-size:15px;line-height:1.6;background:var(--navy);color:var(--text-2);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:rgba(51,199,183,.3);color:#fff}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1100px;margin:0 auto;padding:0 2.5rem}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;height:56px;background:rgba(13,39,69,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-soft)}
+nav .wrap{display:flex;align-items:center;height:56px;gap:1.5rem}
+nav img{height:24px}
+.npills{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+.np{font-family:var(--font-mono);font-size:11px;letter-spacing:.5px;color:var(--text-3);padding:6px 11px;border-radius:20px;transition:.15s}
+.np:hover{color:#fff;background:rgba(255,255,255,.06)}.np.on{color:#fff;background:rgba(255,255,255,.1)}
+
+/* labels */
+.ey{font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--aqua);display:inline-flex;align-items:center;gap:10px}
+.ey::before{content:"";width:30px;height:1px;background:var(--aqua)}
+.ey.red{color:var(--red)}.ey.red::before{background:var(--red)}
+.mn{font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3)}
+
+/* orb */
+.orb{border-radius:50%;display:inline-grid;place-items:center;color:#fff;
+  background:radial-gradient(120% 120% at 30% 20%,#7fe9dc,var(--aqua) 58%,#1f9e8d);
+  box-shadow:0 0 0 1px rgba(51,199,183,.4),0 0 28px rgba(51,199,183,.45)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 1px rgba(51,199,183,.4),0 0 22px rgba(51,199,183,.35)}50%{box-shadow:0 0 0 1px rgba(51,199,183,.6),0 0 40px rgba(51,199,183,.6)}}
+.orb.live{animation:pulse 2.4s var(--ease) infinite}
+
+/* hero */
+.hero{padding:7rem 0 5rem;border-bottom:1px solid var(--border-soft);position:relative;overflow:hidden}
+.hero .glow{position:absolute;width:640px;height:640px;right:-160px;top:-200px;border-radius:50%;background:radial-gradient(circle,rgba(51,199,183,.16),transparent 60%);pointer-events:none}
+.hero .wrap{position:relative;z-index:2;display:flex;align-items:center;gap:3rem;flex-wrap:wrap}
+.hero .copy{flex:1;min-width:300px}
+.hero h1{font-weight:800;font-size:clamp(2.6rem,5.5vw,4.4rem);line-height:1;letter-spacing:-2px;color:#fff;margin:1.6rem 0 0}
+.hero h1 .a{color:var(--aqua)}
+.hero .sub{font-size:1.05rem;font-weight:300;color:var(--text-2);max-width:460px;line-height:1.75;margin-top:1.6rem}
+.hero .orbwrap{position:relative;flex:none}
+.hero .orb{width:180px;height:180px}
+.hero .ring{position:absolute;inset:-26px;border-radius:50%;border:1px solid rgba(51,199,183,.2)}
+.hero .ring2{position:absolute;inset:-52px;border-radius:50%;border:1px solid rgba(51,199,183,.1)}
+
+/* section */
+section{padding:6rem 0;border-bottom:1px solid var(--border-soft)}
+.sh{font-weight:700;font-size:clamp(1.6rem,3.2vw,2.3rem);letter-spacing:-.5px;line-height:1.12;color:#fff;max-width:660px;margin:1rem 0 0}
+.lead{font-size:.96rem;font-weight:300;color:var(--text-2);max-width:560px;line-height:1.8;margin-top:1rem}
+
+/* principle cards */
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:2.6rem}
+.pcard{padding:2.1rem;background:rgba(255,255,255,.03);border:1px solid var(--border-soft)}
+.pcard .ic{width:34px;height:34px;border-radius:9px;background:rgba(51,199,183,.12);border:1px solid rgba(51,199,183,.3);display:grid;place-items:center;margin-bottom:1.1rem}
+.pcard h4{font-weight:600;font-size:1rem;color:#fff;margin-bottom:.5rem}
+.pcard p{font-size:13px;font-weight:300;color:var(--text-2);line-height:1.7}
+
+/* spark + orb showcase */
+.orbrow{display:flex;align-items:center;gap:2.5rem;margin-top:2.6rem;flex-wrap:wrap;padding:2.4rem;background:rgba(255,255,255,.02);border:1px solid var(--border-soft)}
+.orbrow .demo{display:flex;align-items:center;gap:1.6rem}
+.spec{font-family:var(--font-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);margin-top:10px}
+
+/* capability set */
+.gset{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:2.6rem}
+.cap{padding:1.8rem;background:rgba(255,255,255,.03);border:1px solid var(--border-soft)}
+.cap b{display:block;font-weight:600;font-size:14px;color:#fff;margin-bottom:.4rem}
+.cap p{font-size:12.5px;font-weight:300;color:var(--text-2);line-height:1.65}
+.cap .t{font-family:var(--font-mono);font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--aqua);margin-top:.9rem;display:block}
+
+/* states */
+.states{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:2.6rem}
+.state{padding:1.8rem 1.4rem;background:rgba(255,255,255,.03);border:1px solid var(--border-soft);text-align:center}
+.state .o{margin:0 auto 1rem}
+.state .nm{font-weight:600;font-size:13px;color:#fff}
+.state .d{font-size:11px;font-weight:300;color:var(--text-3);margin-top:5px;line-height:1.5}
+.dots i{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--aqua);margin:0 2px;animation:bl 1.2s infinite}
+.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes bl{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* conversation */
+.chat{margin-top:2.6rem;max-width:620px;background:rgba(255,255,255,.02);border:1px solid var(--border-soft);border-radius:14px;overflow:hidden}
+.chat .hd{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border-soft)}
+.chat .hd b{font-weight:600;color:#fff;font-size:14px}
+.chat .body{padding:18px;display:flex;flex-direction:column;gap:14px}
+.bub{max-width:80%;padding:12px 15px;border-radius:12px;font-size:13.5px;line-height:1.6}
+.bub.me{align-self:flex-end;background:rgba(255,255,255,.06);color:#fff;border:1px solid var(--border-soft)}
+.bub.ai{align-self:flex-start;background:rgba(51,199,183,.1);border:1px solid rgba(51,199,183,.28);color:#fff}
+.cite{font-family:var(--font-mono);font-size:10px;color:var(--aqua);margin-top:8px;display:block}
+.chat .ph{display:flex;align-items:center;gap:10px;padding:13px 18px;border-top:1px solid var(--border-soft);color:var(--text-3);font-size:13px}
+.chat .ph .k{margin-left:auto;font-family:var(--font-mono);font-size:10px;border:1px solid var(--border-soft);border-radius:4px;padding:3px 6px}
+
+/* two ways */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:2.6rem}
+.way{padding:2rem;background:rgba(255,255,255,.03);border:1px solid var(--border-soft)}
+.way h4{font-weight:600;color:#fff;font-size:1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:9px}
+.way p{font-size:13px;font-weight:300;color:var(--text-2);line-height:1.7}
+.cmd{font-family:var(--font-mono);font-size:11px;color:var(--aqua);border:1px solid rgba(51,199,183,.3);border-radius:5px;padding:3px 7px}
+
+/* voice do/dont */
+.dd{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:2.6rem}
+.do{padding:1.6rem 1.8rem;border-left:3px solid var(--aqua);background:rgba(51,199,183,.05)}
+.dn{padding:1.6rem 1.8rem;border-left:3px solid var(--red);background:rgba(255,49,49,.04)}
+.dd .l{font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:.7rem;display:block}
+.do .l{color:var(--aqua)}.dn .l{color:var(--red)}
+.dd ul{list-style:none}.dd li{font-size:12.5px;font-weight:300;color:var(--text-2);line-height:1.9;padding-left:14px;position:relative}
+.dd li::before{content:"—";position:absolute;left:0;opacity:.3}
+
+footer{padding:3rem 0;background:rgba(255,255,255,.02)}
+footer .wrap{display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+footer img{height:24px}
+.fc{font-size:11px;color:var(--text-3)}
+.ft{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-faint)}
+
+@media(max-width:860px){.g3,.gset,.g2,.dd{grid-template-columns:1fr}.states{grid-template-columns:1fr 1fr}.npills{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="index.html" aria-label="Asite"><img src="assets/asite-logo-white.png" alt="Asite"></a>
+    <div class="npills">
+      <a class="np" href="index.html">Language</a>
+      <a class="np" href="screens.html">Product</a>
+      <a class="np" href="web.html">Website</a>
+      <a class="np" href="slides.html">Slides</a>
+      <a class="np on" href="ai-hub.html"><svg width="10" height="10" viewBox="0 0 24 24" fill="#33c7b7" style="vertical-align:-1px;margin-right:5px"><path d="M12 2.5 L13.9 9 L20.5 11 L13.9 13 L12 21 L10.1 13 L3.5 11 L10.1 9 Z"/></svg>AI Hub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div class="copy">
+      <span class="ey">Asite Intelligence</span>
+      <h1>One platform,<br>now <span class="a">intelligent.</span></h1>
+      <p class="sub">Secure AI built into the work — not bolted on. It reads from your register, cites what it uses, and never writes without you. One aqua spark, rationed like the red.</p>
+    </div>
+    <div class="orbwrap">
+      <span class="ring"></span><span class="ring2"></span>
+      <span class="orb live" style="width:180px;height:180px"><svg width="60" height="60" viewBox="0 0 24 24" fill="#fff" opacity=".95"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"/></svg></span>
+    </div>
+  </div>
+</header>
+
+<!-- 01 BEHAVIOUR -->
+<section>
+  <div class="wrap">
+    <span class="ey">01 — How it behaves</span>
+    <h2 class="sh">Trustworthy by construction.</h2>
+    <p class="lead">Three rules hold everywhere Intelligence appears. They are not settings — they are how it works.</p>
+    <div class="g3">
+      <div class="pcard"><div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#33c7b7" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div><h4>It cites the register</h4><p>Every answer points to the documents, RFIs, and figures it used. No source, no claim — you can always check the working.</p></div>
+      <div class="pcard"><div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#33c7b7" stroke-width="1.7"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zM5 11v1a7 7 0 0 0 14 0v-1M12 19v3"/></svg></div><h4>Nothing writes without you</h4><p>It drafts, suggests, and summarises — but the issue, the reply, and the approval are always a human decision.</p></div>
+      <div class="pcard"><div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#33c7b7" stroke-width="1.7"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"/></svg></div><h4>Rationed, like the signal</h4><p>The aqua spark appears only where intelligence genuinely helps. It never wallpapers the interface — restraint is the point.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 SPARK & ORB -->
+<section>
+  <div class="wrap">
+    <span class="ey">02 — The spark &amp; the orb</span>
+    <h2 class="sh">One mark for intelligence.</h2>
+    <p class="lead">The spark is the trigger — small, in labels and the ⌘I shortcut. The orb is presence — it appears when Intelligence is working or speaking. Both are aqua, always.</p>
+    <div class="orbrow">
+      <div class="demo">
+        <span class="orb" style="width:64px;height:64px"><svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"/></svg></span>
+        <div><div style="color:#fff;font-weight:600;font-size:14px">The orb</div><div class="spec">Presence · 24–180px · aqua gradient</div></div>
+      </div>
+      <div class="demo">
+        <span style="display:inline-grid;place-items:center;width:44px;height:44px;border-radius:11px;background:rgba(51,199,183,.12);border:1px solid rgba(51,199,183,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="#33c7b7"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"/></svg></span>
+        <div><div style="color:#fff;font-weight:600;font-size:14px">The spark</div><div class="spec">Trigger · in labels &amp; <span style="color:var(--aqua)">⌘I</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 CAPABILITY SET -->
+<section>
+  <div class="wrap">
+    <span class="ey">03 — The intelligence set</span>
+    <h2 class="sh">What it does, where you work.</h2>
+    <div class="gset">
+      <div class="cap"><b>Morning summary</b><p>Opens the day with what needs you — not a pile. One synced brief across every account.</p><span class="t">aMail</span></div>
+      <div class="cap"><b>Answers that cite</b><p>Ask about a hold, a clash, a revision — it answers from the register and shows its sources.</p><span class="t">⌘I · everywhere</span></div>
+      <div class="cap"><b>Convert — paper to data</b><p>Site paper in, structured fields out. Confidence scored, human confirmed before it lands.</p><span class="t">OCR · 97%</span></div>
+      <div class="cap"><b>Clash trace</b><p>Follows a hold to its cause across documents and models — and names the zone.</p><span class="t">3D Repo</span></div>
+      <div class="cap"><b>Draft replies</b><p>Proposes a response in your voice, with the right attachment — you send it.</p><span class="t">aMail</span></div>
+      <div class="cap"><b>Executive packs</b><p>Feeds register figures straight into the QPR pack. Export the truth, don't retype it.</p><span class="t">Analytics</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 STATES -->
+<section>
+  <div class="wrap">
+    <span class="ey">04 — The state of a run</span>
+    <h2 class="sh">The orb tells you where it is.</h2>
+    <p class="lead">Idle, thinking, streaming, cited, or paused — the orb's behaviour is the status. No spinners that mean nothing.</p>
+    <div class="states">
+      <div class="state"><span class="orb o" style="width:42px;height:42px;opacity:.5"></span><div class="nm">Idle</div><div class="d">Present, waiting. Dimmed.</div></div>
+      <div class="state"><span class="orb o live" style="width:42px;height:42px"></span><div class="nm">Thinking</div><div class="d">Pulsing while it reads.</div></div>
+      <div class="state"><span class="orb o" style="width:42px;height:42px"><span class="dots"><i></i><i></i><i></i></span></span><div class="nm">Streaming</div><div class="d">Answer arriving.</div></div>
+      <div class="state"><span class="orb o" style="width:42px;height:42px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg></span><div class="nm">Cited</div><div class="d">Done, sources shown.</div></div>
+      <div class="state"><span class="o" style="display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;background:rgba(255,49,49,.12);border:1px solid rgba(255,49,49,.4)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff3131" stroke-width="2.4"><path d="M12 8v5M12 16h.01"/></svg></span><div class="nm">Paused</div><div class="d">Needs you, or unsure.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 CONVERSATION -->
+<section>
+  <div class="wrap">
+    <span class="ey">05 — In conversation</span>
+    <h2 class="sh">Talk to the platform.</h2>
+    <div class="chat">
+      <div class="hd"><span class="orb" style="width:26px;height:26px"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"/></svg></span><b>Asite Intelligence</b><span class="mn" style="margin-left:auto">MER-TOWER-C</span></div>
+      <div class="body">
+        <div class="bub me">Why is the Level 12 GA blocked?</div>
+        <div class="bub ai">It's held by RFI-204 — a clash between duct DT-12 and transfer beam TB-09 at grid C/12. The current revision is C03, awaiting a structural response from S. Reece.<span class="cite">✓ Cites: AST-2026-204, 198, 187</span></div>
+        <div class="bub me">Draft a chase to the structural lead.</div>
+        <div class="bub ai">Drafted a reply to S. Reece referencing RFI-204 and the C03 GA. Ready in your aMail — review before sending.<span class="cite">✓ Nothing sent · awaiting you</span></div>
+      </div>
+      <div class="ph"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Ask about this project…<span class="k">⌘I</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 TWO WAYS -->
+<section>
+  <div class="wrap">
+    <span class="ey">06 — Two ways it shows up</span>
+    <h2 class="sh">Beside the work, or on call.</h2>
+    <div class="g2">
+      <div class="way"><h4><span class="orb" style="width:22px;height:22px"></span>Inline — the inspector</h4><p>The orb sits in the panel beside what you're looking at, answering from the same record. Always in context, never a separate destination.</p></div>
+      <div class="way"><h4><span class="cmd">⌘I</span> On call — the command</h4><p>Press ⌘I anywhere to ask. It knows the project you're in, cites what it reads, and closes when you're done. Summoned, not always-on.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 VOICE -->
+<section>
+  <div class="wrap">
+    <span class="ey red">07 — How Intelligence speaks</span>
+    <h2 class="sh">Precise, sourced, and brief.</h2>
+    <p class="lead">It speaks like the brand — direct and specific — with one addition: it always shows its working.</p>
+    <div class="dd">
+      <div class="do"><span class="l">Always</span><ul>
+        <li>Lead with the answer, then the evidence</li>
+        <li>Cite the exact documents, RFIs, or figures used</li>
+        <li>Say "I'm not sure" rather than guess</li>
+        <li>Name people and references, not "the relevant user"</li>
+        <li>Stop at the draft — let the human send</li>
+      </ul></div>
+      <div class="dn"><span class="l">Never</span><ul>
+        <li>Claim without a source the user can open</li>
+        <li>Write, send, or approve on its own</li>
+        <li>Pad with "As an AI…" or hedging preamble</li>
+        <li>Invent a figure to fill a sentence</li>
+        <li>Wallpaper the screen with the aqua spark</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img src="assets/asite-logo-white.png" alt="Asite">
+    <div class="fc">Asite Intelligence · v4.0 · June 2026</div>
+    <div class="ft">Cites the register · nothing writes without you</div>
+  </div>
+</footer>
+
+</body>
+</html>

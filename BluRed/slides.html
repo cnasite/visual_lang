@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Slides (v4.0)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="product/screens.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);font-weight:300;background:var(--navy);color:var(--text-2);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1100px;margin:0 auto;padding:0 2.5rem}
+nav{position:sticky;top:0;z-index:50;height:56px;background:rgba(13,39,69,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-soft)}
+nav .wrap{display:flex;align-items:center;height:56px;gap:1.5rem}
+nav img{height:24px}
+.npills{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+.np{font-family:var(--font-mono);font-size:11px;letter-spacing:.5px;color:var(--text-3);padding:6px 11px;border-radius:20px;transition:.15s}
+.np:hover{color:#fff;background:rgba(255,255,255,.06)}.np.on{color:#fff;background:rgba(255,255,255,.1)}
+.ey{font-family:var(--font-mono);font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--red);display:inline-flex;align-items:center;gap:10px}
+.ey::before{content:"";width:30px;height:1px;background:var(--red)}
+.masthead{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--border-soft)}
+.masthead h1{font-weight:800;font-size:clamp(2.2rem,5vw,3.4rem);letter-spacing:-1.5px;color:#fff;margin:1.2rem 0 .8rem;line-height:1}
+.masthead p{font-size:1rem;font-weight:300;color:var(--text-2);max-width:560px;line-height:1.7}
+.sb-head{padding:3rem 0 1.2rem}
+.sb-head .num{font-family:var(--font-mono);font-size:11px;letter-spacing:1.5px;color:var(--red)}
+.sb-head h2{font-weight:700;font-size:1.3rem;letter-spacing:-.4px;color:#fff;margin:.5rem 0 .4rem}
+.sb-head p{font-size:13px;font-weight:300;color:var(--text-2);max-width:580px;line-height:1.7}
+.frame{max-width:1120px;margin:0 auto 1.4rem;padding:0 2.5rem}
+
+/* 16:9 slide */
+.slide{aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1px solid var(--border-soft);position:relative;display:flex;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.slide .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:54px 54px;pointer-events:none}
+.slide .logo{position:absolute;top:30px;left:36px;height:22px;z-index:3}
+.slide .pg{position:absolute;bottom:26px;right:36px;font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;color:rgba(255,255,255,.4)}
+.s-pad{position:relative;z-index:2;padding:0 56px;display:flex;flex-direction:column;justify-content:center;width:100%}
+.s-ey{font-family:var(--font-mono);font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--red);display:inline-flex;align-items:center;gap:10px;margin-bottom:1.4rem}
+.s-ey::before{content:"";width:28px;height:1px;background:var(--red)}
+.s-ey.aqua{color:var(--aqua)}.s-ey.aqua::before{background:var(--aqua)}
+
+/* title */
+.s-title{background:var(--navy)}
+.s-title h2{font-weight:800;font-size:clamp(2rem,4.6vw,3.6rem);line-height:1;letter-spacing:-1.8px;color:#fff;max-width:80%}
+.s-title h2 .r{color:var(--red)}
+.s-title .sub{font-size:1rem;font-weight:300;color:var(--text-2);margin-top:1.4rem;max-width:60%}
+.s-title .foot{position:absolute;bottom:30px;left:56px;font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3)}
+
+/* divider */
+.s-div{background:var(--red)}
+.s-div .n{font-family:var(--font-mono);font-size:13px;letter-spacing:2px;color:rgba(255,255,255,.7)}
+.s-div h2{font-weight:800;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1;letter-spacing:-1.6px;color:#fff;margin-top:1rem;max-width:80%}
+.s-div svg{position:absolute;right:-30px;bottom:-30px;opacity:.16}
+
+/* report */
+.s-report{background:var(--navy)}
+.s-report .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:1.6rem}
+.s-report .tile{background:rgba(255,255,255,.04);border:1px solid var(--border-soft);border-radius:10px;padding:1.2rem 1.4rem}
+.s-report .tile.red{background:var(--red);border-color:var(--red)}
+.s-report .tile .v{font-weight:700;font-size:2rem;letter-spacing:-1px;color:#fff;line-height:1}
+.s-report .tile .l{font-size:11px;font-weight:300;color:var(--text-2);margin-top:.5rem}
+.s-report .tile.red .l{color:rgba(255,255,255,.85)}
+.s-report .chart{display:flex;align-items:flex-end;gap:7px;height:90px;margin-top:1.4rem}
+.s-report .bar{flex:1;border-radius:3px 3px 0 0;background:rgba(255,255,255,.14)}
+.s-report .bar.hot{background:var(--red)}
+
+/* demo */
+.s-demo{background:var(--charcoal);align-items:center;justify-content:center}
+.s-demo .inner{position:relative;z-index:2;width:100%;padding:0 56px;display:flex;align-items:center;gap:2.5rem}
+.s-demo .cap{flex:none;width:32%}
+.s-demo .cap h2{font-weight:700;font-size:1.6rem;letter-spacing:-.5px;color:#fff;margin:.8rem 0 .8rem;line-height:1.1}
+.s-demo .cap p{font-size:13px;font-weight:300;color:var(--text-2);line-height:1.7}
+.s-demo .shot{flex:1;min-width:0}
+
+/* quote */
+.s-quote{background:var(--charcoal)}
+.s-quote .q{font-weight:300;font-size:clamp(1.4rem,3vw,2.2rem);line-height:1.4;letter-spacing:-.3px;color:#fff;max-width:85%}
+.s-quote .q b{font-weight:700;color:var(--red)}
+.s-quote .m{font-family:var(--font-mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);margin-top:1.6rem}
+
+/* close */
+.s-close{background:var(--red);align-items:center;justify-content:center;text-align:center}
+.s-close .inner{position:relative;z-index:2}
+.s-close h2{font-weight:800;font-size:clamp(2rem,4.6vw,3.4rem);letter-spacing:-1.2px;color:#fff;line-height:1}
+.s-close p{color:rgba(255,255,255,.88);font-weight:300;margin-top:1rem;font-size:1rem}
+.s-close .tag{font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:1.6rem}
+.s-close svg{position:absolute;left:-40px;top:-40px;opacity:.14;z-index:1}
+
+@media(max-width:760px){.npills{display:none}.s-demo .inner{flex-direction:column;gap:1.2rem}.s-demo .cap{width:100%}.s-report .tiles{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="index.html" aria-label="Asite"><img src="assets/asite-logo-white.png" alt="Asite"></a>
+    <div class="npills">
+      <a class="np" href="index.html">Language</a>
+      <a class="np" href="screens.html">Product</a>
+      <a class="np" href="web.html">Website</a>
+      <a class="np on" href="slides.html">Slides</a>
+      <a class="np" href="ai-hub.html"><svg width="10" height="10" viewBox="0 0 24 24" fill="#33c7b7" style="vertical-align:-1px;margin-right:5px"><path d="M12 2.5 L13.9 9 L20.5 11 L13.9 13 L12 21 L10.1 13 L3.5 11 L10.1 9 Z"/></svg>AI Hub</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap masthead">
+  <span class="ey">Slides · v4.0</span>
+  <h1>Presentation templates.</h1>
+  <p>The deck system — title, divider, report, product demo, quote, and close. 16:9, navy-grounded, one red signal per slide.</p>
+</div>
+
+<!-- 01 TITLE -->
+<div class="wrap sb-head"><span class="num">SLIDE.01</span><h2>Title</h2><p>The opener — Sofia Pro at scale, the red owning one word, the mark top-left.</p></div>
+<div class="frame"><div class="slide s-title">
+  <div class="grid"></div>
+  <img class="logo" src="assets/asite-logo-white.png" alt="Asite">
+  <div class="s-pad">
+    <span class="s-ey">Capital projects · 2026</span>
+    <h2>Information at the speed of <span class="r">construction.</span></h2>
+    <p class="sub">How leading contractors turn their data problem into an advantage.</p>
+  </div>
+  <div class="s-title foot">Asite · Connecting the physical, digital &amp; human</div>
+  <div class="pg">01</div>
+</div></div>
+
+<!-- 02 DIVIDER -->
+<div class="wrap sb-head"><span class="num">SLIDE.02</span><h2>Section divider</h2><p>The red field marks a new chapter — a number, a title, the cube arrow.</p></div>
+<div class="frame"><div class="slide s-div">
+  <svg width="300" height="300" viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" rx="32" stroke="#fff" stroke-width="3"/><path d="M64 100 L128 100 M100 72 L132 100 L100 128" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <img class="logo" src="assets/asite-logo-white.png" alt="Asite">
+  <div class="s-pad"><span class="n">PART 02</span><h2>The cost of getting information wrong.</h2></div>
+  <div class="pg" style="color:rgba(255,255,255,.6)">02</div>
+</div></div>
+
+<!-- 03 REPORT -->
+<div class="wrap sb-head"><span class="num">SLIDE.03</span><h2>Report</h2><p>Instrument-scale figures and a quiet chart. The red tile is the promise.</p></div>
+<div class="frame"><div class="slide s-report">
+  <div class="grid"></div>
+  <img class="logo" src="assets/asite-logo-white.png" alt="Asite">
+  <div class="s-pad">
+    <span class="s-ey">Proven delivery</span>
+    <h2 style="font-weight:700;font-size:1.7rem;letter-spacing:-.5px;color:#fff;max-width:70%">The numbers are the argument.</h2>
+    <div class="tiles">
+      <div class="tile red"><div class="v">84,000+</div><div class="l">companies trust Asite</div></div>
+      <div class="tile"><div class="v">70%</div><div class="l">tendering saved on T5</div></div>
+      <div class="tile"><div class="v">98%</div><div class="l">issued on time</div></div>
+    </div>
+    <div class="chart"><div class="bar" style="height:40%"></div><div class="bar" style="height:54%"></div><div class="bar" style="height:48%"></div><div class="bar" style="height:66%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:74%"></div><div class="bar" style="height:68%"></div><div class="bar hot" style="height:92%"></div><div class="bar" style="height:72%"></div><div class="bar" style="height:58%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:46%"></div></div>
+  </div>
+  <div class="pg">03</div>
+</div></div>
+
+<!-- 04 PRODUCT DEMO -->
+<div class="wrap sb-head"><span class="num">SLIDE.04</span><h2>Product demo</h2><p>A live interface on a charcoal stage — the register, real, beside the point being made.</p></div>
+<div class="frame"><div class="slide s-demo">
+  <img class="logo" src="assets/asite-logo-white.png" alt="Asite">
+  <div class="inner">
+    <div class="cap">
+      <span class="s-ey aqua">Live in product</span>
+      <h2>One source of truth.</h2>
+      <p>Every document, version, and hold — in one register, audited by default.</p>
+    </div>
+    <div class="shot"><div class="scr sm" style="box-shadow:0 20px 60px rgba(0,0,0,.5)">
+      <div class="scr-chrome"><i></i><i></i><i></i><span class="url">app.asite.com / register</span></div>
+      <div class="scr-app">
+        <aside class="scr-rail">
+          <div class="brand"><img src="assets/asite-logo-white.png" alt="Asite"></div>
+          <a class="scr-ri on"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>Register</a>
+          <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg>Documents</a>
+          <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>RFIs<span class="ct">7</span></a>
+        </aside>
+        <div class="scr-main">
+          <div class="scr-top"><span class="scr-crumb">Tower C <span>/</span> Control</span><span class="scr-av" style="margin-left:auto">CN</span></div>
+          <div class="scr-content">
+            <div class="scr-kpis" style="grid-template-columns:1fr 1fr"><div class="scr-kpi"><div class="v rd">1</div><div class="l">Active hold</div></div><div class="scr-kpi"><div class="v">7</div><div class="l">Open RFIs</div></div></div>
+            <div class="scr-panel"><div class="scr-phd"><b>Documents</b></div>
+              <div class="scr-row sel"><span class="scr-ref">AST-204</span><span class="scr-tt">Level 12 GA</span><span class="scr-st"><span class="scr-dot d-blk"></span>Blocked</span></div>
+              <div class="scr-row"><span class="scr-ref">AST-198</span><span class="scr-tt">MEP — Zone 4</span><span class="scr-st"><span class="scr-dot d-prog"></span>Review</span></div>
+              <div class="scr-row"><span class="scr-ref m">AST-187</span><span class="scr-tt">Transfer beam</span><span class="scr-st"><span class="scr-dot d-done"></span>Approved</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+  <div class="pg">04</div>
+</div></div>
+
+<!-- 05 QUOTE -->
+<div class="wrap sb-head"><span class="num">SLIDE.05</span><h2>Quote</h2><p>The testimonial on charcoal, the red landing on the claim.</p></div>
+<div class="frame"><div class="slide s-quote">
+  <div class="grid"></div>
+  <img class="logo" src="assets/asite-logo-white.png" alt="Asite">
+  <div class="s-pad">
+    <span class="s-ey aqua">In their words</span>
+    <p class="q" style="margin-top:.6rem">"Missed information leads to costly mistakes. <b>Asite keeps your team on the same page</b> — so nothing falls through the cracks."</p>
+    <div class="m">Programme Director · Tier-1 infrastructure contractor</div>
+  </div>
+  <div class="pg">05</div>
+</div></div>
+
+<!-- 06 CLOSE -->
+<div class="wrap sb-head"><span class="num">SLIDE.06</span><h2>Close</h2><p>The red field again — one line, one action, the tagline.</p></div>
+<div class="frame"><div class="slide s-close">
+  <svg width="300" height="300" viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" rx="32" stroke="#fff" stroke-width="3"/><path d="M64 100 L128 100 M100 72 L132 100 L100 128" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <img class="logo" src="assets/asite-logo-white.png" alt="Asite">
+  <div class="inner">
+    <h2>See the whole project.</h2>
+    <p>Book a demo — Asite on a project like yours.</p>
+    <div class="tag">Connecting the physical, digital &amp; human</div>
+  </div>
+  <div class="pg" style="color:rgba(255,255,255,.6)">06</div>
+</div></div>
+
+<div style="padding:4rem 0 6rem;text-align:center"><a href="index.html" style="color:var(--red);font-family:var(--font-mono);font-size:12px">‹ Back to the visual language</a></div>
+
+</body>
+</html>

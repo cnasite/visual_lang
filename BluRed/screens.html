@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Product Interface (v4.0)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="product/screens.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);font-weight:300;background:var(--navy);color:var(--text-2);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1100px;margin:0 auto;padding:0 2.5rem}
+nav{position:sticky;top:0;z-index:50;height:56px;background:rgba(13,39,69,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-soft)}
+nav .wrap{display:flex;align-items:center;height:56px;gap:1.5rem}
+nav img{height:24px}
+.npills{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+.np{font-family:var(--font-mono);font-size:11px;letter-spacing:.5px;color:var(--text-3);padding:6px 11px;border-radius:20px;transition:.15s}
+.np:hover{color:#fff;background:rgba(255,255,255,.06)}.np.on{color:#fff;background:rgba(255,255,255,.1)}
+.masthead{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--border-soft)}
+.ey{font-family:var(--font-mono);font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--red);display:inline-flex;align-items:center;gap:10px}
+.ey::before{content:"";width:30px;height:1px;background:var(--red)}
+.masthead h1{font-weight:800;font-size:clamp(2.2rem,5vw,3.4rem);letter-spacing:-1.5px;color:#fff;margin:1.2rem 0 .8rem;line-height:1}
+.masthead p{font-size:1rem;font-weight:300;color:var(--text-2);max-width:560px;line-height:1.7}
+.sb-head{padding:3.2rem 0 1.3rem}
+.sb-head .num{font-family:var(--font-mono);font-size:11px;letter-spacing:1.5px;color:var(--red)}
+.sb-head h2{font-weight:700;font-size:1.4rem;letter-spacing:-.4px;color:#fff;margin:.5rem 0 .4rem}
+.sb-head p{font-size:13.5px;font-weight:300;color:var(--text-2);max-width:600px;line-height:1.7}
+.frame{max-width:1180px;margin:0 auto 1.5rem;padding:0 2.5rem}
+.endnote{padding:4rem 0 6rem;text-align:center}.endnote a{color:var(--red);font-family:var(--font-mono);font-size:12px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="index.html" aria-label="Asite"><img src="assets/asite-logo-white.png" alt="Asite"></a>
+    <div class="npills">
+      <a class="np" href="index.html">Language</a>
+      <a class="np on" href="screens.html">Product</a>
+      <a class="np" href="web.html">Website</a>
+      <a class="np" href="slides.html">Slides</a>
+      <a class="np" href="ai-hub.html"><svg width="10" height="10" viewBox="0 0 24 24" fill="#33c7b7" style="vertical-align:-1px;margin-right:5px"><path d="M12 2.5 L13.9 9 L20.5 11 L13.9 13 L12 21 L10.1 13 L3.5 11 L10.1 9 Z"/></svg>AI Hub</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap masthead">
+  <span class="ey">Product interface · v4.0</span>
+  <h1>The product, drawn in the language.</h1>
+  <p>A light workspace with a navy rail. One Neo Red signal for the action and the live alert, aqua for intelligence. Six screens, assembled from the component library.</p>
+</div>
+
+<!-- SCR.01 REGISTER -->
+<div class="wrap sb-head" id="r1"><span class="num">SCR.01</span><h2>Project register</h2><p>The home of document control — rail, KPIs, the register with status, and the inspector carrying Intelligence.</p></div>
+<div class="frame"><div class="scr">
+  <div class="scr-chrome"><i></i><i></i><i></i><span class="url">app.asite.com / mer-tower-c / register</span></div>
+  <div class="scr-app">
+    <aside class="scr-rail">
+      <div class="brand"><img src="assets/asite-logo-white.png" alt="Asite"></div>
+      <a class="scr-ri on"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>Register</a>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg>Documents<span class="ct">14,820</span></a>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4zM3 12l9 4 9-4"/></svg>3D Repo</a>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>aMail<span class="ct">12</span></a>
+      <div class="scr-grp">Delivery</div>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>RFIs<span class="ct">7</span></a>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>Playbook</a>
+    </aside>
+    <div class="scr-main">
+      <div class="scr-top"><span class="scr-crumb">Mercury Tower C <span>/</span> Document control</span>
+        <span class="scr-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Search<span class="kbd">⌘K</span></span>
+        <span class="scr-av">CN</span>
+      </div>
+      <div class="scr-content">
+        <div class="scr-ph"><div><div class="scr-h1">Project register</div><div class="scr-meta">MER-TOWER-C · 14,820 FILES · WK 24</div></div><button class="scr-btn p"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Issue</button></div>
+        <div class="scr-kpis">
+          <div class="scr-kpi"><div class="v rd">1</div><div class="l">Active hold</div></div>
+          <div class="scr-kpi"><div class="v">7</div><div class="l">Open RFIs</div></div>
+          <div class="scr-kpi"><div class="v">98%</div><div class="l">On time</div></div>
+          <div class="scr-kpi"><div class="v">2,847</div><div class="l">Filed · Q2</div></div>
+        </div>
+        <div class="scr-panel">
+          <div class="scr-phd"><b>Documents</b><div class="scr-seg"><button class="on">List</button><button>Grid</button><button>Timeline</button></div></div>
+          <div class="scr-row sel"><span class="scr-ref">AST-2026-204</span><span class="scr-tt">Tower C — Level 12 General Arrangement</span><span class="scr-st"><span class="scr-dot d-blk"></span>Blocked</span><span class="scr-rmeta">C03 · 24 Jun</span></div>
+          <div class="scr-row"><span class="scr-ref">AST-2026-198</span><span class="scr-tt">MEP coordination model — Zone 4</span><span class="scr-st"><span class="scr-dot d-prog"></span>In review</span><span class="scr-rmeta">B11 · 23 Jun</span></div>
+          <div class="scr-row"><span class="scr-ref m">AST-2026-187</span><span class="scr-tt">Structural calcs — transfer beam TB-09</span><span class="scr-st"><span class="scr-dot d-done"></span>Approved</span><span class="scr-rmeta">C01 · 21 Jun</span></div>
+          <div class="scr-row"><span class="scr-ref m">AST-2026-176</span><span class="scr-tt">Fire strategy — core &amp; stair pressurisation</span><span class="scr-st"><span class="scr-dot d-rev"></span>Awaiting</span><span class="scr-rmeta">A04 · 20 Jun</span></div>
+        </div>
+      </div>
+    </div>
+    <aside class="scr-insp">
+      <div class="hd"><span class="ref">AST-2026-204 · C03</span><div class="ttl">Tower C — Level 12 GA</div><span class="scr-st"><span class="scr-dot d-blk"></span>Blocked — RFI-204 open</span></div>
+      <div class="scr-prop"><span class="k">Discipline</span><span class="v">Structures</span></div>
+      <div class="scr-prop"><span class="k">Suitability</span><span class="v">S2 — info</span></div>
+      <div class="scr-prop"><span class="k">Audit</span><span class="v" style="color:#1f9e8d">✓ Logged</span></div>
+      <div class="scr-aibox">
+        <div class="scr-aihd"><span class="scr-orb"></span><b>Asite Intelligence</b><span class="scr-badge" style="margin-left:auto">⌘I</span></div>
+        <div class="scr-bubble">This hold traces to a clash between duct DT-12 and transfer beam TB-09 at L12.<span class="scr-cite">✓ Cites: AST-204, 198, 187</span></div>
+      </div>
+    </aside>
+  </div>
+</div></div>
+
+<!-- SCR.02 FILES -->
+<div class="wrap sb-head" id="r2"><span class="num">SCR.02</span><h2>Files workspace</h2><p>Folders first, live previews, list ⇄ grid — a controlled workspace where every drawing carries its conversation.</p></div>
+<div class="frame"><div class="scr">
+  <div class="scr-chrome"><i></i><i></i><i></i><span class="url">app.asite.com / city-hospital / files</span></div>
+  <div class="scr-app">
+    <aside class="scr-rail">
+      <div class="brand"><img src="assets/asite-logo-white.png" alt="Asite"></div>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>Register</a>
+      <a class="scr-ri on"><svg class="ico" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg>Documents<span class="ct">14,820</span></a>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4zM3 12l9 4 9-4"/></svg>3D Repo</a>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>aMail<span class="ct">12</span></a>
+      <div class="scr-grp">Folders</div>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Drawings</a>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Specifications</a>
+    </aside>
+    <div class="scr-main">
+      <div class="scr-top"><span class="scr-crumb">City Hospital <span>/</span> Files <span>/</span> Drawings</span>
+        <span class="scr-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Search<span class="kbd">⌘K</span></span><span class="scr-av">CN</span></div>
+      <div class="scr-content">
+        <div class="scr-ph"><div><div class="scr-h1">Drawings</div><div class="scr-meta">248 FILES · 12 FOLDERS</div></div><div style="display:flex;gap:8px"><div class="scr-seg"><button>List</button><button class="on">Grid</button></div><button class="scr-btn p"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Upload</button></div></div>
+        <div style="display:flex;gap:10px;margin-bottom:14px"><div class="scr-folder"><svg width="16" height="16" fill="none" stroke="#005dff" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Structures<span class="ct">96</span></div><div class="scr-folder"><svg width="16" height="16" fill="none" stroke="#005dff" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>MEP<span class="ct">74</span></div><div class="scr-folder"><svg width="16" height="16" fill="none" stroke="#005dff" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Architecture<span class="ct">78</span></div></div>
+        <div class="scr-files">
+          <div class="scr-file"><div class="thumb dwg"><svg width="40" height="40" fill="none" stroke="#9aa7bd" stroke-width="1.2" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" rx="2"/><path d="M8 18h32M18 18v22M28 8v32"/></svg></div><div class="fn">L12 — General Arrangement</div><div class="fm">REV C03 · DWG</div></div>
+          <div class="scr-file"><div class="thumb dwg"><svg width="40" height="40" fill="none" stroke="#9aa7bd" stroke-width="1.2" viewBox="0 0 48 48"><circle cx="24" cy="24" r="14"/><path d="M24 10v28M10 24h28"/></svg></div><div class="fn">Core setting-out</div><div class="fm">REV C01 · DWG</div></div>
+          <div class="scr-file"><div class="thumb"><svg width="34" height="34" fill="none" stroke="#9aa7bd" stroke-width="1.4" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="fn">Fire strategy</div><div class="fm">REV A04 · PDF</div></div>
+          <div class="scr-file"><div class="thumb dwg"><svg width="40" height="40" fill="none" stroke="#9aa7bd" stroke-width="1.2" viewBox="0 0 48 48"><path d="M24 6 L8 15 L24 24 L40 15 Z"/><path d="M8 24 L24 33 L40 24"/></svg></div><div class="fn">Transfer beam TB-09</div><div class="fm">REV C01 · IFC</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- SCR.03 aMAIL -->
+<div class="wrap sb-head" id="r3"><span class="num">SCR.03</span><h2>aMail — the inbox that files itself</h2><p>Every address that touches the project, synced. The morning opens with a summary, not a pile.</p></div>
+<div class="frame"><div class="scr">
+  <div class="scr-chrome"><i></i><i></i><i></i><span class="url">amail.asite.com / mer-tower-c / summary</span></div>
+  <div class="scr-app">
+    <aside class="scr-rail">
+      <div class="brand"><img src="assets/asite-logo-white.png" alt="Asite"></div>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>Register</a>
+      <a class="scr-ri on"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>aMail<span class="ct">12</span></a>
+      <div class="scr-grp">Accounts</div>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>Outlook</a>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>Gmail</a>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>project@</a>
+    </aside>
+    <div class="scr-main">
+      <div class="scr-top"><span class="scr-crumb">Mercury Tower C <span>/</span> aMail <span>/</span> Summary</span><span class="scr-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Search<span class="kbd">⌘K</span></span><span class="scr-av">CN</span></div>
+      <div class="scr-mail">
+        <div class="scr-threads">
+          <div class="scr-th on"><div class="who">Sarah Reece <span class="t">09:42</span></div><div class="subj">RE: RFI-204 — duct vs transfer beam clash</div><span class="chip">FILED · AST-204</span></div>
+          <div class="scr-th"><div class="who">M. Okafor <span class="t">08:30</span></div><div class="subj">MEP model B11 issued for coordination</div><span class="chip">FILED · ZONE 4</span></div>
+          <div class="scr-th"><div class="who">Kier — Delivery <span class="t">Yest</span></div><div class="subj">Weekly progress &amp; labour returns</div><span class="chip">FILED · WK 24</span></div>
+          <div class="scr-th"><div class="who">A. Lindqvist <span class="t">Yest</span></div><div class="subj">Fire strategy A04 — comments attached</div><span class="chip">FILED · AST-176</span></div>
+        </div>
+        <div style="flex:1;padding:18px;overflow:auto">
+          <div class="scr-aihd" style="margin-bottom:12px"><span class="scr-orb"></span><b>Morning summary</b><span class="scr-badge aq" style="margin-left:auto">3 ACCOUNTS · SYNCED</span></div>
+          <div class="scr-bubble">12 threads filed overnight. One needs you: <b>RFI-204</b> is blocking the Level 12 GA — Sarah is waiting on a structural response. Two models were issued for coordination; no action needed.<span class="scr-cite">✓ Filed to: AST-204, Zone 4, WK 24</span></div>
+          <div style="margin-top:16px;padding:14px;background:#fff;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(13,39,69,.12)">
+            <div style="font:600 13px 'Sofia Pro';color:#231f20;margin-bottom:8px">RE: RFI-204 — duct vs transfer beam clash</div>
+            <p style="font:300 13px/1.6 'Sofia Pro';color:#5c5f63">Confirmed — DT-12 conflicts with TB-09 at L12. We need a structural response before the C03 GA can be released. Drawing and clash marker attached.</p>
+            <div style="margin-top:12px;display:flex;gap:8px"><button class="scr-btn p">Reply</button><button class="scr-btn s">Open RFI-204</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- SCR.04 ANALYTICS -->
+<div class="wrap sb-head" id="r4"><span class="num">SCR.04</span><h2>Analytics &amp; Intelligence</h2><p>Fourteen weeks of activity on one panel — Asite Intelligence open beside it, answering from the same numbers.</p></div>
+<div class="frame"><div class="scr">
+  <div class="scr-chrome"><i></i><i></i><i></i><span class="url">app.asite.com / mer-tower-c / analytics</span></div>
+  <div class="scr-app">
+    <aside class="scr-rail">
+      <div class="brand"><img src="assets/asite-logo-white.png" alt="Asite"></div>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>Register</a>
+      <a class="scr-ri on"><svg class="ico" viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8"/></svg>Analytics</a>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>RFIs<span class="ct">7</span></a>
+      <div class="scr-grp">Reporting</div>
+      <a class="scr-ri"><svg class="ico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>QPR pack</a>
+    </aside>
+    <div class="scr-main">
+      <div class="scr-top"><span class="scr-crumb">Mercury Tower C <span>/</span> Analytics</span><span class="scr-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Search<span class="kbd">⌘K</span></span><span class="scr-av">CN</span></div>
+      <div class="scr-content" style="display:flex;gap:14px">
+        <div style="flex:1;min-width:0">
+          <div class="scr-ph"><div><div class="scr-h1">Register activity</div><div class="scr-meta">14 WEEKS · ISSUED vs OUTSTANDING</div></div></div>
+          <div class="scr-chart">
+            <div class="scr-bar" style="height:42%"></div><div class="scr-bar" style="height:55%"></div><div class="scr-bar" style="height:48%"></div><div class="scr-bar" style="height:66%"></div><div class="scr-bar" style="height:60%"></div><div class="scr-bar" style="height:72%"></div><div class="scr-bar" style="height:64%"></div><div class="scr-bar" style="height:80%"></div><div class="scr-bar" style="height:74%"></div><div class="scr-bar hot" style="height:92%"></div><div class="scr-bar" style="height:70%"></div><div class="scr-bar" style="height:58%"></div><div class="scr-bar" style="height:50%"></div><div class="scr-bar" style="height:44%"></div>
+          </div>
+          <div class="scr-kpis" style="grid-template-columns:1fr 1fr;margin-top:14px">
+            <div class="scr-kpi"><div class="v">97%</div><div class="l">OCR confidence</div></div>
+            <div class="scr-kpi"><div class="v rd">1</div><div class="l">Active hold</div></div>
+          </div>
+        </div>
+        <div style="width:280px;flex:none;background:#fff;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(13,39,69,.12);padding:14px">
+          <div class="scr-aihd"><span class="scr-orb"></span><b>Asite Intelligence</b></div>
+          <div class="scr-bubble">Week 10 issued the most — the spike aligns with the MEP coordination drop. Outstanding items are concentrated in Structures, driven by RFI-204.<span class="scr-cite">✓ From the same register figures</span></div>
+          <button class="scr-btn s" style="width:100%;margin-top:12px;justify-content:center">Export to QPR pack</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- SCR.05 FIRST RUN -->
+<div class="wrap sb-head" id="r5"><span class="num">SCR.05</span><h2>First-run — a welcome, not a wall</h2><p>Day one opens with a guided start. The cube greets, three steps set the path.</p></div>
+<div class="frame"><div class="scr">
+  <div class="scr-chrome"><i></i><i></i><i></i><span class="url">app.asite.com / welcome</span></div>
+  <div class="scr-app">
+    <aside class="scr-rail">
+      <div class="brand"><img src="assets/asite-logo-white.png" alt="Asite"></div>
+      <a class="scr-ri on"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>Home</a>
+      <a class="scr-ri" style="opacity:.5"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>Register</a>
+      <a class="scr-ri" style="opacity:.5"><svg class="ico" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg>Documents</a>
+    </aside>
+    <div class="scr-main">
+      <div class="scr-welcome">
+        <div>
+          <span class="scr-cube"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h7M12 9l3 3-3 3"/></svg></span>
+          <div class="em">Welcome to <span class="r">Mercury Tower C.</span></div>
+          <p>Your project is set up and secure by default. Three steps to your first issued document.</p>
+          <div class="scr-steps">
+            <div class="scr-step"><div class="n">01</div><div class="s">Invite your team</div></div>
+            <div class="scr-step"><div class="n">02</div><div class="s">Connect a model</div></div>
+            <div class="scr-step"><div class="n">03</div><div class="s">Issue a document</div></div>
+          </div>
+          <div style="margin-top:22px"><button class="scr-btn p" style="justify-content:center">Start setup →</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- SCR.06 DOCUMENT CANVAS -->
+<div class="wrap sb-head" id="r6"><span class="num">SCR.06</span><h2>Document canvas — preview &amp; annotate</h2><p>Drawings carry their own conversation. Annotations and comments stay on the sheet.</p></div>
+<div class="frame"><div class="scr">
+  <div class="scr-chrome"><i></i><i></i><i></i><span class="url">app.asite.com / AST-2026-204 / canvas</span></div>
+  <div class="scr-app">
+    <div class="scr-main">
+      <div class="scr-top"><span class="scr-crumb">AST-2026-204 <span>/</span> Level 12 GA <span>/</span> REV C03</span><span class="scr-badge" style="margin-left:auto;color:#ff3131;box-shadow:inset 0 0 0 1px rgba(255,49,49,.4)">RFI-204</span></div>
+      <div style="flex:1;display:flex;min-height:0">
+        <div style="flex:1;position:relative;background:#eef1f6;overflow:hidden">
+          <svg width="100%" height="100%" viewBox="0 0 600 380" preserveAspectRatio="xMidYMid meet" style="position:absolute;inset:0">
+            <g stroke="#aebbd0" stroke-width="1.2" fill="none">
+              <rect x="80" y="60" width="440" height="260"/>
+              <path d="M80 150h180M260 60v200M260 200h260M380 200v120M80 260h180"/>
+              <rect x="300" y="80" width="90" height="90"/>
+              <circle cx="345" cy="125" r="18"/>
+            </g>
+            <g stroke="#005dff" stroke-width="1.4" fill="none" stroke-dasharray="5 4"><path d="M260 200 L430 150"/></g>
+            <circle cx="430" cy="150" r="13" fill="none" stroke="#ff3131" stroke-width="1.5"/>
+            <circle cx="430" cy="150" r="5" fill="#ff3131"/>
+            <text x="448" y="146" font-family="JetBrains Mono, monospace" font-size="9" fill="#ff3131">CLASH · DT-12 × TB-09</text>
+          </svg>
+          <div style="position:absolute;left:14px;bottom:14px;display:flex;gap:6px"><span class="scr-badge" style="background:#fff">100%</span><span class="scr-badge" style="background:#fff">FIT</span></div>
+        </div>
+        <aside class="scr-insp">
+          <div class="hd"><span class="ref">Comments · 3</span><div class="ttl" style="font-size:14px">Level 12 — General Arrangement</div></div>
+          <div style="padding:14px 16px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:9px"><span class="scr-av" style="width:24px;height:24px;font-size:9px">SR</span><div><div style="font:600 12px 'Sofia Pro';color:#231f20">S. Reece <span style="color:#9a9ca0;font-weight:400">· 09:40</span></div><p style="font:300 12px/1.5 'Sofia Pro';color:#5c5f63;margin-top:3px">Duct DT-12 clashes with the transfer beam here. Raising RFI-204.</p></div></div>
+            <div style="display:flex;gap:9px"><span class="scr-orb" style="width:24px;height:24px"></span><div><div style="font:600 12px 'Sofia Pro';color:#231f20">Asite Intelligence</div><div class="scr-bubble" style="margin-top:4px">The clash sits at grid C/12. Two related documents reference this zone.<span class="scr-cite">✓ AST-198, 187</span></div></div></div>
+            <button class="scr-btn p" style="justify-content:center">Add comment</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<div class="endnote"><a href="product/app.html">Open the full-screen product interface →</a></div>
+
+</body>
+</html>

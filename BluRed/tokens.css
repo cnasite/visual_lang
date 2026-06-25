@@ -1,0 +1,81 @@
+/* ============================================================
+   ASITE — Marketing Brand v4.0 (June 2026)
+   Design tokens derived from Asite Brand Guidelines v4.0
+   Palette · Sofia Pro type scale · cube geometry (1:5 radius)
+   ============================================================ */
+
+/* ---- Sofia Pro (primary typeface) ---- */
+@font-face{font-family:'Sofia Pro';src:url('assets/fonts/Sofia Pro Light Az.otf') format('opentype');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Sofia Pro';src:url('assets/fonts/Sofia Pro Regular Az.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Sofia Pro';src:url('assets/fonts/Sofia Pro Medium Az.otf') format('opentype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Sofia Pro';src:url('assets/fonts/Sofia Pro Bold Az.otf') format('opentype');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Sofia Pro';src:url('assets/fonts/Sofia Pro Black Az.otf') format('opentype');font-weight:800;font-style:normal;font-display:swap}
+@font-face{font-family:'Sofia Pro';src:url('assets/fonts/Sofia Pro Bold Italic Az.otf') format('opentype');font-weight:700;font-style:italic;font-display:swap}
+
+:root{
+  /* ---- Core palette ---- */
+  --red:#ff3131;       /* Neo Red — CTAs, alerts, the mark */
+  --blue:#005dff;      /* Blue — secondary, structure */
+  --navy:#0d2745;      /* Navy — primary ground */
+  --charcoal:#231f20;  /* Charcoal — ink / alt ground */
+  --lime:#c1ff6b;      /* Lime — accent (sparing) */
+  --aqua:#33c7b7;      /* Aqua — voice / positive / verified */
+  --sun:#fdd40c;       /* Sun — accent (sparing) */
+  --powder:#f6f5f3;    /* Powder — light ground */
+  --white:#ffffff;
+
+  /* ---- Semantic surfaces (dark-first, navy base) ---- */
+  --bg-0:var(--navy);
+  --bg-1:rgba(255,255,255,.03);
+  --bg-2:rgba(255,255,255,.05);
+  --border:rgba(255,255,255,.07);
+  --border-soft:rgba(255,255,255,.06);
+
+  /* ---- Text on dark ---- */
+  --text-0:#ffffff;
+  --text-1:rgba(255,255,255,.72);
+  --text-2:rgba(255,255,255,.45);
+  --text-3:rgba(255,255,255,.28);
+  --text-faint:rgba(255,255,255,.18);
+
+  /* ---- Text on light (powder) ---- */
+  --ink-0:var(--charcoal);
+  --ink-1:rgba(35,31,32,.55);
+  --ink-2:rgba(35,31,32,.4);
+
+  /* ---- Type ---- */
+  --font-sans:'Sofia Pro','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace; /* data / labels only */
+
+  /* ---- Type scale (Sofia Pro) ---- */
+  --t-display:800 clamp(3.5rem,9vw,7.5rem)/.88 var(--font-sans);
+  --t-h1:700 clamp(1.8rem,3.5vw,2.9rem)/1.08 var(--font-sans);
+  --t-h2:300 1.3rem/1.4 var(--font-sans);
+  --t-h3:600 1.05rem/1.3 var(--font-sans);
+  --t-body:300 .94rem/1.85 var(--font-sans);
+  --t-quote:700 italic .95rem/1.3 var(--font-sans);
+
+  /* eyebrow / label (mono, uppercase) */
+  --t-label:500 10px/1 var(--font-mono);
+  --ls-label:3px;       /* eyebrow tracking */
+  --ls-tight:-.5px;     /* headline tracking */
+
+  /* ---- Spacing ---- */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+  --space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px;
+  --gap-hair:2px;       /* signature 2px module gap */
+  --pad-section:6rem 2.5rem;
+  --maxw:1080px;
+
+  /* ---- Geometry (cube logic): corner radius 1:5 of element size ---- */
+  --r-xs:3px;   /* ~15px module */
+  --r-sm:6px;   /* ~30px */
+  --r-md:8px;   /* ~44px cube face */
+  --r-lg:14px;  /* hero blocks */
+  --r-pill:20px;
+  --radius-ratio:.2; /* radius = size × 0.2 (the 1:5 rule) */
+
+  /* ---- Motion ---- */
+  --ease:cubic-bezier(.2,.6,.2,1);
+  --dur:.16s;
+}
