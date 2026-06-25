@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — BlueBand · AI Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css?v=4">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--white); color:var(--tx-2); font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:rgba(10,71,232,0.25); color:var(--black); }
+  .wrap { max-width:1024px; margin:0 auto; padding:0 var(--space-8); }
+
+  /* ===== nav — copied verbatim from index.html ===== */
+  nav { position:sticky; top:0; z-index:50; background:var(--black); }
+  nav .wrap { display:flex; align-items:center; gap:6px; height:52px; white-space:nowrap; }
+  .nav-mark { display:flex; align-items:center; gap:10px; margin-right:24px; text-decoration:none; }
+  .nav-mark span { font:600 14px/1 var(--font-ui); color:var(--tn-1); }
+  .ntab { font:500 12.5px/1 var(--font-ui); color:var(--tn-2); text-decoration:none; padding:7px 12px;
+    border-radius:var(--r); transition:color var(--t-fast) var(--ease), background var(--t-fast) var(--ease); }
+  .ntab:hover { color:var(--tn-1); background:var(--black-2); }
+  .ntab.on { color:var(--blue-bright); background:var(--black-2); }
+  .nspacer { margin-left:auto; }
+
+  /* ===== fnav — copied verbatim from index.html ===== */
+  .fnav { position:fixed; top:50%; right:18px; transform:translateY(-50%); z-index:60;
+    display:flex; flex-direction:column; gap:1px; padding:8px 6px; max-height:80vh; overflow:auto;
+    background:var(--white); border:1px solid var(--rule); box-shadow:0 12px 32px rgba(11,13,17,0.12); }
+  .fnav .fcap { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase;
+    color:var(--tx-3); padding:4px 9px 8px; }
+  .fnav a { display:flex; align-items:center; gap:8px; font:500 11.5px/1 var(--font-ui); color:var(--tx-2);
+    text-decoration:none; padding:6px 9px; white-space:nowrap;
+    transition:color var(--t-fast) var(--ease), background var(--t-fast) var(--ease); }
+  .fnav a::before { content:""; width:4px; height:4px; background:var(--rule-mid); flex:none; }
+  .fnav a:hover { color:var(--tx-1); background:var(--zone); }
+  .fnav a.on { color:var(--blue); background:var(--blue-tint); }
+  .fnav a.on::before { background:var(--blue); }
+  @media (max-width:1280px){ .fnav{ display:none; } }
+
+  /* ===== hero + section scaffolding — shared with index.html ===== */
+  header.hero { padding:150px 0 120px; border-bottom:1px solid var(--rule); }
+  .chip { display:inline-flex; align-items:center; gap:8px; font:var(--text-label); letter-spacing:var(--track-label);
+    text-transform:uppercase; color:var(--tx-2); border:1px solid var(--rule-mid); border-radius:var(--r); padding:7px 12px; margin-bottom:var(--space-8); }
+  .chip i { width:8px; height:8px; background:var(--blue); display:inline-block; }
+  h1 { font:var(--text-display); letter-spacing:-0.02em; color:var(--tx-1); max-width:820px; }
+  .hero-sub { margin-top:var(--space-8); max-width:600px; font-size:15px; line-height:1.75; color:var(--tx-2); }
+  .hero-meta { margin-top:var(--space-16); display:flex; }
+  .hero-meta div { padding:0 var(--space-8); border-left:1px solid var(--rule); }
+  .hero-meta div:first-child { padding-left:0; border-left:none; }
+  .hero-meta b { color:var(--tx-1); font-weight:600; display:block; font-size:13px; margin-bottom:2px; }
+  .hero-meta span { font:var(--text-small); color:var(--tx-3); }
+
+  section { padding:130px 0; border-bottom:1px solid var(--rule); }
+  .idx { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:#fff; background:var(--blue);
+    border-radius:var(--r); display:inline-block; padding:6px 10px; margin-bottom:var(--space-4); }
+  h2 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--tx-1); margin-bottom:var(--space-4); }
+  h3 { font:var(--text-h3); color:var(--tx-1); }
+  .sub { max-width:620px; margin-bottom:var(--space-16); line-height:1.75; }
+  .rule-note { font:var(--text-small); color:var(--tx-2); border-left:2px solid var(--blue); padding-left:var(--space-4); max-width:600px; margin-top:var(--space-8); }
+  .note-line { font:var(--text-small); color:var(--tx-3); margin-top:var(--space-6); max-width:680px; }
+  .sublbl { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--tx-3); margin-bottom:10px; }
+
+  /* ===== the two marks, side by side ===== */
+  .marks { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); box-shadow:var(--shadow-1); border-radius:var(--r); overflow:hidden; }
+  .markcell { background:var(--white); padding:var(--space-12) var(--space-8) var(--space-8); display:flex; flex-direction:column; }
+  .markcell .glyphrow { height:150px; display:flex; align-items:center; justify-content:center; background:var(--zone); border-radius:var(--r); margin-bottom:var(--space-6); }
+  .markcell .job { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--blue); margin-bottom:6px; }
+  .markcell h3 { margin-bottom:8px; }
+  .markcell p { font:var(--text-small); color:var(--tx-2); line-height:1.7; }
+  .markcell .verbs { margin-top:14px; display:flex; flex-wrap:wrap; gap:6px; }
+  .vb { font:400 10px/1 var(--font-mono); letter-spacing:0.05em; text-transform:uppercase; color:var(--tx-2); background:var(--zone); border-radius:var(--r); padding:6px 9px; }
+  .vb.neg { color:var(--bad); }
+  .splitrule { margin-top:var(--space-8); display:flex; align-items:stretch; background:var(--black); border-radius:var(--r); box-shadow:var(--shadow-1); overflow:hidden; }
+  .splitrule .half { flex:1; padding:var(--space-6) var(--space-8); }
+  .splitrule .half + .half { border-left:1px solid var(--black-2); }
+  .splitrule .k { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--blue-bright); margin-bottom:8px; }
+  .splitrule p { font:400 13px/1.6 var(--font-ui); color:var(--tn-1); }
+  .splitrule b { color:#fff; font-weight:500; }
+
+  /* SVG glyph defaults — sharp like icons */
+  .spark, .orbit { fill:none; stroke-linecap:square; stroke-linejoin:miter; }
+
+  /* ===== shared product-frame chrome (mini app windows) ===== */
+  .frame { background:var(--white); box-shadow:var(--shadow-1); border-radius:var(--r); overflow:hidden; position:relative; }
+  .frame .fbar { display:flex; align-items:center; gap:10px; height:38px; padding:0 14px; border-bottom:1px solid var(--rule); background:var(--zone); }
+  .frame .fbar .dot { width:8px; height:8px; background:var(--rule-mid); }
+  .frame .fbar .ftitle { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--tx-3); }
+  .frame .fbar .fref { margin-left:auto; font:400 11px/1 var(--font-mono); color:var(--tx-3); }
+  .frame .fbody { padding:var(--space-8); position:relative; min-height:200px; }
+
+  .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-4); }
+  .kpi { padding:0 var(--space-6); }
+  .kpi:first-child { padding-left:0; }
+  .kpi .l { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--tx-3); }
+  .kpi .n { font:var(--text-fig); color:var(--tx-1); margin-top:4px; }
+
+  /* generic register rows for mock contexts */
+  .reg-row { display:flex; align-items:center; gap:14px; height:42px; border-top:1px solid var(--rule); font:400 12.5px/1 var(--font-ui); color:var(--tx-1); }
+  .reg-row .rref { font:400 11px/1 var(--font-mono); color:var(--tx-2); width:92px; flex:none; }
+  .reg-row .rt { flex:1; color:var(--tx-2); }
+  .reg-row .rg { font:400 11px/1 var(--font-mono); color:var(--tx-3); width:70px; flex:none; }
+
+  /* ===== Pattern 1 — the Intelligence blob ===== */
+  .blob-stage { background:var(--zone); border-radius:var(--r); box-shadow:var(--shadow-1); padding:var(--space-12); display:flex; align-items:flex-start; justify-content:center; gap:var(--space-12); flex-wrap:wrap; }
+
+  /* closed trigger pill */
+  .blob-pill { display:inline-flex; align-items:center; gap:9px; font:500 12.5px/1 var(--font-ui); color:var(--tx-1);
+    background:var(--white); box-shadow:var(--shadow-2); border-radius:var(--r); padding:11px 15px; white-space:nowrap; }
+  .blob-pill .spark { stroke:var(--blue); stroke-width:1.5; flex:none; }
+  .blob-pill .u-kbd { margin-left:2px; }
+
+  /* OPEN panel — LIGHT, elevated, at most a whisper of tint */
+  .ipanel { width:380px; background:var(--white); box-shadow:var(--shadow-2); border-radius:var(--r);
+    display:flex; flex-direction:column; overflow:hidden; text-align:left; border-top:2px solid var(--blue); }
+  .ipanel .ihd { display:flex; align-items:center; gap:9px; padding:13px 15px; border-bottom:1px solid var(--rule); background:var(--blue-tint); }
+  .ipanel .ihd .spark { stroke:var(--blue); stroke-width:1.5; flex:none; }
+  .ipanel .ihd .l { font:var(--text-label); letter-spacing:0.1em; text-transform:uppercase; color:var(--blue); }
+  .ipanel .ihd .reg { margin-left:auto; font:400 9px/1 var(--font-mono); letter-spacing:0.08em; color:var(--tx-3); }
+  .ipanel .ihd .x { stroke:var(--tx-3); stroke-width:1.5; stroke-linecap:square; fill:none; cursor:pointer; flex:none; margin-left:10px; }
+  .ipanel .ibd { padding:15px; display:flex; flex-direction:column; gap:13px; }
+  .iq { align-self:flex-end; max-width:84%; background:var(--zone); border-radius:var(--r); padding:8px 12px; font:400 12.5px/1.5 var(--font-ui); color:var(--tx-1); }
+  .ia { font:400 13px/1.65 var(--font-ui); color:var(--tx-1); }
+  .ia b { font-weight:600; }
+  .ia .mono { font:500 11.5px/1 var(--font-mono); color:var(--blue); }
+  .isrc { font:400 9.5px/1.5 var(--font-mono); letter-spacing:0.05em; color:var(--tx-3); }
+  .ipanel .icta { background:var(--blue); color:#fff; font:500 11px/1 var(--font-mono); letter-spacing:0.04em; border:none; border-radius:var(--r); padding:10px 14px; align-self:flex-start; cursor:pointer; }
+  .ipanel .icta:hover { background:var(--blue-press); }
+  .ipanel .iin { display:flex; align-items:center; gap:8px; padding:11px 15px; border-top:1px solid var(--rule); font:400 12px/1 var(--font-ui); color:var(--tx-3); }
+  .ipanel .iin .u-kbd { margin-left:auto; }
+  .blobcap { display:block; font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--tx-3); margin-top:14px; text-align:center; }
+
+  /* ===== Pattern 2 — the Insight banner (NO BG) ===== */
+  .ctx-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  /* the banner itself: no background, no fill — only a thin left rule + spark marker */
+  .insight { display:flex; align-items:flex-start; gap:10px; padding:10px 0 10px 14px; border-left:2px solid var(--blue); background:none; }
+  .insight .spark { stroke:var(--blue); stroke-width:1.5; flex:none; margin-top:1px; }
+  .insight .itxt { font:400 12.5px/1.6 var(--font-ui); color:var(--tx-1); }
+  .insight .itxt .mono { font:500 11px/1 var(--font-mono); color:var(--blue); }
+  .insight .ilink { font:500 11px/1 var(--font-mono); letter-spacing:0.04em; color:var(--blue); text-decoration:none; white-space:nowrap; border-bottom:1px solid var(--blue); padding-bottom:1px; }
+  /* contrast demo: banner vs blob, side by side */
+  .vs { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); box-shadow:var(--shadow-1); border-radius:var(--r); overflow:hidden; margin-top:var(--space-8); }
+  .vs .vcell { background:var(--white); padding:var(--space-8); }
+  .vs .vcell .vk { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--tx-3); margin-bottom:14px; }
+  .vs .vcell p { font:var(--text-small); color:var(--tx-2); line-height:1.7; margin-top:14px; }
+  @media (max-width:880px){ .ctx-grid{grid-template-columns:1fr;} .vs{grid-template-columns:1fr;} }
+
+  /* ===== Pattern 3 — the Agent (orbit motif) ===== */
+  .agent-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start; }
+  .agent-grid .full { grid-column:1/-1; }
+
+  /* floating agent chat panel */
+  .achat { width:380px; background:var(--white); box-shadow:var(--shadow-2); border-radius:var(--r); overflow:hidden; border-top:2px solid var(--blue); }
+  .achat .ahd { display:flex; align-items:center; gap:10px; padding:13px 15px; border-bottom:1px solid var(--rule); }
+  .achat .ahd .orbit { stroke:var(--blue); stroke-width:1.4; flex:none; }
+  .achat .ahd b { font:600 13px/1 var(--font-ui); color:var(--tx-1); }
+  .achat .ahd .st { margin-left:auto; }
+  .achat .ahd .x { stroke:var(--tx-3); stroke-width:1.5; stroke-linecap:square; fill:none; cursor:pointer; flex:none; margin-left:8px; }
+  .achat .abd { padding:15px; display:flex; flex-direction:column; gap:11px; }
+  .achat .ainstr { align-self:flex-end; max-width:84%; background:var(--zone); border-radius:var(--r); padding:8px 12px; font:400 12.5px/1.5 var(--font-ui); color:var(--tx-1); }
+  .achat .alead { font:400 13px/1.6 var(--font-ui); color:var(--tx-1); }
+  .achat .alead .mono { font:500 11px/1 var(--font-mono); color:var(--blue); }
+  .step { display:flex; align-items:center; gap:10px; font:400 12px/1.4 var(--font-ui); color:var(--tx-1); padding:7px 0; border-top:1px solid var(--rule); }
+  .step .sq { width:9px; height:9px; flex:none; }
+  .step .sref { margin-left:auto; font:400 10px/1 var(--font-mono); color:var(--tx-3); letter-spacing:0.04em; }
+  .step.done .sq { background:var(--ok); }
+  .step.run .sq { background:var(--warn); }
+  .step.wait .sq { background:var(--inert); }
+  .achat .aft { padding:12px 15px; border-top:1px solid var(--rule); display:flex; gap:8px; background:var(--zone); }
+  .achat .aft .ab { font:500 11px/1 var(--font-mono); letter-spacing:0.04em; border-radius:var(--r); padding:9px 13px; border:none; cursor:pointer; }
+  .achat .aft .ab.go { background:var(--blue); color:#fff; }
+  .achat .aft .ab.go:hover { background:var(--blue-press); }
+  .achat .aft .ab.sec { background:var(--white); color:var(--tx-1); border:1px solid var(--black); }
+
+  /* embedded agent CTA inside a card */
+  .acard { background:var(--white); box-shadow:var(--shadow-1); border-radius:var(--r); padding:var(--space-8); display:flex; flex-direction:column; gap:14px; }
+  .acard .ahead { display:flex; align-items:baseline; gap:10px; }
+  .acard .ahead b { font:600 14px/1.3 var(--font-ui); color:var(--tx-1); }
+  .acard .ahead .ref { margin-left:auto; font:400 11px/1 var(--font-mono); color:var(--tx-3); }
+  .acard p { font:var(--text-small); color:var(--tx-2); line-height:1.65; }
+  .agent-cta { display:inline-flex; align-items:center; gap:9px; font:500 12px/1 var(--font-ui); color:#fff; background:var(--blue);
+    border:none; border-radius:var(--r); padding:11px 15px; cursor:pointer; align-self:flex-start; }
+  .agent-cta:hover { background:var(--blue-press); }
+  .agent-cta .orbit { stroke:#fff; stroke-width:1.4; flex:none; }
+
+  /* inline agent trigger inside a field / row */
+  .inline-demo { background:var(--white); box-shadow:var(--shadow-1); border-radius:var(--r); padding:var(--space-8); display:flex; flex-direction:column; gap:18px; }
+  .ffield { position:relative; }
+  .ffield .flab { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--tx-3); margin-bottom:8px; display:block; }
+  .ffield .fwrap { display:flex; align-items:center; background:var(--zone); border-bottom:1.5px solid var(--black); border-radius:var(--r) var(--r) 0 0; }
+  .ffield textarea { flex:1; resize:none; background:none; border:none; outline:none; font:400 13px/1.5 var(--font-ui); color:var(--tx-2); padding:10px 12px; min-height:54px; }
+  .agent-ib { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; flex:none; margin:0 8px; background:var(--blue); border-radius:var(--r); cursor:pointer; }
+  .agent-ib:hover { background:var(--blue-press); }
+  .agent-ib .orbit { stroke:#fff; stroke-width:1.5; }
+  .trow2 { display:flex; align-items:center; gap:12px; height:44px; border-top:1px solid var(--rule); font:400 12.5px/1 var(--font-ui); color:var(--tx-1); }
+  .trow2 .tref { font:400 11px/1 var(--font-mono); color:var(--tx-2); width:88px; flex:none; }
+  .trow2 .tt { flex:1; color:var(--tx-2); }
+  .agent-ib.sm { width:24px; height:24px; margin:0; }
+  .agent-ib.sm .orbit { stroke-width:1.6; }
+
+  /* ===== reference matrix ===== */
+  .matrix { display:grid; grid-template-columns:150px 1fr 1fr 1.1fr; background:var(--white); box-shadow:var(--shadow-1); border-radius:var(--r); overflow:hidden; }
+  .matrix > div { padding:14px 16px; border-top:1px solid var(--rule); }
+  .matrix > div:nth-child(-n+4) { border-top:none; background:var(--black); }
+  .matrix .mh { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--tn-1); }
+  .matrix .rk { font:600 12.5px/1.4 var(--font-ui); color:var(--tx-1); }
+  .matrix .rk .sm { display:block; font:400 10px/1 var(--font-mono); color:var(--tx-3); margin-top:5px; letter-spacing:0.04em; }
+  .matrix .cell { font:400 12px/1.6 var(--font-ui); color:var(--tx-2); }
+  .matrix .col-l { border-left:1px solid var(--rule); }
+  .matrix .yes { color:var(--ok); font-weight:600; }
+  .matrix .no { color:var(--bad); font-weight:600; }
+  @media (max-width:880px){ .matrix{grid-template-columns:1fr;} .matrix .col-l{border-left:none;} .matrix > div:nth-child(2),.matrix > div:nth-child(3),.matrix > div:nth-child(4){display:none;} }
+
+  /* ===== do / don't ===== */
+  .dd { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); box-shadow:var(--shadow-1); border-radius:var(--r); overflow:hidden; }
+  .dd .ddcol { background:var(--white); padding:var(--space-8); }
+  .dd .ddh { display:flex; align-items:center; gap:8px; font:600 13px/1 var(--font-ui); margin-bottom:18px; }
+  .dd .ddh .m { width:14px; height:14px; flex:none; }
+  .dd .do .ddh { color:var(--ok); } .dd .do .ddh .m { background:var(--ok); }
+  .dd .dont .ddh { color:var(--bad); } .dd .dont .ddh .m { background:var(--bad); }
+  .dd li { list-style:none; font:var(--text-small); color:var(--tx-2); line-height:1.6; padding:11px 0 11px 18px; border-top:1px solid var(--rule); position:relative; }
+  .dd li::before { content:""; position:absolute; left:0; top:17px; width:7px; height:7px; }
+  .dd .do li::before { background:var(--ok); }
+  .dd .dont li::before { background:var(--bad); }
+  .dd li b { color:var(--tx-1); font-weight:600; }
+  @media (max-width:880px){ .dd{grid-template-columns:1fr;} .marks,.agent-grid{grid-template-columns:1fr;} }
+
+  .tocc { font:400 11px/1 var(--font-mono); letter-spacing:0.04em; color:var(--tx-2); text-decoration:none;
+    background:var(--zone); border-radius:var(--r); padding:8px 12px; }
+  .tocc:hover { background:var(--rule); color:var(--tx-1); }
+
+  footer { padding:var(--space-8) 0; }
+  footer .wrap { display:flex; justify-content:space-between; font:var(--text-small); color:var(--tx-3); }
+  footer a { color:var(--tx-2); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-body" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-arrow" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+
+    <!-- square-spark: Intelligence / knowledge mark -->
+    <symbol id="sparkmark" viewBox="0 0 20 20">
+      <rect x="4" y="4" width="12" height="12"/>
+      <path d="M10 1.5 V4 M10 16 V18.5 M1.5 10 H4 M16 10 H18.5 M10 7.5 V12.5 M7.5 10 H12.5"/>
+    </symbol>
+
+    <!-- orbit-nodes: Agent / Coworker mark — central filled core, rotated-square track, square satellites -->
+    <symbol id="orbitmark" viewBox="0 0 20 20">
+      <rect class="o-track" x="3.4" y="3.4" width="13.2" height="13.2" transform="rotate(45 10 10)" fill="none"/>
+      <rect class="o-core" x="7.5" y="7.5" width="5" height="5"/>
+      <rect class="o-sat" x="8.4" y="0.6" width="3.2" height="3.2"/>
+      <rect class="o-sat" x="16.2" y="8.4" width="3.2" height="3.2"/>
+      <rect class="o-sat" x="0.6" y="8.4" width="3.2" height="3.2"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="nav-mark" href="index.html">
+      <svg width="20" height="21" viewBox="0 0 377 396"><use href="#amark"/></svg>
+      <span>ASITE</span>
+    </a>
+    <a class="ntab" href="index.html">Language</a>
+    <a class="ntab" href="screens.html">Product</a>
+    <a class="ntab" href="web.html">Website</a>
+    <a class="ntab" href="slides.html">Slides</a>
+    <a class="ntab on" href="ai-hub.html">AI Hub</a>
+    <span class="nspacer"></span>
+  </div>
+</nav>
+
+<aside class="fnav" aria-label="On this page">
+  <div class="fcap">On this page</div>
+  <a href="#layers">Two layers</a>
+  <a href="#blob">The blob</a>
+  <a href="#banner">The insight banner</a>
+  <a href="#agent">The agent</a>
+  <a href="#matrix">Which one, when</a>
+  <a href="#discipline">The discipline</a>
+</aside>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="chip"><i></i>BlueBand · AI in the product</div>
+    <h1>Two layers over one instrument.</h1>
+    <p class="hero-sub">Asite is a record. Over that record sit two distinct layers, each with one job. <b style="color:var(--tx-1)">Asite Intelligence</b> is the knowledge layer — it knows the record, explains it, and surfaces what matters. It never touches the work. <b style="color:var(--tx-1)">Asite Agent</b> is the action layer — it does a thing it was told to do, and only shows up when there is a thing to do. Same blue, same square geometry, two marks that never get confused. This page is how each one appears inside the product.</p>
+    <div class="hero-meta">
+      <div><b>Intelligence</b><span>Knows · explains · surfaces</span></div>
+      <div><b>Agent</b><span>Does · only when instructed</span></div>
+      <div><b>One blue</b><span>Both layers, the same signal</span></div>
+      <div><b>Geometry</b><span>Square-spark · orbit-nodes</span></div>
+    </div>
+    <div style="margin-top:56px; display:flex; flex-wrap:wrap; gap:8px">
+      <a href="#layers" class="tocc">Two marks, two jobs</a><a href="#blob" class="tocc">Pattern 1 — the blob</a><a href="#banner" class="tocc">Pattern 2 — the insight banner</a><a href="#agent" class="tocc">Pattern 3 — the agent</a><a href="#matrix" class="tocc">Which one, when</a><a href="#discipline" class="tocc">The discipline</a>
+    </div>
+  </div>
+</header>
+
+<section id="layers">
+  <div class="wrap">
+    <div class="idx">01 — Two marks, two jobs</div>
+    <h2>Knowledge and action never share a mark</h2>
+    <p class="sub">The split is the whole system. If a surface only knows things, it wears the square-spark and it cannot act. If a surface does a thing, it wears the orbit and it only exists because there is something to do. Get this wrong and the user can't tell whether the product is about to write to the record.</p>
+    <div class="marks">
+      <div class="markcell">
+        <div class="glyphrow">
+          <svg class="spark" width="64" height="64" viewBox="0 0 20 20" style="stroke:var(--blue); stroke-width:1.3"><use href="#sparkmark"/></svg>
+        </div>
+        <div class="job">Knowledge layer</div>
+        <h3>Asite Intelligence — the square-spark</h3>
+        <p>A square holding an inner spark with four ticks: the record, lit. It knows, explains, answers and surfaces insight, citing where it read. It never writes, never commits, never moves a thing on the record on its own.</p>
+        <div class="verbs">
+          <span class="vb">Knows</span><span class="vb">Explains</span><span class="vb">Answers</span><span class="vb">Surfaces</span><span class="vb neg">Never acts</span>
+        </div>
+      </div>
+      <div class="markcell">
+        <div class="glyphrow">
+          <svg class="orbit" width="64" height="64" viewBox="0 0 20 20" style="stroke:var(--blue); stroke-width:1.2; fill:var(--blue)"><use href="#orbitmark"/></svg>
+        </div>
+        <div class="job">Action layer</div>
+        <h3>Asite Agent / Coworker — the orbit</h3>
+        <p>A filled blue core inside a thin diamond track, with three small square satellites at work on it: an agent doing a job. It appears only when there is an instructed action to run — draft, check, route, reconcile — and disappears when the job is done.</p>
+        <div class="verbs">
+          <span class="vb">Drafts</span><span class="vb">Checks</span><span class="vb">Routes</span><span class="vb">Reconciles</span><span class="vb neg">Never lingers</span>
+        </div>
+      </div>
+    </div>
+    <div class="splitrule">
+      <div class="half">
+        <div class="k">The rule that separates them</div>
+        <p>Intelligence is allowed everywhere, all the time, because it only ever <b>reads</b>. It can sit ambient on any screen — it changes nothing.</p>
+      </div>
+      <div class="half">
+        <div class="k">And holds them apart</div>
+        <p>The Agent is allowed <b>only where there is a job</b>, because it <b>writes</b>. No job, no orbit — it is never decoration and never lingers as an idle presence.</p>
+      </div>
+    </div>
+    <p class="note-line">Both marks are built from the same pen as the iconography — 1.5px strokes, square caps, mitered corners, no circles or rounded forms anywhere. One blue carries both.</p>
+  </div>
+</section>
+
+<section id="blob">
+  <div class="wrap">
+    <div class="idx">02 — Pattern 1 · global</div>
+    <h2>The Intelligence blob</h2>
+    <p class="sub">A floating assistant pinned bottom-right of every screen. It is a knowledge tool: it pulls context from across the record — registers, drawings, RFIs, workflow logs — to answer a question, whether that question is about the screen you're on or anything else in the product. It is the one place Intelligence has its own surface, because you came to it. It still only reads; nothing it shows writes to the record.</p>
+
+    <div class="sublbl">A — Closed trigger pill</div>
+    <div class="blob-stage" style="justify-content:flex-start; padding:var(--space-8)">
+      <span class="blob-pill">
+        <svg class="spark" width="16" height="16" viewBox="0 0 20 20"><use href="#sparkmark"/></svg>
+        Ask Asite Intelligence <span class="u-kbd">⌘I</span>
+      </span>
+    </div>
+    <p class="note-line">At rest it is a quiet white pill on soft shadow, square-spark in blue, a mono ⌘I hint. It sits above the work, never a row in the stack.</p>
+
+    <div class="sublbl" style="margin-top:var(--space-12)">B — Open panel · two example answers</div>
+    <div class="blob-stage">
+      <!-- screen-context question -->
+      <div>
+        <div class="ipanel">
+          <div class="ihd">
+            <svg class="spark" width="16" height="16" viewBox="0 0 20 20"><use href="#sparkmark"/></svg>
+            <span class="l">Asite Intelligence</span>
+            <span class="reg">READS · NEVER WRITES</span>
+            <svg class="x" width="13" height="13" viewBox="0 0 20 20"><path d="M5 5 L15 15 M15 5 L5 15"/></svg>
+          </div>
+          <div class="ibd">
+            <div class="iq">What's blocking pour 6 on this screen?</div>
+            <div class="ia">One hold. <b>RFI <span class="mono">#4182</span></b> — a slab pour clash at <span class="mono">C-07/L+04</span>. Three structural drawings sit behind it; the pour 6 hold point releases on your sign-off.</div>
+            <div class="isrc">SOURCES: RFI REGISTER · DOC REGISTER · POUR PLAN REV C</div>
+            <button class="icta">REVIEW 3</button>
+          </div>
+          <div class="iin">Ask about this screen…<span class="u-kbd">⌘I</span></div>
+        </div>
+        <span class="blobcap">Screen-context question</span>
+      </div>
+
+      <!-- general product question -->
+      <div>
+        <div class="ipanel">
+          <div class="ihd">
+            <svg class="spark" width="16" height="16" viewBox="0 0 20 20"><use href="#sparkmark"/></svg>
+            <span class="l">Asite Intelligence</span>
+            <span class="reg">READS · NEVER WRITES</span>
+            <svg class="x" width="13" height="13" viewBox="0 0 20 20"><path d="M5 5 L15 15 M15 5 L5 15"/></svg>
+          </div>
+          <div class="ibd">
+            <div class="iq">How does a revision get superseded in Asite?</div>
+            <div class="ia">When you issue a newer revision, the prior one moves to <span class="mono">SUPERSEDED</span> automatically and stays on the audit trail. Subscribers on the distribution matrix are notified; nothing is deleted.</div>
+            <div class="isrc">SOURCES: PRODUCT HELP · DOC CONTROL POLICY</div>
+            <button class="icta">OPEN GUIDE</button>
+          </div>
+          <div class="iin">Ask anything about Asite…<span class="u-kbd">⌘I</span></div>
+        </div>
+        <span class="blobcap">General product question</span>
+      </div>
+    </div>
+    <p class="rule-note">The open panel is a <b>light</b> elevated surface — white on soft shadow, a single thin blue top rule and a whisper of blue tint only on the header. Not a dense blue plane, not a gradient. Prose is sans; every ref, location code and number is mono blue. The CTA is solid blue with a mono label — and a blob CTA always opens, navigates or filters. It never commits.</p>
+  </div>
+</section>
+
+<section id="banner">
+  <div class="wrap">
+    <div class="idx">03 — Pattern 2 · in context</div>
+    <h2>The insight banner</h2>
+    <p class="sub">An inline insight shown inside the real content — a dashboard, a report, a card, a workflow view. It states one thing relevant to what you're looking at, and may or may not carry a CTA. The strict rule is restraint: <b style="color:var(--tx-1)">it has no background at all.</b> No fill, no gradient, no pastel wash. It reads as a quiet line of text set among the data, distinguished only by a small square-spark marker and a thin blue left rule. It never competes with the numbers it comments on.</p>
+
+    <div class="ctx-grid">
+      <!-- context 1: dashboard KPI block — with CTA -->
+      <div class="frame">
+        <div class="fbar"><span class="dot"></span><span class="ftitle">Dashboard · Battersea Phase 3</span><span class="fref">WK 24</span></div>
+        <div class="fbody">
+          <div class="kpis">
+            <div class="kpi"><div class="l">Open RFIs</div><div class="n">47</div></div>
+            <div class="kpi"><div class="l">Awaiting you</div><div class="n" style="color:var(--blue)">17</div></div>
+            <div class="kpi"><div class="l">Held</div><div class="n" style="color:var(--bad)">1</div></div>
+            <div class="kpi"><div class="l">Issued / wk</div><div class="n">64</div></div>
+          </div>
+          <div style="margin-top:22px">
+            <div class="insight">
+              <svg class="spark" width="14" height="14" viewBox="0 0 20 20"><use href="#sparkmark"/></svg>
+              <div class="itxt">Structural response time is drifting — <span class="mono">2.4d</span> median, above trend for three weeks. <a class="ilink" href="#">SEE WORKFLOW →</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- context 2: report — no CTA -->
+      <div class="frame">
+        <div class="fbar"><span class="dot"></span><span class="ftitle">QPR · Document control</span><span class="fref">Q2 2026</span></div>
+        <div class="fbody">
+          <div class="sublbl" style="margin-bottom:0">Issued this quarter</div>
+          <div class="reg-row"><span class="rref">DR-1182</span><span class="rt">Core wall reinforcement</span><span class="rg">REV P5</span></div>
+          <div class="reg-row"><span class="rref">DR-1170</span><span class="rt">Slab edge detail</span><span class="rg">REV P3</span></div>
+          <div class="reg-row"><span class="rref">DR-1166</span><span class="rt">Stair core setting-out</span><span class="rg">REV P2</span></div>
+          <div style="margin-top:18px">
+            <div class="insight">
+              <svg class="spark" width="14" height="14" viewBox="0 0 20 20"><use href="#sparkmark"/></svg>
+              <div class="itxt">Issue rate this quarter is up <span class="mono">12%</span> on Q1, driven entirely by the structural package. No action needed — recorded for the review.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- context 3: card — with CTA, full width -->
+    <div class="frame" style="margin-top:18px">
+      <div class="fbar"><span class="dot"></span><span class="ftitle">RFI card · RFI-4182</span><span class="fref">HELD 2D</span></div>
+      <div class="fbody" style="min-height:0">
+        <div style="display:flex; align-items:baseline; gap:12px">
+          <h3 style="font:600 15px/1.3 var(--font-ui)">Slab pour clash — C-07/L+04</h3>
+          <span class="u-badge bad" style="margin-left:auto"><i></i>HELD</span>
+        </div>
+        <p style="font:var(--text-small); color:var(--tx-2); line-height:1.65; margin-top:10px; max-width:560px">Raised against the pour 6 hold point. Awaiting structural clarification on the holding-down bolt set-out before the slab can be released.</p>
+        <div style="margin-top:18px; padding-top:18px; border-top:1px solid var(--rule)">
+          <div class="insight">
+            <svg class="spark" width="14" height="14" viewBox="0 0 20 20"><use href="#sparkmark"/></svg>
+            <div class="itxt">Two of the three drawings behind this RFI are already at <span class="mono">REV P5</span> — only <span class="mono">DR-1181</span> is still in review. <a class="ilink" href="#">OPEN DR-1181 →</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vs">
+      <div class="vcell">
+        <div class="vk">The blob — has a surface</div>
+        <span class="blob-pill" style="box-shadow:var(--shadow-1)">
+          <svg class="spark" width="15" height="15" viewBox="0 0 20 20"><use href="#sparkmark"/></svg>
+          Ask Asite Intelligence <span class="u-kbd">⌘I</span>
+        </span>
+        <p>You went to it. It owns its own elevated plane, floats above the work, and answers a question you asked.</p>
+      </div>
+      <div class="vcell">
+        <div class="vk">The banner — has no surface</div>
+        <div class="insight" style="margin-top:2px">
+          <svg class="spark" width="14" height="14" viewBox="0 0 20 20"><use href="#sparkmark"/></svg>
+          <div class="itxt">Structural response time is drifting — <span class="mono">2.4d</span> median.</div>
+        </div>
+        <p>It came to you, in context. No plane, no fill — a marker and a thin rule, set among the real content. It must never look like a card.</p>
+      </div>
+    </div>
+    <p class="rule-note">Same square-spark, same one blue, opposite restraint. If an insight in context grows a background, a box or a tint behind it, it has stopped being a banner and become a blob in the wrong place.</p>
+  </div>
+</section>
+
+<section id="agent">
+  <div class="wrap">
+    <div class="idx">04 — Pattern 3 · action</div>
+    <h2>Asite Agent / Coworker</h2>
+    <p class="sub">The action layer, wearing the orbit. It only exists when there is a job to do — something the user instructed, that the Agent then carries out against the record. It shows up in three forms: a floating chat that runs the task, a CTA embedded where the work lives, and a small inline trigger. In all three the orbit mark says the same thing: <b style="color:var(--tx-1)">this will do something.</b></p>
+
+    <div class="agent-grid">
+      <!-- (a) floating chat -->
+      <div>
+        <div class="sublbl">A — Floating chat over a workflow</div>
+        <div class="achat">
+          <div class="ahd">
+            <svg class="orbit" width="18" height="18" viewBox="0 0 20 20" style="fill:var(--blue)"><use href="#orbitmark"/></svg>
+            <b>Asite Agent</b>
+            <span class="u-badge warn st"><i></i>RUNNING</span>
+            <svg class="x" width="13" height="13" viewBox="0 0 20 20"><path d="M5 5 L15 15 M15 5 L5 15"/></svg>
+          </div>
+          <div class="abd">
+            <div class="ainstr">Draft the response to RFI-4182.</div>
+            <div class="alead">On it. Pulling the three structural drawings behind <span class="mono">RFI-4182</span> and drafting a response against the pour 6 hold point.</div>
+          </div>
+          <div style="padding:0 15px 6px">
+            <div class="step done"><span class="sq"></span>Read RFI-4182 + thread<span class="sref">DONE</span></div>
+            <div class="step done"><span class="sq"></span>Pulled DR-1182, DR-1181, DR-1170<span class="sref">3 DOCS</span></div>
+            <div class="step run"><span class="sq"></span>Drafting response text<span class="sref">RUNNING</span></div>
+            <div class="step wait"><span class="sq"></span>Route to structural lead<span class="sref">WAITS YOU</span></div>
+          </div>
+          <div class="aft">
+            <button class="ab go">REVIEW DRAFT</button>
+            <button class="ab sec">STOP</button>
+          </div>
+        </div>
+        <p class="note-line">The Agent reports its steps in the status tints — green done, amber running, gray waiting on you. It drafts; it does not send. The final commit always waits on a person.</p>
+      </div>
+
+      <!-- (b) embedded CTA in a card -->
+      <div>
+        <div class="sublbl">B — CTA embedded in a card / view</div>
+        <div class="acard">
+          <div class="ahead">
+            <b>Pour 6 — slab release</b>
+            <span class="ref">C-07/L+04</span>
+          </div>
+          <p>Three structural drawings are blocking the hold point. There is a job here, so the Agent appears — to draft the RFI response and to run the clash check on the latest revisions before release.</p>
+          <button class="agent-cta">
+            <svg class="orbit" width="16" height="16" viewBox="0 0 20 20" style="fill:#fff"><use href="#orbitmark"/></svg>
+            Draft the RFI response
+          </button>
+          <button class="agent-cta" style="background:var(--white); color:var(--blue); border:1px solid var(--blue)">
+            <svg class="orbit" width="16" height="16" viewBox="0 0 20 20" style="fill:var(--blue); stroke:var(--blue)"><use href="#orbitmark"/></svg>
+            Run the clash check
+          </button>
+          <p style="font:400 11px/1.5 var(--font-mono); color:var(--tx-3); letter-spacing:0.03em">If these drawings were already cleared, neither button would be here.</p>
+        </div>
+      </div>
+
+      <!-- (c) inline trigger -->
+      <div class="full">
+        <div class="sublbl">C — Inline trigger in fields, rows and cells</div>
+        <div class="inline-demo">
+          <div class="ffield">
+            <label class="flab">RFI-4182 · Response</label>
+            <div class="fwrap">
+              <textarea>Re: slab pour clash at C-07/L+04 —</textarea>
+              <span class="agent-ib" title="Draft with Agent">
+                <svg class="orbit" width="17" height="17" viewBox="0 0 20 20" style="fill:#fff"><use href="#orbitmark"/></svg>
+              </span>
+            </div>
+          </div>
+          <div>
+            <div class="sublbl" style="margin-bottom:0">Drawing register · Structure</div>
+            <div class="trow2"><span class="tref">DR-1182</span><span class="tt">Core wall reinforcement</span><span class="u-badge warn"><i></i>REVIEW</span><span class="agent-ib sm" title="Run clash check on this row"><svg class="orbit" width="14" height="14" viewBox="0 0 20 20" style="fill:#fff"><use href="#orbitmark"/></svg></span></div>
+            <div class="trow2"><span class="tref">DR-1181</span><span class="tt">Slab edge detail</span><span class="u-badge warn"><i></i>REVIEW</span><span class="agent-ib sm" title="Run clash check on this row"><svg class="orbit" width="14" height="14" viewBox="0 0 20 20" style="fill:#fff"><use href="#orbitmark"/></svg></span></div>
+            <div class="trow2"><span class="tref">DR-1170</span><span class="tt">Slab edge detail — east</span><span class="u-badge mute"><i></i>ISSUED</span><span style="width:24px; flex:none"></span></div>
+          </div>
+        </div>
+        <p class="note-line">A small orbit blob inside a text field drafts the entry; the same blob on a row runs a check against it. The issued row carries no trigger — there is nothing to do, so the Agent is not there.</p>
+      </div>
+    </div>
+    <p class="rule-note"><b>The Agent never lingers as ambient decoration.</b> Unlike Intelligence, which can sit on any screen because it only reads, the Agent appears strictly where there is an instructed action to take. If there's nothing to do, there is no orbit on the screen.</p>
+  </div>
+</section>
+
+<section id="matrix">
+  <div class="wrap">
+    <div class="idx">05 — Which one, when</div>
+    <h2>One ruled matrix, no cards</h2>
+    <p class="sub">Three surfaces, two layers. The question is always the same: does the user need to <b style="color:var(--tx-1)">know</b> something, or <b style="color:var(--tx-1)">do</b> something — and did they come to it, or did it come to them.</p>
+    <div class="matrix">
+      <div class="mh">Surface</div>
+      <div class="mh">Layer</div>
+      <div class="mh col-l">Has a surface?</div>
+      <div class="mh col-l">Use it when</div>
+
+      <div class="rk">Intelligence blob<span class="sm">SQUARE-SPARK</span></div>
+      <div class="cell">Knowledge — reads only</div>
+      <div class="cell col-l"><span class="yes">Yes</span> — light floating panel, bottom-right</div>
+      <div class="cell col-l">The user comes with a question — about this screen or about Asite. Answer and cite; never write.</div>
+
+      <div class="rk">Insight banner<span class="sm">SQUARE-SPARK</span></div>
+      <div class="cell">Knowledge — reads only</div>
+      <div class="cell col-l"><span class="no">No</span> — marker + thin rule, in context</div>
+      <div class="cell col-l">An insight is worth surfacing where the data lives. State one thing, optional CTA, never a fill.</div>
+
+      <div class="rk">Agent chat<span class="sm">ORBIT</span></div>
+      <div class="cell">Action — writes</div>
+      <div class="cell col-l"><span class="yes">Yes</span> — floating panel with steps</div>
+      <div class="cell col-l">A task was instructed and runs in several steps. Show progress in status tints; commit waits on a person.</div>
+
+      <div class="rk">Agent CTA<span class="sm">ORBIT</span></div>
+      <div class="cell">Action — writes</div>
+      <div class="cell col-l"><span class="yes">Yes</span> — button in a card / view</div>
+      <div class="cell col-l">There is a specific job at this spot — draft, check, route. The button only exists while the job does.</div>
+
+      <div class="rk">Agent inline<span class="sm">ORBIT</span></div>
+      <div class="cell">Action — writes</div>
+      <div class="cell col-l"><span class="yes">Yes</span> — small blob in a field / row / cell</div>
+      <div class="cell col-l">An action belongs to one field or row. The blob triggers it in place, and is absent where there's nothing to do.</div>
+    </div>
+    <p class="rule-note">Knowledge surfaces wear the square-spark; action surfaces wear the orbit. The blob and the banner are the same layer in two registers — one you go to, one that comes to you. All three Agent forms are the same layer in three sizes.</p>
+  </div>
+</section>
+
+<section id="discipline" style="border-bottom:none">
+  <div class="wrap">
+    <div class="idx">06 — The discipline</div>
+    <h2>The lock on the AI layer</h2>
+    <p class="sub">Everything above reduces to a short set of rules. Break one and the layers blur — and the user stops trusting whether the product is about to write to the record.</p>
+    <div class="dd">
+      <div class="ddcol do">
+        <div class="ddh"><span class="m"></span>Do</div>
+        <ul>
+          <li><b>Let Intelligence explain, never act.</b> It reads the record, answers, and cites its sources. Its CTAs open, navigate and filter — they never commit.</li>
+          <li><b>Show the Agent only when there's a job.</b> The orbit appears with an instructed action and disappears when the job is done.</li>
+          <li><b>Keep the insight banner backgroundless.</b> A square-spark marker and a thin blue left rule, set among the real content. Nothing more.</li>
+          <li><b>Hold the commit on a person.</b> The Agent drafts, checks and routes; the sign-off that writes to the record is always a human press.</li>
+          <li><b>Use one blue and square motifs.</b> Square-spark for knowledge, orbit for action — same pen, square caps, mitered joins, one signal blue.</li>
+          <li><b>Set every figure in mono.</b> Refs, location codes, revisions, counts and durations are IBM Plex Mono, in prose and in panels alike.</li>
+        </ul>
+      </div>
+      <div class="ddcol dont">
+        <div class="ddh"><span class="m"></span>Don't</div>
+        <ul>
+          <li><b>Don't let Intelligence write.</b> If a surface commits, moves or issues anything, it is the Agent and must wear the orbit — not the spark.</li>
+          <li><b>Don't leave the Agent lingering.</b> No idle orbit as ambient decoration. No job, no mark.</li>
+          <li><b>Don't give the insight banner a fill.</b> No background, no gradient, no pastel wash, no box. The moment it grows a surface it has become a blob in the wrong place.</li>
+          <li><b>Don't reach for a second hue.</b> No orange, no aurora gradient, no decorative tints. Status tints are for traffic states only.</li>
+          <li><b>Don't round the marks.</b> No circles, no soft orbits, no rounded sparks. The square language is the brand.</li>
+          <li><b>Don't confuse the two panels.</b> The blob panel is light; the Agent panel runs steps. Neither is a dense blue plane.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Asite — BlueBand · AI Hub</span>
+    <span><a href="index.html">Language</a> · <a href="screens.html">Product</a> · <a href="web.html">Website</a> · <a href="slides.html">Slides</a></span>
+  </div>
+</footer>
+<script>
+(function(){
+  var links = [].slice.call(document.querySelectorAll('.fnav a'));
+  if(!links.length) return;
+  var map = links.map(function(a){ return {a:a, el:document.querySelector(a.getAttribute('href'))}; })
+                 .filter(function(o){ return o.el; });
+  function onScroll(){
+    var pos = window.scrollY + 120, cur = null;
+    map.forEach(function(o){ if(o.el.offsetTop <= pos) cur = o; });
+    links.forEach(function(a){ a.classList.remove('on'); });
+    if(cur) cur.a.classList.add('on');
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>

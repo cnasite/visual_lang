@@ -1,0 +1,3597 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Asite — BlueBand · Language</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tokens.css?v=4" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--white);
+        color: var(--tx-2);
+        font: var(--text-body);
+        -webkit-font-smoothing: antialiased;
+      }
+      ::selection {
+        background: rgba(10, 71, 232, 0.25);
+        color: var(--black);
+      }
+      .wrap {
+        max-width: 1024px;
+        margin: 0 auto;
+        padding: 0 var(--space-8);
+      }
+
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: var(--black);
+      }
+      nav .wrap {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        height: 52px;
+        white-space: nowrap;
+      }
+      .nav-mark {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-right: 24px;
+        text-decoration: none;
+      }
+      .nav-mark span {
+        font: 600 14px/1 var(--font-ui);
+        color: var(--tn-1);
+      }
+      .ntab {
+        font: 500 12.5px/1 var(--font-ui);
+        color: var(--tn-2);
+        text-decoration: none;
+        padding: 7px 12px;
+        border-radius: var(--r);
+        transition:
+          color var(--t-fast) var(--ease),
+          background var(--t-fast) var(--ease);
+      }
+      .ntab:hover {
+        color: var(--tn-1);
+        background: var(--black-2);
+      }
+      .ntab.on {
+        color: var(--blue-bright);
+        background: var(--black-2);
+      }
+      .nspacer {
+        margin-left: auto;
+      }
+
+      /* floating on-page nav — section anchors live here, not in the top bar */
+      .fnav {
+        position: fixed;
+        top: 50%;
+        right: 18px;
+        transform: translateY(-50%);
+        z-index: 60;
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        padding: 8px 6px;
+        max-height: 80vh;
+        overflow: auto;
+        background: var(--white);
+        border: 1px solid var(--rule);
+        box-shadow: 0 12px 32px rgba(11, 13, 17, 0.12);
+      }
+      .fnav .fcap {
+        font: var(--text-label);
+        letter-spacing: var(--track-label);
+        text-transform: uppercase;
+        color: var(--tx-3);
+        padding: 4px 9px 8px;
+      }
+      .fnav a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font: 500 11.5px/1 var(--font-ui);
+        color: var(--tx-2);
+        text-decoration: none;
+        padding: 6px 9px;
+        white-space: nowrap;
+        transition:
+          color var(--t-fast) var(--ease),
+          background var(--t-fast) var(--ease);
+      }
+      .fnav a::before {
+        content: "";
+        width: 4px;
+        height: 4px;
+        background: var(--rule-mid);
+        flex: none;
+      }
+      .fnav a:hover {
+        color: var(--tx-1);
+        background: var(--zone);
+      }
+      .fnav a.on {
+        color: var(--blue);
+        background: var(--blue-tint);
+      }
+      .fnav a.on::before {
+        background: var(--blue);
+      }
+      @media (max-width: 1280px) {
+        .fnav {
+          display: none;
+        }
+      }
+
+      header.hero {
+        padding: 150px 0 120px;
+        border-bottom: 1px solid var(--rule);
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font: var(--text-label);
+        letter-spacing: var(--track-label);
+        text-transform: uppercase;
+        color: var(--tx-2);
+        border: 1px solid var(--rule-mid);
+        border-radius: var(--r);
+        padding: 7px 12px;
+        margin-bottom: var(--space-8);
+      }
+      .chip i {
+        width: 8px;
+        height: 8px;
+        background: var(--blue);
+        display: inline-block;
+      }
+      h1 {
+        font: var(--text-display);
+        letter-spacing: -0.02em;
+        color: var(--tx-1);
+        max-width: 780px;
+      }
+      .hero-sub {
+        margin-top: var(--space-8);
+        max-width: 560px;
+        font-size: 15px;
+        line-height: 1.75;
+        color: var(--tx-2);
+      }
+      .hero-meta {
+        margin-top: var(--space-16);
+        display: flex;
+      }
+      .hero-meta div {
+        padding: 0 var(--space-8);
+        border-left: 1px solid var(--rule);
+      }
+      .hero-meta div:first-child {
+        padding-left: 0;
+        border-left: none;
+      }
+      .hero-meta b {
+        color: var(--tx-1);
+        font-weight: 600;
+        display: block;
+        font-size: 13px;
+        margin-bottom: 2px;
+      }
+      .hero-meta span {
+        font: var(--text-small);
+        color: var(--tx-3);
+      }
+
+      section {
+        padding: 130px 0;
+        border-bottom: 1px solid var(--rule);
+      }
+      .idx {
+        font: var(--text-label);
+        letter-spacing: var(--track-label);
+        text-transform: uppercase;
+        color: #fff;
+        background: var(--blue);
+        border-radius: var(--r);
+        display: inline-block;
+        padding: 6px 10px;
+        margin-bottom: var(--space-4);
+      }
+      h2 {
+        font: var(--text-h1);
+        letter-spacing: var(--track-h);
+        color: var(--tx-1);
+        margin-bottom: var(--space-4);
+      }
+      .sub {
+        max-width: 600px;
+        margin-bottom: var(--space-16);
+        line-height: 1.75;
+      }
+
+      /* stages — flat planes, square, lifted on soft shadow */
+      .stage2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        background: var(--rule);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      .stage-cell {
+        min-height: 240px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-6);
+      }
+      .stage-black {
+        background: var(--black);
+      }
+      .stage-white {
+        background: var(--white);
+      }
+      .stage-cell .word {
+        font: 600 36px/1 var(--font-ui);
+        letter-spacing: -0.02em;
+        color: var(--tn-1);
+      }
+      .note-line {
+        font: var(--text-small);
+        color: var(--tx-3);
+        margin-top: var(--space-6);
+        max-width: 640px;
+      }
+
+      /* color */
+      .swatches {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: var(--rule);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      .sw {
+        height: 140px;
+        padding: var(--space-4);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+      .sw .nm {
+        font: 600 13px/1.4 var(--font-ui);
+      }
+      .sw .hx {
+        font: var(--text-mono);
+        font-size: 11px;
+      }
+      .st-row {
+        display: flex;
+        gap: var(--space-12);
+        flex-wrap: wrap;
+        margin-top: var(--space-12);
+        padding: var(--space-6) 0;
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+      }
+      .st-row .u-st {
+        color: var(--tx-1);
+      }
+      .rule-note {
+        font: var(--text-small);
+        color: var(--tx-2);
+        border-left: 2px solid var(--blue);
+        padding-left: var(--space-4);
+        max-width: 580px;
+        margin-top: var(--space-8);
+      }
+
+      /* type */
+      .trow {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: var(--space-6);
+        padding: var(--space-8) 0;
+        border-top: 1px solid var(--rule);
+      }
+      .trow .meta {
+        font: var(--text-mono);
+        font-size: 11px;
+        color: var(--tx-3);
+        padding-top: 6px;
+      }
+      .trow .sample {
+        color: var(--tx-1);
+      }
+
+      /* structure demo */
+      .plane {
+        background: var(--white);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        overflow: hidden;
+        padding: 0;
+      }
+      .pz {
+        padding: var(--space-8) var(--space-12);
+      }
+      .pz + .pz {
+        border-top: 1px solid var(--rule);
+      }
+      .zlbl {
+        font: var(--text-label);
+        letter-spacing: var(--track-label);
+        text-transform: uppercase;
+        color: var(--tx-3);
+        margin-bottom: 6px;
+      }
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-4);
+      }
+      .kpi {
+        padding: 0 var(--space-6);
+      }
+      .kpi:first-child {
+        padding-left: 0;
+      }
+      .kpi .l {
+        font: var(--text-label);
+        letter-spacing: var(--track-label);
+        text-transform: uppercase;
+        color: var(--tx-3);
+      }
+      .kpi .n {
+        font: var(--text-fig);
+        color: var(--tx-1);
+        margin-top: 4px;
+      }
+      .cols {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: var(--space-6);
+      }
+      .cols > div {
+        padding: var(--space-8) var(--space-12);
+      }
+
+      /* icons — sharp: square caps, miter joins */
+      .icon-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1px;
+        background: var(--rule);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      .icell {
+        background: var(--white);
+        padding: var(--space-6) var(--space-4);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+      .icell svg {
+        stroke: var(--tx-1);
+        fill: none;
+        stroke-width: 1.5;
+        stroke-linecap: square;
+        stroke-linejoin: miter;
+      }
+      .icell span {
+        font: 500 10px/1.4 var(--font-mono);
+        color: var(--tx-3);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .icell.sig {
+        background: var(--black);
+      }
+      .icell.sig svg {
+        stroke: var(--blue-bright);
+      }
+      .icell.sig span {
+        color: var(--tn-3);
+      }
+      @media (max-width: 880px) {
+        .icon-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      /* components */
+      .comp-stage {
+        background: var(--white);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        padding: var(--space-16);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-12);
+      }
+      .row {
+        display: flex;
+        gap: var(--space-4);
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .btn {
+        font: 500 13px/1 var(--font-ui);
+        padding: 11px 18px;
+        border: none;
+        border-radius: var(--r);
+        cursor: pointer;
+        transition: background var(--t-fast) var(--ease);
+      }
+      .btn-primary {
+        background: var(--blue);
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: var(--blue-press);
+      }
+      .btn-secondary {
+        background: var(--white);
+        color: var(--tx-1);
+        border: 1px solid var(--black);
+        padding: 10px 17px;
+      }
+      .btn-secondary:hover {
+        background: var(--zone);
+      }
+      .btn-ghost {
+        background: none;
+        color: var(--blue);
+        padding: 11px 8px;
+      }
+      .btn-black {
+        background: var(--black);
+        color: var(--tn-1);
+      }
+      .input {
+        background: var(--white);
+        border: 1px solid var(--rule-mid);
+        border-bottom-color: var(--black);
+        border-radius: var(--r) var(--r) 0 0;
+        color: var(--tx-1);
+        font: 400 13px/1.4 var(--font-ui);
+        padding: 10px 12px;
+        outline: none;
+        min-width: 300px;
+      }
+      .input:focus {
+        box-shadow: var(--focus);
+        border-color: var(--black);
+      }
+      .annotation {
+        font: var(--text-small);
+        font-size: 12.5px;
+        color: var(--tx-3);
+      }
+      .tag {
+        font: 400 11px/1 var(--font-mono);
+        color: var(--tx-2);
+        background: var(--zone);
+        border: none;
+        border-radius: var(--r);
+        padding: 7px 11px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .tag.on {
+        background: var(--black);
+        color: var(--tn-1);
+      }
+      .tabs2 {
+        display: flex;
+        border-bottom: 1px solid var(--rule);
+        width: 100%;
+      }
+      .tabs2 span {
+        font: 500 13px/1 var(--font-ui);
+        color: var(--tx-2);
+        padding: 11px 2px;
+        margin-right: 24px;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+      }
+      .tabs2 span.on {
+        color: var(--tx-1);
+        border-bottom-color: var(--blue);
+      }
+      .band {
+        background: var(--white);
+        box-shadow: var(--shadow-2);
+        border-radius: var(--r);
+        border-top: 2px solid var(--blue);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding-bottom: 16px;
+        max-width: 400px;
+      }
+      .band .bhead {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        background: var(--blue-tint);
+        padding: 12px 15px;
+        border-bottom: 1px solid var(--rule);
+      }
+      .band .l {
+        font: var(--text-label);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--blue);
+      }
+      .band p {
+        font: 400 13px/1.55 var(--font-ui);
+        color: var(--tx-1);
+        padding: 0 15px;
+      }
+      .band .mono {
+        font: var(--text-mono);
+        font-size: 11.5px;
+        color: var(--blue);
+      }
+
+      /* data entry — rectangles with a black baseline */
+      .fgrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--rule);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      .fcard {
+        background: var(--white);
+        padding: var(--space-6);
+        display: flex;
+        flex-direction: column;
+      }
+      .flab {
+        font: var(--text-label);
+        letter-spacing: var(--track-label);
+        text-transform: uppercase;
+        color: var(--tx-3);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .req {
+        width: 7px;
+        height: 7px;
+        background: var(--blue);
+        display: inline-block;
+        flex: none;
+      }
+      /* baseline field: rectangle, strong black baseline — not a box */
+      .fld {
+        background: var(--zone);
+        border: none;
+        border-bottom: 1.5px solid var(--black);
+        border-radius: var(--r) var(--r) 0 0;
+        color: var(--tx-1);
+        font: 400 13px/1.4 var(--font-ui);
+        padding: 9px 11px;
+        outline: none;
+        width: 100%;
+        transition:
+          border-color var(--t-fast) var(--ease),
+          box-shadow var(--t-fast) var(--ease),
+          background var(--t-fast) var(--ease);
+      }
+      .fld::placeholder {
+        color: var(--tx-3);
+      }
+      .fld.mono {
+        font: 400 13px/1.4 var(--font-mono);
+        letter-spacing: 0.02em;
+      }
+      .fld.num {
+        font: 400 13px/1.4 var(--font-mono);
+        text-align: right;
+      }
+      textarea.fld {
+        resize: vertical;
+        min-height: 64px;
+      }
+      /* states */
+      .fld.focus {
+        border-bottom-color: var(--blue);
+        box-shadow: inset 0 -1px 0 0 var(--blue);
+        background: var(--white);
+      }
+      .fld.filled {
+        background: var(--white);
+      }
+      .fld.dis {
+        background: var(--zone);
+        color: var(--tx-3);
+        border-bottom-color: var(--rule-mid);
+        cursor: not-allowed;
+      }
+      .fld.err {
+        border-bottom-color: var(--bad);
+        box-shadow: inset 0 -1px 0 0 var(--bad);
+        background: var(--bad-bg);
+      }
+      .fld.good {
+        border-bottom-color: var(--ok);
+        box-shadow: inset 0 -1px 0 0 var(--ok);
+        background: var(--ok-bg);
+      }
+      .fnote {
+        font: 400 11px/1.4 var(--font-mono);
+        letter-spacing: 0.03em;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .fnote.bad {
+        color: var(--bad);
+      }
+      .fnote.good {
+        color: var(--ok);
+      }
+      .fnote i {
+        width: 6px;
+        height: 6px;
+        background: currentColor;
+        display: inline-block;
+        flex: none;
+      }
+      /* select — rectangle with baseline + caret */
+      .fsel {
+        position: relative;
+      }
+      .fsel .car {
+        position: absolute;
+        right: 11px;
+        top: 50%;
+        transform: translateY(-50%);
+        font: 400 10px/1 var(--font-mono);
+        color: var(--tx-2);
+        pointer-events: none;
+      }
+      .fmenu {
+        margin-top: 1px;
+        background: var(--white);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        padding: 4px 0;
+      }
+      .fmenu div {
+        padding: 8px 11px;
+        font: 400 12.5px/1 var(--font-ui);
+        color: var(--tx-1);
+      }
+      .fmenu div.on {
+        background: var(--blue-tint);
+        color: var(--blue);
+      }
+      /* square pick controls — checkbox & radio */
+      .pick {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font: 400 13px/1.5 var(--font-ui);
+        color: var(--tx-1);
+        padding: 5px 0;
+        cursor: default;
+      }
+      .pick .box {
+        width: 16px;
+        height: 16px;
+        flex: none;
+        border: 1.5px solid var(--black);
+        border-radius: var(--r);
+        background: var(--white);
+        position: relative;
+      }
+      .pick .box.on {
+        background: var(--blue);
+        border-color: var(--blue);
+      }
+      .pick .box.on::after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 1px;
+        width: 5px;
+        height: 9px;
+        border: solid #fff;
+        border-width: 0 1.5px 1.5px 0;
+        transform: rotate(40deg);
+      }
+      .pick .box.rad {
+        border-radius: 50%;
+      }
+      .pick .box.rad.on {
+        background: var(--white);
+      }
+      .pick .box.rad.on::after {
+        content: "";
+        position: absolute;
+        left: 3px;
+        top: 3px;
+        width: 8px;
+        height: 8px;
+        border: none;
+        border-radius: 50%;
+        background: var(--blue);
+        transform: none;
+      }
+      .pick .box.dis {
+        border-color: var(--rule-mid);
+        background: var(--zone);
+      }
+      .pick.off {
+        color: var(--tx-3);
+      }
+      /* toggle — square track, blue when on */
+      .tgl {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font: 400 13px/1.5 var(--font-ui);
+        color: var(--tx-1);
+        padding: 5px 0;
+      }
+      .tgl .trk {
+        width: 34px;
+        height: 18px;
+        flex: none;
+        background: var(--rule-mid);
+        border-radius: var(--r);
+        position: relative;
+        transition: background var(--t-fast) var(--ease);
+      }
+      .tgl .trk .kn {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 14px;
+        height: 14px;
+        background: var(--white);
+        border-radius: 2px;
+        transition: left var(--t-fast) var(--ease);
+      }
+      .tgl .trk.on {
+        background: var(--blue);
+      }
+      .tgl .trk.on .kn {
+        left: 18px;
+      }
+      @media (max-width: 880px) {
+        .fgrid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* principles */
+      .princ {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        background: var(--rule);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      .pcard {
+        background: var(--white);
+        padding: var(--space-8);
+      }
+      .pcard b {
+        font: 600 14px/1.5 var(--font-ui);
+        color: var(--tx-1);
+        display: block;
+        margin-bottom: 8px;
+      }
+      .pcard p {
+        font: var(--text-small);
+        color: var(--tx-2);
+        line-height: 1.7;
+      }
+
+      /* provenance */
+      .prov {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--rule);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      .pv {
+        background: var(--white);
+      }
+      .pv .pv-art {
+        height: 190px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--zone);
+      }
+      .pv .pv-txt {
+        padding: var(--space-6) var(--space-6) var(--space-8);
+      }
+      .pv em {
+        font: 500 10px/1 var(--font-mono);
+        letter-spacing: 0.1em;
+        color: var(--blue);
+        font-style: normal;
+        text-transform: uppercase;
+      }
+      .pv b {
+        display: block;
+        font: 600 15px/1.4 var(--font-ui);
+        color: var(--tx-1);
+        margin: 10px 0 8px;
+      }
+      .pv p {
+        font: var(--text-small);
+        font-size: 12.5px;
+        color: var(--tx-2);
+        line-height: 1.65;
+      }
+
+      /* spacing */
+      .scale {
+        display: flex;
+        align-items: flex-end;
+        gap: var(--space-6);
+        margin-bottom: var(--space-4);
+      }
+      .scale div {
+        background: var(--black);
+        width: 40px;
+      }
+      .scale-lbl {
+        display: flex;
+        gap: var(--space-6);
+        font: var(--text-mono);
+        font-size: 10px;
+        color: var(--tx-3);
+      }
+      .scale-lbl span {
+        width: 40px;
+        text-align: center;
+      }
+      .air-demo {
+        background: var(--white);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        overflow: hidden;
+        margin-top: var(--space-12);
+      }
+      .air-zone {
+        padding: var(--space-16) var(--space-16);
+        border-top: 1px solid var(--rule);
+        position: relative;
+      }
+      .air-zone:first-child {
+        border-top: none;
+      }
+      .air-tag {
+        position: absolute;
+        top: 12px;
+        right: 14px;
+        font: var(--text-mono);
+        font-size: 9px;
+        color: var(--blue);
+        letter-spacing: 0.06em;
+      }
+
+      /* overlays */
+      .ov-stage {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 1px;
+        background: var(--rule);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      .ov-view {
+        background: var(--zone);
+        min-height: 340px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .ov-view .scrim {
+        position: absolute;
+        inset: 0;
+        background: rgba(11, 13, 17, 0.4);
+      }
+      .dialog {
+        position: relative;
+        background: var(--white);
+        width: 78%;
+        max-width: 440px;
+        box-shadow: var(--shadow-2);
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      .dialog .dh {
+        padding: var(--space-8) var(--space-8) 0;
+      }
+      .dialog .dh b {
+        font: 600 16px/1.3 var(--font-ui);
+        color: var(--tx-1);
+      }
+      .dialog .dh p {
+        font: var(--text-small);
+        font-size: 13px;
+        color: var(--tx-2);
+        margin-top: 10px;
+        line-height: 1.65;
+      }
+      .dialog .df {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1px;
+        margin-top: var(--space-8);
+        border-top: 1px solid var(--rule);
+      }
+      .dialog .df .btn {
+        flex: none;
+      }
+      .menu {
+        background: var(--white);
+        box-shadow: var(--shadow-2);
+        border-radius: var(--r);
+        width: 240px;
+        padding: 6px 0;
+      }
+      .menu .mi {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        font: 400 13px/1 var(--font-ui);
+        color: var(--tx-1);
+        cursor: pointer;
+      }
+      .menu .mi:hover {
+        background: var(--zone);
+      }
+      .menu .mi.on {
+        background: var(--blue-tint);
+        color: var(--blue);
+      }
+      .menu .mi svg {
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 1.5;
+        stroke-linecap: square;
+        stroke-linejoin: miter;
+      }
+      .menu .mi .u-kbd {
+        margin-left: auto;
+      }
+      .menu .sep {
+        height: 1px;
+        background: var(--rule);
+        margin: 6px 0;
+      }
+
+      .tocc {
+        font: 400 11px/1 var(--font-mono);
+        letter-spacing: 0.04em;
+        color: var(--tx-2);
+        text-decoration: none;
+        background: var(--zone);
+        border-radius: var(--r);
+        padding: 8px 12px;
+      }
+      .tocc:hover {
+        background: var(--rule);
+        color: var(--tx-1);
+      }
+
+      /* motifs (Language) */
+      .mgrid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+      .mcard {
+        background: var(--white);
+        box-shadow: var(--shadow-1);
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      .mstage {
+        height: 130px;
+        background: var(--zone);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .mt {
+        padding: 18px 18px 22px;
+      }
+      .mt b {
+        font: 600 14px/1.4 var(--font-ui);
+        color: var(--tx-1);
+        display: block;
+        margin-bottom: 6px;
+      }
+      .mt p {
+        font: 400 12.5px/1.6 var(--font-ui);
+        color: var(--tx-2);
+      }
+
+      /* brand in the world */
+      .xgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .xcell {
+        position: relative;
+        border-radius: var(--r);
+        overflow: hidden;
+        box-shadow: var(--shadow-1);
+      }
+      .xcap {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        font: 500 9px/1 var(--font-mono);
+        letter-spacing: 0.08em;
+        color: var(--tn-2);
+        background: rgba(11, 13, 17, 0.85);
+        padding: 6px 10px;
+        border-radius: 0 var(--r) 0 0;
+      }
+      @media (max-width: 880px) {
+        .mgrid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .xgrid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      footer {
+        padding: var(--space-8) 0;
+      }
+      footer .wrap {
+        display: flex;
+        justify-content: space-between;
+        font: var(--text-small);
+        color: var(--tx-3);
+      }
+      footer a {
+        color: var(--tx-2);
+      }
+      @media (max-width: 880px) {
+        .stage2,
+        .princ,
+        .prov,
+        .ov-stage {
+          grid-template-columns: 1fr;
+        }
+        .swatches {
+          grid-template-columns: 1fr 1fr;
+        }
+        .trow {
+          grid-template-columns: 1fr;
+        }
+        .kpis {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="amark" viewBox="0 0 377 396">
+          <path
+            class="m-body"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"
+          />
+          <path
+            class="m-arrow"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"
+          />
+        </symbol>
+      </defs>
+    </svg>
+
+    <nav>
+      <div class="wrap">
+        <a class="nav-mark" href="index.html">
+          <svg width="20" height="21" viewBox="0 0 377 396">
+            <use href="#amark" />
+          </svg>
+          <span>ASITE</span>
+        </a>
+        <a class="ntab on" href="index.html">Language</a>
+        <a class="ntab" href="screens.html">Product</a>
+        <a class="ntab" href="web.html">Website</a>
+        <a class="ntab" href="slides.html">Slides</a>
+        <a class="ntab" href="ai-hub.html">AI Hub</a>
+        <span class="nspacer"></span>
+      </div>
+    </nav>
+
+    <aside class="fnav" aria-label="On this page">
+      <div class="fcap">On this page</div>
+      <a href="#mark">Logo</a>
+      <a href="#color">Color</a>
+      <a href="#structure">Surfaces</a>
+      <a href="#type">Type</a>
+      <a href="#spacing">Spacing</a>
+      <a href="#icons">Icons</a>
+      <a href="#illus">Illustration</a>
+      <a href="#motifs">Motifs</a>
+      <a href="#cards">Cards</a>
+      <a href="#overlays">Overlays</a>
+      <a href="#tables">Tables</a>
+      <a href="#inputs">Data entry</a>
+      <a href="#comp">Components</a>
+      <a href="#princ">Principles</a>
+      <a href="#world">In the world</a>
+    </aside>
+
+    <header class="hero">
+      <div class="wrap">
+        <div class="chip"><i></i>BlueBand · Locked</div>
+        <h1>Sharp. Structured. Locked.</h1>
+        <p class="hero-sub">
+          Purely enterprise. Three colors — blue, black, white — and one 4px
+          radius. Planes are organised in space and lifted on soft shadow, never
+          boxed in outlines; headings hold apart from content by air alone;
+          filled sections carry the hierarchy. One blue does every signal job.
+          Emphasis is weight, not hue. The system reads like a set of contract
+          documents: exact, repeatable, signed off.
+        </p>
+        <div class="hero-meta">
+          <div><b>Palette</b><span>Blue · Black · White</span></div>
+          <div>
+            <b>Geometry</b><span>Radius 4 · soft shadow · filled sections</span>
+          </div>
+          <div><b>Type</b><span>IBM Plex Sans · IBM Plex Mono</span></div>
+          <div><b>Structure</b><span>Space and rules, never cards</span></div>
+        </div>
+        <div style="margin-top: 56px; display: flex; flex-wrap: wrap; gap: 8px">
+          <a href="#mark" class="tocc">Logo</a
+          ><a href="#color" class="tocc">Color</a
+          ><a href="#prov" class="tocc">Color, in the world</a
+          ><a href="#structure" class="tocc">Surfaces &amp; depth</a
+          ><a href="#type" class="tocc">Typography</a
+          ><a href="#spacing" class="tocc">Spacing &amp; grids</a
+          ><a href="#icons" class="tocc">Iconography</a
+          ><a href="#illus" class="tocc">Illustration</a
+          ><a href="#motifs" class="tocc">Motifs</a
+          ><a href="#cards" class="tocc">Cards</a
+          ><a href="#overlays" class="tocc">Overlays</a
+          ><a href="#tables" class="tocc">Tables &amp; lists</a
+          ><a href="#comp" class="tocc">Components</a
+          ><a href="#princ" class="tocc">Principles</a
+          ><a href="#world" class="tocc">Brand in the world</a>
+        </div>
+      </div>
+    </header>
+
+    <section id="mark">
+      <div class="wrap">
+        <div class="idx">01 — Logo</div>
+        <h2>Black carries it, blue points</h2>
+        <p class="sub">
+          On black, the mark runs white with a blue arrow — the only place brand
+          and signal meet. On white it is solid black, arrow included: the mark
+          is structure, not decoration, and it never competes with the one blue
+          on the page.
+        </p>
+        <div class="stage2">
+          <div class="stage-cell stage-black">
+            <svg width="60" height="63" viewBox="0 0 377 396">
+              <use href="#amark" />
+            </svg>
+            <span class="word">ASITE</span>
+          </div>
+          <div class="stage-cell stage-white on-light">
+            <svg width="104" height="109" viewBox="0 0 377 396">
+              <use href="#amark" />
+            </svg>
+          </div>
+        </div>
+        <p class="note-line">
+          Wordmark: IBM Plex Sans 600, lowercase, -2% tracking. Placement is
+          locked to the frame — bars, covers, document headers. Never inside the
+          work.
+        </p>
+      </div>
+    </section>
+
+    <section id="color">
+      <div class="wrap">
+        <div class="idx">02 — Color</div>
+        <h2>Three brand colors, plus state</h2>
+        <p class="sub">
+          Black structures. White carries. Blue acts — buttons, links,
+          selection, the active place. The only other hue on screen is status,
+          wearing the site's traffic colours as quiet tints: green moving, amber
+          waiting, red stopped. Blue is never a status; a status is never
+          decoration.
+        </p>
+
+        <div class="swatches">
+          <div class="sw" style="background: var(--black)">
+            <span class="nm" style="color: var(--tn-1)">Black — structure</span
+            ><span class="hx" style="color: var(--tn-3)">#0B0D11</span>
+          </div>
+          <div class="sw" style="background: var(--white)">
+            <span class="nm" style="color: var(--tx-1)">White — the work</span
+            ><span class="hx" style="color: var(--tx-3)">#FFFFFF</span>
+          </div>
+          <div class="sw" style="background: var(--blue)">
+            <span class="nm" style="color: #fff">Blue — the act</span
+            ><span class="hx" style="color: #bacbfa">#0A47E8</span>
+          </div>
+          <div class="sw" style="background: var(--blue-deep)">
+            <span class="nm" style="color: #fff">Deep — the band</span
+            ><span class="hx" style="color: #8fa6e8">#062269</span>
+          </div>
+        </div>
+
+        <div class="st-row">
+          <span class="u-badge warn"><i></i>REVIEW — NEEDS YOU</span>
+          <span class="u-badge ok"><i></i>ISSUED — IN MOTION</span>
+          <span class="u-badge bad"><i></i>OVERDUE — STOPPED</span>
+          <span class="u-badge mute"><i></i>SUPERSEDED — INERT</span>
+        </div>
+        <p class="rule-note">
+          Status is a tinted badge: square marker + mono caps in the same family
+          — green in motion, amber waiting on someone, red stopped, gray inert.
+          Tints stay quiet so 2,000 rows rank themselves without shouting, and
+          blue keeps its one job: you can act here.
+        </p>
+      </div>
+    </section>
+
+    <section id="prov">
+      <div class="wrap">
+        <div class="idx">02b — Color, in the world</div>
+        <h2>Where the blue comes from</h2>
+        <p class="sub">
+          Enterprise blue isn't a software default here — it's the color this
+          industry already trusts with its record. Three objects carry the
+          palette's whole personality.
+        </p>
+        <div class="prov">
+          <div class="pv">
+            <div class="pv-art">
+              <svg width="220" height="150" viewBox="0 0 220 150" fill="none">
+                <rect x="30" y="18" width="160" height="114" fill="#062269" />
+                <g
+                  fill="none"
+                  stroke="#FFFFFF"
+                  stroke-width="1.2"
+                  opacity="0.9"
+                >
+                  <rect x="58" y="44" width="74" height="52" />
+                  <line x1="58" y1="62" x2="132" y2="62" />
+                  <line x1="92" y1="62" x2="92" y2="96" />
+                  <line x1="132" y1="70" x2="158" y2="70" />
+                  <circle cx="158" cy="70" r="7" />
+                </g>
+                <g stroke="#FFFFFF" stroke-width="0.6" opacity="0.45">
+                  <line x1="44" y1="110" x2="176" y2="110" />
+                  <line x1="44" y1="116" x2="140" y2="116" />
+                </g>
+                <rect
+                  x="142"
+                  y="106"
+                  width="34"
+                  height="14"
+                  fill="none"
+                  stroke="#FFFFFF"
+                  stroke-width="0.8"
+                  opacity="0.7"
+                />
+              </svg>
+            </div>
+            <div class="pv-txt">
+              <em>Record</em><b>The blueprint</b>
+              <p>
+                Before the CDE there was the cyanotype: white lines on
+                engineering blue, the one copy everyone built from. In product:
+                deep blue is where the system states the record.
+              </p>
+            </div>
+          </div>
+          <div class="pv">
+            <div class="pv-art">
+              <svg width="220" height="150" viewBox="0 0 220 150" fill="none">
+                <line
+                  x1="20"
+                  y1="118"
+                  x2="200"
+                  y2="118"
+                  stroke="#C6CAD1"
+                  stroke-width="1.5"
+                />
+                <line
+                  x1="36"
+                  y1="84"
+                  x2="184"
+                  y2="84"
+                  stroke="#0A47E8"
+                  stroke-width="3"
+                />
+                <g fill="#0A47E8" opacity="0.35">
+                  <rect x="60" y="88" width="2" height="5" />
+                  <rect x="84" y="87" width="2" height="7" />
+                  <rect x="112" y="88" width="2" height="4" />
+                  <rect x="138" y="87" width="2" height="6" />
+                  <rect x="160" y="88" width="2" height="5" />
+                </g>
+                <rect x="30" y="80" width="8" height="8" fill="#0B0D11" />
+                <rect x="182" y="80" width="8" height="8" fill="#0B0D11" />
+                <text
+                  x="150"
+                  y="74"
+                  font-family="IBM Plex Mono, monospace"
+                  font-size="10"
+                  fill="#878D96"
+                >
+                  SNAP 01
+                </text>
+              </svg>
+            </div>
+            <div class="pv-txt">
+              <em>Commitment</em><b>The chalk line</b>
+              <p>
+                Pinned at both ends, snapped once — straight, instant, and not
+                up for debate. In product: blue marks the committed path. The
+                action, the active place, the selected row.
+              </p>
+            </div>
+          </div>
+          <div class="pv">
+            <div class="pv-art">
+              <svg width="220" height="150" viewBox="0 0 220 150" fill="none">
+                <rect
+                  x="46"
+                  y="22"
+                  width="128"
+                  height="106"
+                  fill="#FFFFFF"
+                  stroke="#0B0D11"
+                  stroke-width="1.2"
+                />
+                <g stroke="#C6CAD1" stroke-width="1.2">
+                  <line x1="60" y1="42" x2="160" y2="42" />
+                  <line x1="60" y1="54" x2="160" y2="54" />
+                  <line x1="60" y1="66" x2="132" y2="66" />
+                </g>
+                <line
+                  x1="60"
+                  y1="104"
+                  x2="160"
+                  y2="104"
+                  stroke="#0B0D11"
+                  stroke-width="1.2"
+                />
+                <path
+                  d="M64 98 Q72 84 80 96 Q84 102 92 90 Q98 82 104 94 Q110 100 122 88"
+                  stroke="#0A47E8"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <text
+                  x="108"
+                  y="120"
+                  font-family="IBM Plex Mono, monospace"
+                  font-size="9"
+                  fill="#878D96"
+                >
+                  11 JUN 26
+                </text>
+              </svg>
+            </div>
+            <div class="pv-txt">
+              <em>Sign-off</em><b>Contract ink</b>
+              <p>
+                Wet signatures go down in blue so the original can be told from
+                the copy. In product: pressing blue is signing — it commits, and
+                the system holds you to it.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="structure">
+      <div class="wrap">
+        <div class="idx">03 — Surfaces &amp; depth</div>
+        <h2>Surfaces: organised in space</h2>
+        <p class="sub">
+          No containers. Zones are separated by 1px rules; columns by vertical
+          rules; the page title holds apart from its content by whitespace alone
+          — no demarcating line. KPIs sit directly on the canvas, divided — not
+          boxed. The eye follows alignment, the way it follows a title block on
+          a drawing sheet.
+        </p>
+        <div class="plane">
+          <div class="pz" style="padding-bottom: var(--space-12)">
+            <div class="zlbl">
+              Page title zone — held apart by air, not a line
+            </div>
+            <span style="font: var(--text-h1); color: var(--tx-1)"
+              >Document register</span
+            >
+          </div>
+          <div class="pz" style="border-top: none; padding-top: 0">
+            <div class="zlbl">
+              KPI zone — figures divided by air, never boxed
+            </div>
+            <div class="kpis">
+              <div class="kpi">
+                <div class="l">Total documents</div>
+                <div class="n">2,481</div>
+              </div>
+              <div
+                class="kpi"
+                style="
+                  background: var(--blue);
+                  padding: 16px var(--space-6);
+                  margin: -16px 0;
+                  border-left: none;
+                "
+              >
+                <div class="l" style="color: #cbd8fb">Awaiting review</div>
+                <div class="n" style="color: #fff">17</div>
+              </div>
+              <div class="kpi">
+                <div class="l">Overdue</div>
+                <div class="n">3</div>
+              </div>
+              <div class="kpi">
+                <div class="l">Issued this week</div>
+                <div class="n">64</div>
+              </div>
+            </div>
+          </div>
+          <div class="cols" style="border-top: 1px solid var(--rule)">
+            <div>
+              <div class="zlbl">Primary column</div>
+              <p
+                style="
+                  font: var(--text-small);
+                  color: var(--tx-2);
+                  max-width: 380px;
+                "
+              >
+                Columns hold apart by a measured gap, not a drawn line. Rules
+                survive only where data demands them — table rows, list items —
+                never as scaffolding between zones.
+              </p>
+            </div>
+            <div>
+              <div class="zlbl">Secondary column</div>
+              <p style="font: var(--text-small); color: var(--tx-2)">
+                Divided by air. The grid is the container.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="type">
+      <div class="wrap">
+        <div class="idx">04 — Typography</div>
+        <h2>Plex: the contract voice</h2>
+        <p class="sub">
+          IBM Plex Sans speaks; IBM Plex Mono measures. Every ref, grid
+          coordinate, revision, count and timestamp is mono — figures included.
+          Numbers in this product are measurements, so they are set like
+          measurements.
+        </p>
+        <div class="trow">
+          <div class="meta">display · PLEX SANS 600 · covers only</div>
+          <div
+            class="sample"
+            style="font: var(--text-display); letter-spacing: -0.02em"
+          >
+            Locked to the line.
+          </div>
+        </div>
+        <div class="trow">
+          <div class="meta">h1 · PLEX SANS 600 · 28/1.2</div>
+          <div
+            class="sample"
+            style="font: var(--text-h1); letter-spacing: var(--track-h)"
+          >
+            Document register
+          </div>
+        </div>
+        <div class="trow">
+          <div class="meta">body · PLEX SANS 400 · 14/1.6</div>
+          <div
+            class="sample"
+            style="font: var(--text-body); color: var(--tx-2); max-width: 560px"
+          >
+            Every drawing revision, RFI and field record in one auditable
+            register — exact, repeatable, signed off.
+          </div>
+        </div>
+        <div class="trow">
+          <div class="meta">figures · PLEX MONO 500 · 28</div>
+          <div class="sample" style="font: var(--text-fig)">
+            2,481 / 17 / 99.98%
+          </div>
+        </div>
+        <div class="trow">
+          <div class="meta">label · PLEX MONO 500 · 10 caps +8%</div>
+          <div class="sample u-label" style="color: var(--tx-3)">
+            PROJECT / DOCUMENTS · AWAITING REVIEW
+          </div>
+        </div>
+        <div class="trow">
+          <div class="meta">reference · PLEX MONO 400 · 12</div>
+          <div
+            class="sample"
+            style="font: var(--text-mono); color: var(--tx-2)"
+          >
+            DR-1182 · REV P4 · C-07/L+04 · 14:32
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="spacing">
+      <div class="wrap">
+        <div class="idx">05 — Spacing &amp; grids</div>
+        <h2>Structure to the edge, content in air</h2>
+        <p class="sub">
+          The two-part rule: rules and planes run edge to edge — they are the
+          building. Content never touches them — it sits inside on a doubling
+          scale of space. Density belongs to the register; everywhere else,
+          generosity is what makes the sharpness read as confidence instead of
+          compression.
+        </p>
+        <div class="scale">
+          <div style="height: 8px"></div>
+          <div style="height: 16px"></div>
+          <div style="height: 32px"></div>
+          <div style="height: 64px"></div>
+          <div style="height: 96px"></div>
+        </div>
+        <div class="scale-lbl">
+          <span>8</span><span>16</span><span>32</span><span>64</span
+          ><span>96</span>
+        </div>
+        <div class="air-demo">
+          <div class="air-zone">
+            <span class="air-tag">PAD 64 / AIR BELOW</span>
+            <div class="u-label" style="color: var(--tx-3); margin-bottom: 8px">
+              Title zone
+            </div>
+            <span style="font: var(--text-h1); color: var(--tx-1)"
+              >Structure runs to the edge. The words never do.</span
+            >
+          </div>
+          <div class="air-zone">
+            <span class="air-tag">PAD 64</span>
+            <p
+              style="
+                font: var(--text-body);
+                color: var(--tx-2);
+                max-width: 460px;
+              "
+            >
+              A zone earns its air. The line above runs the full width of the
+              plane — structure is continuous — while the content holds a deep
+              margin on every side. Two measures, never traded against each
+              other.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="icons">
+      <div class="wrap">
+        <div class="idx">06 — Iconography</div>
+        <h2>Square caps, miter joins</h2>
+        <p class="sub">
+          The same 20px engineering set, machined sharp: butt-square stroke
+          caps, mitered corners, no rounding anywhere. Icons are black at rest,
+          blue only when they are the active place.
+        </p>
+        <div class="icon-grid">
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <rect x="3" y="3" width="6" height="6" />
+              <rect x="11" y="3" width="6" height="6" />
+              <rect x="3" y="11" width="6" height="6" />
+              <rect x="11" y="11" width="6" height="6" /></svg
+            ><span>Dashboard</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <path d="M5.5 2.5 H11.5 L15.5 6.5 V17.5 H5.5 Z" />
+              <path d="M11.5 2.5 V6.5 H15.5" /></svg
+            ><span>Documents</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <rect x="3" y="4" width="14" height="12" />
+              <path d="M3 8.5 H17 M3 12.5 H17 M7 8.5 V16" /></svg
+            ><span>Register</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <rect x="3.5" y="3.5" width="3.5" height="3.5" />
+              <rect x="13" y="13" width="3.5" height="3.5" />
+              <path d="M7 5.25 H12 Q15 5.25 15 8.25 V13" /></svg
+            ><span>Workflows</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <rect x="4.5" y="3.5" width="11" height="14" />
+              <path d="M7.5 2 H12.5 V5 H7.5 Z M7 9.5 H13 M7 12.5 H11" /></svg
+            ><span>Forms</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <path
+                d="M10 2.5 L16.5 6 V14 L10 17.5 L3.5 14 V6 Z M3.5 6 L10 9.5 L16.5 6 M10 9.5 V17.5"
+              /></svg
+            ><span>Models</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <path d="M3 16.5 H17" />
+              <path d="M5.5 16.5 V10.5 M10 16.5 V5.5 M14.5 16.5 V8.5" /></svg
+            ><span>Reports</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <circle cx="9" cy="9" r="5.5" />
+              <path d="M13.2 13.2 L17 17" /></svg
+            ><span>Search</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <path d="M3.5 5 H16.5 L11.5 10.5 V15.5 L8.5 17 V10.5 Z" /></svg
+            ><span>Filter</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <path
+                d="M10 13 V3.5 M6.5 7 L10 3.5 L13.5 7 M4 13.5 V16.5 H16 V13.5"
+              /></svg
+            ><span>Upload</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <path d="M9 4.5 H4.5 V15.5 H15.5 V11" />
+              <path d="M12 3.5 H16.5 V8 M16.5 3.5 L10.5 9.5" /></svg
+            ><span>Export</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <path
+                d="M7 4 V16 M4.5 13.5 L7 16 L9.5 13.5 M13 16 V4 M10.5 6.5 L13 4 L15.5 6.5"
+              /></svg
+            ><span>Sort</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <rect x="3" y="4" width="14" height="12" />
+              <path d="M8.5 4 V16 M12.7 4 V16" /></svg
+            ><span>Columns</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <path
+                d="M6 13.5 V9 Q6 5 10 5 Q14 5 14 9 V13.5 M4.5 13.5 H15.5 M9 16 H11"
+              /></svg
+            ><span>Notify</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <rect x="4" y="4" width="12" height="12" />
+              <path d="M7 10.2 L9.2 12.4 L13.4 8.2" /></svg
+            ><span>Approve</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <path
+                d="M3.7 16.3 L4.6 13.1 L13.3 4.4 L15.6 6.7 L6.9 15.4 Z M11.5 6.2 L13.8 8.5"
+              /></svg
+            ><span>Markup</span>
+          </div>
+          <div class="icell">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <path
+                d="M10 3 L17 7 L10 11 L3 7 Z M3 11.5 L10 15.5 L17 11.5"
+              /></svg
+            ><span>Layers</span>
+          </div>
+          <div class="icell sig">
+            <svg width="26" height="26" viewBox="0 0 20 20">
+              <rect x="4" y="4" width="12" height="12" />
+              <path
+                d="M10 1.5 V4 M10 16 V18.5 M1.5 10 H4 M16 10 H18.5 M10 7.5 V12.5 M7.5 10 H12.5"
+              /></svg
+            ><span>Intelligence</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="illus">
+      <div class="wrap">
+        <div class="idx">07 — Illustration</div>
+        <h2>Drawn with the contract pen</h2>
+        <p class="sub">
+          Illustration is the icon grammar at scale: 1.5px strokes, square caps,
+          mitered corners. Four modes on two axes —
+          <b style="color: var(--tx-1)">Line</b> or
+          <b style="color: var(--tx-1)">Blueprint</b>, in
+          <b style="color: var(--tx-1)">elevation</b> or
+          <b style="color: var(--tx-1)">isometry</b>. Line modes explain on
+          white; Blueprint inverts to the deep blue field — the record itself.
+          Never mix modes in one composition.
+        </p>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--rule);
+            box-shadow: var(--shadow-1);
+            border-radius: var(--r);
+            overflow: hidden;
+          "
+          class="illus"
+        >
+          <div style="background: var(--white)">
+            <div
+              style="
+                height: 250px;
+                background: var(--zone);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <svg
+                width="380"
+                height="214"
+                viewBox="0 0 560 315"
+                fill="none"
+                stroke-linecap="square"
+                stroke-linejoin="miter"
+              >
+                <line
+                  x1="20"
+                  y1="290"
+                  x2="540"
+                  y2="290"
+                  stroke="#0B0D11"
+                  stroke-width="1.5"
+                />
+                <rect
+                  x="200"
+                  y="90"
+                  width="170"
+                  height="200"
+                  stroke="#0B0D11"
+                  stroke-width="1.5"
+                />
+                <g stroke="#C6CAD1" stroke-width="1.2">
+                  <line x1="200" y1="250" x2="370" y2="250" />
+                  <line x1="200" y1="210" x2="370" y2="210" />
+                  <line x1="200" y1="170" x2="370" y2="170" />
+                  <line x1="200" y1="130" x2="370" y2="130" />
+                </g>
+                <rect
+                  x="200"
+                  y="56"
+                  width="170"
+                  height="34"
+                  stroke="#878D96"
+                  stroke-width="1.2"
+                  stroke-dasharray="5 6"
+                />
+                <g stroke="#50555D" stroke-width="1.4">
+                  <line x1="120" y1="290" x2="120" y2="50" />
+                  <line x1="134" y1="290" x2="134" y2="50" />
+                  <line x1="120" y1="100" x2="134" y2="128" />
+                  <line x1="134" y1="100" x2="120" y2="128" />
+                  <line x1="120" y1="170" x2="134" y2="198" />
+                  <line x1="134" y1="170" x2="120" y2="198" />
+                  <line x1="66" y1="50" x2="420" y2="50" />
+                  <line x1="127" y1="26" x2="127" y2="50" />
+                  <line x1="127" y1="26" x2="300" y2="50" />
+                  <line x1="127" y1="26" x2="66" y2="50" />
+                </g>
+                <rect x="276" y="164" width="12" height="12" fill="#0A47E8" />
+                <line
+                  x1="282"
+                  y1="176"
+                  x2="282"
+                  y2="290"
+                  stroke="#0A47E8"
+                  stroke-width="1.2"
+                  stroke-dasharray="2 6"
+                />
+                <text
+                  x="296"
+                  y="174"
+                  font-family="IBM Plex Mono, monospace"
+                  font-size="10"
+                  fill="#50555D"
+                >
+                  L24 · COMMITTED
+                </text>
+              </svg>
+            </div>
+            <div style="padding: 24px 24px 28px">
+              <em
+                style="
+                  font: 500 10px/1 var(--font-mono);
+                  letter-spacing: 0.1em;
+                  color: var(--blue);
+                  font-style: normal;
+                  text-transform: uppercase;
+                "
+                >Mode 01 — Line elevation</em
+              >
+              <b
+                style="
+                  display: block;
+                  font: 600 15px/1.4 var(--font-ui);
+                  color: var(--tx-1);
+                  margin: 10px 0 8px;
+                "
+                >The site, surveyed</b
+              >
+              <p
+                style="font: 400 12.5px/1.65 var(--font-ui); color: var(--tx-2)"
+              >
+                Scenes built from what a site contains — towers, cranes, floor
+                lines. Built work is solid black;
+                <b style="color: var(--tx-1)">planned work is dashed gray</b>;
+                the blue flag sits on the one committed element. For heroes,
+                empty states, storytelling.
+              </p>
+            </div>
+          </div>
+
+          <div style="background: var(--white)">
+            <div
+              style="
+                height: 250px;
+                background: var(--zone);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <svg
+                width="320"
+                height="214"
+                viewBox="0 0 480 315"
+                fill="none"
+                stroke-linecap="square"
+                stroke-linejoin="miter"
+              >
+                <path
+                  d="M90 235 L240 160 L390 235 L240 310 Z"
+                  stroke="#C6CAD1"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M160 210 L240 170 L320 210 L240 250 Z"
+                  stroke="#0B0D11"
+                  stroke-width="1.5"
+                  fill="#FFFFFF"
+                />
+                <path
+                  d="M160 210 L240 250 L240 267 L160 227 Z"
+                  stroke="#0B0D11"
+                  stroke-width="1.5"
+                  fill="#F4F5F7"
+                />
+                <path
+                  d="M320 210 L240 250 L240 267 L320 227 Z"
+                  stroke="#0B0D11"
+                  stroke-width="1.5"
+                  fill="#E9EBEE"
+                />
+                <path
+                  d="M172 157 L240 123 L308 157 L240 191 Z"
+                  fill="#ECF1FE"
+                  stroke="#0A47E8"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M172 157 L240 191 L240 206 L172 172 Z"
+                  fill="#FFFFFF"
+                  stroke="#0A47E8"
+                  stroke-width="1.2"
+                  stroke-opacity="0.5"
+                />
+                <path
+                  d="M308 157 L240 191 L240 206 L308 172 Z"
+                  fill="#FFFFFF"
+                  stroke="#0A47E8"
+                  stroke-width="1.2"
+                  stroke-opacity="0.5"
+                />
+                <path
+                  d="M184 107 L240 79 L296 107 L240 135 Z"
+                  stroke="#878D96"
+                  stroke-width="1.3"
+                  stroke-dasharray="5 6"
+                />
+                <rect x="234" y="30" width="12" height="12" fill="#0A47E8" />
+                <line
+                  x1="240"
+                  y1="42"
+                  x2="240"
+                  y2="74"
+                  stroke="#0A47E8"
+                  stroke-width="1.2"
+                  stroke-dasharray="2 6"
+                />
+                <line
+                  x1="312"
+                  y1="157"
+                  x2="384"
+                  y2="131"
+                  stroke="#50555D"
+                  stroke-width="1.2"
+                  stroke-dasharray="2 6"
+                />
+                <text
+                  x="392"
+                  y="135"
+                  font-family="IBM Plex Mono, monospace"
+                  font-size="10"
+                  fill="#50555D"
+                >
+                  ACTIVE · L+04
+                </text>
+              </svg>
+            </div>
+            <div style="padding: 24px 24px 28px">
+              <em
+                style="
+                  font: 500 10px/1 var(--font-mono);
+                  letter-spacing: 0.1em;
+                  color: var(--blue);
+                  font-style: normal;
+                  text-transform: uppercase;
+                "
+                >Mode 02 — Line isometry</em
+              >
+              <b
+                style="
+                  display: block;
+                  font: 600 15px/1.4 var(--font-ui);
+                  color: var(--tx-1);
+                  margin: 10px 0 8px;
+                "
+                >The register, as object</b
+              >
+              <p
+                style="font: 400 12.5px/1.65 var(--font-ui); color: var(--tx-2)"
+              >
+                Data given mass — slabs on a platform, faces stepped through the
+                grays.
+                <b style="color: var(--tx-1)">States read as material</b>: solid
+                is done, blue-tinted is active, dashed is planned. For product
+                moments and architecture diagrams.
+              </p>
+            </div>
+          </div>
+
+          <div style="background: var(--white)">
+            <div
+              style="
+                height: 250px;
+                background: var(--blue-deep);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <svg
+                width="380"
+                height="200"
+                viewBox="0 0 560 295"
+                fill="none"
+                stroke-linecap="square"
+              >
+                <g
+                  fill="none"
+                  stroke="#FFFFFF"
+                  stroke-width="1.2"
+                  opacity="0.9"
+                >
+                  <rect x="150" y="60" width="200" height="140" />
+                  <line x1="150" y1="108" x2="350" y2="108" />
+                  <line x1="246" y1="108" x2="246" y2="200" />
+                  <line x1="350" y1="124" x2="420" y2="124" />
+                  <rect x="420" y="112" width="24" height="24" />
+                </g>
+                <g stroke="#FFFFFF" stroke-width="0.7" opacity="0.45">
+                  <line x1="110" y1="232" x2="450" y2="232" />
+                  <line x1="110" y1="226" x2="110" y2="238" />
+                  <line x1="450" y1="226" x2="450" y2="238" />
+                </g>
+                <text
+                  x="262"
+                  y="228"
+                  font-family="IBM Plex Mono, monospace"
+                  font-size="10"
+                  fill="#8FA6E8"
+                  text-anchor="middle"
+                >
+                  12 400
+                </text>
+                <g
+                  fill="none"
+                  stroke="#FFFFFF"
+                  stroke-width="0.8"
+                  opacity="0.7"
+                >
+                  <rect x="392" y="246" width="120" height="36" />
+                  <line x1="392" y1="264" x2="512" y2="264" />
+                  <line x1="452" y1="246" x2="452" y2="282" />
+                </g>
+                <text
+                  x="398"
+                  y="259"
+                  font-family="IBM Plex Mono, monospace"
+                  font-size="7.5"
+                  fill="#8FA6E8"
+                >
+                  DR-1182
+                </text>
+                <text
+                  x="458"
+                  y="277"
+                  font-family="IBM Plex Mono, monospace"
+                  font-size="7.5"
+                  fill="#FFFFFF"
+                >
+                  REV P5
+                </text>
+                <rect x="240" y="102" width="12" height="12" fill="#6E94FF" />
+              </svg>
+            </div>
+            <div style="padding: 24px 24px 28px">
+              <em
+                style="
+                  font: 500 10px/1 var(--font-mono);
+                  letter-spacing: 0.1em;
+                  color: var(--blue);
+                  font-style: normal;
+                  text-transform: uppercase;
+                "
+                >Mode 03 — Blueprint</em
+              >
+              <b
+                style="
+                  display: block;
+                  font: 600 15px/1.4 var(--font-ui);
+                  color: var(--tx-1);
+                  margin: 10px 0 8px;
+                "
+                >The record itself</b
+              >
+              <p
+                style="font: 400 12.5px/1.65 var(--font-ui); color: var(--tx-2)"
+              >
+                White lines on the deep blue field — the one place the system
+                inverts, straight from the provenance.
+                <b style="color: var(--tx-1)"
+                  >The bright marker is the live point.</b
+                >
+                For covers, dividers, hoardings, moments of gravity.
+              </p>
+            </div>
+          </div>
+
+          <div style="background: var(--white)">
+            <div
+              style="
+                height: 250px;
+                background: var(--zone);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <svg width="320" height="214" viewBox="0 0 480 315" fill="none">
+                <path d="M90 240 L240 165 L390 240 L240 315 Z" fill="#E2E4E9" />
+                <path
+                  d="M160 212 L240 172 L320 212 L240 252 Z"
+                  fill="#C6CAD1"
+                />
+                <path
+                  d="M160 212 L240 252 L240 270 L160 230 Z"
+                  fill="#9CA3AD"
+                />
+                <path
+                  d="M320 212 L240 252 L240 270 L320 230 Z"
+                  fill="#B2B8C0"
+                />
+                <path
+                  d="M172 158 L240 124 L308 158 L240 192 Z"
+                  fill="#0A47E8"
+                />
+                <path
+                  d="M172 158 L240 192 L240 208 L172 174 Z"
+                  fill="#062269"
+                />
+                <path
+                  d="M308 158 L240 192 L240 208 L308 174 Z"
+                  fill="#0635B8"
+                />
+                <path d="M184 108 L240 80 L296 108 L240 136 Z" fill="#C6CAD1" />
+                <path
+                  d="M184 108 L240 136 L240 151 L184 123 Z"
+                  fill="#9CA3AD"
+                />
+                <path
+                  d="M296 108 L240 136 L240 151 L296 123 Z"
+                  fill="#B2B8C0"
+                />
+                <path d="M204 36 L240 18 L276 36 L240 54 Z" fill="#0B0D11" />
+                <rect x="235" y="31" width="10" height="10" fill="#6E94FF" />
+              </svg>
+            </div>
+            <div style="padding: 24px 24px 28px">
+              <em
+                style="
+                  font: 500 10px/1 var(--font-mono);
+                  letter-spacing: 0.1em;
+                  color: var(--blue);
+                  font-style: normal;
+                  text-transform: uppercase;
+                "
+                >Mode 04 — Filled isometry</em
+              >
+              <b
+                style="
+                  display: block;
+                  font: 600 15px/1.4 var(--font-ui);
+                  color: var(--tx-1);
+                  margin: 10px 0 8px;
+                "
+                >The object, made solid</b
+              >
+              <p
+                style="font: 400 12.5px/1.65 var(--font-ui); color: var(--tx-2)"
+              >
+                Faces filled from the structural grays, outlines gone;
+                <b style="color: var(--tx-1)"
+                  >the committed slab goes solid blue</b
+                >
+                with darkened sides. For app icons, launch art, roadmap
+                monuments.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: 24px;
+          "
+        >
+          <div
+            style="
+              background: var(--white);
+              box-shadow: var(--shadow-1);
+              border-radius: var(--r);
+              padding: 20px;
+            "
+          >
+            <b
+              style="
+                font: 600 13px/1.5 var(--font-ui);
+                color: var(--tx-1);
+                display: block;
+                margin-bottom: 5px;
+              "
+              >One pen</b
+            >
+            <p style="font: 400 12px/1.6 var(--font-ui); color: var(--tx-2)">
+              1.5px strokes, square caps, mitered joins — identical to the
+              icons. A rounded line is off-brand.
+            </p>
+          </div>
+          <div
+            style="
+              background: var(--white);
+              box-shadow: var(--shadow-1);
+              border-radius: var(--r);
+              padding: 20px;
+            "
+          >
+            <b
+              style="
+                font: 600 13px/1.5 var(--font-ui);
+                color: var(--tx-1);
+                display: block;
+                margin-bottom: 5px;
+              "
+              >Dashed means not yet</b
+            >
+            <p style="font: 400 12px/1.6 var(--font-ui); color: var(--tx-2)">
+              Future floors, planned slabs, pending planes — anything unbuilt is
+              drawn in dashes.
+            </p>
+          </div>
+          <div
+            style="
+              background: var(--white);
+              box-shadow: var(--shadow-1);
+              border-radius: var(--r);
+              padding: 20px;
+            "
+          >
+            <b
+              style="
+                font: 600 13px/1.5 var(--font-ui);
+                color: var(--tx-1);
+                display: block;
+                margin-bottom: 5px;
+              "
+              >Blue is committed</b
+            >
+            <p style="font: 400 12px/1.6 var(--font-ui); color: var(--tx-2)">
+              One blue element per scene — the flag, the active slab, the live
+              point. Never two.
+            </p>
+          </div>
+          <div
+            style="
+              background: var(--white);
+              box-shadow: var(--shadow-1);
+              border-radius: var(--r);
+              padding: 20px;
+            "
+          >
+            <b
+              style="
+                font: 600 13px/1.5 var(--font-ui);
+                color: var(--tx-1);
+                display: block;
+                margin-bottom: 5px;
+              "
+              >Blueprint inverts, alone</b
+            >
+            <p style="font: 400 12px/1.6 var(--font-ui); color: var(--tx-2)">
+              White-on-deep-blue is reserved for record moments. It never mixes
+              with the line modes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="motifs">
+      <div class="wrap">
+        <div class="idx">08 — Motifs</div>
+        <h2>The motifs</h2>
+        <p class="sub">
+          Each motif is a contract gesture, abstracted. They never stack — pick
+          one per composition.
+        </p>
+        <div class="mgrid">
+          <div class="mcard">
+            <div class="mstage">
+              <svg width="170" height="60" viewBox="0 0 170 60">
+                <line
+                  x1="10"
+                  y1="24"
+                  x2="160"
+                  y2="24"
+                  stroke="#0B0D11"
+                  stroke-width="2"
+                />
+                <line
+                  x1="10"
+                  y1="24"
+                  x2="10"
+                  y2="36"
+                  stroke="#0B0D11"
+                  stroke-width="1"
+                />
+                <line
+                  x1="60"
+                  y1="24"
+                  x2="60"
+                  y2="33"
+                  stroke="#878D96"
+                  stroke-width="1"
+                />
+                <line
+                  x1="110"
+                  y1="24"
+                  x2="110"
+                  y2="33"
+                  stroke="#878D96"
+                  stroke-width="1"
+                />
+                <rect x="154" y="18" width="12" height="12" fill="#0A47E8" />
+                <text
+                  x="10"
+                  y="50"
+                  font-family="IBM Plex Mono, monospace"
+                  font-size="8"
+                  fill="#878D96"
+                >
+                  2001
+                </text>
+                <text
+                  x="142"
+                  y="50"
+                  font-family="IBM Plex Mono, monospace"
+                  font-size="8"
+                  fill="#0A47E8"
+                >
+                  TODAY
+                </text>
+              </svg>
+            </div>
+            <div class="mt">
+              <b>The Scale Rule</b>
+              <p>
+                A 2px line with mono ticks and a blue marker at now. Measurement
+                as a border device — heroes, timelines, footers.
+              </p>
+            </div>
+          </div>
+          <div class="mcard">
+            <div class="mstage">
+              <svg width="170" height="60" viewBox="0 0 170 60">
+                <line
+                  x1="20"
+                  y1="44"
+                  x2="150"
+                  y2="44"
+                  stroke="#C6CAD1"
+                  stroke-width="1.5"
+                />
+                <rect x="76" y="14" width="18" height="18" fill="#0A47E8" />
+              </svg>
+            </div>
+            <div class="mt">
+              <b>The Flag</b>
+              <p>
+                A solid blue square set on a line or an edge. Marks the one
+                committed thing — the flagship feature, the live point, the
+                decision.
+              </p>
+            </div>
+          </div>
+          <div class="mcard">
+            <div class="mstage" style="background: var(--blue-deep)">
+              <svg width="170" height="76" viewBox="0 0 170 76">
+                <g fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.9">
+                  <rect x="40" y="14" width="70" height="48" />
+                  <line x1="40" y1="32" x2="110" y2="32" />
+                  <line x1="74" y1="32" x2="74" y2="62" />
+                  <line x1="110" y1="40" x2="134" y2="40" />
+                </g>
+                <rect x="130" y="34" width="10" height="10" fill="#6E94FF" />
+              </svg>
+            </div>
+            <div class="mt">
+              <b>The Blueprint Field</b>
+              <p>
+                White linework on the deep blue — the record itself. The only
+                surface where the system inverts. Covers, dividers, hoardings.
+              </p>
+            </div>
+          </div>
+          <div class="mcard">
+            <div class="mstage">
+              <div
+                style="
+                  border: 2px solid #0b0d11;
+                  border-radius: 4px;
+                  padding: 10px 16px;
+                  font:
+                    600 11px/1.5 &quot;IBM Plex Mono&quot;,
+                    monospace;
+                  letter-spacing: 0.08em;
+                  color: #0b0d11;
+                  text-align: center;
+                "
+              >
+                SIGNED OFF<br /><span
+                  style="font-weight: 400; font-size: 9px; color: #50555d"
+                  >11 JUN 2026 · CN</span
+                >
+              </div>
+            </div>
+            <div class="mt">
+              <b>The Stamp</b>
+              <p>
+                A square mono seal — date, initials, state. Approval rendered
+                the way drawings have always carried it. Reports, covers,
+                stickers.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cards">
+      <div class="wrap">
+        <div class="idx">09 — Cards</div>
+        <h2>Four planes, one family</h2>
+        <p class="sub">
+          Locked has no outlined cards — it has planes. Every one on the canvas
+          is one of four: a quiet figure, the committed one, the machine
+          speaking, or a zone strip heading a list. If a plane doesn't fit one
+          of these jobs, it's a table row that got ambitious.
+        </p>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            align-items: start;
+          "
+        >
+          <div>
+            <div
+              style="
+                font: 500 10px/1 var(--font-mono);
+                letter-spacing: 0.08em;
+                color: var(--tx-3);
+                text-transform: uppercase;
+                margin-bottom: 10px;
+              "
+            >
+              Quiet — the figure
+            </div>
+            <div class="stat" style="min-width: 0">
+              <div class="l">Total documents</div>
+              <div class="n">2,481</div>
+            </div>
+          </div>
+          <div>
+            <div
+              style="
+                font: 500 10px/1 var(--font-mono);
+                letter-spacing: 0.08em;
+                color: var(--tx-3);
+                text-transform: uppercase;
+                margin-bottom: 10px;
+              "
+            >
+              Committed — blue block
+            </div>
+            <div class="stat attn" style="min-width: 0">
+              <div class="l">Awaiting your review</div>
+              <div class="n">17</div>
+            </div>
+          </div>
+          <div>
+            <div
+              style="
+                font: 500 10px/1 var(--font-mono);
+                letter-spacing: 0.08em;
+                color: var(--tx-3);
+                text-transform: uppercase;
+                margin-bottom: 10px;
+              "
+            >
+              Assistant — gradient, floats
+            </div>
+            <div class="band" style="max-width: none">
+              <div
+                class="bhead"
+                style="display: flex; align-items: center; gap: 9px"
+              >
+                <span class="l">Asite Intelligence</span>
+              </div>
+              <p style="font-size: 12.5px">3 drawings block RFI #4182.</p>
+            </div>
+          </div>
+          <div>
+            <div
+              style="
+                font: 500 10px/1 var(--font-mono);
+                letter-spacing: 0.08em;
+                color: var(--tx-3);
+                text-transform: uppercase;
+                margin-bottom: 10px;
+              "
+            >
+              Zone strip — heads a list
+            </div>
+            <div
+              style="
+                background: var(--zone);
+                border-radius: var(--r);
+                padding: 13px 16px;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+              "
+            >
+              <b style="font: 600 13.5px/1 var(--font-ui); color: var(--tx-1)"
+                >Your actions</b
+              ><span style="font: 400 10px var(--font-mono); color: var(--tx-3)"
+                >17 ITEMS</span
+              >
+            </div>
+          </div>
+        </div>
+        <p class="rule-note">
+          Planes lift on soft shadow and hold apart by gaps — never outlines,
+          never nesting. One committed plane per strip; one assistant per
+          screen.
+        </p>
+      </div>
+    </section>
+
+    <section id="overlays">
+      <div class="wrap">
+        <div class="idx">10 — Overlays</div>
+        <h2>Dialogs &amp; menus</h2>
+        <p class="sub">
+          A dialog is a plane lifted off the page: black scrim at 40%, a deep
+          soft shadow doing the lifting, generous inner air, and actions seated
+          in their own ruled zone — full-bleed buttons, no gaps. Menus are ruled
+          lists; the selected line is blue because choosing is acting.
+        </p>
+        <div class="ov-stage">
+          <div class="ov-view">
+            <div class="scrim"></div>
+            <div class="dialog">
+              <div class="dh">
+                <b>Issue 3 documents?</b>
+                <p>
+                  DR-1182, DR-1181 and DR-1170 will move to
+                  <span style="font: var(--text-mono); font-size: 11px"
+                    >ISSUED</span
+                  >
+                  and notify 14 subscribers on the distribution matrix.
+                </p>
+              </div>
+              <div class="df">
+                <button
+                  class="btn"
+                  style="
+                    background: var(--white);
+                    color: var(--tx-1);
+                    padding: 14px 24px;
+                  "
+                >
+                  Cancel
+                </button>
+                <button class="btn btn-primary" style="padding: 14px 24px">
+                  Issue documents
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="ov-view"
+            style="align-items: flex-start; padding-top: 44px"
+          >
+            <div class="menu">
+              <div class="mi">
+                <svg width="14" height="14" viewBox="0 0 20 20">
+                  <path d="M5.5 2.5 H11.5 L15.5 6.5 V17.5 H5.5 Z" />
+                  <path d="M11.5 2.5 V6.5 H15.5" /></svg
+                >Open<span class="u-kbd">↵</span>
+              </div>
+              <div class="mi on">
+                <svg width="14" height="14" viewBox="0 0 20 20">
+                  <rect x="4" y="4" width="12" height="12" />
+                  <path d="M7 10.2 L9.2 12.4 L13.4 8.2" /></svg
+                >Approve revision<span class="u-kbd">A</span>
+              </div>
+              <div class="mi">
+                <svg width="14" height="14" viewBox="0 0 20 20">
+                  <path
+                    d="M3.7 16.3 L4.6 13.1 L13.3 4.4 L15.6 6.7 L6.9 15.4 Z M11.5 6.2 L13.8 8.5"
+                  /></svg
+                >Add markup<span class="u-kbd">M</span>
+              </div>
+              <div class="sep"></div>
+              <div class="mi">
+                <svg width="14" height="14" viewBox="0 0 20 20">
+                  <path d="M9 4.5 H4.5 V15.5 H15.5 V11" />
+                  <path d="M12 3.5 H16.5 V8 M16.5 3.5 L10.5 9.5" /></svg
+                >Export<span class="u-kbd">E</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tables">
+      <div class="wrap">
+        <div class="idx">11 — Tables &amp; lists</div>
+        <h2>Registers, not spreadsheets</h2>
+        <p class="sub">
+          The table is the product. Locked rows are 44px, single-line, with grid
+          references and disciplines as columns; the toolbar is welded to the
+          table; selection is a blue tint. Proven at 2,481 rows in
+          <a href="screens.html#s1" style="color: var(--blue)">the register</a>
+          before any pattern ships elsewhere.
+        </p>
+        <div class="princ">
+          <div class="pcard">
+            <b>The toolbar holds the line</b>
+            <p>
+              Search, filters, views, columns and export on one sticky row, with
+              the header row pinned beneath — tools never scroll away from the
+              data they act on.
+            </p>
+          </div>
+          <div class="pcard">
+            <b>Single-line, 44px, locked</b>
+            <p>
+              Grid ref and discipline are columns, not metadata lines. At
+              enterprise scale, density is the comfort — and mono keeps the
+              references scannable.
+            </p>
+          </div>
+          <div class="pcard">
+            <b>Status ranks the rows</b>
+            <p>
+              Tinted badges — green moving, amber waiting, red stopped, gray
+              inert — let 2,000 rows sort themselves at a glance without a
+              single loud pixel.
+            </p>
+          </div>
+          <div class="pcard">
+            <b>Lists are registers in miniature</b>
+            <p>
+              Action queues, RFI groups, activity feeds — same anatomy: badge,
+              title, mono references, keyboard affordance. One grammar, learned
+              once.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="inputs">
+      <div class="wrap">
+        <div class="idx">11b — Data entry</div>
+        <h2>Every value has a correct field</h2>
+        <p class="sub">
+          Entry is the one place the product asks instead of reads, so it asks
+          precisely. The type of the value chooses the control — text takes the
+          sans, refs and quantities take the mono, decisions get only the
+          options that exist. Every field is a rectangle with a black baseline;
+          blue means focus, the status tints mean the value passed or failed. A
+          blue square marks what's required.
+        </p>
+        <div class="fgrid">
+          <div class="fcard">
+            <div class="flab"><span class="req"></span>Text — default</div>
+            <input class="fld" type="text" placeholder="Pour location" />
+            <div class="fnote" style="color: var(--tx-3)">
+              At rest: black baseline, no box. For names, titles, locations.
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="flab">Text — focus</div>
+            <input class="fld focus" type="text" value="Core L+04, west pour" />
+            <div class="fnote" style="color: var(--blue)">
+              Focus moves the baseline to blue — the active place.
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="flab">Text — filled</div>
+            <input class="fld filled" type="text" value="Battersea Phase 3" />
+            <div class="fnote" style="color: var(--tx-3)">
+              A committed value sits on white; the baseline holds black.
+            </div>
+          </div>
+
+          <div class="fcard">
+            <div class="flab">Reference — mono</div>
+            <input
+              class="fld mono filled"
+              type="text"
+              value="DR-1182 · REV P4"
+            />
+            <div class="fnote" style="color: var(--tx-3)">
+              Engineering refs take the mono. Uppercase on entry, no
+              autocorrect.
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="flab"><span class="req"></span>Quantity — numeric</div>
+            <input
+              class="fld num filled"
+              type="text"
+              inputmode="decimal"
+              value="412.50 m³"
+            />
+            <div class="fnote" style="color: var(--tx-3)">
+              Right-aligned tabular figures; the unit travels with the value.
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="flab">Date</div>
+            <input class="fld mono filled" type="text" value="11 JUN 2026" />
+            <div class="fnote" style="color: var(--tx-3)">
+              Dates are measured, so they are mono. One format, project-wide.
+            </div>
+          </div>
+
+          <div class="fcard">
+            <div class="flab"><span class="req"></span>Reference — error</div>
+            <input class="fld mono err" type="text" value="DR-11" />
+            <div class="fnote bad">
+              <i></i>Red baseline. Ref must match DR-0000 · REV P0.
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="flab">Reference — success</div>
+            <input class="fld mono good" type="text" value="DR-1182 · REV P4" />
+            <div class="fnote good">
+              <i></i>Green baseline. Validated against the register.
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="flab">Text — disabled</div>
+            <input
+              class="fld dis"
+              type="text"
+              value="Locked after issue"
+              disabled
+            />
+            <div class="fnote" style="color: var(--tx-3)">
+              Inert: gray baseline, dimmed value, no focus.
+            </div>
+          </div>
+
+          <div class="fcard">
+            <div class="flab">Long text</div>
+            <textarea class="fld filled">
+3 structural drawings at C-07/L+04 are blocking RFI #4182. Reissue before the pour 6 hold point.</textarea
+            >
+            <div class="fnote" style="color: var(--tx-3)">
+              Narrative entry. Resizes vertically; mono never sets prose.
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="flab">
+              <span class="req"></span>Select — one of many
+            </div>
+            <div class="fsel">
+              <div class="fld focus" style="cursor: default">
+                Discipline — Structural
+              </div>
+              <span class="car">▾</span>
+            </div>
+            <div class="fmenu">
+              <div>Architectural</div>
+              <div class="on">Structural</div>
+              <div>MEP</div>
+            </div>
+            <div class="fnote" style="color: var(--tx-3)">
+              Dropdown past five options; the chosen row takes the blue tint.
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="flab">Choose one — radio</div>
+            <label class="pick"
+              ><span class="box rad on"></span>Hold point</label
+            >
+            <label class="pick"
+              ><span class="box rad"></span>Witness point</label
+            >
+            <label class="pick off"
+              ><span class="box rad dis"></span>Surveillance — n/a</label
+            >
+            <div class="fnote" style="color: var(--tx-3)">
+              Square-cornered round marker. All choices stay on screen.
+            </div>
+          </div>
+
+          <div class="fcard">
+            <div class="flab">Choose many — checkbox</div>
+            <label class="pick"><span class="box on"></span>Drawings</label>
+            <label class="pick"
+              ><span class="box on"></span>Specifications</label
+            >
+            <label class="pick"
+              ><span class="box"></span>Method statements</label
+            >
+            <div class="fnote" style="color: var(--tx-3)">
+              Squares, blue when set. Checks don't act until the form does.
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="flab">Toggle — applies now</div>
+            <label class="tgl"
+              ><span class="trk on"><span class="kn"></span></span>Notify
+              approvers on upload</label
+            >
+            <label class="tgl"
+              ><span class="trk"><span class="kn"></span></span>Lock revision
+              after issue</label
+            >
+            <div class="fnote" style="color: var(--tx-3)">
+              A square track for states that take effect immediately. Blue is
+              on.
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="flab">Numeric — error</div>
+            <input
+              class="fld num err"
+              type="text"
+              inputmode="decimal"
+              value="-12.00 m³"
+            />
+            <div class="fnote bad">
+              <i></i>Quantity can't be negative on a pour record.
+            </div>
+          </div>
+        </div>
+        <p class="rule-note">
+          One focus behavior on every field — black baseline goes blue.
+          Validation borrows the site's status tints: red stopped, green
+          cleared, never blue. Required is a blue square on the label, and the
+          value's type, not the layout, picks the control.
+        </p>
+      </div>
+    </section>
+
+    <section id="comp">
+      <div class="wrap">
+        <div class="idx">12 — Components</div>
+        <h2>Square controls, one blue</h2>
+        <p class="sub">
+          Buttons are rectangles. Inputs are rectangles with a black baseline.
+          Tabs underline in blue. Filters are filled tags. The intelligence
+          moment is a floating assistant — a soft gradient plane pinned
+          bottom-right of the canvas, above the work and outside its flow, never
+          a row in the stack.
+        </p>
+        <div class="comp-stage">
+          <div class="row">
+            <button class="btn btn-primary">Upload</button>
+            <button class="btn btn-secondary">Share</button>
+            <button class="btn btn-ghost">Export</button>
+            <button class="btn btn-black">Issue 3</button>
+            <span class="annotation"
+              >← blue acts, black commits, outline supports</span
+            >
+          </div>
+          <div class="row">
+            <input class="input" value="Search refs, names, grid locations" />
+            <span class="u-kbd">⌘K</span>
+            <span class="annotation"
+              >black baseline at rest, 2px blue ring on focus</span
+            >
+          </div>
+          <div class="tabs2">
+            <span>Dashboard</span><span class="on">Documents</span
+            ><span>Workflows</span><span>Forms</span><span>Models</span>
+          </div>
+          <div class="row">
+            <span class="tag on">ALL 2,481</span>
+            <span class="tag">STRUCTURAL ✕</span>
+            <span class="tag">GRID C-07 ✕</span>
+            <span class="tag" style="color: var(--tx-3)">+ FILTER</span>
+            <span class="annotation">active tag inverts to black</span>
+          </div>
+          <div class="band">
+            <div class="bhead">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 20 20"
+                style="
+                  flex: none;
+                  stroke: var(--blue);
+                  fill: none;
+                  stroke-width: 1.5;
+                  stroke-linecap: square;
+                "
+              >
+                <rect x="4" y="4" width="12" height="12" />
+                <path
+                  d="M10 1.5 V4 M10 16 V18.5 M1.5 10 H4 M16 10 H18.5 M10 7.5 V12.5 M7.5 10 H12.5"
+                />
+              </svg>
+              <span class="l">Asite Intelligence</span>
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 20 20"
+                style="
+                  margin-left: auto;
+                  stroke: var(--tx-3);
+                  fill: none;
+                  stroke-width: 1.5;
+                  stroke-linecap: square;
+                "
+              >
+                <path d="M5 5 L15 15 M15 5 L5 15" />
+              </svg>
+            </div>
+            <p>
+              3 structural drawings at <span class="mono">C-07/L+04</span> are
+              blocking RFI #4182 — review them to release the pour 6 hold point.
+            </p>
+            <button
+              class="btn btn-primary"
+              style="font: 500 11px/1 var(--font-mono); align-self: flex-start"
+            >
+              REVIEW 3
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="princ">
+      <div class="wrap">
+        <div class="idx">13 — Principles</div>
+        <h2>The lock</h2>
+        <p class="sub" style="margin-bottom: var(--space-8)">
+          Five rules, non-negotiable.
+        </p>
+        <div class="princ">
+          <div class="pcard">
+            <b>Three brand colors, plus state</b>
+            <p>
+              Blue acts, black structures, white carries. Green, amber and red
+              exist only as status tints — state, never decoration. Any other
+              hue on screen means the system is broken.
+            </p>
+          </div>
+          <div class="pcard">
+            <b>One radius: 4px</b>
+            <p>
+              Corners soften just enough to feel machined, never round. The same
+              4px on every button, tag, plane and avatar — pills, circles and
+              mixed radii read as errors.
+            </p>
+          </div>
+          <div class="pcard">
+            <b>Space is the container</b>
+            <p>
+              No outlined boxes, no scaffolding rules. White planes lift on soft
+              shadow and hold apart by measured gaps; 1px rules survive only
+              inside tables and lists. A border drawn around a white box is a
+              defect.
+            </p>
+          </div>
+          <div class="pcard">
+            <b>Blue means act</b>
+            <p>
+              If it's blue, you can do something: the primary action, the link,
+              the selected row, the active tab. Blue never decorates — a blue
+              thing that does nothing is a defect.
+            </p>
+          </div>
+          <div class="pcard">
+            <b>Mono measures</b>
+            <p>
+              Refs, grids, revisions, counts, figures, timestamps — IBM Plex
+              Mono, always. Numbers are measurements, and measurements don't
+              wear display type.
+            </p>
+          </div>
+          <div class="pcard">
+            <b>The register is the proof</b>
+            <p>
+              Every rule above is tested at 2,481 rows before it ships anywhere
+              else. 44px single-line rows, columns locked to the grid, the
+              toolbar welded to the table.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="world" style="border-bottom: none">
+      <div class="wrap">
+        <div class="idx">14 — Brand in the world</div>
+        <h2>Brand in the world</h2>
+        <p class="sub">
+          The language in the world. Every artefact is built from tokens — no
+          images.
+        </p>
+        <div class="xgrid">
+          <div
+            class="xcell"
+            style="
+              aspect-ratio: 1.91/1;
+              background: var(--white);
+              padding: 32px;
+              display: flex;
+              flex-direction: column;
+            "
+          >
+            <svg width="28" height="29" viewBox="0 0 377 396" class="on-light">
+              <use href="#amark" />
+            </svg>
+            <div
+              style="
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+              "
+            >
+              <div
+                style="
+                  font: 600 30px/1.15 var(--font-ui);
+                  letter-spacing: -0.02em;
+                  color: var(--tx-1);
+                "
+              >
+                Every project. One record.<br />Signed off<span
+                  style="color: var(--blue)"
+                  >.</span
+                >
+              </div>
+              <div style="position: relative; height: 18px; margin-top: 22px">
+                <div
+                  style="
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 8px;
+                    height: 2px;
+                    background: var(--black);
+                  "
+                ></div>
+                <span
+                  style="
+                    position: absolute;
+                    right: 0;
+                    top: 3px;
+                    width: 12px;
+                    height: 12px;
+                    background: var(--blue);
+                  "
+                ></span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  gap: 14px;
+                  margin-top: 10px;
+                  font: 500 9.5px/1 var(--font-mono);
+                  color: var(--tx-3);
+                  letter-spacing: 0.06em;
+                "
+              >
+                <span>ASITE.COM</span><span>COMMON DATA ENVIRONMENT</span>
+              </div>
+            </div>
+            <span class="xcap">SOCIAL / OG CARD · THE SCALE RULE</span>
+          </div>
+
+          <div
+            class="xcell"
+            style="
+              aspect-ratio: 1.91/1;
+              background: var(--white);
+              display: grid;
+              grid-template-columns: 1fr 56px;
+            "
+          >
+            <div
+              style="
+                padding: 32px 32px 44px;
+                display: flex;
+                flex-direction: column;
+              "
+            >
+              <span
+                style="
+                  font: 500 9.5px/1 var(--font-mono);
+                  color: var(--tx-3);
+                  letter-spacing: 0.08em;
+                "
+                >QPR · Q2 2026 · BATTERSEA PHASE 3</span
+              >
+              <div
+                style="
+                  flex: 1;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-end;
+                "
+              >
+                <div
+                  style="
+                    font: 600 34px/1.12 var(--font-ui);
+                    letter-spacing: -0.02em;
+                    color: var(--tx-1);
+                  "
+                >
+                  On the<br />record
+                </div>
+                <div
+                  style="
+                    margin-top: 14px;
+                    display: inline-block;
+                    border: 1.5px solid var(--black);
+                    border-radius: 4px;
+                    padding: 6px 10px;
+                    font: 600 8.5px/1.4 var(--font-mono);
+                    letter-spacing: 0.08em;
+                    color: var(--tx-1);
+                    width: fit-content;
+                  "
+                >
+                  SIGNED OFF · 11 JUN 2026
+                </div>
+              </div>
+            </div>
+            <div style="background: var(--blue-deep); position: relative">
+              <svg
+                width="100%"
+                height="100%"
+                viewBox="0 0 56 300"
+                preserveAspectRatio="none"
+              >
+                <g stroke="#FFFFFF" stroke-width="1" opacity="0.7">
+                  <line x1="28" y1="0" x2="28" y2="300" />
+                  <line x1="18" y1="40" x2="38" y2="40" />
+                  <line x1="22" y1="80" x2="34" y2="80" />
+                  <line x1="18" y1="120" x2="38" y2="120" />
+                  <line x1="22" y1="160" x2="34" y2="160" />
+                  <line x1="18" y1="200" x2="38" y2="200" />
+                  <line x1="22" y1="240" x2="34" y2="240" />
+                </g>
+                <rect x="22" y="274" width="12" height="12" fill="#6E94FF" />
+              </svg>
+            </div>
+            <span class="xcap">REPORT COVER · BLUEPRINT SPINE + STAMP</span>
+          </div>
+
+          <div
+            class="xcell"
+            style="
+              grid-column: 1/-1;
+              aspect-ratio: 4.6/1;
+              background: var(--blue-deep);
+              display: flex;
+              align-items: center;
+              padding: 0 48px;
+              gap: 36px;
+              overflow: hidden;
+            "
+          >
+            <svg
+              width="52"
+              height="55"
+              viewBox="0 0 377 396"
+              style="flex: none"
+            >
+              <use href="#amark" />
+            </svg>
+            <div
+              style="
+                font: 600 clamp(20px, 3vw, 40px)/1.1 var(--font-ui);
+                letter-spacing: -0.02em;
+                color: #fff;
+                white-space: nowrap;
+              "
+            >
+              This site builds from one record<span style="color: #6e94ff"
+                >.</span
+              >
+            </div>
+            <svg
+              style="margin-left: auto; flex: none"
+              width="180"
+              height="90"
+              viewBox="0 0 180 90"
+            >
+              <g fill="none" stroke="#FFFFFF" stroke-width="0.9" opacity="0.55">
+                <rect x="20" y="14" width="80" height="56" />
+                <line x1="20" y1="36" x2="100" y2="36" />
+                <line x1="58" y1="36" x2="58" y2="70" />
+                <line x1="100" y1="44" x2="140" y2="44" />
+              </g>
+              <rect x="136" y="38" width="11" height="11" fill="#6E94FF" />
+            </svg>
+            <span class="xcap">SITE HOARDING · THE BLUEPRINT FIELD</span>
+          </div>
+
+          <div
+            class="xcell"
+            style="
+              aspect-ratio: 1.91/1;
+              background: var(--zone);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 32px;
+            "
+          >
+            <div
+              style="
+                width: 96px;
+                height: 96px;
+                border-radius: 20px;
+                background: var(--black);
+                box-shadow: var(--shadow-2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <svg width="48" height="50" viewBox="0 0 377 396">
+                <use href="#amark" />
+              </svg>
+            </div>
+            <div
+              style="
+                width: 96px;
+                height: 96px;
+                border-radius: 20px;
+                background: var(--blue);
+                box-shadow: var(--shadow-2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <svg
+                width="48"
+                height="50"
+                viewBox="0 0 377 396"
+                style="--mark-body: #ffffff; --mark-arrow: #ffffff"
+              >
+                <use href="#amark" />
+              </svg>
+            </div>
+            <div
+              style="
+                width: 96px;
+                height: 96px;
+                border-radius: 20px;
+                background: #fff;
+                box-shadow: var(--shadow-2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+              class="on-light"
+            >
+              <svg width="48" height="50" viewBox="0 0 377 396">
+                <use href="#amark" />
+              </svg>
+            </div>
+            <span class="xcap">APP ICON · BLACK / BLUE / WHITE</span>
+          </div>
+
+          <div
+            class="xcell"
+            style="
+              aspect-ratio: 1.91/1;
+              background: var(--zone);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <div
+              style="
+                width: 190px;
+                background: #fff;
+                border-radius: var(--r);
+                box-shadow: var(--shadow-2);
+                overflow: hidden;
+              "
+            >
+              <div style="height: 10px; background: var(--blue)"></div>
+              <div style="padding: 18px; text-align: center" class="on-light">
+                <svg width="26" height="27" viewBox="0 0 377 396">
+                  <use href="#amark" />
+                </svg>
+                <div
+                  style="
+                    font: 600 14px/1.3 var(--font-ui);
+                    color: var(--tx-1);
+                    margin-top: 10px;
+                  "
+                >
+                  Charles Njoku
+                </div>
+                <div
+                  style="
+                    font: 400 10.5px/1.5 var(--font-ui);
+                    color: var(--tx-3);
+                  "
+                >
+                  Information Manager · JV
+                </div>
+                <div
+                  style="
+                    margin-top: 12px;
+                    display: inline-block;
+                    font: 500 8.5px/1 var(--font-mono);
+                    color: var(--blue);
+                    background: var(--blue-tint);
+                    border-radius: 4px;
+                    padding: 5px 8px;
+                    letter-spacing: 0.06em;
+                  "
+                >
+                  SITE ACCESS · ZONE A
+                </div>
+              </div>
+            </div>
+            <span class="xcap">EVENT / SITE BADGE</span>
+          </div>
+
+          <div
+            class="xcell"
+            style="
+              grid-column: 1/-1;
+              aspect-ratio: 4.6/1;
+              background: var(--white);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 36px;
+            "
+          >
+            <div
+              style="
+                width: 92px;
+                height: 92px;
+                background: var(--blue);
+                border-radius: var(--r);
+                box-shadow: var(--shadow-1);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+              "
+            >
+              <svg
+                width="26"
+                height="26"
+                viewBox="0 0 20 20"
+                style="
+                  stroke: #fff;
+                  fill: none;
+                  stroke-width: 1.8;
+                  stroke-linecap: square;
+                "
+              >
+                <rect x="4" y="4" width="12" height="12" />
+                <path d="M7 10.2 L9.2 12.4 L13.4 8.2" />
+              </svg>
+              <span
+                style="
+                  font: 600 9px/1 var(--font-mono);
+                  color: #fff;
+                  letter-spacing: 0.06em;
+                "
+                >SIGNED OFF</span
+              >
+            </div>
+            <div
+              style="
+                padding: 12px 18px;
+                background: #fff;
+                border: 2px solid var(--black);
+                border-radius: var(--r);
+                box-shadow: var(--shadow-1);
+                font: 600 11px/1 var(--font-mono);
+                color: var(--tx-1);
+                letter-spacing: 0.05em;
+              "
+            >
+              C-07 / L+04
+            </div>
+            <div
+              style="
+                width: 78px;
+                height: 78px;
+                background: var(--black);
+                border-radius: var(--r);
+                box-shadow: var(--shadow-1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <svg width="40" height="42" viewBox="0 0 377 396">
+                <use href="#amark" />
+              </svg>
+            </div>
+            <div
+              style="
+                padding: 12px 18px;
+                background: var(--warn-bg);
+                border-radius: var(--r);
+                box-shadow: var(--shadow-1);
+                font: 600 10px/1 var(--font-mono);
+                color: var(--warn);
+                letter-spacing: 0.05em;
+              "
+            >
+              WAITING ON YOU
+            </div>
+            <span class="xcap">STICKER SHEET · SQUARE, NEVER ROTATED</span>
+          </div>
+
+          <div
+            class="xcell"
+            style="
+              grid-column: 1/-1;
+              aspect-ratio: 4.6/1;
+              background: var(--white);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 32px;
+            "
+          >
+            <svg width="180" height="50" viewBox="0 0 180 50">
+              <line
+                x1="10"
+                y1="24"
+                x2="170"
+                y2="24"
+                stroke="#0B0D11"
+                stroke-width="2"
+              />
+              <line
+                x1="10"
+                y1="24"
+                x2="10"
+                y2="34"
+                stroke="#0B0D11"
+                stroke-width="1"
+              />
+              <line
+                x1="90"
+                y1="24"
+                x2="90"
+                y2="31"
+                stroke="#878D96"
+                stroke-width="1"
+              />
+              <line
+                x1="170"
+                y1="24"
+                x2="170"
+                y2="34"
+                stroke="#0B0D11"
+                stroke-width="1"
+              />
+            </svg>
+            <div>
+              <div
+                style="font: 600 15px/1.4 var(--font-ui); color: var(--tx-1)"
+              >
+                Nothing on the record needs you
+              </div>
+              <div
+                style="font: 400 12.5px/1.6 var(--font-ui); color: var(--tx-3)"
+              >
+                The rule has no marker today. Enjoy it — or press
+                <span class="u-kbd">C</span> to raise something.
+              </div>
+            </div>
+            <span class="xcap">EMPTY STATE · THE SCALE RULE, UNMARKED</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        <span>Asite — BlueBand · Locked</span>
+        <span
+          ><a href="index.html">Language</a> ·
+          <a href="screens.html">Product</a> · <a href="web.html">Website</a> ·
+          <a href="slides.html">Slides</a></span
+        >
+      </div>
+    </footer>
+    <script>
+      (function () {
+        var links = [].slice.call(document.querySelectorAll(".fnav a"));
+        if (!links.length) return;
+        var map = links
+          .map(function (a) {
+            return { a: a, el: document.querySelector(a.getAttribute("href")) };
+          })
+          .filter(function (o) {
+            return o.el;
+          });
+        function onScroll() {
+          var pos = window.scrollY + 120,
+            cur = null;
+          map.forEach(function (o) {
+            if (o.el.offsetTop <= pos) cur = o;
+          });
+          links.forEach(function (a) {
+            a.classList.remove("on");
+          });
+          if (cur) cur.a.classList.add("on");
+        }
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+  </body>
+</html>

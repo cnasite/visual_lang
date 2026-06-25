@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — BlueBand · Website</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css?v=4">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--white); color:var(--tx-2); font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:rgba(10,71,232,0.25); color:var(--black); }
+  .wrap { max-width:1100px; margin:0 auto; padding:0 var(--space-8); }
+
+  nav { position:sticky; top:0; z-index:50; background:var(--black); }
+  nav .wrap { display:flex; align-items:center; gap:6px; height:52px; white-space:nowrap; }
+  .nav-mark { display:flex; align-items:center; gap:10px; margin-right:24px; text-decoration:none; }
+  .nav-mark span { font:600 14px/1 var(--font-ui); color:var(--tn-1); }
+  .ntab { font:500 12.5px/1 var(--font-ui); color:var(--tn-2); text-decoration:none; padding:7px 12px;
+    border-radius:var(--r); transition:color var(--t-fast) var(--ease), background var(--t-fast) var(--ease); }
+  .ntab:hover { color:var(--tn-1); background:var(--black-2); }
+  .ntab.on { color:var(--blue-bright); background:var(--black-2); }
+  .nspacer { margin-left:auto; }
+
+  /* floating on-page nav — section anchors live here, not in the top bar */
+  .fnav { position:fixed; top:50%; right:18px; transform:translateY(-50%); z-index:60;
+    display:flex; flex-direction:column; gap:1px; padding:8px 6px; max-height:80vh; overflow:auto;
+    background:var(--white); border:1px solid var(--rule); box-shadow:0 12px 32px rgba(11,13,17,0.12); }
+  .fnav .fcap { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase;
+    color:var(--tx-3); padding:4px 9px 8px; }
+  .fnav a { display:flex; align-items:center; gap:8px; font:500 11.5px/1 var(--font-ui); color:var(--tx-2);
+    text-decoration:none; padding:6px 9px; white-space:nowrap;
+    transition:color var(--t-fast) var(--ease), background var(--t-fast) var(--ease); }
+  .fnav a::before { content:""; width:4px; height:4px; background:var(--rule-mid); flex:none; }
+  .fnav a:hover { color:var(--tx-1); background:var(--zone); }
+  .fnav a.on { color:var(--blue); background:var(--blue-tint); }
+  .fnav a.on::before { background:var(--blue); }
+  @media (max-width:1280px){ .fnav{ display:none; } }
+
+  .page-head { padding:100px 0 var(--space-12); }
+  .idx { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:#fff; background:var(--blue);
+    border-radius:var(--r); display:inline-block; padding:6px 10px; margin-bottom:var(--space-4); }
+  .page-head h1 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--tx-1); }
+  .page-head p { max-width:620px; margin-top:var(--space-4); line-height:1.75; }
+
+  .sec-block { padding:var(--space-16) 0 var(--space-6); }
+  .sb-head { display:flex; align-items:baseline; gap:var(--space-4); margin-bottom:var(--space-8); }
+  .sb-head .num { font:var(--text-mono); font-size:11px; color:var(--tx-3); }
+  .sb-head h2 { font:var(--text-h2); letter-spacing:var(--track-h); color:var(--tx-1); }
+  .sb-head p { font:var(--text-small); color:var(--tx-3); margin-left:auto; max-width:400px; text-align:right; }
+
+  .web { width:min(1240px, calc(100vw - 48px)); position:relative; left:50%; transform:translateX(-50%);
+    box-shadow:var(--shadow-1); border-radius:var(--r); overflow:hidden; margin-bottom:var(--space-16); background:var(--white); }
+
+  /* marketing nav */
+  .mnav { background:var(--black); display:flex; align-items:center; gap:28px; padding:0 56px; height:64px; }
+  .mnav .brand { display:flex; align-items:center; gap:11px; margin-right:auto; }
+  .mnav .brand b { font:600 17px/1 var(--font-ui); color:var(--tn-1); }
+  .mnav a { font:500 13.5px/1 var(--font-ui); color:var(--tn-2); text-decoration:none; }
+  .mnav a:hover { color:var(--tn-1); }
+  .btn { font:500 13.5px/1 var(--font-ui); padding:12px 20px; border:none; border-radius:var(--r); cursor:pointer; white-space:nowrap; }
+  .btn-blue { background:var(--blue); color:#fff; }
+  .btn-blue:hover { background:var(--blue-press); }
+  .btn-line { background:none; color:var(--tx-1); border:1px solid var(--black); padding:11px 19px; }
+  .btn-ghostd { background:none; color:var(--tn-2); }
+  .btn-white { background:#fff; color:var(--black); }
+
+  /* hero — the scale rule */
+  .hero-s { padding:140px 56px 0; }
+  .kicker { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--blue); margin-bottom:24px; }
+  .hero-s h3 { font:600 64px/1.06 var(--font-ui); letter-spacing:-0.025em; color:var(--tx-1); max-width:760px; }
+  .hero-s .lede { margin:30px 0 0; max-width:520px; font:400 16.5px/1.75 var(--font-ui); color:var(--tx-2); }
+  .hero-cta { display:flex; gap:14px; margin-top:44px; align-items:center; }
+  .scale-rule { margin-top:110px; position:relative; height:64px; }
+  .scale-rule .line { position:absolute; left:0; right:0; top:0; height:2px; background:var(--black); }
+  .scale-rule .tick { position:absolute; top:0; width:1px; height:14px; background:var(--black); }
+  .scale-rule .tick.minor { height:8px; background:var(--rule-mid); }
+  .scale-rule .lbl { position:absolute; top:22px; font:var(--text-mono); font-size:10px; color:var(--tx-3); transform:translateX(-50%); letter-spacing:0.05em; }
+  .scale-rule .marker { position:absolute; top:-5px; width:12px; height:12px; background:var(--blue); transform:translateX(-50%); }
+  .scale-rule .mlbl { position:absolute; top:22px; font:var(--text-mono); font-size:10px; color:var(--blue); transform:translateX(-50%); letter-spacing:0.05em; }
+
+  /* proof */
+  .proof { display:flex; align-items:stretch; }
+  .proof > div { flex:1; display:flex; align-items:center; justify-content:center; padding:34px 16px; border-left:1px solid var(--rule); }
+  .proof > div:first-child { border-left:none; flex:1.3; background:var(--black); }
+  .proof .pl { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--tn-2); text-align:center; line-height:1.6; }
+  .proof b { font:600 15px/1 var(--font-ui); color:var(--tx-2); white-space:nowrap; }
+
+  /* features — rule-divided columns */
+  .feat { padding:110px 56px; }
+  .feat .fk { max-width:560px; margin-bottom:72px; }
+  .feat h4 { font:600 36px/1.15 var(--font-ui); letter-spacing:-0.015em; color:var(--tx-1); margin-top:16px; }
+  .fcols { display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--rule); }
+  .fcol { padding:44px 36px 36px; border-left:1px solid var(--rule); position:relative; }
+  .fcol:first-child { border-left:none; background:var(--zone); }
+  .fcol .fnum { font:var(--text-mono); font-size:11px; color:var(--tx-3); }
+  .fcol .flag { position:absolute; top:-7px; left:36px; width:12px; height:12px; background:var(--blue); }
+  .fcol svg.fi { stroke:var(--black); fill:none; stroke-width:1.5; stroke-linecap:square; stroke-linejoin:miter; margin-top:26px; }
+  .fcol b { display:block; font:600 17px/1.35 var(--font-ui); color:var(--tx-1); margin:18px 0 10px; }
+  .fcol p { font:400 13.5px/1.7 var(--font-ui); color:var(--tx-2); max-width:300px; }
+
+  /* showcase — annotated product frame */
+  .show { padding:110px 56px; border-top:1px solid var(--rule); display:grid; grid-template-columns:1fr 1.5fr; gap:64px; align-items:center; }
+  .show .sk h4 { font:600 30px/1.2 var(--font-ui); letter-spacing:-0.015em; color:var(--tx-1); margin-top:14px; }
+  .show .sk p { margin-top:16px; font:400 14px/1.75 var(--font-ui); color:var(--tx-2); max-width:340px; }
+  .mini { box-shadow:var(--shadow-2); border-radius:var(--r); background:var(--white); position:relative; }
+  .mini .mbar { background:var(--black); height:34px; display:flex; align-items:center; gap:8px; padding:0 18px; }
+  .mini .mbar b { font:600 12px/1 var(--font-ui); color:var(--tn-1); }
+  .mini .mrow { display:flex; align-items:center; gap:12px; height:40px; padding:0 18px; border-top:1px solid var(--rule); font-size:12px; }
+  .mini .mrow.sel { background:var(--blue-tint); }
+  .mini .mref { font:var(--text-mono); font-size:11px; color:var(--tx-2); width:60px; }
+  .mini .mt { flex:1; font:500 12.5px/1 var(--font-ui); color:var(--tx-1); }
+  .anno { position:absolute; right:-1px; top:50%; transform:translate(100%, -50%); display:flex; align-items:center; }
+  .anno .aline { width:56px; height:2px; background:var(--blue); }
+  .anno .atxt { font:var(--text-mono); font-size:10px; color:var(--blue); padding-left:10px; max-width:130px; line-height:1.5; letter-spacing:0.03em; }
+
+  /* numbers band */
+  .numbers { background:var(--black); padding:96px 56px; }
+  .ngrid { display:grid; grid-template-columns:repeat(3,1fr); }
+  .ncell { padding:0 44px; border-left:1px solid #22262D; }
+  .ncell:first-child { border-left:none; padding-left:0; }
+  .ncell .nv { font:500 56px/1 var(--font-mono); color:var(--tn-1); letter-spacing:-0.03em; }
+  .ncell .nv em { font-style:normal; color:var(--blue-bright); }
+  .ncell .nl { font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--tn-3); margin-top:16px; }
+
+  /* quote */
+  .quote { padding:130px 56px; }
+  .quote blockquote { max-width:740px; margin:0 auto; font:500 30px/1.45 var(--font-ui); letter-spacing:-0.015em; color:var(--tx-1); }
+  .quote blockquote .hl { color:var(--blue); }
+  .quote .attr { max-width:740px; margin:36px auto 0; display:flex; align-items:center; gap:14px; }
+  .quote .attr i { width:10px; height:10px; background:var(--blue); flex:none; }
+  .quote .attr span { font:var(--text-mono); font-size:11px; color:var(--tx-3); letter-spacing:0.06em; }
+
+  /* cta — the blue field */
+  .cta { background:var(--blue); padding:120px 56px; text-align:center; }
+  .cta h4 { font:600 44px/1.12 var(--font-ui); letter-spacing:-0.02em; color:#fff; }
+  .cta p { margin:18px auto 0; max-width:440px; font:400 15px/1.7 var(--font-ui); color:#CBD8FB; }
+  .cta .row { display:flex; gap:14px; justify-content:center; margin-top:44px; }
+
+  /* footer */
+  .mfoot { background:var(--black); padding:72px 56px 0; }
+  .mf-grid { display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:32px; padding-bottom:64px; }
+  .mf-grid .col b { display:block; font:var(--text-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--tn-3); margin-bottom:18px; }
+  .mf-grid .col a { display:block; font:400 13.5px/1.5 var(--font-ui); color:var(--tn-2); text-decoration:none; margin-bottom:11px; }
+  .mf-grid .col a:hover { color:var(--tn-1); }
+  .mf-base { border-top:1px solid #22262D; display:flex; align-items:center; justify-content:space-between; padding:22px 0 26px; }
+  .mf-base span { font:var(--text-mono); font-size:10px; color:var(--tn-3); letter-spacing:0.06em; }
+
+  footer.gallery { padding:var(--space-8) 0; }
+  footer.gallery .wrap { display:flex; justify-content:space-between; font:var(--text-small); color:var(--tx-3); }
+  footer.gallery a { color:var(--tx-2); }
+  @media (max-width:880px){ .fcols,.ngrid,.mf-grid,.show{grid-template-columns:1fr;} .hero-s h3{font-size:40px;} .proof{flex-wrap:wrap;} }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-body" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-arrow" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="nav-mark" href="index.html">
+      <svg width="20" height="21" viewBox="0 0 377 396"><use href="#amark"/></svg>
+      <span>ASITE</span>
+    </a>
+    <a class="ntab" href="index.html">Language</a>
+    <a class="ntab" href="screens.html">Product</a>
+    <a class="ntab on" href="web.html">Website</a>
+    <a class="ntab" href="slides.html">Slides</a>
+    <a class="ntab" href="ai-hub.html">AI Hub</a>
+    <span class="nspacer"></span>
+  </div>
+</nav>
+
+<aside class="fnav" aria-label="On this page">
+  <div class="fcap">On this page</div>
+  <a href="#w1">Hero</a>
+  <a href="#w1b">Hero · Line</a>
+  <a href="#w1c">Hero · Blueprint</a>
+  <a href="#w1d">Hero · Index</a>
+  <a href="#w1e">Hero · Split well</a>
+  <a href="#w2">Proof strip</a>
+  <a href="#w3">Features</a>
+  <a href="#w4">Showcase</a>
+  <a href="#w5">Numbers</a>
+  <a href="#w6">Quote</a>
+  <a href="#w7">CTA</a>
+  <a href="#w8">See it live</a>
+  <a href="#w9">Footer</a>
+</aside>
+
+<div class="page-head wrap">
+  <div class="idx">BlueBand · Expressions · Web</div>
+  <h1>The language, published</h1>
+  <p>Locked applied to asite.com — white pages with enormous air, structure running edge to edge, one blue doing all the work. The recurring motif is the scale rule: a 2px black line with mono ticks, the instrument the whole industry measures against.</p>
+</div>
+
+<div class="sec-block" id="w1">
+  <div class="wrap sb-head">
+    <span class="num">01</span>
+    <h2>Hero — the scale rule</h2>
+    <p>A statement in maximum air; below it, the measuring line — and the blue marker showing where Asite sits on it</p>
+  </div>
+  <div class="web">
+    <div class="mnav">
+      <div class="brand">
+        <svg width="24" height="25" viewBox="0 0 377 396"><use href="#amark"/></svg>
+        <b>ASITE</b>
+      </div>
+      <a href="#">Platform</a><a href="#">Solutions</a><a href="#">Industries</a><a href="#">Resources</a><a href="#">Pricing</a>
+      <button class="btn btn-ghostd">Sign in</button>
+      <button class="btn btn-blue">Book a demo</button>
+    </div>
+    <div class="hero-s">
+      <div class="kicker">The common data environment</div>
+      <h3>Every project. One record. Signed off.</h3>
+      <p class="lede">Drawings, RFIs, forms and field data — versioned, auditable, and visible from bid to handover. Asite is where the built world keeps its word.</p>
+      <div class="hero-cta">
+        <button class="btn btn-blue" style="padding:14px 26px">Book a demo</button>
+        <button class="btn btn-line" style="padding:13px 25px">See the register</button>
+      </div>
+      <div class="scale-rule">
+        <div class="line"></div>
+        <span class="tick" style="left:0%"></span><span class="lbl" style="left:0%; transform:none">2001</span>
+        <span class="tick minor" style="left:12.5%"></span><span class="tick" style="left:25%"></span><span class="lbl" style="left:25%">2.2M PROJECTS</span>
+        <span class="tick minor" style="left:37.5%"></span><span class="tick" style="left:50%"></span><span class="lbl" style="left:50%">£300BN DELIVERED</span>
+        <span class="tick minor" style="left:62.5%"></span><span class="tick" style="left:75%"></span><span class="lbl" style="left:75%">ISO 19650 NATIVE</span>
+        <span class="tick minor" style="left:87.5%"></span>
+        <span class="marker" style="left:100%"></span><span class="mlbl" style="left:100%; transform:translateX(-100%)">TODAY</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w1b">
+  <div class="wrap sb-head">
+    <span class="num">01B</span>
+    <h2>Hero — Line elevation</h2>
+    <p>The site drawn with the contract pen: built solid, planned dashed, the blue flag on the committed level</p>
+  </div>
+  <div class="web">
+    <div style="display:grid; grid-template-columns:1fr 1.1fr; gap:24px; padding:96px 56px; align-items:center">
+      <div>
+        <div class="kicker">THE COMMON DATA ENVIRONMENT</div>
+        <h3 style="font:600 clamp(30px,3.8vw,46px)/1.1 var(--font-ui); letter-spacing:-0.02em; color:var(--tx-1); margin-top:14px">Every level,<br>on the record.</h3>
+        <p class="lede" style="margin-top:18px; max-width:380px; font:400 15px/1.7 var(--font-ui); color:var(--tx-2)">From the floors you've poured to the ones still dashed — one register holds the whole building, signed at every line.</p>
+        <div style="display:flex; gap:14px; margin-top:32px">
+          <button class="btn btn-blue">Book a demo</button>
+          <button class="btn btn-line">See how it works</button>
+        </div>
+      </div>
+      <svg width="100%" viewBox="0 0 560 430" fill="none" stroke-linecap="square" stroke-linejoin="miter">
+        <line x1="20" y1="400" x2="540" y2="400" stroke="#0B0D11" stroke-width="1.5"/>
+        <rect x="200" y="120" width="180" height="280" stroke="#0B0D11" stroke-width="1.5"/>
+        <g stroke="#C6CAD1" stroke-width="1.2"><line x1="200" y1="360" x2="380" y2="360"/><line x1="200" y1="320" x2="380" y2="320"/><line x1="200" y1="280" x2="380" y2="280"/><line x1="200" y1="240" x2="380" y2="240"/><line x1="200" y1="200" x2="380" y2="200"/></g>
+        <g stroke="#878D96" stroke-width="1.2" stroke-dasharray="5 6"><line x1="200" y1="160" x2="380" y2="160"/><rect x="200" y="80" width="180" height="40"/></g>
+        <g stroke="#50555D" stroke-width="1.4">
+          <line x1="118" y1="400" x2="118" y2="70"/><line x1="134" y1="400" x2="134" y2="70"/>
+          <line x1="118" y1="120" x2="134" y2="150"/><line x1="134" y1="120" x2="118" y2="150"/>
+          <line x1="118" y1="210" x2="134" y2="240"/><line x1="134" y1="210" x2="118" y2="240"/>
+          <line x1="118" y1="300" x2="134" y2="330"/><line x1="134" y1="300" x2="118" y2="330"/>
+          <line x1="60" y1="70" x2="440" y2="70"/><line x1="126" y1="40" x2="126" y2="70"/><line x1="126" y1="40" x2="300" y2="70"/><line x1="126" y1="40" x2="60" y2="70"/>
+        </g>
+        <rect x="338" y="234" width="12" height="12" fill="#0A47E8"/>
+        <line x1="344" y1="246" x2="344" y2="400" stroke="#0A47E8" stroke-width="1.2" stroke-dasharray="2 6"/>
+        <text x="358" y="244" font-family="IBM Plex Mono, monospace" font-size="10" fill="#50555D">L24 · COMMITTED</text>
+        <text x="34" y="392" font-family="IBM Plex Mono, monospace" font-size="9" fill="#878D96">C-07</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w1c">
+  <div class="wrap sb-head">
+    <span class="num">01C</span>
+    <h2>Hero — The Blueprint Field</h2>
+    <p>The record itself as the room: white linework, the bright marker, one white action. For launches and gravity</p>
+  </div>
+  <div class="web">
+    <div style="background:var(--blue-deep); padding:110px 56px; position:relative; overflow:hidden">
+      <svg style="position:absolute; right:40px; top:50%; transform:translateY(-50%)" width="420" height="320" viewBox="0 0 420 320">
+        <g fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.45">
+          <rect x="60" y="40" width="240" height="180"/>
+          <line x1="60" y1="106" x2="300" y2="106"/>
+          <line x1="178" y1="106" x2="178" y2="220"/>
+          <line x1="300" y1="128" x2="372" y2="128"/>
+        </g>
+        <g stroke="#FFFFFF" stroke-width="0.6" opacity="0.3"><line x1="40" y1="262" x2="380" y2="262"/><line x1="40" y1="255" x2="40" y2="269"/><line x1="380" y1="255" x2="380" y2="269"/></g>
+        <rect x="366" y="122" width="12" height="12" fill="#6E94FF"/>
+      </svg>
+      <div style="position:relative; max-width:560px">
+        <div class="kicker" style="color:#8FA6E8">LAUNCH · HOLD-POINT AUTOMATION</div>
+        <h3 style="font:600 clamp(32px,4.4vw,54px)/1.1 var(--font-ui); letter-spacing:-0.022em; color:#fff; margin-top:16px">Decisions, cast in place.</h3>
+        <p style="margin-top:20px; max-width:420px; font:400 15.5px/1.7 var(--font-ui); color:#CBD8FB">Hold points now write themselves from your workflows — and lift the moment the answer lands. Automatic, audited, on the record.</p>
+        <div style="display:flex; gap:14px; margin-top:36px">
+          <button class="btn btn-white">See it work</button>
+          <button class="btn" style="background:var(--blue-press); color:#fff">Read the launch notes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w1d">
+  <div class="wrap sb-head">
+    <span class="num">01D</span>
+    <h2>Hero — Centred index</h2>
+    <p>The statement set on axis, the register's columns named in mono beneath it — the page opens like a contents sheet</p>
+  </div>
+  <div class="web">
+    <div style="padding:120px 56px 96px; text-align:center">
+      <div class="kicker" style="margin-bottom:20px">ONE PLATFORM · BID TO HANDOVER</div>
+      <h3 style="font:600 clamp(34px,4.6vw,58px)/1.08 var(--font-ui); letter-spacing:-0.024em; color:var(--tx-1); max-width:780px; margin:0 auto">The whole project,<br>kept to the line.</h3>
+      <p style="margin:24px auto 0; max-width:480px; font:400 15.5px/1.7 var(--font-ui); color:var(--tx-2)">Drawings, RFIs, forms and field data in one current record — auditable, versioned, and signed at every step.</p>
+      <div style="display:flex; gap:14px; margin-top:36px; justify-content:center">
+        <button class="btn btn-blue" style="padding:14px 26px">Book a demo</button>
+        <button class="btn btn-line" style="padding:13px 25px">Tour the platform</button>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--rule); max-width:820px; margin:72px auto 0">
+        <div style="padding:24px 16px 0; border-left:1px solid var(--rule); position:relative"><span style="position:absolute; top:-7px; left:16px; width:12px; height:12px; background:var(--blue)"></span><div class="u-label" style="color:var(--tx-3)">01 — Register</div><b style="display:block; margin-top:10px; font:600 14px/1.4 var(--font-ui); color:var(--tx-1)">One current record</b></div>
+        <div style="padding:24px 16px 0; border-left:1px solid var(--rule)"><div class="u-label" style="color:var(--tx-3)">02 — Workflows</div><b style="display:block; margin-top:10px; font:600 14px/1.4 var(--font-ui); color:var(--tx-1)">Ball always in court</b></div>
+        <div style="padding:24px 16px 0; border-left:1px solid var(--rule)"><div class="u-label" style="color:var(--tx-3)">03 — Field</div><b style="display:block; margin-top:10px; font:600 14px/1.4 var(--font-ui); color:var(--tx-1)">Signed at the point</b></div>
+        <div style="padding:24px 16px 0; border-left:1px solid var(--rule)"><div class="u-label" style="color:var(--tx-3)">04 — Intelligence</div><b style="display:block; margin-top:10px; font:600 14px/1.4 var(--font-ui); color:var(--tx-1)">States a position</b></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w1e">
+  <div class="wrap sb-head">
+    <span class="num">01E</span>
+    <h2>Hero — The split well</h2>
+    <p>Voice on white, the live record on a scrubbed zone — the product visible in the same breath as the claim</p>
+  </div>
+  <div class="web">
+    <div style="display:grid; grid-template-columns:1fr 1fr; min-height:440px">
+      <div style="padding:96px 56px; display:flex; flex-direction:column; justify-content:center">
+        <div class="kicker">FIELD · FORMS · SIGN-OFF</div>
+        <h3 style="font:600 clamp(30px,3.6vw,44px)/1.1 var(--font-ui); letter-spacing:-0.02em; color:var(--tx-1); margin-top:14px">Signed where<br>the work happens.</h3>
+        <p style="margin-top:18px; max-width:380px; font:400 15px/1.7 var(--font-ui); color:var(--tx-2)">Inspections, pour cards and snags closed on site — synced to the register the moment a signature lands.</p>
+        <div style="display:flex; gap:14px; margin-top:32px">
+          <button class="btn btn-blue">Book a demo</button>
+          <button class="btn btn-line">See the field app</button>
+        </div>
+      </div>
+      <div style="background:var(--zone); border-left:1px solid var(--rule); padding:56px; display:flex; align-items:center">
+        <div class="mini" style="width:100%">
+          <div class="mbar">
+            <svg width="15" height="16" viewBox="0 0 377 396"><use href="#amark"/></svg>
+            <b>asite · Field sign-off</b>
+            <span style="margin-left:auto; font:var(--text-mono); font-size:10px; color:var(--tn-3)">POUR 14</span>
+          </div>
+          <div class="mrow"><span class="mref">QA-204</span><span class="mt">Rebar cover check</span><span class="u-badge ok"><i></i>SIGNED</span></div>
+          <div class="mrow sel"><span class="mref" style="color:var(--blue)">QA-205</span><span class="mt" style="color:var(--blue)">Pre-pour inspection</span><span class="u-badge warn"><i></i>YOU</span></div>
+          <div class="mrow"><span class="mref">QA-206</span><span class="mt">Formwork release</span><span class="u-badge mute"><i></i>QUEUED</span></div>
+          <div style="padding:14px 18px; border-top:1px solid var(--rule); display:flex; align-items:center; gap:10px">
+            <span style="font:var(--text-mono); font-size:10px; color:var(--tx-3); letter-spacing:0.05em">HOLD POINT LIFTS ON SIGN-OFF</span>
+            <button class="btn btn-blue" style="margin-left:auto; padding:8px 16px; font-size:12px">Sign</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w2">
+  <div class="wrap sb-head">
+    <span class="num">02</span>
+    <h2>Proof strip</h2>
+    <p>Names in their own ruled cells — a register of clients, not a logo carousel</p>
+  </div>
+  <div class="web">
+    <div class="proof">
+      <div><span class="pl">Trusted on the<br>world's hardest builds</span></div>
+      <div><b>Laing O'Rourke</b></div>
+      <div><b>Transport for London</b></div>
+      <div><b>Skanska</b></div>
+      <div><b>Balfour Beatty</b></div>
+      <div><b>Mace</b></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w3">
+  <div class="wrap sb-head">
+    <span class="num">03</span>
+    <h2>Features — three columns, one flag</h2>
+    <p>Rule-divided columns under a 2px anchor; the blue square sits only on the flagship</p>
+  </div>
+  <div class="web">
+    <div class="feat">
+      <div class="fk">
+        <div class="kicker">Why teams switch</div>
+        <h4>The register, the workflow and the model — one source of truth.</h4>
+      </div>
+      <div class="fcols">
+        <div class="fcol">
+          <span class="flag" style="left:36px"></span>
+          <span class="fnum">01</span>
+          <svg class="fi" width="26" height="26" viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="12"/><path d="M3 8.5 H17 M3 12.5 H17 M7 8.5 V16"/></svg>
+          <b>A register that holds the line</b>
+          <p>Every revision, status and audit trail in locked 44px rows. 2,481 documents read like one sheet — and the sheet is always current.</p>
+        </div>
+        <div class="fcol">
+          <span class="fnum">02</span>
+          <svg class="fi" width="26" height="26" viewBox="0 0 20 20"><rect x="3.5" y="3.5" width="3.5" height="3.5"/><rect x="13" y="13" width="3.5" height="3.5"/><path d="M7 5.25 H12 Q15 5.25 15 8.25 V13"/></svg>
+          <b>Workflows with a ball in court</b>
+          <p>RFIs and approvals always show whose move it is. Critical-path items rank themselves by weight before they can slip.</p>
+        </div>
+        <div class="fcol">
+          <span class="fnum">03</span>
+          <svg class="fi" width="26" height="26" viewBox="0 0 20 20"><rect x="4" y="4" width="12" height="12"/><path d="M10 1.5 V4 M10 16 V18.5 M1.5 10 H4 M16 10 H18.5 M10 7.5 V12.5 M7.5 10 H12.5"/></svg>
+          <b>Intelligence that states a position</b>
+          <p>The system watches review rates against pour dates and says, in one band of blue, what blocks what — before the hold point moves.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w4">
+  <div class="wrap sb-head">
+    <span class="num">04</span>
+    <h2>Showcase — the blue line annotates</h2>
+    <p>A live product frame; one blue rule points at the row that matters, captioned in mono</p>
+  </div>
+  <div class="web">
+    <div class="show">
+      <div class="sk">
+        <div class="kicker">The register</div>
+        <h4>The meeting opens here now.</h4>
+        <p>One register, current by definition. When the room disagrees about which drawing is live, the register answers — and the argument is over before it starts.</p>
+        <button class="btn btn-line" style="margin-top:28px">Watch the 3-minute tour</button>
+      </div>
+      <div style="padding-right:120px">
+        <div class="mini">
+          <div class="mbar">
+            <svg width="15" height="16" viewBox="0 0 377 396"><use href="#amark"/></svg>
+            <b>asite · Document register</b>
+          </div>
+          <div class="mrow"><span class="mref">DR-1183</span><span class="mt">Transfer beam detail</span><span class="u-badge ok"><i></i>ISSUED</span></div>
+          <div class="mrow sel"><span class="mref" style="color:var(--blue)">DR-1182</span><span class="mt" style="color:var(--blue)">Core wall reinforcement</span><span class="u-badge warn"><i></i>REVIEW</span></div>
+          <div class="mrow"><span class="mref">DR-1181</span><span class="mt">Slab edge detail — pour 6</span><span class="u-badge ok"><i></i>ISSUED</span></div>
+          <div class="mrow"><span class="mref">DR-1179</span><span class="mt">MEP riser coordination</span><span class="u-badge bad"><i></i>OVERDUE</span></div>
+          <div class="anno" style="top:44%">
+            <span class="aline"></span>
+            <span class="atxt">THE ONE THAT NEEDS YOU — RANKED BY THE SYSTEM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w5">
+  <div class="wrap sb-head">
+    <span class="num">05</span>
+    <h2>Numbers band</h2>
+    <p>Mono figures on black — measurements, not marketing; blue lands on the unit</p>
+  </div>
+  <div class="web">
+    <div class="numbers">
+      <div class="ngrid">
+        <div class="ncell"><div class="nv">2.2<em>M</em></div><div class="nl">Projects on the platform</div></div>
+        <div class="ncell"><div class="nv">£300<em>BN</em></div><div class="nl">Of built work delivered</div></div>
+        <div class="ncell"><div class="nv">99.98<em>%</em></div><div class="nl">Audit-ready uptime</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w6">
+  <div class="wrap sb-head">
+    <span class="num">06</span>
+    <h2>Quote</h2>
+    <p>The customer's key phrase takes the blue — the words are the act</p>
+  </div>
+  <div class="web">
+    <div class="quote">
+      <blockquote>"We stopped arguing about which drawing was current. <span class="hl">The register is the meeting now</span> — we open it and the room agrees."</blockquote>
+      <div class="attr">
+        <i></i>
+        <span>HEAD OF DIGITAL DELIVERY · TIER-1 CONTRACTOR · £1.2BN PROGRAMME</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w7">
+  <div class="wrap sb-head">
+    <span class="num">07</span>
+    <h2>CTA — the blue field</h2>
+    <p>The one place blue becomes the room — the page's single committed moment</p>
+  </div>
+  <div class="web">
+    <div class="cta">
+      <h4>Put your next project on the record.</h4>
+      <p>A 30-minute walkthrough of the register, workflows and field tools — on your own project data if you bring it.</p>
+      <div class="row">
+        <button class="btn btn-white" style="padding:14px 26px">Book a demo</button>
+        <button class="btn" style="background:var(--blue-press); color:#fff; padding:14px 26px">Talk to engineering</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w8">
+  <div class="wrap sb-head">
+    <span class="num">08</span>
+    <h2>See it live</h2>
+    <p>The trial offer set as a ruled spec — two ways in, the terms named in mono, no soft sell</p>
+  </div>
+  <div class="web">
+    <div style="display:grid; grid-template-columns:1.1fr 1fr; min-height:380px">
+      <div style="padding:80px 56px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--rule)">
+        <div class="kicker">TRY IT · BOOK A DEMO</div>
+        <h4 style="font:600 36px/1.15 var(--font-ui); letter-spacing:-0.018em; color:var(--tx-1); margin-top:14px">See the register on your own project.</h4>
+        <p style="margin-top:18px; max-width:420px; font:400 15px/1.7 var(--font-ui); color:var(--tx-2)">Bring one live drawing set. In half an hour you'll watch it become a versioned, audited record — workflows wired, hold points set.</p>
+        <div style="display:flex; gap:14px; margin-top:32px">
+          <a class="btn btn-blue" href="landing.html" style="padding:14px 26px">See the landing page ↗</a>
+          <button class="btn btn-line" style="padding:13px 25px">Book a demo</button>
+        </div>
+      </div>
+      <div style="padding:56px; display:flex; flex-direction:column; justify-content:center">
+        <div style="border-top:2px solid var(--black)">
+          <div style="display:flex; align-items:baseline; gap:14px; padding:18px 0; border-bottom:1px solid var(--rule)">
+            <span style="font:var(--text-mono); font-size:11px; color:var(--tx-3); width:64px">SETUP</span>
+            <b style="font:600 14px/1.4 var(--font-ui); color:var(--tx-1)">No install — runs in the browser</b>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:14px; padding:18px 0; border-bottom:1px solid var(--rule)">
+            <span style="font:var(--text-mono); font-size:11px; color:var(--tx-3); width:64px">TIME</span>
+            <b style="font:600 14px/1.4 var(--font-ui); color:var(--tx-1)">30 minutes, on your data</b>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:14px; padding:18px 0; border-bottom:1px solid var(--rule)">
+            <span style="font:var(--text-mono); font-size:11px; color:var(--tx-3); width:64px">TERMS</span>
+            <b style="font:600 14px/1.4 var(--font-ui); color:var(--tx-1)">No card · ISO 19650 native</b>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:14px; padding:18px 0">
+            <span style="font:var(--text-mono); font-size:11px; color:var(--blue); width:64px">NEXT</span>
+            <b style="font:600 14px/1.4 var(--font-ui); color:var(--blue)">Live with your team in a week</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-block" id="w9">
+  <div class="wrap sb-head">
+    <span class="num">09</span>
+    <h2>Footer</h2>
+    <p>Black closes the page, columns ruled into space, the company signed in mono</p>
+  </div>
+  <div class="web">
+    <div class="mfoot">
+      <div class="mf-grid">
+        <div class="col">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:18px">
+            <svg width="26" height="27" viewBox="0 0 377 396"><use href="#amark"/></svg>
+            <b style="font:600 16px/1 var(--font-ui); color:var(--tn-1); text-transform:none; letter-spacing:0">ASITE</b>
+          </div>
+          <p style="font:400 12.5px/1.7 var(--font-ui); color:var(--tn-3); max-width:240px">The common data environment for the built world. Exact, repeatable, signed off.</p>
+        </div>
+        <div class="col"><b>Platform</b><a href="#">Document register</a><a href="#">Workflows</a><a href="#">Field &amp; forms</a><a href="#">Model coordination</a><a href="#">Intelligence</a></div>
+        <div class="col"><b>Industries</b><a href="#">Infrastructure</a><a href="#">Buildings</a><a href="#">Energy</a><a href="#">Public sector</a></div>
+        <div class="col"><b>Company</b><a href="#">About</a><a href="#">Customers</a><a href="#">Careers</a><a href="#">Contact</a></div>
+      </div>
+      <div class="mf-base">
+        <span>© 2026 ASITE · LONDON · NEW YORK · DUBAI · SYDNEY</span>
+        <span>EST. 2001 · REGISTERED ON THE RECORD</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="gallery">
+  <div class="wrap">
+    <span>Asite — BlueBand · Locked · Web sections</span>
+    <span><a href="index.html">Language</a> · <a href="screens.html">Product</a> · <a href="web.html">Website</a> · <a href="slides.html">Slides</a></span>
+  </div>
+</footer>
+<script>
+(function(){
+  var links = [].slice.call(document.querySelectorAll('.fnav a'));
+  if(!links.length) return;
+  var map = links.map(function(a){ return {a:a, el:document.querySelector(a.getAttribute('href'))}; })
+                 .filter(function(o){ return o.el; });
+  function onScroll(){
+    var pos = window.scrollY + 120, cur = null;
+    map.forEach(function(o){ if(o.el.offsetTop <= pos) cur = o; });
+    links.forEach(function(a){ a.classList.remove('on'); });
+    if(cur) cur.a.classList.add('on');
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>

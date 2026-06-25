@@ -1,0 +1,159 @@
+/* ============================================================
+   ASITE — DIRECTION 04: LOCKED
+   Purely enterprise. Sharp, strong, structured.
+   Blue, black, white — nothing else. Zero radii. Flat planes
+   organised in space by rules and alignment, never by cards.
+   Emphasis is weight and value, not hue. One blue does all
+   signal work: action, selection, the active place.
+   ============================================================ */
+
+:root {
+
+  /* ----------------------------------------------------------
+     1. BLACK — structure and maximum emphasis.
+     ---------------------------------------------------------- */
+  --black:    #0B0D11;          /* app bar, primary text, strong rules */
+  --black-2:  #1A1E24;          /* hover on black                       */
+
+  /* text on white */
+  --tx-1: #0B0D11;
+  --tx-2: #50555D;
+  --tx-3: #878D96;
+
+  /* text on black */
+  --tn-1: #F2F3F5;
+  --tn-2: #A9AEB6;
+  --tn-3: #70767F;
+
+  /* ----------------------------------------------------------
+     2. WHITE — the canvas. Flat. Zones are drawn with rules,
+     not boxes: 1px gray for structure, 2px black to anchor.
+     ---------------------------------------------------------- */
+  --white:  #FFFFFF;
+  --zone:   #F4F5F7;            /* sparingly: input wells, scrubbed strips */
+  --rule:        #E2E4E9;       /* structural hairline                  */
+  --rule-mid:    #C6CAD1;       /* hover, emphasis hairline             */
+  --rule-strong: #0B0D11;       /* the anchor rule — 2px, black         */
+
+  /* ----------------------------------------------------------
+     3. BLUE — the one signal. Action, selection, active.
+     Locked blue on white; bright blue on black; tint for
+     selected planes. If it's blue, you can act on it.
+     ---------------------------------------------------------- */
+  --blue:        #0A47E8;       /* primary action, links, active        */
+  --blue-press:  #0635B8;       /* pressed / hover                      */
+  --blue-deep:   #062269;       /* dense bands — intelligence, covers   */
+  --blue-bright: #6E94FF;       /* blue on black surfaces               */
+  --blue-tint:   #ECF1FE;       /* selection plane on white             */
+  --focus: 0 0 0 2px #FFFFFF, 0 0 0 4px #0A47E8;
+
+  /* ----------------------------------------------------------
+     4. STATUS — the site's traffic colours, as quiet tints.
+     Green = in motion. Amber = waiting on someone. Red =
+     stopped. Gray = inert. Status is the ONLY other hue in
+     the system: tint field + same-family text + square marker.
+     Blue is never a status; status is never decoration.
+     ---------------------------------------------------------- */
+  --ok:       #0E7A41;  --ok-bg:    #E5F3EB;
+  --warn:     #B25E00;  --warn-bg:  #FBF0DC;
+  --bad:      #C02626;  --bad-bg:   #FBE9E9;
+  --inert:    #6B7280;  --inert-bg: #EFF0F2;
+
+  /* legacy weight-based markers (kept for back-compat) */
+  --st-action: #0A47E8;
+  --st-motion: #0B0D11;
+  --st-hard:   #0B0D11;
+  --st-inert:  #B7BCC4;
+
+  /* ----------------------------------------------------------
+     5. TYPE — IBM Plex. Sans for voice, Mono for reference
+     data (refs, grids, revisions, counts, timestamps, labels).
+     Figures set in Mono — measured, not styled.
+     ---------------------------------------------------------- */
+  --font-ui:   'IBM Plex Sans', 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
+
+  --text-display: 600 clamp(38px, 4.6vw, 56px)/1.1 var(--font-ui);
+  --text-h1:      600 28px/1.2  var(--font-ui);
+  --text-h2:      600 20px/1.3  var(--font-ui);
+  --text-h3:      600 15px/1.4  var(--font-ui);
+  --text-body:    400 14px/1.6  var(--font-ui);
+  --text-small:   400 13px/1.55 var(--font-ui);
+  --text-label:   500 10px/1.4  var(--font-mono);   /* caps, +8%      */
+  --text-mono:    400 12px/1.5  var(--font-mono);
+  --text-fig:     500 28px/1.1  var(--font-mono);   /* KPI figures    */
+
+  --track-label: 0.08em;
+  --track-h: -0.01em;
+
+  /* ----------------------------------------------------------
+     6. GEOMETRY & DEPTH — locked. One radius: 4px — softened,
+     never round. White planes lift on soft shadow, never on
+     outlines; 1px rules divide zones INSIDE planes; headings
+     separate from content by whitespace alone. Filled sections
+     carry hierarchy. Density: 44px single-line rows.
+     ---------------------------------------------------------- */
+  --r: 4px;
+  --shadow-1: 0 1px 2px rgba(11,13,17,0.04), 0 4px 12px rgba(11,13,17,0.05), 0 16px 40px rgba(11,13,17,0.07);
+  --shadow-2: 0 4px 16px rgba(11,13,17,0.12), 0 28px 72px rgba(11,13,17,0.24);
+
+  /* the AI highlight — intelligence never spans, never solid */
+  --ai-wash: linear-gradient(115deg, rgba(10,71,232,0.11), rgba(110,148,255,0.05) 52%, rgba(10,71,232,0.02) 100%);
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-6: 24px; --space-8: 32px; --space-12: 48px; --space-16: 64px;
+  --space-24: 96px;
+
+  --row-h: 44px;
+  --cell-pad-x: 12px;
+  --edge-pad: 16px;
+
+  /* ----------------------------------------------------------
+     7. MOTION — immediate. 70–120ms, opacity and color only.
+     Nothing slides, nothing springs.
+     ---------------------------------------------------------- */
+  --ease: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --t-fast: 70ms;
+  --t-base: 110ms;
+}
+
+/* ---------------- utilities ---------------- */
+
+.u-label {
+  font: var(--text-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+
+/* status badge: tint field + square marker + mono caps */
+.u-badge { display:inline-flex; align-items:center; gap:7px;
+  font:500 10px/1 var(--font-mono); letter-spacing:0.06em;
+  padding:5px 9px; border-radius:var(--r); white-space:nowrap; }
+.u-badge i { width:8px; height:8px; background:currentColor; display:inline-block; flex:none; }
+.u-badge.ok   { color:var(--ok);    background:var(--ok-bg); }
+.u-badge.warn { color:var(--warn);  background:var(--warn-bg); }
+.u-badge.bad  { color:var(--bad);   background:var(--bad-bg); }
+.u-badge.mute { color:var(--inert); background:var(--inert-bg); }
+
+/* legacy weight-based status (superseded by .u-badge) */
+.u-st { display:inline-flex; align-items:center; gap:7px;
+  font:500 10px/1 var(--font-mono); letter-spacing:0.06em; }
+.u-sq { width:8px; height:8px; display:inline-block; flex:none; }
+.u-sq.action { background:var(--st-action); }
+.u-sq.motion { background:transparent; border:1.5px solid var(--st-motion); }
+.u-sq.hard   { background:var(--st-hard); }
+.u-sq.inert  { background:var(--st-inert); }
+
+.u-kbd {
+  font: 500 10px/1 var(--font-mono);
+  color: var(--tx-2);
+  border: 1px solid var(--rule-mid);
+  border-radius: var(--r);
+  padding: 3px 5px;
+}
+
+/* the mark — custom properties pierce the <use> boundary.
+   Default = on black (white body, blue arrow). On any light
+   surface set .on-light: solid black, arrow included. */
+.m-body  { fill: var(--mark-body,  var(--tn-1)); }
+.m-arrow { fill: var(--mark-arrow, var(--blue-bright)); }
+.on-light { --mark-body: var(--black); --mark-arrow: var(--black); }
