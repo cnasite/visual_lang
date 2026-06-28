@@ -1,0 +1,147 @@
+/* ============================================================
+   ASITE — THE QUIET INSTRUMENT · LIGHT v2
+   ------------------------------------------------------------
+   Core direction borrowed from Linear's command-deck discipline:
+     · depth from 1px inset borders + soft light, never fills
+     · instrument-panel density, every pixel earns its place
+     · one rationed chromatic accent per surface
+     · the 510/590 Inter "precise but not bold" voice
+     · mono only where precision matters (IDs, refs, telemetry)
+   …re-housed in TQI's own identity:
+     · plain WHITE canvas (not obsidian)
+     · Survey Red-Orange #C8371B as the single intent
+     · Newsreader serif for hero / slides / print only (never app UI)
+     · the Asite mark for product chrome; the spark / orb for Intelligence
+   ============================================================ */
+
+/* Display serif — hero / slides / print ONLY. Bundle as woff2 for offline/print. */
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,360;6..72,400;6..72,500&display=swap');
+@font-face { font-family:'Inter';          src:url('assets/fonts/Inter-400.woff2') format('woff2');        font-weight:400; font-display:swap; }
+@font-face { font-family:'Inter';          src:url('assets/fonts/Inter-500.woff2') format('woff2');        font-weight:500; font-display:swap; }
+@font-face { font-family:'Inter';          src:url('assets/fonts/Inter-600.woff2') format('woff2');        font-weight:600; font-display:swap; }
+@font-face { font-family:'JetBrains Mono'; src:url('assets/fonts/JetBrainsMono-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'JetBrains Mono'; src:url('assets/fonts/JetBrainsMono-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+
+:root {
+
+  /* ---- 1. SURFACES — plain white, four near-equal steps.
+     Linear's lesson: separation is a hairline + soft shadow,
+     not a contrast jump between fills. ---- */
+  --bg-0: #FFFFFF;            /* canvas — plain white, non-negotiable */
+  --bg-1: #FFFFFF;            /* app chrome, top bar, sidebar         */
+  --bg-2: #FAFAF9;            /* cards, popovers — a whisper warmer    */
+  --bg-3: #F3F3F1;            /* hover, raised, input rest             */
+  --bg-overlay: rgba(22,24,28,0.34);
+
+  --border:        rgba(22,24,28,0.09);   /* hairline — the workhorse */
+  --border-strong: rgba(22,24,28,0.16);
+  --inset:         inset 0 0 0 1px rgba(22,24,28,0.06);
+  --shadow-card:   0 1px 1px rgba(22,24,28,0.04), 0 8px 24px rgba(22,24,28,0.06);
+  --shadow-pop:    0 4px 32px rgba(22,24,28,0.14);
+
+  /* ---- 2. TEXT — three cool-gray steps. Hierarchy by value. ---- */
+  --text-1: #16181C;         /* primary  */
+  --text-2: #5A5F66;         /* secondary, metadata */
+  --text-3: #8E9299;         /* tertiary, placeholders, inactive nav */
+
+  /* ---- 3. THE INTENT — Survey Red-Orange.
+     One chromatic accent, rationed to a single primary action
+     or focus per surface. Clears AA as text (4.9:1) and as a
+     white-on-fill button (4.5:1), so it can carry thin marks
+     too — caret, underline, the spark. ---- */
+  --intent:        #C8371B;
+  --intent-bright: #E0431F;  /* hover / links */
+  --intent-press:  #A92D14;  /* active / pressed */
+  --intent-wash:   rgba(200,55,27,0.09);
+  --intent-line:   rgba(200,55,27,0.22);
+  --intent-glow:   0 0 0 1px rgba(200,55,27,0.30), 0 0 22px rgba(200,55,27,0.13);
+
+  /* Ember — the only gradient. Hero fields only, never UI chrome. */
+  --aurora:
+    radial-gradient(640px 320px at 16% 0%, rgba(200,55,27,0.06), transparent 64%),
+    radial-gradient(560px 300px at 82% 6%, rgba(224,67,31,0.045), transparent 60%);
+
+  /* ---- 4. STATUS — desaturated, dot-first. Never a filled pill. ---- */
+  --st-done:     #2E9E68;
+  --st-progress: #B98A1D;
+  --st-blocked:  #D8504F;
+  --st-review:   #5C84A0;
+  --st-backlog:  #8E9299;
+
+  /* ---- 5. TYPE — Newsreader (serif) for hero/slides/print titles ONLY;
+     Inter 400/500/600 approximating Linear's 400/510/590 voice carries
+     all app UI; JetBrains Mono for IDs, revs, telemetry. ---- */
+  --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-ui:      'Inter','Segoe UI',sans-serif;
+  --font-mono:    'JetBrains Mono','SF Mono',monospace;
+
+  --text-display: 400 clamp(40px,4.6vw,60px)/1.06 var(--font-display);
+  --text-h1:      600 30px/1.18 var(--font-ui);
+  --text-h2:      600 20px/1.3  var(--font-ui);
+  --text-h3:      500 15px/1.4  var(--font-ui);
+  --text-body:    400 14px/1.6  var(--font-ui);
+  --text-small:   400 13px/1.5  var(--font-ui);
+  --text-micro:   500 11px/1.4  var(--font-ui);
+  --text-mono:    400 12px/1.45 var(--font-mono);
+
+  --track-display: -0.012em;
+  --track-h1: -0.018em;       /* tighter the larger, Linear-style */
+  --track-h2: -0.012em;
+  --track-h:  -0.008em;
+  --track-micro: 0.04em;      /* eyebrow caps */
+
+  /* ---- 6. GEOMETRY — soft but tightened toward Linear's rectilinear
+     feel. Buttons/inputs 8, cards 10–12, nothing sharp. ---- */
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 10px;
+  --r-xl: 14px;
+
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+  --space-5:20px; --space-6:24px; --space-8:32px; --space-12:48px;
+  --space-16:64px; --space-20:80px; --space-24:96px;
+
+  /* ---- 7. MOTION — instant, weightless. Fade + 2px rise. ---- */
+  --ease: cubic-bezier(0.25,0.1,0.25,1);
+  --t-fast: 80ms;
+  --t-base: 140ms;
+}
+
+/* ---------------- base ---------------- */
+*{ box-sizing:border-box; }
+html,body{ margin:0; background:var(--bg-0); color:var(--text-1);
+  font:var(--text-body); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+::selection{ background:var(--intent-wash); }
+
+/* ---------------- utilities ---------------- */
+.u-card{ background:var(--bg-2); border-radius:var(--r-lg);
+  box-shadow:var(--inset), var(--shadow-card); }
+.u-dot{ width:8px; height:8px; border-radius:50%; display:inline-block; flex:none; }
+.u-mono{ font:var(--text-mono); color:var(--text-2); letter-spacing:-0.01em; }
+.u-kbd{ font:500 11px/1 var(--font-ui); color:var(--text-2); background:var(--bg-3);
+  border-radius:5px; box-shadow:var(--inset); padding:3px 6px; }
+.u-eyebrow{ font:var(--text-micro); letter-spacing:var(--track-micro);
+  text-transform:uppercase; color:var(--text-3); }
+
+/* buttons */
+.btn{ font:500 13px/1 var(--font-ui); border:0; border-radius:var(--r-md);
+  padding:9px 14px; cursor:pointer; transition:background var(--t-fast) var(--ease); }
+.btn-primary{ background:var(--intent); color:#fff; }
+.btn-primary:hover{ background:var(--intent-bright); }
+.btn-primary:active{ background:var(--intent-press); }
+.btn-secondary{ background:var(--bg-3); color:var(--text-1); box-shadow:var(--inset); }
+.btn-secondary:hover{ background:#ECECEA; }
+.btn-ghost{ background:transparent; color:var(--text-2); }
+.btn-ghost:hover{ color:var(--text-1); background:var(--bg-3); }
+
+/* inputs */
+.inp{ font:var(--text-small); color:var(--text-1); background:var(--bg-3);
+  border:1px solid transparent; border-radius:var(--r-md); padding:8px 11px;
+  box-shadow:var(--inset); transition:box-shadow var(--t-fast), border-color var(--t-fast); }
+.inp::placeholder{ color:var(--text-3); }
+.inp:focus{ outline:0; background:#fff; border-color:var(--intent);
+  box-shadow:0 0 0 3px var(--intent-wash); }
+
+/* status — dot + plain text, never a filled pill */
+.status{ display:inline-flex; align-items:center; gap:7px; color:var(--text-2);
+  font:var(--text-small); }

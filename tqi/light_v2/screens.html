@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asite · The Quiet Instrument — Light v2 · Drawing register</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  body{ height:100vh; overflow:hidden; }
+  .app{ display:grid; grid-template-rows:52px 1fr; height:100vh; }
+
+  /* ---------- top bar ---------- */
+  .topbar{ display:flex; align-items:center; gap:14px; padding:0 16px;
+    background:var(--bg-1); border-bottom:1px solid var(--border); }
+  .brand{ display:flex; align-items:center; gap:9px; }
+  .brand .wm{ font:600 14px/1 var(--font-ui); letter-spacing:-0.01em; }
+  .switch{ display:flex; align-items:center; gap:7px; padding:5px 9px; border-radius:var(--r-sm);
+    cursor:pointer; color:var(--text-1); font:500 13px/1 var(--font-ui); }
+  .switch:hover{ background:var(--bg-3); }
+  .switch .car{ color:var(--text-3); font-size:11px; }
+  .sep{ width:1px; height:18px; background:var(--border); }
+  .search{ margin:0 auto; display:flex; align-items:center; gap:8px; flex:0 1 360px; min-width:140px;
+    background:var(--bg-3); border-radius:var(--r-md); padding:7px 11px; box-shadow:var(--inset);
+    color:var(--text-3); font:var(--text-small); cursor:text; }
+  .search svg{ flex:none; }
+  .search .txt{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .search .k{ flex:none; }
+  .tb-actions{ display:flex; align-items:center; gap:6px; }
+  .iconbtn{ width:30px; height:30px; display:grid; place-items:center; border-radius:var(--r-sm);
+    color:var(--text-2); cursor:pointer; }
+  .iconbtn:hover{ background:var(--bg-3); color:var(--text-1); }
+  .avatar{ width:26px; height:26px; border-radius:50%; background:var(--bg-3);
+    box-shadow:var(--inset); display:grid; place-items:center; font:600 11px/1 var(--font-ui);
+    color:var(--text-2); }
+
+  /* ---------- body ---------- */
+  .body{ display:grid; grid-template-columns:222px 1fr; min-height:0; }
+
+  /* sidebar */
+  .side{ border-right:1px solid var(--border); padding:14px 10px; display:flex; flex-direction:column;
+    gap:2px; background:var(--bg-1); min-height:0; }
+  .ws{ display:flex; align-items:center; gap:9px; padding:4px 8px 12px; }
+  .ws .nm{ font:600 13px/1.2 var(--font-ui); letter-spacing:-0.01em; }
+  .ws .code{ font:var(--text-mono); color:var(--text-3); }
+  .ws-mono{ width:24px; height:24px; border-radius:7px; background:var(--bg-3); box-shadow:var(--inset);
+    display:grid; place-items:center; font:600 12px/1 var(--font-ui); color:var(--text-2); flex:none; }
+  .nav a{ display:flex; align-items:center; gap:10px; padding:7px 9px; border-radius:var(--r-sm);
+    color:var(--text-2); font:500 13px/1 var(--font-ui); text-decoration:none; cursor:pointer; }
+  .nav a:hover{ background:var(--bg-3); color:var(--text-1); }
+  .nav a.on{ background:var(--intent-wash); color:var(--text-1); }
+  .nav a.on svg{ color:var(--intent); }
+  .nav a svg{ color:var(--text-3); flex:none; }
+  .nav a .ct{ margin-left:auto; font:var(--text-mono); color:var(--text-3); }
+  .grp{ margin:14px 8px 6px; }
+  .progress{ margin-top:auto; padding:14px 9px 4px; }
+  .progress .lab{ display:flex; justify-content:space-between; font:var(--text-mono); color:var(--text-3); margin-bottom:7px; }
+  .bar{ height:6px; border-radius:3px; background:var(--bg-3); box-shadow:var(--inset); overflow:hidden; }
+  .bar i{ display:block; height:100%; width:64%; background:var(--intent); border-radius:3px; }
+
+  /* main */
+  .main{ min-height:0; overflow:auto; padding:22px 26px 80px; }
+  .main .wrap{ max-width:1240px; margin:0 auto; }
+  .head{ display:flex; align-items:flex-end; gap:14px; margin-bottom:18px; }
+  .head h1{ margin:4px 0 0; font:var(--text-h1); letter-spacing:var(--track-h1); }
+  .head .meta{ font:var(--text-small); color:var(--text-2); margin-bottom:3px; }
+  .head .actions{ margin-left:auto; display:flex; gap:8px; }
+
+  /* register spans the full content width; Intelligence is a summoned drawer (.ai-blob) */
+
+  /* toolbar */
+  .toolbar{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+  .chip{ display:inline-flex; align-items:center; gap:7px; padding:6px 11px; border-radius:999px;
+    font:500 12px/1 var(--font-ui); color:var(--text-2); background:var(--bg-2);
+    box-shadow:var(--inset); cursor:pointer; }
+  .chip:hover{ color:var(--text-1); }
+  .chip.on{ background:var(--intent-wash); color:var(--text-1); box-shadow:none; }
+  .toolbar .right{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+
+  /* register table */
+  .reg{ background:var(--bg-1); border:1px solid var(--border); border-radius:var(--r-lg);
+    box-shadow:var(--shadow-card); overflow:hidden; }
+  .reg table{ width:100%; border-collapse:collapse; }
+  .reg th{ text-align:left; font:var(--text-micro); letter-spacing:var(--track-micro);
+    text-transform:uppercase; color:var(--text-3); padding:11px 14px; border-bottom:1px solid var(--border); }
+  .reg td{ padding:11px 14px; border-bottom:1px solid var(--border); font:var(--text-small);
+    color:var(--text-1); vertical-align:middle; }
+  .reg tr:last-child td{ border-bottom:0; }
+  .reg tbody tr{ cursor:pointer; }
+  .reg tbody tr:hover{ background:var(--bg-2); }
+  .reg tbody tr.sel{ background:var(--intent-wash); }   /* selection = wash, never an edge bar */
+  .ref{ font:var(--text-mono); color:var(--text-2); letter-spacing:-0.01em; }
+  .rev{ font:var(--text-mono); color:var(--text-1); }
+  .title{ font-weight:500; }
+  .ttl-sub{ display:block; font:var(--text-mono); color:var(--text-3); margin-top:2px; }
+  .asg{ display:inline-flex; align-items:center; gap:7px; }
+  .asg .av{ width:20px; height:20px; border-radius:50%; background:var(--bg-3); box-shadow:var(--inset);
+    display:grid; place-items:center; font:600 10px/1 var(--font-ui); color:var(--text-2); }
+  .upd{ color:var(--text-2); }
+  .flag{ color:var(--intent); }
+
+  /* ---------- Asite Intelligence — summoned blob + drawer ---------- */
+  .ai-blob{ position:fixed; right:24px; bottom:22px; z-index:40; display:flex; align-items:center; gap:10px; cursor:pointer; }
+  .ai-tag{ display:flex; align-items:center; gap:8px; font:500 12px/1 var(--font-ui); color:var(--text-1);
+    background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); border-radius:999px; padding:8px 13px;
+    opacity:0; transform:translateX(6px); pointer-events:none;
+    transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease); }
+  .ai-blob:hover .ai-tag{ opacity:1; transform:none; }
+  .ai-orb{ width:42px; height:42px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle at 32% 28%, #FFFFFF, var(--bg-3) 72%); position:relative;
+    box-shadow:var(--inset), 0 0 0 1px rgba(200,55,27,.30), 0 10px 26px rgba(22,24,28,.12); }
+  .ai-orb::before{ content:""; position:absolute; inset:-5px; border-radius:50%;
+    box-shadow:0 0 22px rgba(200,55,27,.18); animation:ai-breathe 4.5s var(--ease) infinite; }
+  .ai-orb i{ font-style:normal; font-size:16px; line-height:1; color:var(--intent); }
+  @keyframes ai-breathe{ 0%,100%{ opacity:.4 } 50%{ opacity:1 } }
+  @media (prefers-reduced-motion:reduce){ .ai-orb::before{ animation:none; opacity:.6 } }
+
+  .ai-panel{ position:absolute; right:0; bottom:54px; width:380px; text-align:left; cursor:default;
+    background:var(--bg-1); border:1px solid var(--border); border-radius:var(--r-xl); box-shadow:var(--shadow-pop);
+    opacity:0; visibility:hidden; transform:translateY(8px);
+    transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease), visibility var(--t-base); }
+  .ai-blob.open .ai-panel{ opacity:1; visibility:visible; transform:none; }
+  .ai-blob.open .ai-tag{ display:none; }
+  .ai-blob.open .ai-orb{ box-shadow:var(--inset), 0 0 0 1px var(--intent), 0 10px 26px rgba(22,24,28,.12); }
+
+  .ai-hd{ display:flex; align-items:center; gap:9px; padding:13px 15px; border-bottom:1px solid var(--border); }
+  .ai-hd i{ font-style:normal; color:var(--intent); font-size:14px; }
+  .ai-hd b{ font:600 13px/1 var(--font-ui); color:var(--text-1); }
+  .ai-hd .tag{ margin-left:auto; font:500 9.5px/1 var(--font-mono); letter-spacing:.1em; color:var(--text-3); }
+  .ai-bd{ padding:14px 15px; display:flex; flex-direction:column; gap:11px; }
+  .ai-q{ align-self:flex-end; max-width:85%; background:var(--bg-3); box-shadow:var(--inset); border-radius:12px 12px 4px 12px;
+    padding:8px 12px; font:400 12.5px/1.5 var(--font-ui); color:var(--text-1); }
+  .ai-a{ font:400 12.5px/1.6 var(--font-ui); color:var(--text-2); }
+  .ai-a b{ color:var(--text-1); font-weight:500; }
+  .hl{ background:var(--intent-wash); border-bottom:1.5px solid var(--intent); border-radius:2px; padding:0 3px; }
+  .ai-rd{ display:flex; align-items:center; gap:8px; background:var(--bg-2); box-shadow:var(--inset); border-radius:var(--r-md);
+    padding:8px 10px; font:400 12px/1.4 var(--font-ui); color:var(--text-2); }
+  .ai-rd .rf2{ font:400 11px/1 var(--font-mono); color:var(--text-3); }
+  .ai-rd .tm2{ margin-left:auto; font:400 9.5px/1 var(--font-mono); color:var(--text-3); letter-spacing:.06em; }
+  .ai-act{ display:flex; gap:8px; }
+  .ai-act .btn{ font-size:12px; }
+  .ai-src{ font:400 9.5px/1.6 var(--font-mono); letter-spacing:.07em; color:var(--text-3); }
+  .ai-in{ display:flex; align-items:center; gap:8px; padding:11px 14px; border-top:1px solid var(--border);
+    font:400 12.5px/1 var(--font-ui); color:var(--text-3); }
+  .ai-in .u-kbd{ margin-left:auto; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ========== TOP BAR ========== -->
+  <header class="topbar">
+    <div class="brand">
+      <!-- Asite mark (brand logo — product chrome). Inherits ink via currentColor. -->
+      <svg class="brand-mark" viewBox="0 0 377 396" role="img" aria-label="Asite" fill="currentColor" style="height:20px;width:auto;color:var(--text-1);display:block">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+      </svg>
+      <span class="wm">Asite</span>
+    </div>
+    <div class="sep"></div>
+    <div class="switch">Meridian Tower C <span class="car">▾</span></div>
+
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="6"/><path d="M14 14l4 4" stroke-linecap="round"/></svg>
+      <span class="txt">Search documents, forms, people…</span>
+      <span class="k u-kbd">⌘K</span>
+    </div>
+    <div class="tb-actions">
+      <span class="iconbtn" title="Notifications">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8a5 5 0 0110 0c0 4 1.5 5 1.5 5h-13S5 12 5 8z" stroke-linejoin="round"/><path d="M8.5 16a1.5 1.5 0 003 0" stroke-linecap="round"/></svg>
+      </span>
+      <span class="avatar">CN</span>
+    </div>
+  </header>
+
+  <!-- ========== BODY ========== -->
+  <div class="body">
+
+    <!-- sidebar -->
+    <aside class="side">
+      <div class="ws">
+        <!-- project monogram (neutral) — the orb is reserved for Intelligence -->
+        <span class="ws-mono">M</span>
+        <div>
+          <div class="nm">Meridian Tower C</div>
+          <div class="code">MTC · ISO 19650-2</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a class="on" href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5"/></svg> Overview</a>
+        <a href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3h7l3 3v11H5z" stroke-linejoin="round"/><path d="M12 3v3h3"/></svg> Documents <span class="ct">248</span></a>
+        <a href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="6" r="2"/><circle cx="15" cy="14" r="2"/><path d="M5 8v3a3 3 0 003 3h5"/></svg> Workflows <span class="ct">9</span></a>
+        <a href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3" width="12" height="14" rx="1.5"/><path d="M7 7h6M7 10h6M7 13h4"/></svg> Forms <span class="ct">12</span></a>
+        <a href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l7 4v6l-7 4-7-4V7z" stroke-linejoin="round"/><path d="M3 7l7 4 7-4M10 11v6"/></svg> Models</a>
+        <a href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16V8M9 16V4M14 16v-6"/></svg> Reports</a>
+      </nav>
+
+      <div class="grp u-eyebrow">Saved views</div>
+      <nav class="nav">
+        <a href="#"><i class="u-dot" style="background:var(--intent)"></i> Awaiting my review <span class="ct">3</span></a>
+        <a href="#"><i class="u-dot" style="background:var(--st-progress)"></i> Overdue this week <span class="ct">5</span></a>
+        <a href="#"><i class="u-dot" style="background:var(--st-backlog)"></i> Uncontrolled copies</a>
+      </nav>
+
+      <div class="progress">
+        <div class="lab"><span>Stage 4 — Production</span><span>64%</span></div>
+        <div class="bar"><i></i></div>
+      </div>
+    </aside>
+
+    <!-- main -->
+    <main class="main">
+      <div class="wrap">
+      <div class="head">
+        <div>
+          <div class="u-eyebrow">Documents · Register</div>
+          <h1>Drawing register</h1>
+        </div>
+        <div class="meta">248 documents · 3 awaiting review</div>
+        <div class="actions">
+          <button class="btn btn-secondary">Filter</button>
+          <button class="btn btn-primary">Upload revision</button>
+        </div>
+      </div>
+
+        <section>
+          <div class="toolbar">
+            <span class="chip on">All</span>
+            <span class="chip"><i class="u-dot" style="background:var(--intent)"></i> In review · 3</span>
+            <span class="chip"><i class="u-dot" style="background:var(--st-progress)"></i> In progress · 7</span>
+            <span class="chip"><i class="u-dot" style="background:var(--st-done)"></i> Published · 12</span>
+            <span class="right"><span class="u-mono">Sorted: Updated ↓</span></span>
+          </div>
+
+          <div class="reg">
+            <table>
+              <thead>
+                <tr><th>Ref</th><th>Title</th><th>Rev</th><th>Status</th><th>Discipline</th><th>Assignee</th><th>Updated</th></tr>
+              </thead>
+              <tbody>
+                <tr class="sel">
+                  <td class="ref">A-204</td>
+                  <td><span class="title">Level 04 — General arrangement</span><span class="ttl-sub">title-block rev mismatch <span class="flag">●</span></span></td>
+                  <td class="rev">C</td>
+                  <td><span class="status"><i class="u-dot" style="background:var(--intent)"></i>In review</span></td>
+                  <td>Architecture</td>
+                  <td><span class="asg"><span class="av">KD</span>K. Doyle</span></td>
+                  <td class="upd">2m ago</td>
+                </tr>
+                <tr>
+                  <td class="ref">S-118</td>
+                  <td><span class="title">Core wall reinforcement — gridline F</span></td>
+                  <td class="rev">B</td>
+                  <td><span class="status"><i class="u-dot" style="background:var(--st-progress)"></i>In progress</span></td>
+                  <td>Structures</td>
+                  <td><span class="asg"><span class="av">AB</span>A. Bello</span></td>
+                  <td class="upd">26m ago</td>
+                </tr>
+                <tr>
+                  <td class="ref">M-052</td>
+                  <td><span class="title">Plant room — chilled water schematic</span></td>
+                  <td class="rev">A</td>
+                  <td><span class="status"><i class="u-dot" style="background:var(--intent)"></i>In review</span></td>
+                  <td>MEP</td>
+                  <td><span class="asg"><span class="av">JL</span>J. Lin</span></td>
+                  <td class="upd">1h ago</td>
+                </tr>
+                <tr>
+                  <td class="ref">A-201</td>
+                  <td><span class="title">Level 01 — General arrangement</span></td>
+                  <td class="rev">D</td>
+                  <td><span class="status"><i class="u-dot" style="background:var(--st-done)"></i>Published</span></td>
+                  <td>Architecture</td>
+                  <td><span class="asg"><span class="av">KD</span>K. Doyle</span></td>
+                  <td class="upd">3h ago</td>
+                </tr>
+                <tr>
+                  <td class="ref">C-009</td>
+                  <td><span class="title">Site drainage — north plot</span></td>
+                  <td class="rev">B</td>
+                  <td><span class="status"><i class="u-dot" style="background:var(--st-review)"></i>Shared</span></td>
+                  <td>Civils</td>
+                  <td><span class="asg"><span class="av">RP</span>R. Patel</span></td>
+                  <td class="upd">Yesterday</td>
+                </tr>
+                <tr>
+                  <td class="ref">S-117</td>
+                  <td><span class="title">Core wall reinforcement — gridline E</span></td>
+                  <td class="rev">B</td>
+                  <td><span class="status"><i class="u-dot" style="background:var(--st-done)"></i>Published</span></td>
+                  <td>Structures</td>
+                  <td><span class="asg"><span class="av">AB</span>A. Bello</span></td>
+                  <td class="upd">Yesterday</td>
+                </tr>
+                <tr>
+                  <td class="ref">A-310</td>
+                  <td><span class="title">Curtain wall — typical bay detail</span></td>
+                  <td class="rev">A</td>
+                  <td><span class="status"><i class="u-dot" style="background:var(--st-backlog)"></i>Draft</span></td>
+                  <td>Architecture</td>
+                  <td><span class="asg"><span class="av">MO</span>M. Owen</span></td>
+                  <td class="upd">2d ago</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Asite Intelligence — summoned blob + drawer (bottom-right) -->
+<div class="ai-blob open" role="button" aria-label="Asite Intelligence" tabindex="0">
+  <span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span>
+  <div class="ai-panel">
+    <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span class="tag">CITES THE REGISTER</span></div>
+    <div class="ai-bd">
+      <div class="ai-q">Anything wrong with A-204 before I publish?</div>
+      <div class="ai-a">One thing to clear first. The title block on <span class="hl">A-204</span> reads revision <b>C</b>, but the register still shows <b>B</b>, and the suitability code is missing. Discipline matches.</div>
+      <div class="ai-rd"><i class="u-dot" style="background:var(--st-blocked)"></i><span class="rf2">A-204</span>Revision mismatch — C vs B<span class="tm2">TITLE BLOCK</span></div>
+      <div class="ai-rd"><i class="u-dot" style="background:var(--st-backlog)"></i><span class="rf2">A-204</span>Suitability code missing<span class="tm2">REQUIRED</span></div>
+      <div class="ai-act"><button class="btn btn-primary">Use document value</button><button class="btn btn-secondary">Re-run</button></div>
+      <div class="ai-src">SOURCES: REGISTER.XLSX · A-204.PDF — NOTHING WRITES WITHOUT YOU</div>
+    </div>
+    <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+  </div>
+  <span class="ai-orb"><i>✦</i></span>
+</div>
+
+<script>
+  // Orb toggles the drawer; click outside closes it.
+  document.querySelectorAll('.ai-orb').forEach(function(o){
+    o.addEventListener('click', function(e){ e.stopPropagation(); o.parentElement.classList.toggle('open'); });
+  });
+  document.addEventListener('click', function(e){
+    document.querySelectorAll('.ai-blob.open').forEach(function(b){ if(!b.contains(e.target)) b.classList.remove('open'); });
+  });
+</script>
+</body>
+</html>
