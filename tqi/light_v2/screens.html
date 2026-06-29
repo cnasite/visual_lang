@@ -1,343 +1,1924 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Asite · The Quiet Instrument — Light v2 · Drawing register</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Product Interface · Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css">
 <style>
-  body{ height:100vh; overflow:hidden; }
-  .app{ display:grid; grid-template-rows:52px 1fr; height:100vh; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg-0); color:var(--text-2); font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:rgba(200, 55, 27,0.18); color:#16181C; }
+  .wrap { max-width:1100px; margin:0 auto; padding:0 var(--space-8); }
+  .m-body { fill:var(--mkb, #16181C); } .m-arrow { fill:var(--mka, #C8371B); }
 
-  /* ---------- top bar ---------- */
-  .topbar{ display:flex; align-items:center; gap:14px; padding:0 16px;
-    background:var(--bg-1); border-bottom:1px solid var(--border); }
-  .brand{ display:flex; align-items:center; gap:9px; }
-  .brand .wm{ font:600 14px/1 var(--font-ui); letter-spacing:-0.01em; }
-  .switch{ display:flex; align-items:center; gap:7px; padding:5px 9px; border-radius:var(--r-sm);
-    cursor:pointer; color:var(--text-1); font:500 13px/1 var(--font-ui); }
-  .switch:hover{ background:var(--bg-3); }
-  .switch .car{ color:var(--text-3); font-size:11px; }
-  .sep{ width:1px; height:18px; background:var(--border); }
-  .search{ margin:0 auto; display:flex; align-items:center; gap:8px; flex:0 1 360px; min-width:140px;
-    background:var(--bg-3); border-radius:var(--r-md); padding:7px 11px; box-shadow:var(--inset);
-    color:var(--text-3); font:var(--text-small); cursor:text; }
-  .search svg{ flex:none; }
-  .search .txt{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .search .k{ flex:none; }
-  .tb-actions{ display:flex; align-items:center; gap:6px; }
-  .iconbtn{ width:30px; height:30px; display:grid; place-items:center; border-radius:var(--r-sm);
-    color:var(--text-2); cursor:pointer; }
-  .iconbtn:hover{ background:var(--bg-3); color:var(--text-1); }
-  .avatar{ width:26px; height:26px; border-radius:50%; background:var(--bg-3);
-    box-shadow:var(--inset); display:grid; place-items:center; font:600 11px/1 var(--font-ui);
-    color:var(--text-2); }
+  nav { position:sticky; top:0; z-index:50; background:rgba(250,250,249,0.86); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+  nav .wrap { display:flex; align-items:center; gap:var(--space-2); height:56px; }
+  .nav-mark { display:flex; align-items:center; gap:10px; margin-right:var(--space-6); text-decoration:none; }
+  .nav-mark span { font:590 14px/1 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); }
+  .ntab { font:500 12.5px/1 var(--font-ui); color:var(--text-2); text-decoration:none; padding:7px 12px;
+    border-radius:var(--r-sm); transition:background var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+  .ntab:hover { color:var(--text-1); background:var(--bg-2); }
+  .ntab.on { background:var(--intent-wash); color:var(--text-1); }
+  .nspacer { margin-left:auto; }
 
-  /* ---------- body ---------- */
-  .body{ display:grid; grid-template-columns:222px 1fr; min-height:0; }
+  /* floating on-page nav */
+  .fnav { position:fixed; top:50%; right:18px; transform:translateY(-50%); z-index:60;
+    display:flex; flex-direction:column; gap:1px; padding:9px 7px; max-height:80vh; overflow:auto;
+    background:rgba(255,255,255,0.88); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border-radius:var(--r-lg); box-shadow:var(--inset), 0 16px 40px rgba(22,24,28,0.10); }
+  .fnav .fcap { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); padding:2px 9px 7px; }
+  .fnav a { display:flex; align-items:center; gap:8px; font:450 11.5px/1 var(--font-ui); color:var(--text-2);
+    text-decoration:none; padding:5px 9px; border-radius:var(--r-sm); white-space:nowrap;
+    transition:background var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+  .fnav a::before { content:""; width:3px; height:3px; border-radius:50%; background:var(--text-3); flex:none; }
+  .fnav a:hover { color:var(--text-1); background:var(--bg-3); }
+  .fnav a.on { color:var(--text-1); background:var(--intent-wash); }
+  .fnav a.on::before { background:var(--intent-bright); }
+  @media (max-width:1320px){ .fnav{ display:none; } }
 
-  /* sidebar */
-  .side{ border-right:1px solid var(--border); padding:14px 10px; display:flex; flex-direction:column;
-    gap:2px; background:var(--bg-1); min-height:0; }
-  .ws{ display:flex; align-items:center; gap:9px; padding:4px 8px 12px; }
-  .ws .nm{ font:600 13px/1.2 var(--font-ui); letter-spacing:-0.01em; }
-  .ws .code{ font:var(--text-mono); color:var(--text-3); }
-  .ws-mono{ width:24px; height:24px; border-radius:7px; background:var(--bg-3); box-shadow:var(--inset);
-    display:grid; place-items:center; font:600 12px/1 var(--font-ui); color:var(--text-2); flex:none; }
-  .nav a{ display:flex; align-items:center; gap:10px; padding:7px 9px; border-radius:var(--r-sm);
-    color:var(--text-2); font:500 13px/1 var(--font-ui); text-decoration:none; cursor:pointer; }
-  .nav a:hover{ background:var(--bg-3); color:var(--text-1); }
-  .nav a.on{ background:var(--intent-wash); color:var(--text-1); }
-  .nav a.on svg{ color:var(--intent); }
-  .nav a svg{ color:var(--text-3); flex:none; }
-  .nav a .ct{ margin-left:auto; font:var(--text-mono); color:var(--text-3); }
-  .grp{ margin:14px 8px 6px; }
-  .progress{ margin-top:auto; padding:14px 9px 4px; }
-  .progress .lab{ display:flex; justify-content:space-between; font:var(--text-mono); color:var(--text-3); margin-bottom:7px; }
-  .bar{ height:6px; border-radius:3px; background:var(--bg-3); box-shadow:var(--inset); overflow:hidden; }
-  .bar i{ display:block; height:100%; width:64%; background:var(--intent); border-radius:3px; }
+  .page-head { padding:var(--space-16) 0 var(--space-8); }
+  .idx { font:500 12px/1.4 var(--font-mono); color:var(--intent-bright); margin-bottom:var(--space-3); }
+  .page-head h1 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--text-1); }
+  .page-head p { max-width:620px; margin-top:var(--space-3); line-height:1.65; }
 
-  /* main */
-  .main{ min-height:0; overflow:auto; padding:22px 26px 80px; }
-  .main .wrap{ max-width:1240px; margin:0 auto; }
-  .head{ display:flex; align-items:flex-end; gap:14px; margin-bottom:18px; }
-  .head h1{ margin:4px 0 0; font:var(--text-h1); letter-spacing:var(--track-h1); }
-  .head .meta{ font:var(--text-small); color:var(--text-2); margin-bottom:3px; }
-  .head .actions{ margin-left:auto; display:flex; gap:8px; }
+  .screen-block { padding:var(--space-16) 0 var(--space-6); }
+  .sb-head { display:flex; align-items:baseline; gap:var(--space-4); }
+  .sb-head .num { font:500 12px/1.4 var(--font-mono); color:var(--text-3); }
+  .sb-head h2 { font:var(--text-h2); letter-spacing:var(--track-h); color:var(--text-1); }
+  .sb-head p { font:var(--text-small); color:var(--text-3); margin-left:auto; max-width:380px; text-align:right; }
 
-  /* register spans the full content width; Intelligence is a summoned drawer (.ai-blob) */
+  /* ===== app frame ===== */
+  .app { width:min(1240px, calc(100vw - 48px)); position:relative; left:50%; transform:translateX(-50%);
+    background:var(--bg-0); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop);
+    overflow:hidden; font-size:13px; margin-bottom:64px; }
+  .app-body { display:grid; grid-template-columns:220px 1fr; min-height:620px; }
 
-  /* toolbar */
-  .toolbar{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
-  .chip{ display:inline-flex; align-items:center; gap:7px; padding:6px 11px; border-radius:999px;
-    font:500 12px/1 var(--font-ui); color:var(--text-2); background:var(--bg-2);
-    box-shadow:var(--inset); cursor:pointer; }
-  .chip:hover{ color:var(--text-1); }
-  .chip.on{ background:var(--intent-wash); color:var(--text-1); box-shadow:none; }
-  .toolbar .right{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+  /* Asite Intelligence blob */
+  .ai-blob { position:absolute; right:18px; bottom:18px; z-index:8; display:flex; align-items:center; gap:10px; cursor:pointer; }
+  .ai-tag { display:flex; align-items:center; gap:8px; font:500 12px/1 var(--font-ui); color:var(--text-1);
+    background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); border-radius:999px; padding:8px 12px;
+    opacity:0; transform:translateX(6px); transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease); pointer-events:none; }
+  .ai-blob:hover .ai-tag { opacity:1; transform:none; }
+  .ai-orb { width:40px; height:40px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle at 32% 28%, #E3E4E0, var(--bg-3) 70%);
+    box-shadow:var(--inset), 0 0 0 1px rgba(200, 55, 27,0.28), 0 10px 26px rgba(22,24,28,0.12); position:relative; }
+  .ai-orb::before { content:""; position:absolute; inset:-5px; border-radius:50%;
+    box-shadow:0 0 20px rgba(200, 55, 27,0.16); animation:ai-breathe 4.5s var(--ease) infinite; }
+  .ai-orb i { font-style:normal; font-size:15px; line-height:1; color:var(--intent-bright); }
+  @keyframes ai-breathe { 0%,100% { opacity:0.45; } 50% { opacity:1; } }
 
-  /* register table */
-  .reg{ background:var(--bg-1); border:1px solid var(--border); border-radius:var(--r-lg);
-    box-shadow:var(--shadow-card); overflow:hidden; }
-  .reg table{ width:100%; border-collapse:collapse; }
-  .reg th{ text-align:left; font:var(--text-micro); letter-spacing:var(--track-micro);
-    text-transform:uppercase; color:var(--text-3); padding:11px 14px; border-bottom:1px solid var(--border); }
-  .reg td{ padding:11px 14px; border-bottom:1px solid var(--border); font:var(--text-small);
-    color:var(--text-1); vertical-align:middle; }
-  .reg tr:last-child td{ border-bottom:0; }
-  .reg tbody tr{ cursor:pointer; }
-  .reg tbody tr:hover{ background:var(--bg-2); }
-  .reg tbody tr.sel{ background:var(--intent-wash); }   /* selection = wash, never an edge bar */
-  .ref{ font:var(--text-mono); color:var(--text-2); letter-spacing:-0.01em; }
-  .rev{ font:var(--text-mono); color:var(--text-1); }
-  .title{ font-weight:500; }
-  .ttl-sub{ display:block; font:var(--text-mono); color:var(--text-3); margin-top:2px; }
-  .asg{ display:inline-flex; align-items:center; gap:7px; }
-  .asg .av{ width:20px; height:20px; border-radius:50%; background:var(--bg-3); box-shadow:var(--inset);
-    display:grid; place-items:center; font:600 10px/1 var(--font-ui); color:var(--text-2); }
-  .upd{ color:var(--text-2); }
-  .flag{ color:var(--intent); }
-
-  /* ---------- Asite Intelligence — summoned blob + drawer ---------- */
-  .ai-blob{ position:fixed; right:24px; bottom:22px; z-index:40; display:flex; align-items:center; gap:10px; cursor:pointer; }
-  .ai-tag{ display:flex; align-items:center; gap:8px; font:500 12px/1 var(--font-ui); color:var(--text-1);
-    background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); border-radius:999px; padding:8px 13px;
-    opacity:0; transform:translateX(6px); pointer-events:none;
-    transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease); }
-  .ai-blob:hover .ai-tag{ opacity:1; transform:none; }
-  .ai-orb{ width:42px; height:42px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
-    background:radial-gradient(circle at 32% 28%, #FFFFFF, var(--bg-3) 72%); position:relative;
-    box-shadow:var(--inset), 0 0 0 1px rgba(200,55,27,.30), 0 10px 26px rgba(22,24,28,.12); }
-  .ai-orb::before{ content:""; position:absolute; inset:-5px; border-radius:50%;
-    box-shadow:0 0 22px rgba(200,55,27,.18); animation:ai-breathe 4.5s var(--ease) infinite; }
-  .ai-orb i{ font-style:normal; font-size:16px; line-height:1; color:var(--intent); }
-  @keyframes ai-breathe{ 0%,100%{ opacity:.4 } 50%{ opacity:1 } }
-  @media (prefers-reduced-motion:reduce){ .ai-orb::before{ animation:none; opacity:.6 } }
-
-  .ai-panel{ position:absolute; right:0; bottom:54px; width:380px; text-align:left; cursor:default;
-    background:var(--bg-1); border:1px solid var(--border); border-radius:var(--r-xl); box-shadow:var(--shadow-pop);
+  .ai-panel { position:absolute; right:0; bottom:54px; width:372px; text-align:left; cursor:default;
+    background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop);
     opacity:0; visibility:hidden; transform:translateY(8px);
     transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease), visibility var(--t-base); }
-  .ai-blob.open .ai-panel{ opacity:1; visibility:visible; transform:none; }
-  .ai-blob.open .ai-tag{ display:none; }
-  .ai-blob.open .ai-orb{ box-shadow:var(--inset), 0 0 0 1px var(--intent), 0 10px 26px rgba(22,24,28,.12); }
-
-  .ai-hd{ display:flex; align-items:center; gap:9px; padding:13px 15px; border-bottom:1px solid var(--border); }
-  .ai-hd i{ font-style:normal; color:var(--intent); font-size:14px; }
-  .ai-hd b{ font:600 13px/1 var(--font-ui); color:var(--text-1); }
-  .ai-hd .tag{ margin-left:auto; font:500 9.5px/1 var(--font-mono); letter-spacing:.1em; color:var(--text-3); }
-  .ai-bd{ padding:14px 15px; display:flex; flex-direction:column; gap:11px; }
-  .ai-q{ align-self:flex-end; max-width:85%; background:var(--bg-3); box-shadow:var(--inset); border-radius:12px 12px 4px 12px;
+  .ai-blob.open .ai-panel { opacity:1; visibility:visible; transform:none; }
+  .ai-blob.open .ai-tag { display:none; }
+  .ai-blob.open .ai-orb { box-shadow:var(--inset), 0 0 0 1px var(--intent), 0 10px 26px rgba(22,24,28,0.12); }
+  .ai-hd { display:flex; align-items:center; gap:9px; padding:12px 14px; border-bottom:1px solid var(--border); }
+  .ai-hd i { font-style:normal; color:var(--intent-bright); font-size:13px; }
+  .ai-hd b { font:560 12.5px/1 var(--font-ui); color:var(--text-1); }
+  .ai-hd span { margin-left:auto; font:500 9.5px/1 var(--font-mono); letter-spacing:0.1em; color:var(--text-3); }
+  .ai-bd { padding:14px; display:flex; flex-direction:column; gap:10px; }
+  .ai-q { align-self:flex-end; max-width:85%; background:var(--bg-3); box-shadow:var(--inset); border-radius:12px 12px 4px 12px;
     padding:8px 12px; font:400 12.5px/1.5 var(--font-ui); color:var(--text-1); }
-  .ai-a{ font:400 12.5px/1.6 var(--font-ui); color:var(--text-2); }
-  .ai-a b{ color:var(--text-1); font-weight:500; }
-  .hl{ background:var(--intent-wash); border-bottom:1.5px solid var(--intent); border-radius:2px; padding:0 3px; }
-  .ai-rd{ display:flex; align-items:center; gap:8px; background:var(--bg-2); box-shadow:var(--inset); border-radius:var(--r-md);
+  .ai-a { font:400 12.5px/1.6 var(--font-ui); color:var(--text-2); }
+  .ai-rd { display:flex; align-items:center; gap:8px; background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); border-radius:var(--r-md);
     padding:8px 10px; font:400 12px/1.4 var(--font-ui); color:var(--text-2); }
-  .ai-rd .rf2{ font:400 11px/1 var(--font-mono); color:var(--text-3); }
-  .ai-rd .tm2{ margin-left:auto; font:400 9.5px/1 var(--font-mono); color:var(--text-3); letter-spacing:.06em; }
-  .ai-act{ display:flex; gap:8px; }
-  .ai-act .btn{ font-size:12px; }
-  .ai-src{ font:400 9.5px/1.6 var(--font-mono); letter-spacing:.07em; color:var(--text-3); }
-  .ai-in{ display:flex; align-items:center; gap:8px; padding:11px 14px; border-top:1px solid var(--border);
+  .ai-rd .rf2 { font:400 11px/1 var(--font-mono); color:var(--text-3); }
+  .ai-rd .tm2 { margin-left:auto; font:400 9.5px/1 var(--font-mono); color:var(--text-3); }
+  .ai-act { display:flex; gap:8px; }
+  .ai-src { font:400 9.5px/1.6 var(--font-mono); letter-spacing:0.07em; color:var(--text-3); }
+  .ai-sg { display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
+  .ai-sg span { font:400 12px/1.4 var(--font-ui); color:var(--text-2); background:var(--bg-1); box-shadow:var(--inset);
+    border-radius:999px; padding:7px 12px; cursor:pointer; }
+  .ai-sg span:hover { color:var(--text-1); background:var(--bg-3); }
+  .ai-in { display:flex; align-items:center; gap:8px; padding:11px 14px; border-top:1px solid var(--border);
     font:400 12.5px/1 var(--font-ui); color:var(--text-3); }
-  .ai-in .u-kbd{ margin-left:auto; }
+  .ai-in .u-kbd { margin-left:auto; }
+
+  .side { background:var(--bg-1); border-right:1px solid var(--border); padding:var(--space-3); display:flex; flex-direction:column; gap:2px; }
+  .ws { display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:var(--r-md); margin-bottom:var(--space-3); }
+  .ws b { font:560 13px/1 var(--font-ui); color:var(--text-1); }
+  .ws .u-kbd { margin-left:auto; }
+  .side a { display:flex; align-items:center; gap:9px; padding:6px 10px; border-radius:var(--r-sm);
+    font:500 12.5px/1.5 var(--font-ui); color:var(--text-2); text-decoration:none; }
+  .side a:hover { background:var(--bg-2); color:var(--text-1); }
+  .side a.on { background:var(--intent-wash); color:var(--text-1); }
+  .side .grp { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); padding:14px 10px 5px; }
+  .side .ico { width:22px; text-align:center; opacity:0.85; font-size:17px; }
+  .side a { font-size:13px; }
+
+  /* onboarding */
+  .ob { min-height:620px; background:var(--aurora), var(--bg-0); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:48px; }
+  .obcard { width:440px; background:var(--bg-1); border-radius:var(--r-xl); box-shadow:var(--inset), var(--shadow-pop); padding:36px; }
+  .obcard h3 { font:590 20px/1.3 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); margin:16px 0 6px; }
+  .obcard .sub2 { font:400 13px/1.6 var(--font-ui); color:var(--text-3); margin-bottom:24px; }
+  .fld { margin-bottom:14px; }
+  .fld label { display:block; font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); margin-bottom:7px; }
+  .fld .inp { width:100%; }
+  .obstep { font:500 11px/1 var(--font-mono); color:var(--text-3); letter-spacing:0.06em; }
+  .obstep b { color:var(--intent-bright); font-weight:500; }
+  .invrow { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--border); }
+  .invrow .who { font:500 12.5px/1.4 var(--font-ui); color:var(--text-1); flex:1; }
+  .invrow .role { font:500 11.5px/1 var(--font-ui); color:var(--text-2); background:var(--bg-3); box-shadow:var(--inset); border-radius:var(--r-sm); padding:5px 9px; }
+  .tmpl { display:flex; flex-direction:column; gap:8px; }
+  .tmpl .tc { display:flex; gap:12px; align-items:center; padding:13px 14px; border-radius:var(--r-md); background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); cursor:pointer; }
+  .tmpl .tc.on { background:var(--intent-wash); box-shadow:var(--inset), 0 0 0 1px rgba(200, 55, 27,0.4); }
+  .tmpl .tc b { font:560 13px/1.4 var(--font-ui); color:var(--text-1); display:block; }
+  .tmpl .tc span { font:400 11.5px/1.5 var(--font-ui); color:var(--text-3); }
+  .tmpl .tc svg { stroke:var(--text-2); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+
+  /* dashboards */
+  .heroband { position:relative; padding:34px var(--space-6) 28px; border-bottom:1px solid var(--border); background:var(--aurora), var(--bg-0); overflow:hidden; }
+  .heroband .skyline { position:absolute; right:24px; bottom:0; opacity:0.9; }
+  .heroband h2 { font:700 30px/1.15 var(--font-display); letter-spacing:-0.01em; color:var(--text-1); }
+  .heroband .gstats { display:flex; gap:40px; margin-top:18px; }
+  .heroband .gstats .n { font:590 22px/1.1 var(--font-ui); color:var(--text-1); }
+  .heroband .gstats .l { font:400 12px/1.5 var(--font-ui); color:var(--text-3); }
+  .pjgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); padding:var(--space-6); }
+  .pj { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-4); cursor:pointer; }
+  .pj:hover { background:var(--bg-3); }
+  .pj .nm { font:560 13.5px/1.4 var(--font-ui); color:var(--text-1); display:flex; align-items:center; gap:8px; }
+  .pj .loc { font:400 11.5px/1.5 var(--font-ui); color:var(--text-3); margin-bottom:12px; }
+  .pj .bar { height:4px; border-radius:2px; background:var(--bg-3); overflow:hidden; margin:8px 0 8px; }
+  .pj .bar i { display:block; height:100%; background:var(--text-3); border-radius:2px; }
+  .pj .bar i.hot { background:var(--intent); }
+  .pj .meta { display:flex; gap:10px; font:400 10.5px/1.4 var(--font-mono); color:var(--text-3); }
+  .chgrid { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-4); padding:var(--space-6); }
+  .ch { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-4); }
+  .ch .lbl { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); margin-bottom:12px; display:flex; gap:8px; }
+  .ch .lbl .v { margin-left:auto; font:500 11px/1.4 var(--font-mono); color:var(--text-1); text-transform:none; }
+  .legend { display:flex; gap:14px; margin-top:10px; font:400 11px/1.4 var(--font-ui); color:var(--text-3); }
+  .legend i { width:8px; height:8px; border-radius:2px; display:inline-block; margin-right:5px; }
+  .heat { display:grid; grid-template-columns:repeat(14,1fr); gap:4px; }
+  .heat i { aspect-ratio:1; border-radius:2.5px; background:var(--bg-3); }
+  .ring { transform:rotate(-90deg); }
+  .mil { display:flex; align-items:flex-start; padding:0 var(--space-6) var(--space-4); }
+  .mil .ms { flex:1; position:relative; padding-top:18px; }
+  .mil .ms::before { content:""; position:absolute; top:5px; left:0; right:0; height:2px; background:var(--bg-3); }
+  .mil .ms i { position:absolute; top:0; left:0; width:12px; height:12px; border-radius:50%; background:var(--bg-3); box-shadow:var(--inset); }
+  .mil .ms.done::before { background:var(--text-3); }
+  .mil .ms.done i { background:var(--text-2); }
+  .mil .ms.now i { background:var(--intent); box-shadow:0 0 10px rgba(200, 55, 27,0.5); }
+  .mil .ms b { font:560 11.5px/1.4 var(--font-ui); color:var(--text-1); display:block; }
+  .mil .ms span { font:400 10px/1.4 var(--font-mono); color:var(--text-3); }
+
+  .main { display:flex; flex-direction:column; min-width:0; }
+
+  /* aMail */
+  .acct { display:flex; flex-direction:column; gap:3px; padding:8px 10px; border-radius:var(--r-sm); }
+  .acct .em { font:500 12px/1.3 var(--font-ui); color:var(--text-1); display:flex; align-items:center; gap:8px; }
+  .acct .em .u-dot { width:7px; height:7px; flex:none; }
+  .acct .sy { font:400 9.5px/1.4 var(--font-mono); letter-spacing:0.06em; color:var(--text-3); padding-left:15px; }
+  .msplit { display:grid; grid-template-columns:390px 1fr; flex:1; min-height:0; }
+  .mlist { border-right:1px solid var(--border); display:flex; flex-direction:column; min-width:0; }
+  .mband { padding:8px var(--space-4); background:var(--bg-1); border-bottom:1px solid var(--border);
+    font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); }
+  .mrow { display:flex; flex-direction:column; gap:3px; padding:11px var(--space-4); border-bottom:1px solid var(--border); cursor:pointer; }
+  .mrow:hover { background:var(--bg-2); }
+  .mrow.sel { background:var(--intent-wash); }
+  .mrow .l1 { display:flex; align-items:center; gap:8px; font:560 12.5px/1.4 var(--font-ui); color:var(--text-1); }
+  .mrow .l1 .u-dot { width:7px; height:7px; flex:none; }
+  .mrow .l1 .tm { margin-left:auto; font:400 10px/1 var(--font-mono); color:var(--text-3); }
+  .mrow .l2 { font:500 12px/1.45 var(--font-ui); color:var(--text-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .mrow .l2 .rf2 { font:400 11px/1 var(--font-mono); color:var(--text-3); }
+  .mrow .l3 { display:flex; align-items:center; gap:8px; font:400 11.5px/1.4 var(--font-ui); color:var(--text-3);
+    white-space:nowrap; overflow:hidden; }
+  .fchip { font:500 9.5px/1 var(--font-mono); letter-spacing:0.05em; color:var(--text-2);
+    background:var(--bg-3); box-shadow:var(--inset); border-radius:4px; padding:3px 6px; flex:none; }
+  .fchip.unf { color:var(--intent-bright); background:var(--intent-wash); box-shadow:none; }
+  .mread { padding:var(--space-6); display:flex; flex-direction:column; gap:14px; min-width:0; }
+  .mread h4 { font:560 16px/1.35 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); }
+  .msg { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:14px 16px; }
+  .msg .mh { display:flex; align-items:center; gap:9px; font:560 12px/1.4 var(--font-ui); color:var(--text-1); margin-bottom:7px; }
+  .msg .mh span { font:400 10px/1 var(--font-mono); color:var(--text-3); }
+  .msg .mh .tm { margin-left:auto; }
+  .msg p { font:400 12.5px/1.65 var(--font-ui); color:var(--text-2); }
+  .att { display:flex; align-items:center; gap:10px; background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); border-radius:var(--r-md);
+    padding:9px 12px; font:500 12px/1.4 var(--font-ui); color:var(--text-1); }
+  .att .sz { font:400 10px/1 var(--font-mono); color:var(--text-3); }
+  .att .fchip { margin-left:auto; }
+  .rule { display:grid; grid-template-columns:16px 1fr auto; gap:var(--space-4); align-items:center;
+    padding:12px var(--space-6); border-bottom:1px solid var(--border); }
+  .rule .rif { font:400 12px/1.6 var(--font-mono); color:var(--text-2); }
+  .rule .rif b { color:var(--text-1); font-weight:500; }
+  .rule .rif .arr { color:var(--intent-bright); }
+  .rule .rmeta { font:400 10px/1.5 var(--font-mono); color:var(--text-3); text-align:right; }
+  .mhead { display:flex; align-items:center; gap:var(--space-3); padding:12px var(--space-6); border-bottom:1px solid var(--border); }
+  .mhead h3 { font:560 14px/1 var(--font-ui); color:var(--text-1); }
+  .mhead .cnt { font:var(--text-mono); font-size:11px; color:var(--text-3); }
+  .mhead .sp { margin-left:auto; display:flex; gap:8px; align-items:center; }
+  .fbar { display:flex; align-items:center; gap:8px; padding:9px var(--space-6); border-bottom:1px solid var(--border); }
+
+  .btn { font:560 12.5px/1 var(--font-ui); padding:7px 13px; border-radius:var(--r-md); border:none; cursor:pointer; white-space:nowrap; }
+  .btn-primary { background:var(--intent); color:#fff; }
+  .btn-primary:hover { background:var(--intent-bright); }
+  .btn-secondary { background:var(--bg-3); color:var(--text-1); box-shadow:var(--inset); }
+  .btn-ghost { background:none; color:var(--text-2); }
+  .prop { display:inline-flex; align-items:center; gap:6px; font:500 11.5px/1 var(--font-ui); color:var(--text-2);
+    background:var(--bg-2); box-shadow:var(--inset); border-radius:var(--r-sm); padding:4px 9px; white-space:nowrap; }
+  .u-dot { width:8px; height:8px; }
+  .inp { display:flex; align-items:center; gap:8px; background:var(--bg-0); border:1px solid var(--border);
+    border-radius:var(--r-md); color:var(--text-3); font:400 12.5px/1 var(--font-ui); padding:7px 11px; }
+  .inp.lit { border-color:var(--intent); box-shadow:0 0 0 3px var(--intent-wash); color:var(--text-1); }
+
+  .seg { display:flex; background:var(--bg-0); border-radius:var(--r-md); box-shadow:var(--inset); padding:2px; }
+  .seg span { padding:5px 11px; border-radius:6px; font:500 11.5px/1.4 var(--font-ui); color:var(--text-3); cursor:pointer; }
+  .seg span.on { background:var(--bg-3); color:var(--text-1); box-shadow:var(--inset); }
+
+  .ghead { display:flex; align-items:center; gap:9px; padding:8px var(--space-6); background:var(--bg-1);
+    font:560 12px/1 var(--font-ui); color:var(--text-1); border-bottom:1px solid var(--border); }
+  .ghead .cnt { color:var(--text-3); font-weight:400; }
+  .rowi { display:grid; grid-template-columns:16px 120px 1fr auto; gap:var(--space-4); align-items:center;
+    padding:9px var(--space-6); border-bottom:1px solid var(--border); cursor:pointer; }
+  .rowi:hover { background:var(--bg-2); }
+  .rowi.sel { background:var(--intent-wash); }
+  .rowi .ref { font:var(--text-mono); font-size:11.5px; color:var(--text-3); }
+  .rowi .t { font:500 13px/1.4 var(--font-ui); color:var(--text-1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .rowi .props { display:flex; gap:6px; align-items:center; }
+  .rowi .meta { font:var(--text-mono); font-size:10.5px; color:var(--text-3); }
+  .av { width:18px; height:18px; border-radius:50%; background:var(--bg-3); box-shadow:var(--inset);
+    display:inline-flex; align-items:center; justify-content:center; font:560 7.5px/1 var(--font-ui); color:var(--text-2); flex:none; }
+  .foot { margin-top:auto; display:flex; gap:var(--space-4); padding:8px var(--space-6); border-top:1px solid var(--border);
+    font:var(--text-mono); font-size:10.5px; color:var(--text-3); }
+
+  /* dashboard */
+  .statline { display:flex; gap:var(--space-8); padding:var(--space-6); border-bottom:1px solid var(--border); }
+  .statline .st .n { font:590 26px/1.1 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); }
+  .statline .st .l { font:var(--text-small); color:var(--text-3); margin-top:2px; }
+  .dash-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:0; flex:1; }
+  .qcol { border-right:1px solid var(--border); }
+  .pcol { display:flex; flex-direction:column; gap:var(--space-4); padding:var(--space-6); }
+  .pcard2 { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-4); }
+  .pcard2 .lbl { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); margin-bottom:10px; }
+  .feed { display:flex; gap:10px; padding:7px 0; font:400 12.5px/1.5 var(--font-ui); color:var(--text-2); }
+  .feed b { color:var(--text-1); font-weight:560; }
+  .feed .tm { margin-left:auto; font:var(--text-mono); font-size:10px; color:var(--text-3); white-space:nowrap; }
+  .week { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; align-items:end; height:64px; margin-top:6px; }
+  .week div { background:var(--bg-3); border-radius:3px 3px 0 0; }
+  .week .hot { background:var(--intent); }
+  .wlbl { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; font:var(--text-mono); font-size:9px; color:var(--text-3); text-align:center; margin-top:6px; }
+
+  /* files grid view */
+  .fsec { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); padding:18px var(--space-6) 8px; }
+  .fgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-3); padding:0 var(--space-6) var(--space-4); }
+  .fcard { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-4); cursor:pointer; min-width:0; }
+  .fcard:hover { background:var(--bg-3); }
+  .fcard.sel { background:var(--intent-wash); }
+  .fcard b { display:block; font:560 12.5px/1.4 var(--font-ui); color:var(--text-1); margin-top:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .fcard .meta { font:var(--text-mono); font-size:10px; color:var(--text-3); margin-top:3px; display:flex; align-items:center; gap:6px; }
+  .thumb { height:78px; border-radius:6px; background:var(--bg-1); box-shadow:var(--inset); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+
+  /* document canvas */
+  .canvas-grid { display:grid; grid-template-columns:1fr 290px; flex:1; min-height:0; }
+  .canvas { position:relative; background:var(--bg-0); display:flex; align-items:center; justify-content:center; padding:28px; }
+  .sheet { background:#EFEFEC; border-radius:6px; box-shadow:0 12px 40px rgba(22,24,28,0.10); position:relative; }
+  .zoom { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:2px; background:var(--bg-1);
+    border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:3px; font:500 11px/1 var(--font-ui); color:var(--text-2); }
+  .zoom span { padding:6px 10px; border-radius:6px; cursor:pointer; }
+  .zoom span:hover { background:var(--bg-3); color:var(--text-1); }
+  .pin { position:absolute; width:22px; height:22px; border-radius:50% 50% 50% 4px; background:var(--intent);
+    color:#fff; font:560 10px/22px var(--font-ui); text-align:center; box-shadow:0 4px 12px rgba(200, 55, 27,0.4); }
+  .pin.muted { background:var(--bg-3); color:var(--text-2); box-shadow:var(--shadow-card); }
+  .cpanel { background:var(--bg-1); border-left:1px solid var(--border); padding:var(--space-4); display:flex; flex-direction:column; gap:var(--space-3); overflow:hidden; }
+  .cmt { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-3); }
+  .cmt.lit { box-shadow:var(--inset), 0 0 0 1px rgba(200, 55, 27,0.4); }
+  .cmt .hd { display:flex; gap:8px; align-items:center; margin-bottom:6px; }
+  .cmt .hd b { font:560 12px/1 var(--font-ui); color:var(--text-1); }
+  .cmt .hd .tm { margin-left:auto; font:var(--text-mono); font-size:9.5px; color:var(--text-3); }
+  .cmt p { font:400 12px/1.55 var(--font-ui); color:var(--text-2); }
+  .cmt .act { font:500 11px/1 var(--font-ui); color:var(--intent-bright); margin-top:8px; }
+
+  /* native doc editor */
+  .doc-top { display:flex; align-items:center; gap:10px; padding:10px var(--space-6); border-bottom:1px solid var(--border); }
+  .crumbs { font:500 12px/1.4 var(--font-ui); color:var(--text-3); }
+  .crumbs b { color:var(--text-1); font-weight:560; }
+  .avstack { display:flex; }
+  .avstack .av { margin-left:-5px; border:2px solid var(--bg-0); width:20px; height:20px; }
+  .doc { max-width:660px; margin:0 auto; padding:44px var(--space-6) 64px; width:100%; }
+  .doc h1.t { font:590 28px/1.25 var(--font-ui); letter-spacing:-0.015em; color:var(--text-1); margin-bottom:10px; }
+  .doc .props { display:flex; gap:8px; margin-bottom:28px; flex-wrap:wrap; }
+  .blk { position:relative; padding:3px 0; }
+  .blk .hndl { position:absolute; left:-26px; top:6px; color:var(--text-3); opacity:0; font-size:11px; }
+  .blk:hover .hndl { opacity:0.7; }
+  .blk h4 { font:560 17px/1.4 var(--font-ui); letter-spacing:-0.008em; color:var(--text-1); margin:18px 0 6px; }
+  .blk p { font:400 14px/1.7 var(--font-ui); color:var(--text-2); }
+  .hl { background:var(--intent-wash); border-bottom:1.5px solid var(--intent); color:var(--text-1); border-radius:2px; padding:0 2px; }
+  .todo { display:flex; gap:10px; align-items:flex-start; padding:4px 0; font:400 14px/1.6 var(--font-ui); color:var(--text-2); }
+  .todo .bx { width:15px; height:15px; border-radius:4px; margin-top:3px; flex:none; box-shadow:var(--inset); background:var(--bg-2); }
+  .todo .bx.ck { background:var(--intent); position:relative; }
+  .todo .bx.ck::after { content:"✓"; position:absolute; inset:0; color:#fff; font-size:10px; line-height:15px; text-align:center; }
+  .todo .done { text-decoration:line-through; color:var(--text-3); }
+  .callout { display:flex; gap:12px; background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card); border-radius:var(--r-md);
+    padding:14px 16px; margin:14px 0; }
+  .callout p { font:400 13.5px/1.6 var(--font-ui); color:var(--text-1); }
+  .slash { display:flex; gap:10px; align-items:center; color:var(--text-3); font:400 14px/1.6 var(--font-ui);
+    border:1px dashed var(--border-strong); border-radius:var(--r-md); padding:8px 14px; margin-top:18px; }
+  .mtbl { width:100%; border-collapse:collapse; margin:10px 0; font:400 13px/1.5 var(--font-ui); }
+  .mtbl th { text-align:left; font:560 11.5px/1.4 var(--font-ui); color:var(--text-3); padding:6px 10px; border-bottom:1px solid var(--border-strong); }
+  .mtbl td { padding:7px 10px; border-bottom:1px solid var(--border); color:var(--text-2); }
+  .mtbl td:first-child { font-family:var(--font-mono); font-size:11.5px; color:var(--text-1); }
+
+  /* convert flow */
+  .dropzone { margin:var(--space-8) var(--space-6); border:1.5px dashed var(--border-strong); border-radius:var(--r-lg);
+    padding:52px; text-align:center; background:var(--aurora), transparent; }
+  .dropzone h4 { font:560 16px/1.4 var(--font-ui); color:var(--text-1); margin:14px 0 4px; }
+  .dropzone p { font:var(--text-small); color:var(--text-3); }
+  .ftypes { display:flex; gap:8px; justify-content:center; margin-top:18px; }
+  .q { padding:0 var(--space-6) var(--space-4); }
+  .qrow { display:grid; grid-template-columns:34px 1fr 200px 110px; gap:var(--space-4); align-items:center;
+    padding:11px 0; border-bottom:1px solid var(--border); }
+  .qrow .fn { font:500 13px/1.4 var(--font-ui); color:var(--text-1); }
+  .qrow .fm { font:var(--text-mono); font-size:10.5px; color:var(--text-3); }
+  .track { height:4px; border-radius:2px; background:var(--bg-3); overflow:hidden; }
+  .track i { display:block; height:100%; background:var(--intent); border-radius:2px; }
+  .track i.ok { background:var(--st-done); }
+  .ficon { width:34px; height:40px; border-radius:5px; background:var(--bg-2); box-shadow:var(--inset);
+    font:560 8px/40px var(--font-mono); color:var(--text-2); text-align:center; }
+
+  .conv { display:grid; grid-template-columns:1fr 1fr; flex:1; min-height:0; }
+  .src { background:var(--bg-0); border-right:1px solid var(--border); padding:var(--space-6); display:flex; flex-direction:column; gap:12px; align-items:center; }
+  .conf { font:500 10px/1 var(--font-mono); padding:3px 7px; border-radius:4px; }
+  .conf.hi { color:var(--st-done); background:rgba(76,183,130,0.12); }
+  .conf.md { color:var(--st-progress); background:rgba(212,164,68,0.12); }
+  .conf.lo { color:var(--intent-bright); background:var(--intent-wash); }
+  .xfield { padding:12px 0; border-bottom:1px solid var(--border); }
+  .xfield .xl { display:flex; align-items:center; gap:8px; font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
+  .xfield .xv { font:400 13.5px/1.6 var(--font-ui); color:var(--text-1); }
+  .xfield.lo-f .xv { background:var(--intent-wash); border-radius:4px; padding:2px 6px; display:inline-block; }
+
+  /* command palette */
+  .palette-stage { position:relative; }
+  .dim { position:absolute; inset:0; background:var(--bg-overlay); backdrop-filter:blur(2px); z-index:2; }
+  .palette { position:absolute; z-index:3; left:50%; top:80px; transform:translateX(-50%); width:560px;
+    background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); overflow:hidden; }
+  .palette .pin2 { display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid var(--border); }
+  .palette input { background:none; border:none; outline:none; color:var(--text-1); font:400 14px/1 var(--font-ui); flex:1; }
+  .palette .sec { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); padding:10px 16px 4px; }
+  .palette .it { display:flex; align-items:center; gap:10px; padding:8px 16px; font:500 13px/1.4 var(--font-ui); color:var(--text-2); }
+  .palette .it.on { background:var(--intent-wash); color:var(--text-1); }
+  .palette .it .u-kbd { margin-left:auto; }
+
+  footer { border-top:1px solid var(--border); padding:var(--space-8) 0; margin-top:var(--space-8); }
+  footer .wrap { display:flex; justify-content:space-between; font:var(--text-small); color:var(--text-3); }
+  @media (max-width:900px){ .app-body{grid-template-columns:1fr;} .side{display:none;} .dash-grid,.canvas-grid,.conv{grid-template-columns:1fr;} .fgrid{grid-template-columns:1fr 1fr;} .sb-head p{display:none;} }
+
+  /* mode toggle dock */
+  .dock { position:fixed; left:16px; bottom:16px; z-index:60; display:flex; align-items:center; gap:8px; }
+  .themeswitch { display:inline-flex; align-items:center; gap:2px; background:rgba(255,255,255,0.88); backdrop-filter:blur(10px); box-shadow:var(--inset); border-radius:999px; padding:3px; font:500 10px/1 var(--font-mono); letter-spacing:0.08em; }
+  .themeswitch a, .themeswitch span { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:999px; color:var(--text-3); text-decoration:none; }
+  .themeswitch .ts-on { background:var(--intent); color:#fff; }
+  .themeswitch a:hover { color:var(--text-1); }
+
+  /* ===== Light theme: INK primary, ORANGE accent =====
+     Primary actions are ink (#16181C). Survey Orange is the accent only —
+     focus, links, selection washes, status, and the live AI signal
+     (orb, spark, run pulse, caret). No large orange fills. */
+  .btn-primary { background:var(--text-1) !important; color:#fff !important; }
+  .btn-primary:hover { background:#000 !important; box-shadow:none !important; }
+  .ai-entry .go, .sc-input .go { background:var(--text-1) !important; }
+  .ai-entry .go:hover, .sc-input .go:hover { background:#000 !important; }
+  .ctafield { background:var(--text-1) !important; }
+  .ctafield h2 { color:#fff !important; }
+  .ctafield p { color:rgba(255,255,255,0.82) !important; }
+  .ctafield .mn { color:rgba(255,255,255,0.55) !important; }
+  .ctafield .btn-ink { background:var(--intent) !important; color:#fff !important; }
 </style>
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-body" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-arrow" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="nav-mark" href="index.html"><svg width="22" height="23" viewBox="0 0 377 396"><use href="#amark"/></svg><span>Asite</span></a>
+    <a class="ntab" href="index.html">Language</a>
+    <a class="ntab on" href="screens.html">Product</a>
+    <a class="ntab" href="web.html">Website</a>
+    <a class="ntab" href="slides.html">Slides</a>
+    <a class="ntab" href="ai-hub.html"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:5px"><path d="M12 2.5 L13.9 9 L20.5 11 L13.9 13 L12 21 L10.1 13 L3.5 11 L10.1 9 Z"/></svg>AI Hub</a>
+    <span class="nspacer"></span>
+  </div>
+</nav>
+
+<aside class="fnav" aria-label="On this page">
+  <div class="fcap">On this page</div>
+  <a href="#o1">Onboarding</a>
+  <a href="#da0">Dashboards</a>
+  <a href="#sb">Work</a>
+  <a href="#m0">aMail</a>
+  <a href="#b1">Beyond the screen</a>
+</aside>
+
+<div class="wrap page-head">
+  <div class="idx">The Quiet Instrument · Product</div>
+  <h1>Interface screens</h1>
+  <p>The working surfaces of the quiet idiom: briefing dashboards, a files workspace, two ways to hold a document, a conversion flow that turns site paper into living documents — and aMail, the inbox that files itself into the register.</p>
+</div>
+
+<!-- ============ SCR.O ONBOARDING ============ -->
+<div class="wrap screen-block" id="o1">
+  <div class="sb-head"><span class="num">SCR.O1</span><h2>Onboarding — Workspace</h2><p>One card, one question — the product’s front door, kept on plain white.</p></div>
+</div>
 <div class="app">
-
-  <!-- ========== TOP BAR ========== -->
-  <header class="topbar">
-    <div class="brand">
-      <!-- Asite mark (brand logo — product chrome). Inherits ink via currentColor. -->
-      <svg class="brand-mark" viewBox="0 0 377 396" role="img" aria-label="Asite" fill="currentColor" style="height:20px;width:auto;color:var(--text-1);display:block">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
-      </svg>
-      <span class="wm">Asite</span>
+  <div class="ob">
+    <div class="obcard">
+      <div style="display:flex; align-items:center; justify-content:space-between">
+        <svg width="30" height="32" viewBox="0 0 377 396"><use href="#amark"/></svg>
+        <span class="obstep"><b>01</b> / 03</span>
+      </div>
+      <h3>Create your workspace</h3>
+      <div class="sub2">This becomes the root of numbering and audit. You can refine everything later.</div>
+      <div class="fld"><label>Organisation</label><span class="inp lit">Meridian Construction Group</span></div>
+      <div class="fld"><label>Region — data residency</label><span class="inp">United Kingdom · London <span style="margin-left:auto">▾</span></span></div>
+      <button class="btn btn-primary" style="width:100%; padding:11px; margin-top:10px">Continue</button>
+      <div style="text-align:center; margin-top:16px; font:500 11.5px/1.4 var(--font-ui); color:var(--text-3)">3 teammates already use Asite — <span style="color:var(--intent-bright)">join their workspace</span></div>
     </div>
-    <div class="sep"></div>
-    <div class="switch">Meridian Tower C <span class="car">▾</span></div>
+  </div>
+</div>
 
-    <div class="search">
-      <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="6"/><path d="M14 14l4 4" stroke-linecap="round"/></svg>
-      <span class="txt">Search documents, forms, people…</span>
-      <span class="k u-kbd">⌘K</span>
+<div class="wrap screen-block" id="o2">
+  <div class="sb-head"><span class="num">SCR.O2</span><h2>Onboarding — Team</h2><p>Invites with roles attached — permissions are part of the welcome, not an afterthought.</p></div>
+</div>
+<div class="app">
+  <div class="ob">
+    <div class="obcard">
+      <div style="display:flex; align-items:center; justify-content:space-between">
+        <svg width="30" height="32" viewBox="0 0 377 396"><use href="#amark"/></svg>
+        <span class="obstep"><b>02</b> / 03</span>
+      </div>
+      <h3>Bring the site with you</h3>
+      <div class="sub2">Roles map to ISO 19650 duties. Everyone sees exactly what their role needs.</div>
+      <div class="invrow"><span class="av">KD</span><span class="who">kofi@arup.com</span><span class="role">Lead reviewer ▾</span></div>
+      <div class="invrow"><span class="av">AB</span><span class="who">anaya@mcg.co</span><span class="role">Doc controller ▾</span></div>
+      <div class="invrow" style="border-bottom:none"><span class="av" style="background:none; box-shadow:none">＋</span><span class="who" style="color:var(--text-3)">Add by email or CSV…</span><span class="role" style="opacity:0.5">Viewer ▾</span></div>
+      <div style="display:flex; gap:10px; margin-top:22px">
+        <button class="btn btn-ghost">Skip for now</button>
+        <button class="btn btn-primary" style="flex:1; padding:11px">Send 2 invites</button>
+      </div>
     </div>
-    <div class="tb-actions">
-      <span class="iconbtn" title="Notifications">
-        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8a5 5 0 0110 0c0 4 1.5 5 1.5 5h-13S5 12 5 8z" stroke-linejoin="round"/><path d="M8.5 16a1.5 1.5 0 003 0" stroke-linecap="round"/></svg>
-      </span>
-      <span class="avatar">CN</span>
-    </div>
-  </header>
+  </div>
+</div>
 
-  <!-- ========== BODY ========== -->
-  <div class="body">
-
-    <!-- sidebar -->
-    <aside class="side">
-      <div class="ws">
-        <!-- project monogram (neutral) — the orb is reserved for Intelligence -->
-        <span class="ws-mono">M</span>
-        <div>
-          <div class="nm">Meridian Tower C</div>
-          <div class="code">MTC · ISO 19650-2</div>
+<div class="wrap screen-block" id="o3">
+  <div class="sb-head"><span class="num">SCR.O3</span><h2>Onboarding — First Project</h2><p>Templates carry the standards in. The selected card takes the wash; everything else stays quiet.</p></div>
+</div>
+<div class="app">
+  <div class="ob">
+    <div class="obcard">
+      <div style="display:flex; align-items:center; justify-content:space-between">
+        <svg width="30" height="32" viewBox="0 0 377 396"><use href="#amark"/></svg>
+        <span class="obstep"><b>03</b> / 03</span>
+      </div>
+      <h3>Start your first project</h3>
+      <div class="sub2">Each template ships numbering, workflows, and hold-point rules pre-wired.</div>
+      <div class="tmpl">
+        <div class="tc on">
+          <svg width="24" height="24" viewBox="0 0 20 20"><path d="M4 16.5 V7 L10 3.5 L16 7 V16.5 M7.5 16.5 V11 H12.5 V16.5"/></svg>
+          <div><b>Building</b><span>ISO 19650 full workflow · S1–S4 states</span></div>
+        </div>
+        <div class="tc">
+          <svg width="24" height="24" viewBox="0 0 20 20"><path d="M3 15 C7 9 13 9 17 15 M3 15 H17 M6.5 11.2 V15 M10 9.8 V15 M13.5 11.2 V15"/></svg>
+          <div><b>Infrastructure</b><span>Linear assets · chainage-based register</span></div>
+        </div>
+        <div class="tc">
+          <svg width="24" height="24" viewBox="0 0 20 20"><rect x="3.5" y="3.5" width="13" height="13" rx="1.5"/><path d="M3.5 8 H16.5 M8 8 V16.5"/></svg>
+          <div><b>Fit-out</b><span>Fast approvals · light workflow</span></div>
         </div>
       </div>
+      <button class="btn btn-primary" style="width:100%; padding:11px; margin-top:20px">Create Meridian Tower C</button>
+    </div>
+  </div>
+</div>
 
-      <nav class="nav">
-        <a class="on" href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5"/></svg> Overview</a>
-        <a href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3h7l3 3v11H5z" stroke-linejoin="round"/><path d="M12 3v3h3"/></svg> Documents <span class="ct">248</span></a>
-        <a href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="6" r="2"/><circle cx="15" cy="14" r="2"/><path d="M5 8v3a3 3 0 003 3h5"/></svg> Workflows <span class="ct">9</span></a>
-        <a href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3" width="12" height="14" rx="1.5"/><path d="M7 7h6M7 10h6M7 13h4"/></svg> Forms <span class="ct">12</span></a>
-        <a href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l7 4v6l-7 4-7-4V7z" stroke-linejoin="round"/><path d="M3 7l7 4 7-4M10 11v6"/></svg> Models</a>
-        <a href="#"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16V8M9 16V4M14 16v-6"/></svg> Reports</a>
-      </nav>
-
-      <div class="grp u-eyebrow">Saved views</div>
-      <nav class="nav">
-        <a href="#"><i class="u-dot" style="background:var(--intent)"></i> Awaiting my review <span class="ct">3</span></a>
-        <a href="#"><i class="u-dot" style="background:var(--st-progress)"></i> Overdue this week <span class="ct">5</span></a>
-        <a href="#"><i class="u-dot" style="background:var(--st-backlog)"></i> Uncontrolled copies</a>
-      </nav>
-
-      <div class="progress">
-        <div class="lab"><span>Stage 4 — Production</span><span>64%</span></div>
-        <div class="bar"><i></i></div>
-      </div>
-    </aside>
-
-    <!-- main -->
-    <main class="main">
-      <div class="wrap">
-      <div class="head">
+<!-- ============ SCR.A0 FIRST-RUN DASHBOARD ============ -->
+<div class="wrap screen-block" id="da0">
+  <div class="sb-head"><span class="num">SCR.A0</span><h2>Dashboard — First Run (Admin)</h2><p>The view after onboarding: the workspace rendered as an isometric object being built. Each setup step pours a slab; the beam points at the next one.</p></div>
+</div>
+<div class="app">
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <a href="#da0" class="on"><span class="ico">⌂</span>Today</a>
+      <a href="#da0"><span class="ico">◑</span>RFIs</a>
+      <a href="#da0"><span class="ico">▤</span>Files</a>
+      <a href="#da0"><span class="ico">≡</span>Docs</a>
+      <a href="#da0"><span class="ico">⇄</span>Convert</a>
+      <div class="grp">Team</div>
+      <a href="#da0"><span class="ico">◍</span>Invites · 2 pending</a>
+    </div>
+    <div class="main" style="padding:0">
+      <!-- welcome hero -->
+      <div style="display:grid; grid-template-columns:1fr 0.9fr; gap:24px; align-items:center; padding:40px 40px 28px; background:var(--aurora), transparent; border-bottom:1px solid var(--border)">
         <div>
-          <div class="u-eyebrow">Documents · Register</div>
-          <h1>Drawing register</h1>
+          <span style="font:500 11px/1 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em">WORKSPACE CREATED · ADMIN</span>
+          <div style="font:700 30px/1.15 var(--font-display); letter-spacing:-0.01em; color:var(--text-1); margin-top:14px">Welcome, Charles.<br>Your workspace is standing<span style="color:var(--intent)">.</span></div>
+          <p style="font:400 14px/1.7 var(--font-ui); color:var(--text-2); max-width:380px; margin-top:14px">Meridian Construction Group is live, numbered, and audited from this moment. Four more pours and the whole team can build on it.</p>
+          <div style="display:flex; gap:12px; margin-top:22px; align-items:center">
+            <button class="btn btn-primary">Upload first files</button>
+            <button class="btn btn-secondary">Invite more people</button>
+            <span class="u-kbd">⌘K</span>
+          </div>
         </div>
-        <div class="meta">248 documents · 3 awaiting review</div>
-        <div class="actions">
+        <svg width="100%" viewBox="0 0 480 360" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <!-- platform -->
+          <path d="M80 268 L240 188 L400 268 L240 348 Z" stroke="#E3E4E0" stroke-width="1.5"/>
+          <!-- slab 1: poured (workspace) -->
+          <path d="M150 248 L240 203 L330 248 L240 293 Z" fill="#E7E9ED" stroke="#CFD1CC" stroke-width="1.5"/>
+          <path d="M150 248 L240 293 L240 310 L150 265 Z" fill="#101214" stroke="#CFD1CC" stroke-width="1.5"/>
+          <path d="M330 248 L240 293 L240 310 L330 265 Z" fill="#FCFCFD" stroke="#CFD1CC" stroke-width="1.5"/>
+          <text x="346" y="252" font-family="JetBrains Mono, monospace" font-size="9" fill="#4CB782">✓ WORKSPACE</text>
+          <!-- slab 2: next (active, orange) -->
+          <path d="M163 196 L240 157.5 L317 196 L240 234.5 Z" fill="rgba(200, 55, 27,0.13)" stroke="#C8371B" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <text x="332" y="200" font-family="JetBrains Mono, monospace" font-size="9" fill="#E0431F">→ FILES</text>
+          <!-- slab 3 + 4: future, dashed gray -->
+          <path d="M176 150 L240 118 L304 150 L240 182 Z" stroke="#CFD1CC" stroke-width="1.3" stroke-dasharray="4 6"/>
+          <text x="318" y="154" font-family="JetBrains Mono, monospace" font-size="9" fill="#90949B">WORKFLOWS</text>
+          <path d="M189 108 L240 82.5 L291 108 L240 133.5 Z" stroke="#CFD1CC" stroke-width="1.3" stroke-dasharray="4 6"/>
+          <text x="305" y="112" font-family="JetBrains Mono, monospace" font-size="9" fill="#90949B">TEAM</text>
+          <!-- data plane + beam to next slab -->
+          <path d="M196 36 L240 14 L284 36 L240 58 Z" stroke="#90949B" stroke-width="1.2" stroke-dasharray="4 5"/>
+          <circle cx="240" cy="36" r="3.6" fill="#C8371B"/>
+          <line x1="240" y1="42" x2="240" y2="152" stroke="#C8371B" stroke-width="1.1" stroke-dasharray="2 6" stroke-opacity="0.6"/>
+          <circle cx="240" cy="196" r="3.2" fill="#C8371B"/>
+          <!-- setting-out cross -->
+          <g stroke="#C8371B" stroke-width="3.6"><line x1="124" y1="296" x2="144" y2="306"/><line x1="144" y1="296" x2="124" y2="306"/></g>
+          <!-- material cube -->
+          <path d="M368 296 L390 285 L412 296 L390 307 Z" fill="#FCFCFD" stroke="#CFD1CC" stroke-width="1.2"/>
+          <path d="M368 296 L390 307 L390 320 L368 309 Z" fill="#101214" stroke="#CFD1CC" stroke-width="1.2"/>
+          <path d="M412 296 L390 307 L390 320 L412 309 Z" fill="#FCFCFD" stroke="#CFD1CC" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <!-- setup checklist + quick actions -->
+      <div style="display:grid; grid-template-columns:1.3fr 1fr; gap:0; flex:1">
+        <div style="border-right:1px solid var(--border)">
+          <div class="ghead">Build your workspace <span class="cnt">1 of 5 poured</span></div>
+          <div class="rowi" style="opacity:0.6"><i class="u-dot" style="background:var(--st-done)"></i><span class="ref">DONE</span><span class="t" style="text-decoration:line-through">Create workspace &amp; standards</span><span class="props"><span class="meta">MCG · ISO 19650-2</span></span></div>
+          <div class="rowi sel"><i class="u-dot" style="background:var(--intent)"></i><span class="ref">NEXT</span><span class="t">Upload your first files — or convert site paper</span><span class="props"><span class="u-kbd">U</span><span class="meta">~2 min</span></span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-backlog)"></i><span class="ref">03</span><span class="t">Confirm S1–S4 approval workflows</span><span class="props"><span class="meta">template ready</span></span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-backlog)"></i><span class="ref">04</span><span class="t">Team joins — 2 invites pending</span><span class="props"><span class="av">KD</span><span class="av">AB</span><span class="meta">resend</span></span></div>
+          <div class="rowi" style="border-bottom:none"><i class="u-dot" style="background:var(--st-backlog)"></i><span class="ref">05</span><span class="t">Place your first hold point rule</span><span class="props"><span class="meta">optional</span></span></div>
+          <div class="foot"><span>EACH STEP POURS A SLAB</span><span style="margin-left:auto">SKIP ANYTIME — ⌘K REACHES EVERYTHING</span></div>
+        </div>
+        <div style="padding:var(--space-6); display:flex; flex-direction:column; gap:var(--space-3)">
+          <div class="pcard2">
+            <div class="lbl">While you're here</div>
+            <div class="feed" style="padding:5px 0"><span style="color:var(--text-3)">⇄</span><span>Drop a PDF on <b>Convert</b> — it becomes an editable doc</span></div>
+            <div class="feed" style="padding:5px 0"><span style="color:var(--text-3)">⌕</span><span>Press <b>⌘K</b> — every file, RFI, and action</span></div>
+            <div class="feed" style="padding:5px 0"><span style="color:var(--text-3)">◑</span><span>RFIs route by role — already mapped to ISO duties</span></div>
+          </div>
+          <div class="pcard2" style="flex:1">
+            <div class="lbl">Your workspace, so far</div>
+            <div style="display:flex; gap:28px; margin-top:4px">
+              <div><div style="font:590 22px/1 var(--font-ui); color:var(--text-1)">1</div><div style="font:400 11px/1.5 var(--font-ui); color:var(--text-3); margin-top:4px">project</div></div>
+              <div><div style="font:590 22px/1 var(--font-ui); color:var(--text-1)">2</div><div style="font:400 11px/1.5 var(--font-ui); color:var(--text-3); margin-top:4px">invites out</div></div>
+              <div><div style="font:590 22px/1 var(--font-ui); color:var(--text-1)">0</div><div style="font:400 11px/1.5 var(--font-ui); color:var(--text-3); margin-top:4px">files — yet</div></div>
+            </div>
+            <div style="margin-top:18px; font:500 10px/1.6 var(--font-mono); color:var(--text-3); letter-spacing:0.05em">AUDIT TRAIL: RUNNING SINCE 09:41<br>NUMBERING: MCG-TWRC-···-0001 RESERVED</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.A DASHBOARD ============ -->
+<div class="wrap screen-block" id="sa">
+  <div class="sb-head"><span class="num">SCR.A</span><h2>Dashboard — The Morning Briefing</h2><p>Not charts — a queue. What needs you, what the site is doing, and the one window the weather gives you.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <a href="#sa" class="on"><span class="ico">⌂</span>Today</a>
+      <a href="#sa"><span class="ico">◑</span>RFIs</a>
+      <a href="#sa"><span class="ico">▤</span>Files</a>
+      <a href="#sa"><span class="ico">≡</span>Docs</a>
+      <a href="#sa"><span class="ico">⇄</span>Convert</a>
+      <div class="grp">Views</div>
+      <a href="#sa"><span class="ico">◍</span>Awaiting me</a>
+      <a href="#sa"><span class="ico">⚠</span>Holding pours</a>
+    </div>
+    <div class="main">
+      <div class="mhead"><h3>Good morning, Charles</h3><span class="cnt">WED 11 JUN · WK 24</span>
+        <div class="sp"><button class="btn btn-secondary">Customise</button><span class="u-kbd">⌘K</span></div>
+      </div>
+      <div class="statline">
+        <div class="st"><div class="n">6</div><div class="l">need you</div></div>
+        <div class="st"><div class="n">3</div><div class="l">due today</div></div>
+        <div class="st"><div class="n">2</div><div class="l">blocked</div></div>
+        <div class="st" style="margin-left:auto; text-align:right"><div class="n" style="color:var(--st-done)">98.4%</div><div class="l">register health</div></div>
+      </div>
+      <div class="dash-grid">
+        <div class="qcol">
+          <div class="ghead">Your queue <span class="cnt">6</span></div>
+          <div class="rowi sel"><i class="u-dot" style="background:var(--st-blocked)"></i><span class="ref">RFI-0847</span><span class="t">Respond — core wall cover clash L26</span><span class="props"><span class="meta">holds P-1131</span><span class="u-kbd">↵</span></span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-progress)"></i><span class="ref">STR-CAL-0098</span><span class="t">Review — transfer beam load calc B02</span><span class="props"><span class="meta">due today</span></span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-progress)"></i><span class="ref">P-1128</span><span class="t">Sign — pour card, L24 core, 412m³</span><span class="props"><span class="meta">due Fri</span></span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-review)"></i><span class="ref">TX-0204</span><span class="t">Approve — transmittal to Arup, 14 files</span><span class="props"><span class="meta">today</span></span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-review)"></i><span class="ref">DOC-0091</span><span class="t">Co-edit — site quality plan §2 comments</span><span class="props"><span class="meta">2 unresolved</span></span></div>
+          <div class="rowi" style="border-bottom:none"><i class="u-dot" style="background:var(--st-backlog)"></i><span class="ref">CONV-018</span><span class="t">Verify — converted subcontractor brief</span><span class="props"><span class="meta">low confidence</span></span></div>
+          <div class="foot"><span>QUEUE SORTED BY IMPACT</span><span style="margin-left:auto">J / K TO MOVE · ↵ TO OPEN</span></div>
+        </div>
+        <div class="pcol">
+          <div class="pcard2">
+            <div class="lbl">Site conditions — lift window</div>
+            <div style="display:flex; align-items:center; gap:14px">
+              <span style="font:590 22px/1 var(--font-ui); color:var(--text-1)">14°</span>
+              <span style="font:400 12.5px/1.5 var(--font-ui)">Rain from 14:00.<br><span style="color:var(--text-1)">Crane window closes 13:30</span> — pour P-1128 unaffected.</span>
+            </div>
+          </div>
+          <div class="pcard2">
+            <div class="lbl">Deliverables this week</div>
+            <div class="week"><div style="height:40%"></div><div style="height:62%"></div><div class="hot" style="height:88%"></div><div style="height:30%"></div><div style="height:55%"></div><div style="height:12%"></div><div style="height:8%"></div></div>
+            <div class="wlbl"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+          </div>
+          <div class="pcard2" style="flex:1">
+            <div class="lbl">Activity</div>
+            <div class="feed"><span class="av">KD</span><span><b>Kofi</b> replied on RFI-0847</span><span class="tm">8m</span></div>
+            <div class="feed"><span class="av">SJ</span><span><b>Sonia</b> uploaded 4 ceiling plans</span><span class="tm">31m</span></div>
+            <div class="feed"><span class="av">AB</span><span><b>Anaya</b> resolved 2 comments on DOC-0091</span><span class="tm">1h</span></div>
+            <div class="feed"><span class="av">MK</span><span><b>Mohan</b> issued ELE-RPT-0118 Rev 3</span><span class="tm">2h</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.A2 GLOBAL OVERVIEW ============ -->
+<div class="wrap screen-block" id="da1">
+  <div class="sb-head"><span class="num">SCR.A2</span><h2>Dashboard — Global Overview</h2><p>Portfolio level. The hero earns its illustration: the skyline is drawn in the icon grammar, with one beam landing.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <a href="#da1" class="on"><span class="ico">⌂</span>Portfolio</a>
+      <a href="#da1"><span class="ico">◑</span>RFIs</a>
+      <a href="#da1"><span class="ico">▤</span>Files</a>
+      <a href="#da1"><span class="ico">≡</span>Docs</a>
+      <div class="grp">Regions</div>
+      <a href="#da1"><span class="ico">●</span>UK &amp; Europe</a>
+      <a href="#da1"><span class="ico">●</span>Middle East</a>
+      <a href="#da1"><span class="ico">●</span>APAC</a>
+    </div>
+    <div class="main">
+      <div class="heroband">
+        <svg class="skyline" width="420" height="130" viewBox="0 0 420 130" fill="none" stroke="#CFD1CC" stroke-width="1.5" stroke-linecap="round">
+          <path d="M10 130 V70 H56 V130 M33 70 V54 M70 130 V40 H120 V130 M95 40 V30 M134 130 V88 H188 V130 M202 130 V22 H258 V130"/>
+          <path d="M216 22 V8 H312 M312 4 V12" stroke="#90949B"/>
+          <path d="M276 130 V58 H330 V130 M344 130 V84 H400 V130"/>
+          <path d="M84 56 H106 M84 72 H106 M84 88 H106 M216 40 H244 M216 58 H244 M216 76 H244 M216 94 H244" stroke="#E3E4E0"/>
+          <circle cx="312" cy="8" r="4" fill="#C8371B" stroke="none"/>
+          <line x1="312" y1="12" x2="312" y2="130" stroke="#C8371B" stroke-opacity="0.35" stroke-dasharray="2 6"/>
+        </svg>
+        <span class="obstep">PORTFOLIO · WK 24</span>
+        <h2 style="margin-top:10px">Twelve sites, one register<span style="color:var(--intent)">.</span></h2>
+        <div class="gstats">
+          <div><div class="n">12</div><div class="l">active projects</div></div>
+          <div><div class="n">84,210</div><div class="l">controlled documents</div></div>
+          <div><div class="n">97.9%</div><div class="l">portfolio health</div></div>
+          <div><div class="n" style="color:var(--intent-bright)">3</div><div class="l">holds across portfolio</div></div>
+        </div>
+      </div>
+      <div class="pjgrid">
+        <div class="pj"><div class="nm"><i class="u-dot" style="background:var(--st-progress)"></i>Meridian Tower C</div><div class="loc">London · commercial high-rise</div><div class="bar"><i style="width:64%"></i></div><div class="meta"><span>64%</span><span>47 RFIs</span><span style="color:var(--intent-bright)">1 hold</span></div></div>
+        <div class="pj"><div class="nm"><i class="u-dot" style="background:var(--st-done)"></i>City Hospital</div><div class="loc">Manchester · healthcare</div><div class="bar"><i style="width:81%"></i></div><div class="meta"><span>81%</span><span>12 RFIs</span></div></div>
+        <div class="pj"><div class="nm"><i class="u-dot" style="background:var(--st-blocked)"></i>JM Mall Complex</div><div class="loc">Dubai · retail</div><div class="bar"><i class="hot" style="width:38%"></i></div><div class="meta"><span>38%</span><span>61 RFIs</span><span style="color:var(--intent-bright)">2 holds</span></div></div>
+        <div class="pj"><div class="nm"><i class="u-dot" style="background:var(--st-progress)"></i>Crossway Depot</div><div class="loc">Leeds · infrastructure</div><div class="bar"><i style="width:52%"></i></div><div class="meta"><span>52%</span><span>23 RFIs</span></div></div>
+        <div class="pj"><div class="nm"><i class="u-dot" style="background:var(--st-done)"></i>Harbour Quarter</div><div class="loc">Sydney · mixed use</div><div class="bar"><i style="width:90%"></i></div><div class="meta"><span>90%</span><span>6 RFIs</span></div></div>
+        <div class="pj" style="display:flex; align-items:center; justify-content:center; background:none; box-shadow:var(--inset); border:none"><span style="font:500 12px/1 var(--font-ui); color:var(--text-3)">View all 12 →</span></div>
+      </div>
+      <div class="foot"><span>SORTED BY RISK</span><span style="margin-left:auto">SYNCED 0.4S AGO</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.A3 ANALYTICS ============ -->
+<div class="wrap screen-block" id="da2">
+  <div class="sb-head"><span class="num">SCR.A3</span><h2>Dashboard — Analytics</h2><p>The data-heavy view: trends, distribution, cadence, and a year of activity — all monochrome until something needs you.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <a href="#da2"><span class="ico">⌂</span>Today</a>
+      <a href="#da2" class="on"><span class="ico">◔</span>Analytics</a>
+      <a href="#da2"><span class="ico">◑</span>RFIs</a>
+      <a href="#da2"><span class="ico">▤</span>Files</a>
+      <div class="grp">Reports</div>
+      <a href="#da2"><span class="ico">≡</span>Weekly digest</a>
+      <a href="#da2"><span class="ico">≡</span>QPR pack</a>
+    </div>
+    <div class="main">
+      <div class="mhead"><h3>Analytics</h3><span class="cnt">LAST 12 WEEKS</span>
+        <div class="sp"><div class="seg"><span>4w</span><span class="on">12w</span><span>YTD</span></div><button class="btn btn-secondary">Export</button></div>
+      </div>
+      <div class="chgrid">
+        <div class="ch">
+          <div class="lbl">RFI response time — days <span class="v">median 1.8d ↓</span></div>
+          <svg width="100%" height="120" viewBox="0 0 440 120" preserveAspectRatio="none">
+            <line x1="0" y1="30" x2="440" y2="30" stroke="#E7E9ED"/><line x1="0" y1="60" x2="440" y2="60" stroke="#E7E9ED"/><line x1="0" y1="90" x2="440" y2="90" stroke="#E7E9ED"/>
+            <polyline points="0,52 40,44 80,58 120,40 160,48 200,34 240,42 280,30 320,38 360,26 400,30 440,22" fill="none" stroke="#90949B" stroke-width="1.5"/>
+            <polyline points="0,84 40,80 80,88 120,72 160,78 200,64 240,70 280,58 320,62 360,52 400,55 440,46" fill="none" stroke="#C8371B" stroke-width="1.5"/>
+            <circle cx="440" cy="46" r="3" fill="#C8371B"/>
+          </svg>
+          <div class="legend"><span><i style="background:#90949B"></i>All disciplines</span><span><i style="background:#C8371B"></i>Structural — watch</span></div>
+        </div>
+        <div class="ch">
+          <div class="lbl">Documents by discipline <span class="v">230 total</span></div>
+          <svg width="100%" height="120" viewBox="0 0 440 120">
+            <g font-family="Inter" font-size="10" fill="#90949B">
+              <text x="0" y="18">STR</text><text x="0" y="44">MEP</text><text x="0" y="70">CIV</text><text x="0" y="96">ARC</text>
+            </g>
+            <g>
+              <rect x="40" y="8" width="240" height="13" rx="3" fill="#CFD1CC"/><rect x="280" y="8" width="60" height="13" rx="3" fill="#E3E4E0"/>
+              <rect x="40" y="34" width="180" height="13" rx="3" fill="#CFD1CC"/><rect x="220" y="34" width="44" height="13" rx="3" fill="#E3E4E0"/>
+              <rect x="40" y="60" width="140" height="13" rx="3" fill="#CFD1CC"/><rect x="180" y="60" width="36" height="13" rx="3" fill="#E3E4E0"/>
+              <rect x="40" y="86" width="110" height="13" rx="3" fill="#CFD1CC"/><rect x="150" y="86" width="30" height="13" rx="3" fill="#E3E4E0"/>
+            </g>
+            <g font-family="JetBrains Mono" font-size="9" fill="#90949B">
+              <text x="348" y="18">88</text><text x="272" y="44">66</text><text x="224" y="70">46</text><text x="188" y="96">30</text>
+            </g>
+          </svg>
+          <div class="legend"><span><i style="background:#CFD1CC"></i>Approved</span><span><i style="background:#E3E4E0"></i>In workflow</span></div>
+        </div>
+        <div class="ch">
+          <div class="lbl">Workflow distribution <span class="v">register health 98.4%</span></div>
+          <div style="display:flex; align-items:center; gap:24px">
+            <svg width="110" height="110" viewBox="0 0 110 110" class="ring">
+              <circle cx="55" cy="55" r="46" fill="none" stroke="#E7E9ED" stroke-width="11"/>
+              <circle cx="55" cy="55" r="46" fill="none" stroke="#CFD1CC" stroke-width="11" stroke-dasharray="173 289" stroke-linecap="round"/>
+              <circle cx="55" cy="55" r="46" fill="none" stroke="#90949B" stroke-width="11" stroke-dasharray="72 289" stroke-dashoffset="-178" stroke-linecap="round"/>
+              <circle cx="55" cy="55" r="46" fill="none" stroke="#C8371B" stroke-width="11" stroke-dasharray="14 289" stroke-dashoffset="-256" stroke-linecap="round"/>
+            </svg>
+            <div style="display:flex; flex-direction:column; gap:8px; font:400 12px/1.4 var(--font-ui); color:var(--text-2)">
+              <span><i style="width:8px;height:8px;border-radius:2px;background:#CFD1CC;display:inline-block;margin-right:7px"></i>Published · 60%</span>
+              <span><i style="width:8px;height:8px;border-radius:2px;background:#90949B;display:inline-block;margin-right:7px"></i>In review · 25%</span>
+              <span><i style="width:8px;height:8px;border-radius:2px;background:#C8371B;display:inline-block;margin-right:7px"></i>Held · 5%</span>
+              <span style="color:var(--text-3)">Draft · 10%</span>
+            </div>
+          </div>
+        </div>
+        <div class="ch">
+          <div class="lbl">Activity — 14 weeks <span class="v">peak Wed</span></div>
+          <div class="heat">
+            <i style="background:#F3F4F6"></i><i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#BFC2BC"></i><i style="background:#CFD1CC"></i><i style="background:#F3F4F6"></i><i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#F3F4F6"></i><i style="background:#E3E4E0"></i>
+            <i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#BFC2BC"></i><i style="background:#E3E4E0"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#999D96"></i><i style="background:#BFC2BC"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i><i style="background:#F3F4F6"></i>
+            <i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#999D96"></i><i style="background:#ACB0A9"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#CFD1CC"></i><i style="background:#ACB0A9"></i><i style="background:#999D96"></i><i style="background:#C8371B"></i><i style="background:#ACB0A9"></i><i style="background:#BFC2BC"></i><i style="background:#CFD1CC"></i><i style="background:#E3E4E0"></i>
+          </div>
+          <div class="legend" style="margin-top:12px"><span><i style="background:#E3E4E0"></i>quiet</span><span><i style="background:#ACB0A9"></i>busy</span><span><i style="background:#C8371B"></i>record — 412m³ pour day</span></div>
+        </div>
+      </div>
+      <div class="foot"><span>ALL FIGURES LIVE FROM REGISTER</span><span style="margin-left:auto">EXPORT FEEDS QPR PACK</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.A4 PROJECT DASHBOARD ============ -->
+<div class="wrap screen-block" id="da3">
+  <div class="sb-head"><span class="num">SCR.A4</span><h2>Dashboard — Project</h2><p>One project's pulse: progress, milestones, what's pending, what's asked. The hold sits in the timeline where it actually is.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob open" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd">
+        <div class="ai-q">What's holding the L24 pour?</div>
+        <div class="ai-a">One hold. <span style="color:var(--text-1)">RFI-0847 — cover clash at L26.</span> Arup's reply landed 09:12; cover verified at 40&nbsp;mm. P-1131 releases on sign-off.</div>
+        <div class="ai-rd"><i class="u-dot" style="background:var(--st-blocked)"></i><span class="rf2">RFI-0847</span>Cover clash at L26<span class="tm2">REPLY 09:12</span></div>
+        <div class="ai-rd"><i class="u-dot" style="background:var(--st-review)"></i><span class="rf2">P-1131</span>L24 core pour<span class="tm2">AWAITS SIGN-OFF</span></div>
+        <div class="ai-act"><button class="btn btn-primary" style="font-size:12px">Open RFI-0847</button><button class="btn btn-secondary" style="font-size:12px">Draft release note</button></div>
+        <div class="ai-src">SOURCES: RFI REGISTER · POUR PLAN REV C — NOTHING WRITES WITHOUT YOU</div>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <a href="#da3" class="on"><span class="ico">⌂</span>Project</a>
+      <a href="#da3"><span class="ico">◑</span>RFIs</a>
+      <a href="#da3"><span class="ico">▤</span>Files</a>
+      <a href="#da3"><span class="ico">≡</span>Docs</a>
+      <a href="#da3"><span class="ico">⇄</span>Convert</a>
+    </div>
+    <div class="main">
+      <div class="mhead">
+        <h3>Meridian Tower C</h3><span class="cnt">LONDON · WK 24 / 92</span>
+        <div class="sp">
+          <span class="prop"><i class="u-dot" style="background:var(--st-progress)"></i>On programme +2.1d</span>
+          <button class="btn btn-primary">New RFI</button>
+        </div>
+      </div>
+      <div class="statline">
+        <div class="st"><div class="n">64%</div><div class="l">complete</div></div>
+        <div class="st"><div class="n">47</div><div class="l">open RFIs</div></div>
+        <div class="st"><div class="n">9</div><div class="l">pending tasks</div></div>
+        <div class="st"><div class="n" style="color:var(--intent-bright)">1</div><div class="l">active hold</div></div>
+        <div class="st" style="margin-left:auto; text-align:right"><div class="n">L24</div><div class="l">core at level</div></div>
+      </div>
+      <div style="padding:22px var(--space-6) 4px; font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3)">Milestones</div>
+      <div class="mil">
+        <div class="ms done"><i></i><b>Substructure</b><span>DONE · WK 18</span></div>
+        <div class="ms done"><i></i><b>Core to L20</b><span>DONE · WK 22</span></div>
+        <div class="ms now"><i></i><b>Core L24–L28</b><span style="color:var(--intent-bright)">HOLD · RFI-0847</span></div>
+        <div class="ms"><i></i><b>Facade start</b><span>WK 30</span></div>
+        <div class="ms"><i></i><b>Topping out</b><span>WK 41</span></div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0; flex:1; border-top:1px solid var(--border)">
+        <div style="border-right:1px solid var(--border)">
+          <div class="ghead">Pending tasks <span class="cnt">9</span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-progress)"></i><span class="ref">P-1128</span><span class="t">Sign pour card — L24 core</span><span class="props"><span class="meta">due Fri</span></span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-review)"></i><span class="ref">TX-0204</span><span class="t">Approve transmittal to Arup</span><span class="props"><span class="meta">today</span></span></div>
+          <div class="rowi" style="border-bottom:none"><i class="u-dot" style="background:var(--st-backlog)"></i><span class="ref">ITP-044</span><span class="t">Schedule L25 rebar inspection</span><span class="props"><span class="meta">wk 25</span></span></div>
+        </div>
+        <div>
+          <div class="ghead">Open requests <span class="cnt">latest</span></div>
+          <div class="rowi sel"><i class="u-dot" style="background:var(--st-blocked)"></i><span class="ref">RFI-0847</span><span class="t">Core wall cover clash L26</span><span class="props"><span class="av">KD</span><span class="meta">2d over</span></span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-progress)"></i><span class="ref">RFI-0851</span><span class="t">Link detail revision L26</span><span class="props"><span class="av">CN</span><span class="meta">13 Jun</span></span></div>
+          <div class="rowi" style="border-bottom:none"><i class="u-dot" style="background:var(--st-review)"></i><span class="ref">RFI-0842</span><span class="t">Pile cap substitution PC-07</span><span class="props"><span class="av">LR</span><span class="meta">review</span></span></div>
+        </div>
+      </div>
+      <div class="foot"><span>TEAM ON SITE: 212</span><span>NEXT POUR: P-1131 · 16 JUN</span><span style="margin-left:auto">WEATHER WINDOW: CLOSES 13:30</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.A5 EXECUTIVE — FILLED ISOMETRY ============ -->
+<div class="wrap screen-block" id="da4">
+  <div class="sb-head"><span class="num">SCR.A5</span><h2>Dashboard — Executive (Filled Isometry)</h2><p>The board view: the portfolio as a solid monument, quarterly pours as fact. Filled isometry carries the gravity.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <a href="#da4" class="on"><span class="ico">⌂</span>Executive</a>
+      <a href="#da4"><span class="ico">◔</span>Analytics</a>
+      <a href="#da4"><span class="ico">≡</span>QPR packs</a>
+      <div class="grp">Quarters</div>
+      <a href="#da4"><span class="ico">●</span>FY26 · Q3</a>
+    </div>
+    <div class="main" style="padding:0">
+      <div style="display:grid; grid-template-columns:1fr 0.85fr; gap:24px; align-items:center; padding:40px; background:var(--aurora), transparent; border-bottom:1px solid var(--border)">
+        <div>
+          <span style="font:500 11px/1 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em">FY26 · Q3 · BOARD SUMMARY</span>
+          <div style="font:700 28px/1.18 var(--font-display); letter-spacing:-0.01em; color:var(--text-1); margin-top:14px">Portfolio, poured solid<span style="color:var(--intent)">.</span></div>
+          <div style="display:flex; gap:36px; margin-top:26px">
+            <div><div style="font:590 30px/1 var(--font-ui); color:var(--text-1)">£2.1bn</div><div style="font:400 12px/1.5 var(--font-ui); color:var(--text-3); margin-top:6px">under management</div></div>
+            <div><div style="font:590 30px/1 var(--font-ui); color:var(--text-1)">97.9%</div><div style="font:400 12px/1.5 var(--font-ui); color:var(--text-3); margin-top:6px">portfolio health</div></div>
+            <div><div style="font:590 30px/1 var(--font-ui); color:var(--intent-bright)">3</div><div style="font:400 12px/1.5 var(--font-ui); color:var(--text-3); margin-top:6px">holds — the orange layer</div></div>
+          </div>
+        </div>
+        <svg width="100%" viewBox="0 0 480 340" fill="none">
+          <ellipse cx="240" cy="300" rx="150" ry="22" fill="#000000" opacity="0.35"/>
+          <path d="M90 254 L240 179 L390 254 L240 329 Z" fill="#101214"/>
+          <path d="M160 226 L240 186 L320 226 L240 266 Z" fill="#E3E4E0"/>
+          <path d="M160 226 L240 266 L240 284 L160 244 Z" fill="#FCFCFD"/>
+          <path d="M320 226 L240 266 L240 284 L320 244 Z" fill="#E7E9ED"/>
+          <path d="M172 172 L240 138 L308 172 L240 206 Z" fill="#C8371B"/>
+          <path d="M172 172 L240 206 L240 222 L172 188 Z" fill="#C8371B"/>
+          <path d="M308 172 L240 206 L240 222 L308 188 Z" fill="#E04E1F"/>
+          <path d="M184 122 L240 94 L296 122 L240 150 Z" fill="#E3E4E0"/>
+          <path d="M184 122 L240 150 L240 165 L184 137 Z" fill="#FCFCFD"/>
+          <path d="M296 122 L240 150 L240 165 L296 137 Z" fill="#E7E9ED"/>
+          <path d="M204 46 L240 28 L276 46 L240 64 Z" fill="#E7E9ED"/>
+          <circle cx="240" cy="46" r="3.6" fill="#E0431F"/>
+        </svg>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0; flex:1">
+        <div style="border-right:1px solid var(--border); padding:var(--space-6)">
+          <div class="lbl" style="font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); margin-bottom:14px">Poured this quarter</div>
+          <div style="display:flex; flex-direction:column; gap:11px; font:400 13px/1.5 var(--font-ui); color:var(--text-2)">
+            <span><i class="u-dot" style="background:var(--st-done); display:inline-block; margin-right:8px"></i>Convert shipped — 1,840 docs made native</span>
+            <span><i class="u-dot" style="background:var(--st-done); display:inline-block; margin-right:8px"></i>Two programmes onboarded</span>
+            <span><i class="u-dot" style="background:var(--st-progress); display:inline-block; margin-right:8px"></i>Hold-point automation — pouring now</span>
+          </div>
+        </div>
+        <div style="border-right:1px solid var(--border); padding:var(--space-6)">
+          <div class="lbl" style="font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); margin-bottom:14px">The orange layer — holds</div>
+          <table class="dreg" style="width:100%; border-collapse:collapse; font:400 11px/1.6 var(--font-mono)">
+            <tr><td style="padding:6px 0; color:var(--text-1)">TWR-C · RFI-0847</td><td style="text-align:right; color:var(--intent-bright)">2d over</td></tr>
+            <tr><td style="padding:6px 0; color:var(--text-1)">JMM · PERMIT-CR</td><td style="text-align:right; color:var(--text-3)">due wk 25</td></tr>
+            <tr><td style="padding:6px 0; color:var(--text-1)">JMM · MAT-019</td><td style="text-align:right; color:var(--text-3)">in review</td></tr>
+          </table>
+        </div>
+        <div style="padding:var(--space-6)">
+          <div class="lbl" style="font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); margin-bottom:14px">Next pour</div>
+          <div style="font:400 14px/1.7 var(--font-ui); color:var(--text-2)">Q4 — portfolio intelligence. Formwork up; board demo at the next steering meeting.</div>
+        </div>
+      </div>
+      <div class="foot"><span>FIGURES LIVE FROM THE REGISTER</span><span style="margin-left:auto">EXPORT: QPR PACK · 22 SLIDES</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.A6 SITE DIARY — FILLED ART ============ -->
+<div class="wrap screen-block" id="da5">
+  <div class="sb-head"><span class="num">SCR.A6</span><h2>Dashboard — Site Diary (Filled Art)</h2><p>The human view: the day on site under a filled-art sky. Crew, weather, and a diary that reads like one.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <a href="#da5"><span class="ico">⌂</span>Today</a>
+      <a href="#da5" class="on"><span class="ico">✎</span>Site Diary</a>
+      <a href="#da5"><span class="ico">✓</span>Field</a>
+      <a href="#da5"><span class="ico">▤</span>Files</a>
+      <div class="grp">This week</div>
+      <a href="#da5"><span class="ico">●</span>Mon — Wed ✓</a>
+    </div>
+    <div class="main" style="padding:0">
+      <div style="position:relative; padding:36px 40px 0; background:var(--aurora), transparent; border-bottom:1px solid var(--border); overflow:hidden">
+        <div style="position:relative; z-index:1">
+          <span style="font:500 11px/1 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em">SITE DIARY · WED 11 JUN · WK 24</span>
+          <div style="font:700 26px/1.2 var(--font-display); letter-spacing:-0.01em; color:var(--text-1); margin-top:12px">Today on site</div>
+          <div style="display:flex; gap:32px; margin:20px 0 26px">
+            <div><div style="font:590 22px/1 var(--font-ui); color:var(--text-1)">212</div><div style="font:400 11px/1.5 var(--font-ui); color:var(--text-3); margin-top:4px">crew on site</div></div>
+            <div><div style="font:590 22px/1 var(--font-ui); color:var(--text-1)">14°</div><div style="font:400 11px/1.5 var(--font-ui); color:var(--text-3); margin-top:4px">rain from 14:00</div></div>
+            <div><div style="font:590 22px/1 var(--font-ui); color:var(--text-1)">2</div><div style="font:400 11px/1.5 var(--font-ui); color:var(--text-3); margin-top:4px">pours scheduled</div></div>
+            <div><div style="font:590 22px/1 var(--font-ui); color:var(--st-done)">0</div><div style="font:400 11px/1.5 var(--font-ui); color:var(--text-3); margin-top:4px">incidents</div></div>
+          </div>
+        </div>
+        <svg style="position:absolute; right:24px; bottom:0" width="440" height="150" viewBox="0 0 560 190" fill="none">
+          <rect x="20" y="170" width="520" height="7" rx="3.5" fill="#E7E9ED"/>
+          <rect x="250" y="40" width="120" height="130" fill="#E7E9ED"/>
+          <rect x="250" y="40" width="120" height="11" fill="#E3E4E0"/>
+          <rect x="274" y="66" width="18" height="8" fill="#101214"/><rect x="312" y="66" width="18" height="8" fill="#101214"/>
+          <rect x="274" y="94" width="18" height="8" fill="#101214"/><rect x="312" y="94" width="18" height="8" fill="#101214"/>
+          <rect x="274" y="122" width="18" height="8" fill="#101214"/><rect x="312" y="122" width="18" height="8" fill="#101214"/>
+          <rect x="150" y="110" width="70" height="60" fill="#FCFCFD"/>
+          <rect x="410" y="26" width="9" height="144" fill="#E3E4E0"/>
+          <rect x="346" y="21" width="150" height="8" rx="4" fill="#E3E4E0"/>
+          <rect x="478" y="29" width="18" height="14" fill="#E7E9ED"/>
+          <rect x="368" y="29" width="3" height="34" fill="#CFD1CC"/>
+          <rect x="361" y="63" width="16" height="13" fill="#E0431F"/>
+          <path d="M62 152 Q62 124 90 124 Q118 124 118 152 Z" fill="#C8371B"/>
+          <path d="M84 124 Q84 118 90 118 Q96 118 96 124 L96 130 Q93 128 90 128 Q87 128 84 130 Z" fill="#E0431F"/>
+          <rect x="54" y="152" width="72" height="8" rx="4" fill="#C8371B"/>
+        </svg>
+      </div>
+      <div style="display:grid; grid-template-columns:1.35fr 1fr; gap:0; flex:1">
+        <div style="border-right:1px solid var(--border)">
+          <div class="ghead">Diary — entries write themselves <span class="cnt">5</span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-done)"></i><span class="ref">07:02</span><span class="t">Toolbox talk — L24 pour sequence, 38 attended</span><span class="props"><span class="av">CN</span></span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-done)"></i><span class="ref">09:41</span><span class="t">Pour P-1128 started — L24 core, C50/60</span><span class="props"><span class="meta">auto from field</span></span></div>
+          <div class="rowi sel"><i class="u-dot" style="background:var(--intent)"></i><span class="ref">11:20</span><span class="t">Crane window note — rain at 14:00, last lift 13:30</span><span class="props"><span class="meta">weather feed</span></span></div>
+          <div class="rowi"><i class="u-dot" style="background:var(--st-progress)"></i><span class="ref">12:05</span><span class="t">Rebar inspection L25 — passed with comment</span><span class="props"><span class="av">KD</span></span></div>
+          <div class="rowi" style="border-bottom:none"><i class="u-dot" style="background:var(--st-backlog)"></i><span class="ref">＋</span><span class="t" style="color:var(--text-3)">Add an entry — or dictate from the field app</span><span class="props"><span class="u-kbd">E</span></span></div>
+          <div class="foot"><span>SIGNED ENTRIES BECOME THE DAILY RECORD</span><span style="margin-left:auto">PDF AT 18:00 · AUTO</span></div>
+        </div>
+        <div style="padding:var(--space-6); display:flex; flex-direction:column; gap:var(--space-3)">
+          <div class="pcard2">
+            <div class="lbl">Site photos — today</div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px">
+              <div style="aspect-ratio:1; border-radius:6px; background:#F3F4F6; display:flex; align-items:center; justify-content:center"><svg width="22" height="22" viewBox="0 0 20 20" stroke="#90949B" stroke-width="1.5" fill="none"><rect x="3" y="5" width="14" height="11" rx="2"/><circle cx="10" cy="10.5" r="3"/></svg></div>
+              <div style="aspect-ratio:1; border-radius:6px; background:#F3F4F6"></div>
+              <div style="aspect-ratio:1; border-radius:6px; background:#F7F8FA; display:flex; align-items:center; justify-content:center; font:500 11px/1 var(--font-ui); color:var(--text-3)">+9</div>
+            </div>
+          </div>
+          <div class="pcard2" style="flex:1">
+            <div class="lbl">Tomorrow's plan</div>
+            <div style="font:400 12.5px/1.7 var(--font-ui); color:var(--text-2)">Strike formwork L23 · pour P-1131 <span style="color:var(--intent-bright)">(pending RFI-0847)</span> · facade brackets arrive gate 3, 06:30.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.B FILES ============ -->
+<div class="wrap screen-block" id="sb">
+  <div class="sb-head"><span class="num">SCR.B</span><h2>Files — Workspace</h2><p>A working top bar — search, filter, sort, import — and a list ⇄ grid switch. Grid shown: folders first, then live previews.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>City Hospital</b><span class="u-kbd">⌘O</span></div>
+      <a href="#sb"><span class="ico">⌂</span>Today</a>
+      <a href="#sb"><span class="ico">◑</span>RFIs</a>
+      <a href="#sb" class="on"><span class="ico">▤</span>Files</a>
+      <a href="#sb"><span class="ico">≡</span>Docs</a>
+      <a href="#sb"><span class="ico">⇄</span>Convert</a>
+      <div class="grp">Smart views</div>
+      <a href="#sb"><span class="ico">◍</span>Awaiting me · 2</a>
+      <a href="#sb"><span class="ico">⚠</span>Overdue · 2</a>
+      <a href="#sb"><span class="ico">↺</span>Recently converted</a>
+    </div>
+    <div class="main">
+      <div class="mhead">
+        <h3>Files</h3><span class="cnt">230 controlled</span>
+        <div class="sp">
+          <span class="inp" style="min-width:230px">⌕ &nbsp;Search files…<span class="u-kbd" style="margin-left:auto">/</span></span>
           <button class="btn btn-secondary">Filter</button>
-          <button class="btn btn-primary">Upload revision</button>
+          <button class="btn btn-secondary">Sort: Recent</button>
+          <button class="btn btn-secondary">Import</button>
+          <div class="seg"><span>List</span><span class="on">Grid</span></div>
+          <button class="btn btn-primary">Upload</button>
+        </div>
+      </div>
+      <div class="fbar">
+        <span class="prop">Folder: Civil ✕</span>
+        <span class="prop"><i class="u-dot" style="background:var(--st-done)"></i>Distributed ✕</span>
+        <span class="prop" style="color:var(--text-3)">+ Add filter</span>
+        <span style="margin-left:auto" class="prop">Select all</span>
+      </div>
+
+      <div class="fsec">Folders</div>
+      <div class="fgrid">
+        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#E7E9ED" stroke="#90949B" stroke-width="1.2"/></svg><b>Civil</b><div class="meta">64 files · 2 awaiting</div></div>
+        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#E7E9ED" stroke="#90949B" stroke-width="1.2"/></svg><b>Architecture</b><div class="meta">41 files</div></div>
+        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#E7E9ED" stroke="#C8371B" stroke-width="1.2"/></svg><b>Structure</b><div class="meta">88 files · <span style="color:var(--intent-bright)">1 blocked RFI</span></div></div>
+        <div class="fcard"><svg width="30" height="24" viewBox="0 0 30 24"><path d="M1 5 Q1 2 4 2 H11 L14 5 H26 Q29 5 29 8 V19 Q29 22 26 22 H4 Q1 22 1 19 Z" fill="#E7E9ED" stroke="#90949B" stroke-width="1.2"/></svg><b>Interior Design</b><div class="meta">37 files</div></div>
+      </div>
+
+      <div class="fsec">Files — Civil</div>
+      <div class="fgrid">
+        <div class="fcard sel">
+          <div class="thumb"><svg width="120" height="64" viewBox="0 0 120 64"><rect x="14" y="10" width="92" height="44" fill="none" stroke="#90949B" stroke-width="1"/><rect x="22" y="18" width="30" height="14" fill="none" stroke="#90949B" stroke-width="0.8"/><rect x="60" y="18" width="38" height="28" fill="none" stroke="#90949B" stroke-width="0.8"/><line x1="22" y1="40" x2="52" y2="40" stroke="#C8371B" stroke-width="1.2"/></svg></div>
+          <b>Main electrical layout</b>
+          <div class="meta">ELE-RPT-0118 · <i class="u-dot" style="background:var(--st-done); width:6px; height:6px"></i> Rev 3</div>
+        </div>
+        <div class="fcard">
+          <div class="thumb"><svg width="120" height="64" viewBox="0 0 120 64"><circle cx="60" cy="32" r="20" fill="none" stroke="#90949B" stroke-width="1"/><line x1="60" y1="12" x2="60" y2="52" stroke="#90949B" stroke-width="0.7"/><line x1="40" y1="32" x2="80" y2="32" stroke="#90949B" stroke-width="0.7"/></svg></div>
+          <b>Floorplan 4</b>
+          <div class="meta">CIV-RPT-0214 · Rev 1</div>
+        </div>
+        <div class="fcard">
+          <div class="thumb"><div class="ficon" style="width:30px; height:36px; line-height:36px">PDF</div></div>
+          <b>Pile integrity test report</b>
+          <div class="meta">CIV-RPT-0033 · Rev C01</div>
+        </div>
+        <div class="fcard">
+          <div class="thumb"><svg width="120" height="64" viewBox="0 0 120 64"><polyline points="18,48 38,30 58,38 78,18 102,26" fill="none" stroke="#90949B" stroke-width="1.2"/><line x1="18" y1="52" x2="102" y2="52" stroke="#CFD1CC" stroke-width="1"/></svg></div>
+          <b>Settlement monitoring</b>
+          <div class="meta">CIV-DAT-0007 · live</div>
+        </div>
+        <div class="fcard">
+          <div class="thumb"><svg width="120" height="64" viewBox="0 0 120 64"><rect x="20" y="12" width="80" height="40" rx="3" fill="none" stroke="#90949B" stroke-width="1"/><line x1="20" y1="24" x2="100" y2="24" stroke="#90949B" stroke-width="0.7"/><line x1="20" y1="36" x2="100" y2="36" stroke="#CFD1CC" stroke-width="0.7"/><line x1="20" y1="44" x2="100" y2="44" stroke="#CFD1CC" stroke-width="0.7"/></svg></div>
+          <b>Drainage schedule</b>
+          <div class="meta">CIV-SCH-0021 · Rev B</div>
+        </div>
+        <div class="fcard">
+          <div class="thumb"><div class="ficon" style="width:30px; height:36px; line-height:36px">DOC</div></div>
+          <b>Earthworks method statement</b>
+          <div class="meta">CIV-MST-0009 · <span style="color:var(--st-progress)">in review</span></div>
+        </div>
+        <div class="fcard">
+          <div class="thumb"><svg width="120" height="64" viewBox="0 0 120 64"><path d="M20 50 L45 20 L70 42 L95 14" fill="none" stroke="#90949B" stroke-width="1"/><circle cx="95" cy="14" r="2.5" fill="#C8371B"/></svg></div>
+          <b>Crane lift plan — east</b>
+          <div class="meta">CIV-LFT-0004 · Rev 2</div>
+        </div>
+        <div class="fcard">
+          <div class="thumb" style="border:1px dashed var(--border-strong); background:none; box-shadow:none; color:var(--text-3); font:500 11px/1 var(--font-ui)">＋ &nbsp;New from template</div>
+          <b style="color:var(--text-3)">Create document</b>
+          <div class="meta">native · versioned</div>
+        </div>
+      </div>
+      <div class="foot"><span>SHOWING 1–8 OF 64 · CIVIL</span><span style="margin-left:auto">G THEN L: LIST VIEW · AUDIT: COMPLETE</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.C DOCUMENT CANVAS ============ -->
+<div class="wrap screen-block" id="sc">
+  <div class="sb-head"><span class="num">SCR.C</span><h2>Document Canvas — Preview &amp; Annotate</h2><p>Uploaded building documents on a light sheet: pins, clouds, and a thread that resolves. The sheet is the only light thing on screen.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="doc-top">
+    <span class="crumbs">Files / Structure / <b>STR-DWG-0412 — Core Wall Reinforcement L24–L28</b></span>
+    <span class="prop"><i class="u-dot" style="background:var(--st-done)"></i>Rev C03 · S4</span>
+    <div class="sp" style="margin-left:auto; display:flex; gap:8px; align-items:center">
+      <div class="seg"><span class="on">Annotate</span><span>Measure</span><span>Compare</span></div>
+      <button class="btn btn-secondary">Share</button>
+      <button class="btn btn-primary">Publish markups</button>
+    </div>
+  </div>
+  <div class="canvas-grid">
+    <div class="canvas">
+      <div class="sheet" style="width:680px; height:460px">
+        <svg width="680" height="460" viewBox="0 0 680 460">
+          <g stroke="#3A4046" fill="none" stroke-width="1.2">
+            <rect x="90" y="70" width="380" height="280"/>
+            <rect x="118" y="98" width="130" height="92"/>
+            <rect x="118" y="216" width="130" height="86"/>
+            <rect x="282" y="98" width="150" height="204"/>
+          </g>
+          <g stroke="#8B9197" stroke-width="0.7">
+            <line x1="294" y1="106" x2="294" y2="294"/><line x1="312" y1="106" x2="312" y2="294"/><line x1="330" y1="106" x2="330" y2="294"/><line x1="348" y1="106" x2="348" y2="294"/><line x1="366" y1="106" x2="366" y2="294"/><line x1="384" y1="106" x2="384" y2="294"/><line x1="402" y1="106" x2="402" y2="294"/><line x1="420" y1="106" x2="420" y2="294"/>
+          </g>
+          <g stroke="#8B9197" stroke-width="0.8">
+            <line x1="90" y1="46" x2="470" y2="46"/><line x1="90" y1="40" x2="90" y2="52"/><line x1="470" y1="40" x2="470" y2="52"/>
+          </g>
+          <text x="270" y="40" font-family="JetBrains Mono, monospace" font-size="10" fill="#6B7178" text-anchor="middle">12 400</text>
+          <path d="M500 96 q8 -13 21 -6 q7 -11 19 -5 q11 -8 18 3 q13 0 10 13 q10 8 -2 16 q2 13 -11 11 q-5 11 -18 6 q-10 10 -18 0 q-13 3 -13 -10 q-11 -6 -3 -16 q-8 -10 -3 -12 z" fill="none" stroke="#C8371B" stroke-width="1.2"/>
+          <g stroke="#3A4046" stroke-opacity="0.7" fill="none"><rect x="490" y="330" width="160" height="92"/><path d="M490 354 H650 M490 378 H650 M570 330 V422"/></g>
+          <text x="498" y="346" font-family="JetBrains Mono, monospace" font-size="8" fill="#6B7178">MERIDIAN TOWER C</text>
+          <text x="498" y="370" font-family="JetBrains Mono, monospace" font-size="8" fill="#6B7178">STR-DWG-0412</text>
+          <text x="578" y="370" font-family="JetBrains Mono, monospace" font-size="8" fill="#1A1D20">REV C03</text>
+        </svg>
+        <div class="pin" style="left:168px; top:128px">1</div>
+        <div class="pin" style="left:332px; top:248px">2</div>
+        <div class="pin muted" style="left:508px; top:88px">3</div>
+      </div>
+      <div class="zoom"><span>−</span><span style="font-family:var(--font-mono); font-size:10.5px">76%</span><span>＋</span><span>Fit</span><span>p. 2/14</span></div>
+    </div>
+    <div class="cpanel">
+      <div style="display:flex; align-items:center; gap:8px">
+        <b style="font:560 12.5px/1 var(--font-ui); color:var(--text-1)">Annotations</b><span style="font:var(--text-mono); font-size:10px; color:var(--text-3)">3</span>
+        <div class="seg" style="margin-left:auto"><span class="on">Open</span><span>Resolved</span></div>
+      </div>
+      <div class="cmt lit">
+        <div class="hd"><span class="pin" style="position:static; width:18px; height:18px; line-height:18px; font-size:9px">1</span><b>Kofi Diallo</b><span class="tm">11:42</span></div>
+        <p>Cover to outer face links reads 40mm here — clashes with the cast-in conduit run on MEP-1107. Can we confirm the revised link detail?</p>
+        <div class="act">Reply · Resolve · Create RFI ↵</div>
+      </div>
+      <div class="cmt">
+        <div class="hd"><span class="pin" style="position:static; width:18px; height:18px; line-height:18px; font-size:9px">2</span><b>Jun Tanaka</b><span class="tm">09:15</span></div>
+        <p>Couplers revised to Type 2 above L27 — see STR-CAL-0098 B02.</p>
+        <div class="act">Reply · Resolve</div>
+      </div>
+      <div class="cmt" style="opacity:0.6">
+        <div class="hd"><span class="pin muted" style="position:static; width:18px; height:18px; line-height:18px; font-size:9px">3</span><b>You</b><span class="tm">resolved</span></div>
+        <p>Cloud C03-02 — title block rev confirmed.</p>
+      </div>
+      <div class="inp" style="margin-top:auto">＋ &nbsp;Annotate selection… <span class="u-kbd" style="margin-left:auto">A</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.D NATIVE DOC EDITOR ============ -->
+<div class="wrap screen-block" id="sd">
+  <div class="sb-head"><span class="num">SCR.D</span><h2>Docs — Native Editor</h2><p>Not an upload — a document born here. Blocks, hold-points, live co-editing, and an inline comment that behaves like a setting-out mark.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="doc-top">
+    <span class="crumbs">Docs / Quality / <b>Site Quality Plan — Tower C</b></span>
+    <span class="prop"><i class="u-dot" style="background:var(--st-progress)"></i>Draft · v7</span>
+    <div class="sp" style="margin-left:auto; display:flex; gap:10px; align-items:center">
+      <div class="avstack"><span class="av">CN</span><span class="av">AB</span><span class="av">KD</span></div>
+      <button class="btn btn-secondary">Share</button>
+      <button class="btn btn-primary">Publish to register</button>
+    </div>
+  </div>
+  <div style="display:flex; min-height:600px">
+    <div class="doc">
+      <h1 class="t">Site Quality Plan — Tower C</h1>
+      <div class="props">
+        <span class="prop"><span class="av" style="width:14px;height:14px;font-size:6px">CN</span>Owner: Charles</span>
+        <span class="prop">DOC-0091</span>
+        <span class="prop">Updated 4m ago</span>
+        <span class="prop">ISO 19650 §5</span>
+      </div>
+
+      <div class="blk"><span class="hndl">⠿</span><h4>1. Inspection regime</h4></div>
+      <div class="blk"><span class="hndl">⠿</span><p>Every structural pour is preceded by a closed inspection loop: checklist, photographic record, and sign-off in the field app. <span class="hl">No pour proceeds without the loop closing</span> — the register enforces the hold automatically.</p></div>
+
+      <div class="blk"><span class="hndl">⠿</span>
+        <div class="todo"><span class="bx ck"></span><span class="done">Define ITP template for vertical elements</span></div>
+        <div class="todo"><span class="bx ck"></span><span class="done">Map hold-points to register workflow states</span></div>
+        <div class="todo"><span class="bx"></span><span>Agree NCR escalation path with Arup <span style="font-family:var(--font-mono); font-size:11px; color:var(--text-3)">@kofi</span></span></div>
+      </div>
+
+      <div class="blk"><span class="hndl">⠿</span>
+        <div class="callout">
+          <span style="color:var(--intent); font-size:15px">◆</span>
+          <p><b style="color:var(--text-1)">Hold point.</b> L24–L28 core pours require Category A sign-off while RFI-0847 remains open. Lifted automatically on close-out.</p>
         </div>
       </div>
 
-        <section>
-          <div class="toolbar">
-            <span class="chip on">All</span>
-            <span class="chip"><i class="u-dot" style="background:var(--intent)"></i> In review · 3</span>
-            <span class="chip"><i class="u-dot" style="background:var(--st-progress)"></i> In progress · 7</span>
-            <span class="chip"><i class="u-dot" style="background:var(--st-done)"></i> Published · 12</span>
-            <span class="right"><span class="u-mono">Sorted: Updated ↓</span></span>
-          </div>
-
-          <div class="reg">
-            <table>
-              <thead>
-                <tr><th>Ref</th><th>Title</th><th>Rev</th><th>Status</th><th>Discipline</th><th>Assignee</th><th>Updated</th></tr>
-              </thead>
-              <tbody>
-                <tr class="sel">
-                  <td class="ref">A-204</td>
-                  <td><span class="title">Level 04 — General arrangement</span><span class="ttl-sub">title-block rev mismatch <span class="flag">●</span></span></td>
-                  <td class="rev">C</td>
-                  <td><span class="status"><i class="u-dot" style="background:var(--intent)"></i>In review</span></td>
-                  <td>Architecture</td>
-                  <td><span class="asg"><span class="av">KD</span>K. Doyle</span></td>
-                  <td class="upd">2m ago</td>
-                </tr>
-                <tr>
-                  <td class="ref">S-118</td>
-                  <td><span class="title">Core wall reinforcement — gridline F</span></td>
-                  <td class="rev">B</td>
-                  <td><span class="status"><i class="u-dot" style="background:var(--st-progress)"></i>In progress</span></td>
-                  <td>Structures</td>
-                  <td><span class="asg"><span class="av">AB</span>A. Bello</span></td>
-                  <td class="upd">26m ago</td>
-                </tr>
-                <tr>
-                  <td class="ref">M-052</td>
-                  <td><span class="title">Plant room — chilled water schematic</span></td>
-                  <td class="rev">A</td>
-                  <td><span class="status"><i class="u-dot" style="background:var(--intent)"></i>In review</span></td>
-                  <td>MEP</td>
-                  <td><span class="asg"><span class="av">JL</span>J. Lin</span></td>
-                  <td class="upd">1h ago</td>
-                </tr>
-                <tr>
-                  <td class="ref">A-201</td>
-                  <td><span class="title">Level 01 — General arrangement</span></td>
-                  <td class="rev">D</td>
-                  <td><span class="status"><i class="u-dot" style="background:var(--st-done)"></i>Published</span></td>
-                  <td>Architecture</td>
-                  <td><span class="asg"><span class="av">KD</span>K. Doyle</span></td>
-                  <td class="upd">3h ago</td>
-                </tr>
-                <tr>
-                  <td class="ref">C-009</td>
-                  <td><span class="title">Site drainage — north plot</span></td>
-                  <td class="rev">B</td>
-                  <td><span class="status"><i class="u-dot" style="background:var(--st-review)"></i>Shared</span></td>
-                  <td>Civils</td>
-                  <td><span class="asg"><span class="av">RP</span>R. Patel</span></td>
-                  <td class="upd">Yesterday</td>
-                </tr>
-                <tr>
-                  <td class="ref">S-117</td>
-                  <td><span class="title">Core wall reinforcement — gridline E</span></td>
-                  <td class="rev">B</td>
-                  <td><span class="status"><i class="u-dot" style="background:var(--st-done)"></i>Published</span></td>
-                  <td>Structures</td>
-                  <td><span class="asg"><span class="av">AB</span>A. Bello</span></td>
-                  <td class="upd">Yesterday</td>
-                </tr>
-                <tr>
-                  <td class="ref">A-310</td>
-                  <td><span class="title">Curtain wall — typical bay detail</span></td>
-                  <td class="rev">A</td>
-                  <td><span class="status"><i class="u-dot" style="background:var(--st-backlog)"></i>Draft</span></td>
-                  <td>Architecture</td>
-                  <td><span class="asg"><span class="av">MO</span>M. Owen</span></td>
-                  <td class="upd">2d ago</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
+      <div class="blk"><span class="hndl">⠿</span><h4>2. Materials approvals</h4></div>
+      <div class="blk"><span class="hndl">⠿</span>
+        <table class="mtbl">
+          <tr><th>Ref</th><th>Material</th><th>Status</th></tr>
+          <tr><td>MAT-014</td><td>C50/60 mix design — core walls</td><td><i class="u-dot" style="background:var(--st-done); width:7px; height:7px; display:inline-block; margin-right:6px"></i>Approved</td></tr>
+          <tr><td>MAT-019</td><td>Type 2 mechanical couplers</td><td><i class="u-dot" style="background:var(--st-progress); width:7px; height:7px; display:inline-block; margin-right:6px"></i>In review</td></tr>
+          <tr><td>MAT-021</td><td>Facade bracket assemblies</td><td><i class="u-dot" style="background:var(--st-backlog); width:7px; height:7px; display:inline-block; margin-right:6px"></i>Pending</td></tr>
+        </table>
       </div>
-    </main>
-  </div>
-</div>
 
-<!-- Asite Intelligence — summoned blob + drawer (bottom-right) -->
-<div class="ai-blob open" role="button" aria-label="Asite Intelligence" tabindex="0">
-  <span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span>
-  <div class="ai-panel">
-    <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span class="tag">CITES THE REGISTER</span></div>
-    <div class="ai-bd">
-      <div class="ai-q">Anything wrong with A-204 before I publish?</div>
-      <div class="ai-a">One thing to clear first. The title block on <span class="hl">A-204</span> reads revision <b>C</b>, but the register still shows <b>B</b>, and the suitability code is missing. Discipline matches.</div>
-      <div class="ai-rd"><i class="u-dot" style="background:var(--st-blocked)"></i><span class="rf2">A-204</span>Revision mismatch — C vs B<span class="tm2">TITLE BLOCK</span></div>
-      <div class="ai-rd"><i class="u-dot" style="background:var(--st-backlog)"></i><span class="rf2">A-204</span>Suitability code missing<span class="tm2">REQUIRED</span></div>
-      <div class="ai-act"><button class="btn btn-primary">Use document value</button><button class="btn btn-secondary">Re-run</button></div>
-      <div class="ai-src">SOURCES: REGISTER.XLSX · A-204.PDF — NOTHING WRITES WITHOUT YOU</div>
+      <div class="slash">/ &nbsp;Type to insert — Heading, Hold point, Table, Drawing embed, ITP checklist…</div>
     </div>
-    <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    <div class="cpanel" style="width:280px; flex:none">
+      <b style="font:560 12.5px/1 var(--font-ui); color:var(--text-1)">Comments</b>
+      <div class="cmt lit">
+        <div class="hd"><span class="av">KD</span><b>Kofi Diallo</b><span class="tm">22m</span></div>
+        <p>On the highlighted clause — should the hold also cover transfer-level pours, or core only?</p>
+        <div class="act">Reply · Resolve</div>
+      </div>
+      <div class="cmt">
+        <div class="hd"><span class="av">AB</span><b>Anaya Brown</b><span class="tm">1h</span></div>
+        <p>§2 table — MAT-021 samples arrive Thursday; I'll attach the test certs here.</p>
+        <div class="act">Reply · Resolve</div>
+      </div>
+      <div class="inp" style="margin-top:auto">＋ &nbsp;Comment on selection… <span class="u-kbd" style="margin-left:auto">C</span></div>
+    </div>
   </div>
-  <span class="ai-orb"><i>✦</i></span>
 </div>
 
+<!-- ============ SCR.E CONVERT — INTAKE ============ -->
+<div class="wrap screen-block" id="se">
+  <div class="sb-head"><span class="num">SCR.E</span><h2>Convert — Intake</h2><p>Site paper in: forms, briefs, scanned PDFs. Dropped, queued, transcribed into native documents that can be edited and governed.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <a href="#se"><span class="ico">⌂</span>Today</a>
+      <a href="#se"><span class="ico">▤</span>Files</a>
+      <a href="#se"><span class="ico">≡</span>Docs</a>
+      <a href="#se" class="on"><span class="ico">⇄</span>Convert</a>
+      <div class="grp">Queues</div>
+      <a href="#se"><span class="ico">◍</span>Needs verification · 1</a>
+      <a href="#se"><span class="ico">✓</span>Converted · 18</a>
+    </div>
+    <div class="main">
+      <div class="mhead"><h3>Convert</h3><span class="cnt">paper → native documents</span>
+        <div class="sp"><button class="btn btn-secondary">From email</button><button class="btn btn-primary">Browse files</button></div>
+      </div>
+      <div class="dropzone">
+        <svg width="44" height="46" viewBox="0 0 377 396" style="opacity:0.9"><use href="#amark"/></svg>
+        <h4>Drop forms, briefs, or scanned PDFs</h4>
+        <p>Text, tables, and form fields are transcribed into editable, versioned documents.</p>
+        <div class="ftypes">
+          <span class="prop">PDF</span><span class="prop">DOCX</span><span class="prop">XLSX</span><span class="prop">Photo / scan</span>
+        </div>
+      </div>
+      <div class="q">
+        <div class="qrow">
+          <div class="ficon">PDF</div>
+          <div><div class="fn">Subcontractor brief — groundworks pkg 2.pdf</div><div class="fm">3.2 MB · 14 pages</div></div>
+          <div class="track"><i style="width:64%"></i></div>
+          <span class="fm">Transcribing… 64%</span>
+        </div>
+        <div class="qrow">
+          <div class="ficon">IMG</div>
+          <div><div class="fn">Pour card P-1119 (site scan).jpg</div><div class="fm">1.1 MB · handwriting detected</div></div>
+          <div class="track"><i class="ok" style="width:100%"></i></div>
+          <span class="fm" style="color:var(--st-done)">Converted ✓</span>
+        </div>
+        <div class="qrow" style="border-bottom:none">
+          <div class="ficon">PDF</div>
+          <div><div class="fn">Permit application — crane oversail.pdf</div><div class="fm">0.8 MB · form fields</div></div>
+          <div class="track"><i style="width:8%; background:var(--bg-3)"></i></div>
+          <span class="fm">Queued</span>
+        </div>
+      </div>
+      <div class="foot"><span>18 CONVERTED THIS WEEK</span><span style="margin-left:auto">OUTPUT: NATIVE DOC · STORED IN FILES · FULL AUDIT</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.F CONVERT — VERIFY ============ -->
+<div class="wrap screen-block" id="sf">
+  <div class="sb-head"><span class="num">SCR.F</span><h2>Convert — Verify &amp; Store</h2><p>Source on the left, transcription on the right. Confidence per field; only the uncertain line asks for your eyes — in orange, of course.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="doc-top">
+    <span class="crumbs">Convert / <b>Subcontractor brief — groundworks pkg 2</b></span>
+    <span class="prop"><i class="u-dot" style="background:var(--st-progress)"></i>Needs verification · 1 field</span>
+    <div class="sp" style="margin-left:auto; display:flex; gap:8px">
+      <button class="btn btn-ghost">Re-run</button>
+      <button class="btn btn-secondary">Edit manually</button>
+      <button class="btn btn-primary">Approve &amp; store</button>
+    </div>
+  </div>
+  <div class="conv">
+    <div class="src">
+      <span style="font:var(--text-mono); font-size:10.5px; color:var(--text-3)">SOURCE · PAGE 3 / 14</span>
+      <div class="sheet" style="width:380px; height:480px; padding:34px 30px">
+        <svg width="320" height="412" viewBox="0 0 320 412">
+          <rect x="0" y="0" width="180" height="14" rx="2" fill="#C9CCC9"/>
+          <rect x="0" y="34" width="300" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="0" y="48" width="280" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="0" y="62" width="296" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="0" y="92" width="120" height="9" rx="2" fill="#A8ABA8"/>
+          <rect x="0" y="110" width="300" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="0" y="124" width="266" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="0" y="152" width="300" height="58" rx="3" fill="none" stroke="#A8ABA8"/>
+          <rect x="10" y="164" width="130" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="10" y="180" width="200" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="10" y="196" width="160" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="0" y="232" width="100" height="9" rx="2" fill="#A8ABA8"/>
+          <rect x="0" y="250" width="298" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="0" y="264" width="180" height="7" rx="2" fill="#E8A48C"/>
+          <rect x="0" y="292" width="300" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="0" y="306" width="290" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="0" y="334" width="140" height="9" rx="2" fill="#A8ABA8"/>
+          <rect x="0" y="352" width="220" height="7" rx="2" fill="#B8BBB8"/>
+          <rect x="0" y="380" width="110" height="22" rx="3" fill="none" stroke="#A8ABA8"/>
+        </svg>
+      </div>
+    </div>
+    <div style="padding:var(--space-6); overflow:hidden">
+      <span style="font:var(--text-mono); font-size:10.5px; color:var(--text-3)">EXTRACTED DOCUMENT</span>
+      <div class="xfield"><div class="xl">Title <span class="conf hi">98%</span></div><div class="xv">Groundworks Package 2 — Subcontractor Brief</div></div>
+      <div class="xfield"><div class="xl">Client / Org <span class="conf hi">97%</span></div><div class="xv">Meridian Construction Group — Tower C</div></div>
+      <div class="xfield"><div class="xl">Scope summary <span class="conf md">91%</span></div><div class="xv">Bulk excavation to −6.4m, contiguous pile wall guide walls, dewatering to agreed drawdown, disposal off-site per EA permit.</div></div>
+      <div class="xfield lo-f"><div class="xl">Programme constraint <span class="conf lo">62% — verify</span></div><div class="xv">Possession of east yard from <b style="color:var(--text-1)">12 [Aug?]</b> — handwriting unclear, confirm month.</div></div>
+      <div class="xfield"><div class="xl">Detected tables <span class="conf hi">2</span></div><div class="xv" style="font:400 12.5px/1.6 var(--font-ui); color:var(--text-2)">Rates schedule (14 rows) · Plant list (8 rows) — imported as editable tables.</div></div>
+      <div style="display:flex; gap:8px; margin-top:14px">
+        <span class="prop">→ Stores as DOC-0094</span>
+        <span class="prop">Folder: Commercial</span>
+        <span class="prop">Source PDF attached</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.G RFI TRACKER ============ -->
+<div class="wrap screen-block" id="sg">
+  <div class="sb-head"><span class="num">SCR.G</span><h2>RFI Tracker</h2><p>Issues-list grammar: status groups, dot semantics, properties inline.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <a href="#sg"><span class="ico">⌂</span>Today</a>
+      <a href="#sg" class="on"><span class="ico">◑</span>RFIs</a>
+      <a href="#sg"><span class="ico">▤</span>Files</a>
+      <a href="#sg"><span class="ico">≡</span>Docs</a>
+      <div class="grp">Views</div>
+      <a href="#sg"><span class="ico">◍</span>Awaiting me</a>
+      <a href="#sg"><span class="ico">⚠</span>Holding pours</a>
+    </div>
+    <div class="main">
+      <div class="mhead"><h3>RFIs</h3><span class="cnt">47 open</span>
+        <div class="sp">
+          <button class="btn btn-secondary">Filter</button>
+          <button class="btn btn-secondary">Group: Status</button>
+          <button class="btn btn-primary">New RFI</button>
+          <span class="u-kbd">C</span>
+        </div>
+      </div>
+      <div class="ghead"><i class="u-dot" style="background:var(--st-blocked)"></i>Blocked <span class="cnt">2</span></div>
+      <div class="rowi sel"><i class="u-dot" style="background:var(--st-blocked)"></i><span class="ref">RFI-0847</span><span class="t">Core wall cover clash at L26 — cast-in conduit</span><span class="props"><span class="prop">STR</span><span class="prop">Holds P-1131</span><span class="av">KD</span><span class="meta">2d over</span></span></div>
+      <div class="rowi"><i class="u-dot" style="background:var(--st-blocked)"></i><span class="ref">RFI-0839</span><span class="t">Transfer beam penetration conflict, grid 7</span><span class="props"><span class="prop">STR</span><span class="av">JT</span><span class="meta">1d over</span></span></div>
+      <div class="ghead"><i class="u-dot" style="background:var(--st-progress)"></i>In progress <span class="cnt">3</span></div>
+      <div class="rowi"><i class="u-dot" style="background:var(--st-progress)"></i><span class="ref">RFI-0851</span><span class="t">Link detail revision for L26 outer face</span><span class="props"><span class="prop">STR</span><span class="av">CN</span><span class="meta">due 13 Jun</span></span></div>
+      <div class="rowi"><i class="u-dot" style="background:var(--st-progress)"></i><span class="ref">RFI-0848</span><span class="t">Facade bracket tolerance at east elevation</span><span class="props"><span class="prop">ARC</span><span class="av">AB</span><span class="meta">due 14 Jun</span></span></div>
+      <div class="rowi" style="border-bottom:none"><i class="u-dot" style="background:var(--st-progress)"></i><span class="ref">RFI-0845</span><span class="t">Riser coordination clearance L12</span><span class="props"><span class="prop">MEP</span><span class="av">MK</span><span class="meta">due 16 Jun</span></span></div>
+      <div class="foot"><span>47 OPEN</span><span>SLA MEDIAN 1.8D</span><span style="margin-left:auto">SYNCED 0.4S AGO</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.H COMMAND PALETTE ============ -->
+<div class="wrap screen-block" id="sh">
+  <div class="sb-head"><span class="num">SCR.H</span><h2>Command Palette</h2><p>⌘K reaches every file, RFI, doc, and conversion. The keyboard is the crane.</p></div>
+</div>
+<div class="app palette-stage">
+  <div class="app-body" style="filter:saturate(0.9)">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b></div>
+      <a href="#sh"><span class="ico">⌂</span>Today</a>
+      <a href="#sh" class="on"><span class="ico">◑</span>RFIs</a>
+      <a href="#sh"><span class="ico">▤</span>Files</a>
+      <a href="#sh"><span class="ico">≡</span>Docs</a>
+    </div>
+    <div class="main">
+      <div class="mhead"><h3>RFIs</h3><span class="cnt">47 open</span></div>
+      <div class="rowi"><i class="u-dot" style="background:var(--st-blocked)"></i><span class="ref">RFI-0847</span><span class="t">Core wall cover clash at L26</span><span class="props"><span class="av">KD</span></span></div>
+      <div class="rowi"><i class="u-dot" style="background:var(--st-progress)"></i><span class="ref">RFI-0851</span><span class="t">Link detail revision for L26 outer face</span><span class="props"><span class="av">CN</span></span></div>
+    </div>
+  </div>
+  <div class="dim"></div>
+  <div class="palette">
+    <div class="pin2">
+      <span style="color:var(--text-3)">⌕</span>
+      <input value="pour P-1131"/>
+      <span class="u-kbd">esc</span>
+    </div>
+    <div class="sec">RFIs</div>
+    <div class="it on"><i class="u-dot" style="background:var(--st-blocked)"></i>RFI-0847 — Core wall cover clash at L26<span class="u-kbd">↵</span></div>
+    <div class="sec">Docs</div>
+    <div class="it"><span style="color:var(--text-3)">≡</span>Site Quality Plan §Hold points — mentions P-1131</div>
+    <div class="sec">Actions</div>
+    <div class="it"><span style="color:var(--text-3)">＋</span>Create RFI from “pour P-1131”<span class="u-kbd">⌘↵</span></div>
+    <div class="it"><span style="color:var(--text-3)">⇄</span>Convert a document…</div>
+    <div style="height:10px"></div>
+  </div>
+  <div style="height:480px"></div>
+</div>
+
+<!-- ============ SCR.M0 AMAIL SUMMARY ============ -->
+<div class="wrap screen-block" id="m0">
+  <div class="sb-head"><span class="num">SCR.M0</span><h2>aMail — Morning Summary</h2><p>Before the inbox: what arrived overnight, what the rules already filed, and the five threads that actually need a human. The inbox opens pre-read.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <div class="grp">aMail — Connected inboxes</div>
+      <div class="acct"><span class="em"><i class="u-dot" style="background:var(--st-done)"></i>c.njoku@meridian.co</span><span class="sy">OUTLOOK · SYNCED 2 MIN AGO</span></div>
+      <div class="acct"><span class="em"><i class="u-dot" style="background:var(--st-done)"></i>tenders@meridian.co</span><span class="sy">GMAIL · SYNCED 9 MIN AGO</span></div>
+      <div class="acct"><span class="em"><i class="u-dot" style="background:var(--st-progress)"></i>site-towerc@meridian.co</span><span class="sy">SHARED · RULE-FILED</span></div>
+      <div class="grp">Views</div>
+      <a href="#m0" class="on"><span class="ico">◐</span>Summary</a>
+      <a href="#m1"><span class="ico">▤</span>Inbox · 24</a>
+      <a href="#m1"><span class="ico">◍</span>Needs filing · <span style="color:var(--intent-bright)">6</span></a>
+      <a href="#m1"><span class="ico">↩</span>Awaiting reply · 3</a>
+      <a href="#m2"><span class="ico">⚙</span>Rules · 4</a>
+    </div>
+    <div class="main">
+      <div class="mhead">
+        <h3>Morning summary</h3><span class="cnt">WED 11 JUN · 06:00–08:50</span>
+        <div class="sp"><button class="btn btn-secondary">Mark all read</button><button class="btn btn-primary">Open inbox</button></div>
+      </div>
+      <div style="padding:18px var(--space-6) 0; display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4)">
+        <div style="background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset); padding:16px">
+          <div style="font:590 24px/1 var(--font-ui); color:var(--text-1)">14</div>
+          <div style="font:400 11.5px/1.5 var(--font-ui); color:var(--text-3); margin-top:6px">arrived overnight, across 3 inboxes</div>
+        </div>
+        <div style="background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset); padding:16px">
+          <div style="font:590 24px/1 var(--font-ui); color:var(--text-1)">9</div>
+          <div style="font:400 11.5px/1.5 var(--font-ui); color:var(--text-3); margin-top:6px">already filed by rules — nothing to do</div>
+        </div>
+        <div style="background:var(--intent-wash); border-radius:var(--r-md); box-shadow:var(--inset), 0 0 0 1px rgba(200, 55, 27,0.3); padding:16px">
+          <div style="font:590 24px/1 var(--font-ui); color:var(--intent-bright)">5</div>
+          <div style="font:400 11.5px/1.5 var(--font-ui); color:var(--text-2); margin-top:6px">need a human — one holds concrete</div>
+        </div>
+      </div>
+      <div style="padding:20px var(--space-6) 6px; font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3)">What matters, in order</div>
+      <div style="padding:0 var(--space-6)">
+        <div class="mrow sel" style="border-radius:var(--r-sm)">
+          <div class="l1"><i class="u-dot" style="background:var(--st-blocked)"></i>L. Okafor — Arup<span class="tm">09:12</span></div>
+          <div class="l2">RE: <span class="rf2">RFI-0847</span> — cover verified at 40 mm. QA counter-sign releases the L24 pour.</div>
+          <div class="l3"><span class="fchip">FILED → 06 / QUALITY / RFIS</span>reply drafts itself from the register — review before send</div>
+        </div>
+        <div class="mrow">
+          <div class="l1"><i class="u-dot" style="background:var(--st-progress)"></i>D. Hartley — Kier<span class="tm">08:47</span></div>
+          <div class="l2"><span class="rf2">MAT-019</span> coupler certs, batch 7 of 8 — rule matched 94%, awaiting your confirm</div>
+          <div class="l3"><span class="fchip unf">CONFIRM FILING → 06-A / CERTIFICATES</span></div>
+        </div>
+        <div class="mrow">
+          <div class="l1"><i class="u-dot" style="background:var(--st-review)"></i>Bid portal — tenders@<span class="tm">07:30</span></div>
+          <div class="l2">City Hospital Phase 2 — 12 supplier questions consolidated, clarifications close Friday</div>
+          <div class="l3"><span class="fchip unf">UNFILED</span></div>
+        </div>
+        <div class="mrow">
+          <div class="l1">S. Brennan — TfL<span class="tm">08:15</span></div>
+          <div class="l2">Weekend possession 21–22 JUN granted — filed, calendar hold created</div>
+          <div class="l3"><span class="fchip">FILED → 02 / LOGISTICS</span></div>
+        </div>
+        <div class="mrow">
+          <div class="l1">Accounts — Meridian<span class="tm">06:42</span></div>
+          <div class="l2">May application for payment certified — remittance attached and registered</div>
+          <div class="l3"><span class="fchip">FILED → 09 / COMMERCIAL</span></div>
+        </div>
+      </div>
+      <div style="padding:14px var(--space-6) 18px; font:400 9.5px/1.6 var(--font-mono); letter-spacing:0.07em; color:var(--text-3)">RULES WORKED OVERNIGHT: 9 FILED · 2 SECURE LINKS SERVED · 0 LOST — THE INBOX OPENS PRE-READ</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.M1 AMAIL INBOX ============ -->
+<div class="wrap screen-block" id="m1">
+  <div class="sb-head"><span class="num">SCR.M1</span><h2>aMail — Connected Inbox</h2><p>Every inbox that touches the project, synced into the register: Outlook, Gmail, shared addresses — one common view, nothing locked in anyone's mailbox.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <div class="grp">aMail — Connected inboxes</div>
+      <div class="acct"><span class="em"><i class="u-dot" style="background:var(--st-done)"></i>c.njoku@meridian.co</span><span class="sy">OUTLOOK · SYNCED 2 MIN AGO</span></div>
+      <div class="acct"><span class="em"><i class="u-dot" style="background:var(--st-done)"></i>tenders@meridian.co</span><span class="sy">GMAIL · SYNCED 9 MIN AGO</span></div>
+      <div class="acct"><span class="em"><i class="u-dot" style="background:var(--st-progress)"></i>site-towerc@meridian.co</span><span class="sy">SHARED · RULE-FILED</span></div>
+      <div class="grp">Views</div>
+      <a href="#m0"><span class="ico">◐</span>Summary</a>
+      <a href="#m1" class="on"><span class="ico">▤</span>Inbox · 24</a>
+      <a href="#m1"><span class="ico">◍</span>Needs filing · <span style="color:var(--intent-bright)">6</span></a>
+      <a href="#m1"><span class="ico">↩</span>Awaiting reply · 3</a>
+      <a href="#m1"><span class="ico">▦</span>Filed — forever</a>
+      <a href="#m2"><span class="ico">⚙</span>Rules · 4</a>
+      <div class="grp">Folder sync</div>
+      <div class="acct"><span class="sy" style="padding-left:0">OUTLOOK /TOWER-C ⇄ 06 COMMS</span></div>
+      <div class="acct"><span class="sy" style="padding-left:0">SAVE AS YOU SEND · ON</span></div>
+    </div>
+    <div class="main">
+      <div class="mhead">
+        <h3>Inbox</h3><span class="cnt">3 ACCOUNTS · ONE REGISTER</span>
+        <div class="sp">
+          <span class="inp" style="min-width:230px">⌕ &nbsp;Search mail and attachments…<span class="u-kbd" style="margin-left:auto">/</span></span>
+          <button class="btn btn-secondary">Filter: Unfiled</button>
+          <button class="btn btn-primary">Compose</button>
+        </div>
+      </div>
+      <div class="msplit">
+        <div class="mlist">
+          <div class="mband">Today — Mer Tower C</div>
+          <div class="mrow sel">
+            <div class="l1"><i class="u-dot" style="background:var(--st-blocked)"></i>L. Okafor — Arup<span class="tm">09:12</span></div>
+            <div class="l2">RE: <span class="rf2">RFI-0847</span> — cover clash at L26, set-out confirmed</div>
+            <div class="l3"><span class="fchip">FILED → 06 / QUALITY / RFIS</span>2 attachments · cover verified at 40 mm, see markup…</div>
+          </div>
+          <div class="mrow">
+            <div class="l1"><i class="u-dot" style="background:var(--st-progress)"></i>D. Hartley — Kier<span class="tm">08:47</span></div>
+            <div class="l2"><span class="rf2">MAT-019</span> coupler test certs — batch 7 of 8</div>
+            <div class="l3"><span class="fchip unf">UNFILED · RULE MATCH 94%</span>certs attached for the L25 couplers…</div>
+          </div>
+          <div class="mrow">
+            <div class="l1">S. Brennan — TfL<span class="tm">08:15</span></div>
+            <div class="l2">Access window — weekend possession confirmed</div>
+            <div class="l3"><span class="fchip">FILED → 02 / LOGISTICS</span>possession 21–22 JUN granted as requested…</div>
+          </div>
+          <div class="mband">Today — tenders@meridian.co</div>
+          <div class="mrow">
+            <div class="l1"><i class="u-dot" style="background:var(--st-review)"></i>Bid portal<span class="tm">07:30</span></div>
+            <div class="l2">City Hospital Phase 2 — clarifications close Friday</div>
+            <div class="l3"><span class="fchip unf">UNFILED</span>12 supplier questions consolidated…</div>
+          </div>
+          <div class="mband">Yesterday</div>
+          <div class="mrow">
+            <div class="l1">K. Adeyemi — Meridian<span class="tm">17:42</span></div>
+            <div class="l2">Site diary photos — <span class="rf2">WK 24</span> pour prep</div>
+            <div class="l3"><span class="fchip">FILED → 08 / RECORDS</span>14 photos, auto-saved on send…</div>
+          </div>
+        </div>
+        <div class="mread">
+          <h4>RE: RFI-0847 — cover clash at L26, set-out confirmed</h4>
+          <div style="display:flex; gap:8px; flex-wrap:wrap">
+            <span class="prop"><i class="u-dot" style="background:var(--st-blocked)"></i>Linked: RFI-0847</span>
+            <span class="prop">Thread: 6 messages</span>
+            <span class="prop">Saved to Cloud · restorable forever</span>
+          </div>
+          <div class="msg">
+            <div class="mh">L. Okafor <span>&lt;l.okafor@arup.com&gt;</span><span class="tm">09:12</span></div>
+            <p>Set-out checked against rev C03 this morning. Cover at the clash point verifies at 40 mm with the type 2 coupler — markup attached. Happy for the hold to lift once QA counter-signs.</p>
+          </div>
+          <div class="att"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>L26-cover-markup-C03.pdf<span class="sz">2.1 MB</span><span class="fchip">SAVED → 06-A-DR-0419</span></div>
+          <div class="att"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>coupler-cert-batch7.pdf<span class="sz">840 KB</span><span class="fchip">SAVED → 06-A-CE-0177</span></div>
+          <div style="display:flex; gap:8px; margin-top:4px">
+            <button class="btn btn-primary">Reply — files on send</button>
+            <button class="btn btn-secondary">Send secure link</button>
+            <button class="btn btn-ghost">Open RFI-0847 ↗</button>
+          </div>
+          <div style="font:400 9.5px/1.6 var(--font-mono); letter-spacing:0.07em; color:var(--text-3)">EVERY MESSAGE IN THIS THREAD IS ON THE PROJECT RECORD · NOTHING LIVES ONLY IN AN INBOX</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCR.M2 AMAIL RULES ============ -->
+<div class="wrap screen-block" id="m2">
+  <div class="sb-head"><span class="num">SCR.M2</span><h2>aMail — Rules &amp; Continuity</h2><p>Create the rule once; aMail files forever. And when people leave the project, their threads don't.</p></div>
+</div>
+<div class="app">
+    <div class="ai-blob" role="button" aria-label="Asite Intelligence"><span class="ai-tag">Ask Asite Intelligence <span class="u-kbd">⌘I</span></span><div class="ai-panel">
+      <div class="ai-hd"><i>✦</i><b>Asite Intelligence</b><span>CITES THE REGISTER</span></div>
+      <div class="ai-bd ai-sg">
+        <span>What's holding the next pour?</span>
+        <span>What changed since yesterday?</span>
+        <span>Draft today's site diary</span>
+      </div>
+      <div class="ai-in">Ask about this project…<span class="u-kbd">⌘I</span></div>
+    </div><span class="ai-orb"><i>✦</i></span></div>
+  <div class="app-body">
+    <div class="side">
+      <div class="ws"><svg width="18" height="19" viewBox="0 0 377 396"><use href="#amark"/></svg><b>Mer Tower C</b><span class="u-kbd">⌘O</span></div>
+      <div class="grp">aMail — Connected inboxes</div>
+      <div class="acct"><span class="em"><i class="u-dot" style="background:var(--st-done)"></i>c.njoku@meridian.co</span><span class="sy">OUTLOOK · SYNCED 2 MIN AGO</span></div>
+      <div class="acct"><span class="em"><i class="u-dot" style="background:var(--st-done)"></i>tenders@meridian.co</span><span class="sy">GMAIL · SYNCED 9 MIN AGO</span></div>
+      <div class="acct"><span class="em"><i class="u-dot" style="background:var(--st-progress)"></i>site-towerc@meridian.co</span><span class="sy">SHARED · RULE-FILED</span></div>
+      <div class="grp">Views</div>
+      <a href="#m0"><span class="ico">◐</span>Summary</a>
+      <a href="#m1"><span class="ico">▤</span>Inbox · 24</a>
+      <a href="#m1"><span class="ico">◍</span>Needs filing · <span style="color:var(--intent-bright)">6</span></a>
+      <a href="#m1"><span class="ico">↩</span>Awaiting reply · 3</a>
+      <a href="#m2" class="on"><span class="ico">⚙</span>Rules · 4</a>
+      <div class="grp">Folder sync</div>
+      <div class="acct"><span class="sy" style="padding-left:0">OUTLOOK /TOWER-C ⇄ 06 COMMS</span></div>
+      <div class="acct"><span class="sy" style="padding-left:0">SAVE AS YOU SEND · ON</span></div>
+    </div>
+    <div class="main">
+      <div class="mhead">
+        <h3>Filing rules</h3><span class="cnt">4 ACTIVE · 2,847 FILED THIS QUARTER</span>
+        <div class="sp"><button class="btn btn-primary">New rule</button></div>
+      </div>
+      <div class="rule"><i class="u-dot" style="background:var(--st-done)"></i><span class="rif">from <b>*@arup.com</b> ∧ subject contains <b>"RFI"</b> <span class="arr">→</span> file to <b>06 / Quality / RFIs</b></span><span class="rmeta">312 FILED · LAST 09:12</span></div>
+      <div class="rule"><i class="u-dot" style="background:var(--st-done)"></i><span class="rif">attachment is <b>*.pdf</b> ∧ from <b>*@kier.co.uk</b> <span class="arr">→</span> file to <b>06-A / Certificates</b>, register attachment</span><span class="rmeta">1,184 FILED · LAST 08:47</span></div>
+      <div class="rule"><i class="u-dot" style="background:var(--st-done)"></i><span class="rif">to <b>site-towerc@meridian.co</b> <span class="arr">→</span> file to <b>08 / Records / Site</b>, save as you send</span><span class="rmeta">990 FILED · LAST 17:42</span></div>
+      <div class="rule"><i class="u-dot" style="background:var(--st-progress)"></i><span class="rif">subject contains <b>"possession"</b> <span class="arr">→</span> file to <b>02 / Logistics</b> — <b>suggested from 18 manual filings</b></span><span class="rmeta">AWAITS YOUR APPROVAL</span></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); padding:var(--space-6)">
+        <div style="background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-4)">
+          <div style="font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); margin-bottom:12px">Continuity — leavers</div>
+          <div style="display:flex; align-items:center; gap:10px">
+            <span class="av">KD</span>
+            <div style="flex:1">
+              <div style="font:560 13px/1.4 var(--font-ui); color:var(--text-1)">K. Diallo — left MAR 2026</div>
+              <div style="font:400 11.5px/1.5 var(--font-ui); color:var(--text-3)">1,204 threads retained on the Cloud · zero lost</div>
+            </div>
+            <button class="btn btn-secondary">Restore chains</button>
+          </div>
+          <div style="font:400 9.5px/1.6 var(--font-mono); letter-spacing:0.07em; color:var(--text-3); margin-top:12px">SAVED CHAINS SURVIVE TURNOVER, PROJECT END, AND STORAGE WIPES</div>
+        </div>
+        <div style="background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-4)">
+          <div style="font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); margin-bottom:12px">Storage — one provider</div>
+          <div style="display:flex; align-items:baseline; gap:8px"><span style="font:590 26px/1 var(--font-ui); color:var(--text-1)">38.4 GB</span><span style="font:400 11.5px/1.4 var(--font-ui); color:var(--text-3)">consolidated from 3 mail stores</span></div>
+          <div style="height:6px; border-radius:3px; background:var(--bg-3); overflow:hidden; margin-top:14px"><i style="display:block; height:100%; width:62%; background:var(--text-3)"></i></div>
+          <div style="font:400 9.5px/1.6 var(--font-mono); letter-spacing:0.07em; color:var(--text-3); margin-top:12px">62% OF PLAN · DUPLICATES DEDUPED AT SAVE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BEYOND THE SCREEN ============ -->
+<div class="wrap screen-block" id="b1">
+  <div class="sb-head"><span class="num">BTS.01</span><h2>Daily Briefing Email</h2><p>The product's voice in the inbox: one send at 06:00, the queue as it stands, one intent action. Transactional email that still reads as the instrument.</p></div>
+</div>
+<div class="app" style="max-width:680px; background:var(--bg-0)">
+  <div style="padding:18px 28px; border-bottom:1px solid var(--border); display:flex; gap:12px; align-items:center">
+    <span class="av">A</span>
+    <div style="flex:1">
+      <div style="font:560 13px/1.4 var(--font-ui); color:var(--text-1)">Asite <span style="font:400 11px/1 var(--font-mono); color:var(--text-3)">&lt;briefing@asite.com&gt;</span></div>
+      <div style="font:500 12.5px/1.4 var(--font-ui); color:var(--text-2)">Tower C — 6 need you · 1 holds concrete</div>
+    </div>
+    <span style="font:400 10px/1 var(--font-mono); color:var(--text-3)">06:00</span>
+  </div>
+  <div style="padding:30px 28px">
+    <div style="display:flex; align-items:center; gap:10px">
+      <svg width="20" height="21" viewBox="0 0 377 396"><use href="#amark"/></svg>
+      <span style="font:500 11px/1 var(--font-mono); letter-spacing:0.1em; color:var(--text-3)">MORNING BRIEFING · WED 11 JUN</span>
+    </div>
+    <div style="font:700 22px/1.3 var(--font-display); letter-spacing:-0.01em; color:var(--text-1); margin-top:18px">Good morning, Charles.</div>
+    <p style="font:400 13.5px/1.65 var(--font-ui); color:var(--text-2); margin-top:10px">Six items need you. One is holding 412m³ of concrete.</p>
+    <div style="margin-top:22px; background:var(--bg-2); border-radius:var(--r-md); box-shadow:var(--inset); overflow:hidden">
+      <div style="display:flex; gap:12px; align-items:center; padding:13px 16px; border-bottom:1px solid var(--border)">
+        <i class="u-dot" style="background:var(--st-blocked)"></i>
+        <span style="font:400 10.5px/1 var(--font-mono); color:var(--text-3)">RFI-0847</span>
+        <span style="font:500 12.5px/1.4 var(--font-ui); color:var(--text-1); flex:1">Core wall cover clash L26</span>
+        <span style="font:400 10px/1 var(--font-mono); color:var(--st-blocked)">2D OVER</span>
+      </div>
+      <div style="display:flex; gap:12px; align-items:center; padding:13px 16px; border-bottom:1px solid var(--border)">
+        <i class="u-dot" style="background:var(--st-progress)"></i>
+        <span style="font:400 10.5px/1 var(--font-mono); color:var(--text-3)">STR-CAL-0098</span>
+        <span style="font:500 12.5px/1.4 var(--font-ui); color:var(--text-1); flex:1">Transfer beam load calc review</span>
+        <span style="font:400 10px/1 var(--font-mono); color:var(--text-3)">TODAY</span>
+      </div>
+      <div style="display:flex; gap:12px; align-items:center; padding:13px 16px">
+        <i class="u-dot" style="background:var(--st-review)"></i>
+        <span style="font:400 10.5px/1 var(--font-mono); color:var(--text-3)">TX-0204</span>
+        <span style="font:500 12.5px/1.4 var(--font-ui); color:var(--text-1); flex:1">Transmittal to Arup — 14 files</span>
+        <span style="font:400 10px/1 var(--font-mono); color:var(--text-3)">TODAY</span>
+      </div>
+    </div>
+    <div style="margin-top:22px"><button class="btn btn-primary" style="padding:12px 22px">Open your queue</button></div>
+    <p style="font:400 10.5px/1.6 var(--font-mono); color:var(--text-3); margin-top:26px; letter-spacing:0.04em">ONE SEND PER DAY · REPLIES ROUTE TO YOUR PM · UNSUBSCRIBE MOVES THIS TO ⌘K ONLY</p>
+  </div>
+</div>
+
+<div class="wrap screen-block" id="b2">
+  <div class="sb-head"><span class="num">BTS.02</span><h2>Control-Room Display</h2><p>Ten-foot UI for the site office wall: register health at a glance, rotating every 20 seconds, readable from the kettle.</p></div>
+</div>
+<div class="app app-wide" style="background:var(--bg-0)">
+  <div style="aspect-ratio:32/10; padding:48px 64px; display:flex; flex-direction:column; background:var(--aurora), var(--bg-0)">
+    <div style="display:flex; align-items:center; gap:16px">
+      <svg width="26" height="27" viewBox="0 0 377 396"><use href="#amark"/></svg>
+      <span style="font:500 13px/1 var(--font-mono); letter-spacing:0.14em; color:var(--text-2)">MERIDIAN TOWER C — LIVE</span>
+      <span style="margin-left:auto; font:500 13px/1 var(--font-mono); color:var(--text-3)">WED 11 JUN · 09:41 · <span style="color:var(--st-done)">● SYNCED</span></span>
+    </div>
+    <div style="flex:1; display:grid; grid-template-columns:repeat(4,1fr); gap:48px; align-items:center">
+      <div><div style="font:590 clamp(48px,6vw,84px)/1 var(--font-ui); letter-spacing:-0.03em; color:var(--st-done)">98.4%</div><div style="font:500 13px/1.5 var(--font-mono); letter-spacing:0.12em; color:var(--text-3); margin-top:12px">REGISTER HEALTH</div></div>
+      <div><div style="font:590 clamp(48px,6vw,84px)/1 var(--font-ui); letter-spacing:-0.03em; color:var(--text-1)">47</div><div style="font:500 13px/1.5 var(--font-mono); letter-spacing:0.12em; color:var(--text-3); margin-top:12px">OPEN RFIS</div></div>
+      <div><div style="font:590 clamp(48px,6vw,84px)/1 var(--font-ui); letter-spacing:-0.03em; color:var(--intent)">1</div><div style="font:500 13px/1.5 var(--font-mono); letter-spacing:0.12em; color:var(--text-3); margin-top:12px">HOLD — RFI-0847 · L26</div></div>
+      <div><div style="font:590 clamp(48px,6vw,84px)/1 var(--font-ui); letter-spacing:-0.03em; color:var(--text-1)">13:30</div><div style="font:500 13px/1.5 var(--font-mono); letter-spacing:0.12em; color:var(--text-3); margin-top:12px">CRANE WINDOW CLOSES</div></div>
+    </div>
+    <div style="display:flex; align-items:center; gap:18px">
+      <div style="display:flex; gap:6px"><i class="u-dot" style="background:var(--intent)"></i><i class="u-dot" style="background:var(--bg-3)"></i><i class="u-dot" style="background:var(--bg-3)"></i></div>
+      <span style="font:400 11px/1 var(--font-mono); color:var(--text-3); letter-spacing:0.1em">VIEW 1/3 — ROTATES 20S · NO INTERACTION · TYPE ONLY GROWS</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap screen-block" id="b3">
+  <div class="sb-head"><span class="num">BTS.03</span><h2>Field Glance</h2><p>Watch face and lock-screen: the system compressed to one decision. If it isn't worth a wrist buzz, it doesn't get one.</p></div>
+</div>
+<div class="app" style="max-width:780px; background:var(--bg-0)">
+  <div style="display:flex; gap:56px; align-items:center; justify-content:center; padding:56px; flex-wrap:wrap">
+    <div style="width:188px; height:228px; border-radius:42px; background:var(--bg-1); box-shadow:var(--inset), var(--shadow-pop); display:flex; flex-direction:column; padding:24px 22px">
+      <div style="display:flex; justify-content:space-between; font:500 10px/1 var(--font-mono); color:var(--text-3)"><span>09:41</span><svg width="13" height="14" viewBox="0 0 377 396"><use href="#amark"/></svg></div>
+      <div style="margin-top:auto">
+        <i class="u-dot" style="background:var(--st-blocked); display:block"></i>
+        <div style="font:560 15px/1.3 var(--font-ui); color:var(--text-1); margin-top:10px">RFI-0847 answered</div>
+        <div style="font:400 11.5px/1.5 var(--font-ui); color:var(--text-2); margin-top:4px">Hold lifts. P-1131 releases.</div>
+        <div style="display:flex; gap:8px; margin-top:14px">
+          <span style="flex:1; text-align:center; font:560 11px/1 var(--font-ui); color:var(--bg-0); background:var(--intent); border-radius:999px; padding:9px 0">Sign pour</span>
+          <span style="flex:1; text-align:center; font:560 11px/1 var(--font-ui); color:var(--text-2); background:var(--bg-3); border-radius:999px; padding:9px 0; box-shadow:var(--inset)">Later</span>
+        </div>
+      </div>
+    </div>
+    <div style="width:300px; border-radius:24px; background:var(--bg-1); box-shadow:var(--inset), var(--shadow-pop); padding:18px">
+      <div style="text-align:center; font:500 11px/1 var(--font-mono); color:var(--text-3)">LOCK SCREEN · 09:41</div>
+      <div style="margin-top:16px; background:rgba(22,24,28,0.10); border-radius:var(--r-md); box-shadow:var(--inset); padding:14px">
+        <div style="display:flex; gap:10px; align-items:center">
+          <svg width="16" height="17" viewBox="0 0 377 396"><use href="#amark"/></svg>
+          <span style="font:560 12px/1 var(--font-ui); color:var(--text-1)">Asite</span>
+          <span style="margin-left:auto; font:400 10px/1 var(--font-mono); color:var(--text-3)">now</span>
+        </div>
+        <div style="font:500 12.5px/1.5 var(--font-ui); color:var(--text-1); margin-top:8px">Kofi answered RFI-0847 — hold lifted. Pour P-1131 needs your signature before 13:30.</div>
+      </div>
+      <div style="margin-top:10px; background:rgba(22,24,28,0.6); border-radius:var(--r-md); box-shadow:var(--inset); padding:14px; opacity:0.6">
+        <div style="display:flex; gap:10px; align-items:center">
+          <svg width="16" height="17" viewBox="0 0 377 396"><use href="#amark"/></svg>
+          <span style="font:560 12px/1 var(--font-ui); color:var(--text-1)">Asite</span>
+          <span style="margin-left:auto; font:400 10px/1 var(--font-mono); color:var(--text-3)">2h</span>
+        </div>
+        <div style="font:500 12.5px/1.5 var(--font-ui); color:var(--text-2); margin-top:8px">Sonia uploaded 4 ceiling plans to Files / MEP.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap screen-block" id="b4">
+  <div class="sb-head"><span class="num">BTS.04</span><h2>Generated Transmittal</h2><p>The machine-made document: every PDF the system emits carries the language — mono metadata grid, dot states, the intent rule line. Brand where no designer will ever touch it.</p></div>
+</div>
+<div class="app" style="max-width:720px; background:var(--bg-0)">
+  <div style="padding:40px; display:flex; justify-content:center">
+    <div style="width:560px; max-width:100%; background:#FAFAF8; border-radius:4px; box-shadow:0 16px 48px rgba(22,24,28,0.10); padding:38px 42px; color:#14191E">
+      <div style="display:flex; align-items:center; gap:12px">
+        <svg width="24" height="25" viewBox="0 0 377 396" style="--mkb:#14191E; --mka:#C8371B"><use href="#amark"/></svg>
+        <span style="font:700 14px/1 var(--font-display); letter-spacing:-0.01em; ">Transmittal</span>
+        <span style="margin-left:auto; font:500 10px/1 var(--font-mono); color:#5E6B77">TX-0204</span>
+      </div>
+      <div style="height:1.5px; background:linear-gradient(90deg, #C8371B 120px, #D8DDE2 120px); margin:18px 0 22px"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px 24px; font:400 10.5px/1.7 var(--font-mono); color:#5E6B77">
+        <span>FROM&nbsp;&nbsp;&nbsp;MCG — C. NJOKU</span><span>DATE&nbsp;&nbsp;&nbsp;11 JUN 2026 · 09:41</span>
+        <span>TO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ARUP — K. DIALLO</span><span>PROJECT&nbsp;&nbsp;&nbsp;MERIDIAN TOWER C</span>
+        <span>REASON&nbsp;FOR CONSTRUCTION</span><span>FILES&nbsp;&nbsp;14 · 86.2 MB</span>
+      </div>
+      <table style="width:100%; border-collapse:collapse; margin-top:22px; font:400 10.5px/1.5 var(--font-mono)">
+        <tr style="color:#5E6B77"><td style="padding:7px 0; border-bottom:1.5px solid #14191E">REF</td><td style="border-bottom:1.5px solid #14191E">TITLE</td><td style="border-bottom:1.5px solid #14191E">REV</td><td style="border-bottom:1.5px solid #14191E; text-align:right">STATE</td></tr>
+        <tr><td style="padding:8px 0; border-bottom:1px solid #E4E8EB">STR-DWG-0412</td><td style="font-family:Inter,sans-serif; font-size:12px; border-bottom:1px solid #E4E8EB">Core wall reinforcement L24–L28</td><td style="border-bottom:1px solid #E4E8EB">C03</td><td style="text-align:right; color:#3E7E5F; border-bottom:1px solid #E4E8EB">● S4</td></tr>
+        <tr><td style="padding:8px 0; border-bottom:1px solid #E4E8EB">STR-DWG-0413</td><td style="font-family:Inter,sans-serif; font-size:12px; border-bottom:1px solid #E4E8EB">Transfer slab setting-out L29</td><td style="border-bottom:1px solid #E4E8EB">B01</td><td style="text-align:right; color:#96772F; border-bottom:1px solid #E4E8EB">● S3</td></tr>
+        <tr><td style="padding:8px 0">STR-RPT-0051</td><td style="font-family:Inter,sans-serif; font-size:12px">Wind tunnel summary rev pack</td><td>C01</td><td style="text-align:right; color:#3E7E5F">● S4</td></tr>
+      </table>
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:30px">
+        <span style="font:400 9px/1.6 var(--font-mono); color:#9AA4AE; letter-spacing:0.06em">GENERATED BY ASITE · AUDIT REF 8842-AC<br>+11 MORE FILES ON PAGE 2</span>
+        <span style="font:500 10px/1 var(--font-mono); color:#C8371B; border:1px solid rgba(200, 55, 27,0.5); border-radius:3px; padding:5px 9px; letter-spacing:0.08em">CONTROLLED COPY</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Asite — The Quiet Instrument</span>
+    <span>2026</span>
+  </div>
+</footer>
 <script>
-  // Orb toggles the drawer; click outside closes it.
-  document.querySelectorAll('.ai-orb').forEach(function(o){
-    o.addEventListener('click', function(e){ e.stopPropagation(); o.parentElement.classList.toggle('open'); });
-  });
-  document.addEventListener('click', function(e){
-    document.querySelectorAll('.ai-blob.open').forEach(function(b){ if(!b.contains(e.target)) b.classList.remove('open'); });
-  });
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('.fnav a'))
+      .filter(function(l){ return l.getAttribute('href').indexOf('#') === 0; });
+    var map = links.map(function(l){ return [document.getElementById(l.getAttribute('href').slice(1)), l]; })
+      .filter(function(x){ return x[0]; });
+    if(!map.length) return;
+    function spy(){
+      var cur = map[0][1];
+      for (var i=0;i<map.length;i++){ if (map[i][0].getBoundingClientRect().top <= 130) cur = map[i][1]; }
+      links.forEach(function(l){ l.classList.toggle('on', l === cur); });
+    }
+    addEventListener('scroll', spy, {passive:true}); spy();
+    document.querySelectorAll('.ai-orb').forEach(function(o){
+      o.addEventListener('click', function(e){ e.stopPropagation(); o.parentElement.classList.toggle('open'); });
+    });
+  })();
 </script>
+
+<div class="dock">
+  <div class="themeswitch" role="group" aria-label="Theme">
+    <a href="../screens.html" aria-label="Switch to dark theme">● DARK</a>
+    <span class="ts-on">○ LIGHT</span>
+  </div>
+</div>
 </body>
 </html>

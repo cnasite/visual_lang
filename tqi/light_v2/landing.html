@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — Build without limits</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg-0); color:var(--text-2); font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:rgba(200, 55, 27,0.18); color:#16181C; }
+  .wrap { max-width:1140px; margin:0 auto; padding:0 var(--space-8); }
+  .m-body { fill:var(--mkb, #16181C); } .m-arrow { fill:var(--mka, #C8371B); }
+  .m-ink { --mkb:#16181C; --mka:#16181C; }
+  a { color:inherit; }
+
+  .btn { display:inline-flex; align-items:center; gap:8px; font:560 13.5px/1 var(--font-ui); padding:11px 20px;
+    border-radius:var(--r-md); border:none; cursor:pointer; text-decoration:none; white-space:nowrap; }
+  .btn-primary { background:var(--intent); color:#fff; }
+  .btn-primary:hover { background:var(--intent-bright); }
+  .btn-secondary { background:var(--bg-3); color:var(--text-1); box-shadow:var(--inset); }
+  .btn-ghost { background:none; color:var(--text-2); }
+  .btn-ghost:hover { color:var(--text-1); }
+  .u-kbd { font:500 10.5px/1 var(--font-mono); color:var(--text-3); background:var(--bg-3); box-shadow:var(--inset);
+    border-radius:4px; padding:3px 6px; }
+
+  /* nav */
+  nav { position:sticky; top:0; z-index:50; background:rgba(250,250,249,0.88); backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+  nav .wrap { display:flex; align-items:center; gap:var(--space-2); height:60px; }
+  .nav-mark { display:flex; align-items:center; gap:10px; margin-right:var(--space-6); text-decoration:none; }
+  .nav-mark span { font:590 14.5px/1 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); }
+  nav .lnk { font:500 13px/1 var(--font-ui); color:var(--text-2); text-decoration:none; padding:8px 12px; border-radius:var(--r-sm); }
+  nav .lnk:hover { color:var(--text-1); background:var(--bg-2); }
+  nav .sp { margin-left:auto; display:flex; align-items:center; gap:10px; }
+  nav .login { font:500 13px/1 var(--font-ui); color:var(--text-2); text-decoration:none; padding:8px 12px; }
+  nav .login:hover { color:var(--text-1); }
+
+  /* metre band motif */
+  .stripeband { height:8px; background:repeating-linear-gradient(90deg, var(--intent) 0 56px, transparent 56px 64px); }
+
+  /* hero — vertically stacked, instrument motifs */
+  .hero { position:relative; padding:104px 0 0; background:var(--aurora), var(--bg-0); overflow:hidden; border-bottom:1px solid var(--border); }
+  .hero .wrap { display:flex; flex-direction:column; align-items:center; text-align:center; position:relative; }
+  .hero .beam2 { position:absolute; left:50%; top:-104px; width:1px; height:96px; background:linear-gradient(var(--intent), transparent); }
+  .hero .xc { position:absolute; width:16px; height:16px; opacity:0.85; }
+  .hero .xc::before, .hero .xc::after { content:""; position:absolute; background:var(--text-3); }
+  .hero .xc::before { left:50%; top:0; bottom:0; width:1.2px; transform:translateX(-50%); }
+  .hero .xc::after { top:50%; left:0; right:0; height:1.2px; transform:translateY(-50%); }
+  .hero .xc.hot::before, .hero .xc.hot::after { background:var(--intent); }
+  .hero .coord { position:absolute; top:50%; font:400 9.5px/1.8 var(--font-mono); letter-spacing:0.12em; color:var(--text-3); }
+  .hero .coord.l { left:0; transform:rotate(180deg); writing-mode:vertical-rl; }
+  .hero .coord.r { right:0; writing-mode:vertical-rl; }
+  .hero .datum { width:min(760px, 100%); display:flex; align-items:center; gap:12px; margin:42px 0 0; }
+  .hero .datum .ln { flex:1; height:1px; background:repeating-linear-gradient(90deg, var(--border-strong) 0 8px, transparent 8px 14px); }
+  .hero .datum .dm { width:7px; height:7px; border:1px solid var(--text-3); transform:rotate(45deg); flex:none; }
+  .hero .datum .lb { font:400 9.5px/1 var(--font-mono); letter-spacing:0.14em; color:var(--text-3); }
+  .hero .eyebrow { display:inline-flex; align-items:center; gap:9px; font:500 11.5px/1 var(--font-mono); letter-spacing:0.14em;
+    color:var(--intent-bright); margin-bottom:22px; }
+  .hero .eyebrow i { width:6px; height:6px; border-radius:50%; background:var(--intent); }
+  .hero h1 { font:700 clamp(40px,4.8vw,62px)/1.04 var(--font-display); letter-spacing:-0.01em; color:var(--text-1); }
+  .hero .sub { font:400 16px/1.7 var(--font-ui); color:var(--text-2); max-width:560px; margin-top:22px; }
+  .hero .cta { display:flex; gap:14px; align-items:center; justify-content:center; margin-top:34px; }
+  .hero .meta { display:flex; gap:26px; justify-content:center; margin-top:38px; font:500 10.5px/1.5 var(--font-mono); letter-spacing:0.09em; color:var(--text-3); }
+  .hero .illo { position:relative; width:min(860px, 100%); margin-top:10px; margin-bottom:var(--space-16); }
+  .hero .illo svg { width:100%; height:auto; display:block; }
+
+  /* sections */
+  section { padding:var(--space-24) 0; border-bottom:1px solid var(--border); }
+  .sec-eyebrow { font:500 11.5px/1 var(--font-mono); letter-spacing:0.14em; color:var(--intent-bright); margin-bottom:16px; }
+  section h2 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--text-1); max-width:640px; }
+  section .lead { font:400 15px/1.7 var(--font-ui); color:var(--text-2); max-width:560px; margin-top:14px; }
+
+  /* proof — logo carousel */
+  .proof { padding:var(--space-8) 0; border-bottom:1px solid var(--border); overflow:hidden; }
+  .proof .wrap { display:flex; align-items:center; gap:30px; }
+  .proof .n { flex:none; font:500 11px/1.5 var(--font-mono); letter-spacing:0.1em; color:var(--text-1); white-space:nowrap; }
+  .marq { flex:1; min-width:0; overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+  .marq .track { display:flex; align-items:center; width:max-content; animation:marq 30s linear infinite; }
+  .marq .track img { height:24px; max-width:130px; object-fit:contain; width:auto; margin-right:72px; flex:none;
+    opacity:0.55; }
+  .marq:hover .track { animation-play-state:paused; }
+  @keyframes marq { to { transform:translateX(-50%); } }
+
+  /* features */
+  .feat { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); margin-top:40px; }
+  .fcard { position:relative; background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-6); }
+  .fcard.flag { background:var(--bg-2); }
+  .fcard .cross { position:absolute; top:18px; right:18px; width:18px; height:18px; }
+  .fcard .cross::before, .fcard .cross::after { content:""; position:absolute; background:var(--intent); }
+  .fcard .cross::before { left:50%; top:0; bottom:0; width:1.5px; transform:translateX(-50%); }
+  .fcard .cross::after { top:50%; left:0; right:0; height:1.5px; transform:translateY(-50%); }
+  .fcard .lic { display:block; margin-bottom:18px; }
+  .fcard .lic svg { display:block; }
+  .fcard b { font:560 15px/1.4 var(--font-ui); color:var(--text-1); display:block; margin-bottom:8px; }
+  .fcard p { font:400 13px/1.65 var(--font-ui); color:var(--text-2); }
+  .fcard .mn { font:400 10px/1.5 var(--font-mono); letter-spacing:0.08em; color:var(--text-3); margin-top:16px; display:block; }
+
+  /* product mock frames */
+  .mockband { margin-top:48px; display:grid; grid-template-columns:1.45fr 0.55fr; gap:var(--space-4); align-items:start; }
+  .browser { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); overflow:hidden; position:relative; }
+  .browser .chrome { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border); background:var(--bg-2); }
+  .browser .chrome i { width:9px; height:9px; border-radius:50%; background:var(--bg-3); box-shadow:var(--inset); }
+  .browser .chrome .url { margin:0 auto; font:400 10.5px/1 var(--font-mono); color:var(--text-3); background:var(--bg-0);
+    box-shadow:var(--inset); border-radius:999px; padding:5px 14px; }
+  .mock-app { display:grid; grid-template-columns:172px 1fr; min-height:380px; position:relative; }
+  .mock-side { background:var(--bg-2); border-right:1px solid var(--border); padding:12px 10px; }
+  .mock-side .ws { display:flex; align-items:center; gap:8px; padding:6px 8px; margin-bottom:10px; }
+  .mock-side .ws b { font:560 11.5px/1 var(--font-ui); color:var(--text-1); }
+  .mock-side a { display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:var(--r-sm);
+    font:500 11px/1.5 var(--font-ui); color:var(--text-2); text-decoration:none; }
+  .mock-side a.on { background:var(--intent-wash); color:var(--text-1); }
+  .mock-main { padding:16px 18px; min-width:0; }
+  .kpis { display:flex; gap:28px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+  .kpi .v { font:590 20px/1.1 var(--font-ui); color:var(--text-1); }
+  .kpi .v.hot { color:var(--intent-bright); }
+  .kpi .l { font:400 10px/1.5 var(--font-ui); color:var(--text-3); }
+  .mil { display:flex; padding:14px 0 8px; }
+  .mil .ms { flex:1; position:relative; padding-top:13px; }
+  .mil .ms::before { content:""; position:absolute; top:4px; left:0; right:0; height:2px; background:var(--bg-3); }
+  .mil .ms i { position:absolute; top:0; left:0; width:9px; height:9px; border-radius:50%; background:var(--bg-3); box-shadow:var(--inset); }
+  .mil .ms.done::before { background:var(--text-3); }
+  .mil .ms.done i { background:var(--text-2); }
+  .mil .ms.now i { background:var(--intent); box-shadow:0 0 8px rgba(200, 55, 27,0.5); }
+  .mil .ms b { font:560 9.5px/1.4 var(--font-ui); color:var(--text-1); display:block; }
+  .mil .ms span { font:400 8.5px/1.4 var(--font-mono); color:var(--text-3); }
+  .hrow { display:flex; align-items:center; gap:10px; padding:9px 4px; border-bottom:1px solid var(--border);
+    font:400 11.5px/1.4 var(--font-ui); color:var(--text-2); }
+  .hrow:last-child { border-bottom:none; }
+  .hrow .dot { width:7px; height:7px; border-radius:50%; flex:none; }
+  .hrow .rf { font:400 10px/1 var(--font-mono); color:var(--text-3); width:76px; flex:none; }
+  .hrow .t { color:var(--text-1); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hrow .tm { margin-left:auto; font:400 9px/1 var(--font-mono); color:var(--text-3); flex:none; }
+  .hrow.sel { background:var(--intent-wash); border-radius:var(--r-sm); }
+  .ai-orb { position:absolute; right:14px; bottom:14px; width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle at 32% 28%, #E3E4E0, var(--bg-3) 70%);
+    box-shadow:var(--inset), 0 0 0 1px rgba(200, 55, 27,0.28), 0 0 18px rgba(200, 55, 27,0.16), 0 8px 20px rgba(22,24,28,0.10); }
+  .ai-orb i { font-style:normal; font-size:13px; line-height:1; color:var(--intent-bright); }
+  .sidecard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); overflow:hidden; }
+  .sidecard .hd { display:flex; align-items:center; gap:8px; padding:11px 14px; border-bottom:1px solid var(--border); }
+  .sidecard .hd b { font:560 12px/1 var(--font-ui); color:var(--text-1); }
+  .sidecard .hd span { margin-left:auto; font:400 9.5px/1 var(--font-mono); color:var(--text-3); }
+  .mrow { padding:10px 14px; border-bottom:1px solid var(--border); }
+  .mrow:last-child { border-bottom:none; }
+  .mrow .l1 { display:flex; align-items:center; gap:7px; font:560 11.5px/1.4 var(--font-ui); color:var(--text-1); }
+  .mrow .l1 .tm { margin-left:auto; font:400 9px/1 var(--font-mono); color:var(--text-3); }
+  .mrow .l2 { font:400 11px/1.5 var(--font-ui); color:var(--text-2); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .fchip { display:inline-block; font:500 8.5px/1 var(--font-mono); letter-spacing:0.05em; color:var(--text-2);
+    background:var(--bg-3); box-shadow:var(--inset); border-radius:4px; padding:3px 6px; margin-top:5px; }
+  .fchip.unf { color:var(--intent-bright); background:var(--intent-wash); box-shadow:none; }
+  .ann { position:absolute; left:-14px; top:46%; display:flex; align-items:center; gap:10px; transform:translateX(-100%); white-space:nowrap; }
+  .ann .lab { font:500 11px/1.4 var(--font-mono); color:var(--intent-bright); letter-spacing:0.06em; text-align:right; }
+  .ann .ln { width:54px; height:1px; background:var(--intent); }
+
+  /* product sections — one full screen + three features */
+  .chrome { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border); background:var(--bg-2); }
+  .chrome i { width:8px; height:8px; border-radius:50%; background:var(--bg-3); box-shadow:var(--inset); }
+  .chrome .url { margin:0 auto; font:400 10px/1 var(--font-mono); color:var(--text-3); background:var(--bg-0);
+    box-shadow:var(--inset); border-radius:999px; padding:4px 13px; }
+  .bigshot { margin-top:40px; position:relative; border-radius:var(--r-lg); overflow:hidden;
+    box-shadow:var(--inset), var(--shadow-pop); background:var(--bg-1); }
+  .bigshot img { display:block; width:100%; height:auto; }
+  .bigshot .fade { position:absolute; left:0; right:0; bottom:0; height:120px; pointer-events:none;
+    background:linear-gradient(transparent, rgba(246,246,244,0.55)); }
+
+  /* video */
+  .vid { margin-top:48px; position:relative; border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--inset), var(--shadow-pop);
+    background:var(--bg-3); cursor:pointer; }
+  .vid .stage { aspect-ratio:16/7.5; display:flex; align-items:center; justify-content:center; position:relative; }
+  .vid .stage svg { position:absolute; inset:0; width:100%; height:100%; }
+  .vid .play { position:relative; z-index:3; width:74px; height:74px; border-radius:50%; background:var(--intent);
+    display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 1px rgba(200, 55, 27,0.4), 0 0 44px rgba(200, 55, 27,0.35);
+    transition:transform var(--t-base) var(--ease), background var(--t-base) var(--ease); }
+  .vid:hover .play { transform:scale(1.07); background:var(--intent-bright); }
+  .vid .play::after { content:""; display:block; width:0; height:0; margin-left:5px;
+    border-top:11px solid transparent; border-bottom:11px solid transparent; border-left:18px solid #16100C; }
+  .vid .bar { position:relative; z-index:3; display:flex; align-items:center; gap:16px; padding:14px 20px;
+    border-top:1px solid var(--border); background:rgba(255,255,255,0.62); backdrop-filter:blur(8px); }
+  .vid .bar b { font:560 13px/1 var(--font-ui); color:var(--text-1); }
+  .vid .bar .mn { font:400 10px/1 var(--font-mono); letter-spacing:0.08em; color:var(--text-3); }
+  .vid .bar .tl { margin-left:auto; flex:0 0 220px; height:3px; border-radius:2px; background:var(--bg-3); overflow:hidden; }
+  .vid .bar .tl i { display:block; height:100%; width:22%; background:var(--intent); }
+
+  /* numbers */
+  .nums { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-4); margin-top:40px; }
+  .num { padding:var(--space-6); background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); }
+  .num.hot { background:var(--intent-wash); box-shadow:var(--inset), 0 0 0 1px rgba(200, 55, 27,0.3); }
+  .num .v { font:590 34px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--text-1); }
+  .num .l { font:400 12px/1.6 var(--font-ui); color:var(--text-2); margin-top:10px; }
+  .num .s { font:400 9.5px/1.5 var(--font-mono); letter-spacing:0.08em; color:var(--text-3); margin-top:12px; display:block; }
+
+  /* case studies */
+  .cases { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); margin-top:40px; }
+  .case { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); overflow:hidden; position:relative; }
+  .case .tag { font:500 10px/1 var(--font-mono); letter-spacing:0.12em; color:var(--text-3); }
+  .case h3 { font:560 19px/1.35 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); margin:14px 0 10px; }
+  .case p { font:400 13px/1.7 var(--font-ui); color:var(--text-2); }
+  .case .who { display:flex; align-items:center; gap:10px; margin-top:22px; }
+  .case .who .ln { width:34px; height:1px; background:var(--intent); }
+  .case .who span { font:500 11px/1.4 var(--font-mono); letter-spacing:0.07em; color:var(--text-1); }
+
+  /* security band */
+  .sec-band { display:flex; align-items:center; gap:var(--space-8); background:var(--bg-1); border-radius:var(--r-lg);
+    box-shadow:var(--inset), var(--shadow-card); padding:var(--space-8); margin-top:40px; }
+  .sec-band .shield { flex:none; width:54px; height:60px; }
+  .sec-band b { font:560 16px/1.45 var(--font-ui); color:var(--text-1); display:block; }
+  .sec-band p { font:400 12.5px/1.6 var(--font-ui); color:var(--text-2); margin-top:6px; max-width:520px; }
+  .sec-band .mn { margin-left:auto; font:400 10px/1.9 var(--font-mono); letter-spacing:0.09em; color:var(--text-3); text-align:right; }
+
+  /* CTA field */
+  .ctafield { background:var(--intent); border-bottom:none; }
+  .ctafield .wrap { text-align:center; }
+  .ctafield h2 { font:700 clamp(34px,4.4vw,56px)/1.06 var(--font-display); letter-spacing:-0.01em; color:#16100C; max-width:none; }
+  .ctafield p { font:500 15px/1.6 var(--font-ui); color:rgba(22,16,12,0.78); max-width:480px; margin:18px auto 0; }
+  .ctafield .btn-ink { background:#16100C; color:#FFF; margin-top:32px; }
+  .ctafield .mn { font:500 10px/1.5 var(--font-mono); letter-spacing:0.1em; color:rgba(22,16,12,0.6); margin-top:26px; }
+
+  /* footer */
+  footer { background:var(--bg-1); }
+  footer .cols { display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr 1fr; gap:var(--space-8); padding:var(--space-12) 0 var(--space-8); }
+  footer .mn-h { font:500 10.5px/1 var(--font-mono); color:var(--text-3); letter-spacing:0.09em; margin-bottom:14px; }
+  footer .col a { display:block; font:500 12.5px/2 var(--font-ui); color:var(--text-2); text-decoration:none; }
+  footer .col a:hover { color:var(--text-1); }
+  footer .desc { font:400 12.5px/1.65 var(--font-ui); color:var(--text-3); max-width:240px; margin-top:14px; }
+  footer .legal { display:flex; gap:24px; padding:18px 0; border-top:1px solid var(--border);
+    font:500 10px/1.4 var(--font-mono); color:var(--text-3); letter-spacing:0.05em; }
+  footer .legal .r { margin-left:auto; }
+
+  .dock { position:fixed; left:16px; bottom:16px; z-index:60; display:flex; align-items:center; gap:8px; }
+  .backlink { font:500 10px/1 var(--font-mono); letter-spacing:0.08em;
+    color:var(--text-3); background:rgba(255,255,255,0.88); backdrop-filter:blur(10px); box-shadow:var(--inset);
+    border-radius:999px; padding:8px 13px; text-decoration:none; }
+  .backlink:hover { color:var(--text-1); }
+  .themeswitch { display:inline-flex; align-items:center; gap:2px; background:rgba(255,255,255,0.88); backdrop-filter:blur(10px);
+    box-shadow:var(--inset); border-radius:999px; padding:3px; font:500 10px/1 var(--font-mono); letter-spacing:0.08em; }
+  .themeswitch a, .themeswitch span { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:999px;
+    color:var(--text-3); text-decoration:none; }
+  .themeswitch .ts-on { background:var(--intent); color:#fff; }
+  .themeswitch a:hover { color:var(--text-1); }
+
+  /* case study imagery */
+  .case-ph { position:relative; height:200px; overflow:hidden; }
+  .case-ph img { width:100%; height:100%; object-fit:cover; display:block;
+    filter:contrast(1.02); transition:filter var(--t-base) var(--ease), transform var(--t-base) var(--ease); }
+  .case:hover .case-ph img { filter:brightness(1.04) contrast(1.02); }
+  .case-ph::after { content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, transparent 32%, var(--bg-1) 100%); }
+  .case-body { padding:var(--space-8); }
+
+  /* video — click-to-play image reel; controls reveal on hover */
+  .vid .reel { position:absolute; inset:0; z-index:1; overflow:hidden; background:#0C0D0F; }
+  .vid .frame { position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    opacity:0; transform:scale(1.06); filter:contrast(1.02);
+    transition:opacity 1.2s var(--ease); will-change:opacity, transform; }
+  .vid .frame.on { opacity:1; animation:kenburns 5.4s var(--ease) forwards; }
+  @keyframes kenburns { from { transform:scale(1.06); } to { transform:scale(1.16); } }
+  .vid .vgrad { position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0;
+    transition:opacity var(--t-base) var(--ease);
+    background:radial-gradient(120% 92% at 50% 32%, transparent 38%, rgba(8,9,10,0.55) 100%),
+               linear-gradient(rgba(8,9,10,0.10), rgba(8,9,10,0.42)); }
+  .vid:hover .vgrad, .vid:focus-within .vgrad { opacity:1; }
+  .vid .play { z-index:3; border:none; padding:0; cursor:pointer; opacity:0;
+    transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease), background var(--t-base) var(--ease); }
+  .vid:hover .play, .vid:focus-within .play { opacity:1; }
+  .vid.playing .play::after { width:6px; height:20px; margin:0; border:none; border-radius:1px;
+    background:#16100C; box-shadow:11px 0 0 #16100C; transform:translateX(-5px); }
+  @media (prefers-reduced-motion: reduce){ .vid .frame.on { animation:none; transform:scale(1.06); } }
+
+  @media (max-width:980px){
+    .hero .wrap, .cases, .mockband { grid-template-columns:1fr; }
+    .feat, .nums { grid-template-columns:1fr 1fr; }
+    footer .cols { grid-template-columns:1fr 1fr; }
+    .ann { display:none; }
+  }
+
+  /* ===== Light theme: INK primary, ORANGE accent =====
+     Primary actions are ink (#16181C). Survey Orange is the accent only —
+     focus, links, selection washes, status, and the live AI signal
+     (orb, spark, run pulse, caret). No large orange fills. */
+  .btn-primary { background:var(--text-1) !important; color:#fff !important; }
+  .btn-primary:hover { background:#000 !important; box-shadow:none !important; }
+  .ai-entry .go, .sc-input .go { background:var(--text-1) !important; }
+  .ai-entry .go:hover, .sc-input .go:hover { background:#000 !important; }
+  .ctafield { background:var(--text-1) !important; }
+  .ctafield h2 { color:#fff !important; }
+  .ctafield p { color:rgba(255,255,255,0.82) !important; }
+  .ctafield .mn { color:rgba(255,255,255,0.55) !important; }
+  .ctafield .btn-ink { background:var(--intent) !important; color:#fff !important; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-body" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-arrow" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="nav-mark" href="#top"><svg width="22" height="23" viewBox="0 0 377 396"><use href="#amark"/></svg><span>Asite</span></a>
+    <a class="lnk" href="#platform">Products</a>
+    <a class="lnk" href="#cases">Industries</a>
+    <a class="lnk" href="#video">Insights</a>
+    <a class="lnk" href="#security">Company</a>
+    <span class="sp">
+      <a class="login" href="#cta">Log in</a>
+      <a class="btn btn-primary" href="#cta">Book a demo</a>
+    </span>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <span class="beam2"></span>
+    <span class="xc" style="left:8px; top:18px"></span>
+    <span class="xc hot" style="right:8px; top:18px"></span>
+    <span class="coord l">X 12.400 · Y 8.060 · Z 9.300</span>
+    <span class="coord r">FEDERATED · IFC 4 · GRID 04</span>
+    <div class="eyebrow"><i></i>BUILD WITHOUT LIMITS</div>
+    <h1 style="max-width:820px">One platform for everything you build.</h1>
+    <p class="sub">A comprehensive data platform for your asset and construction project data. Connect the design, build, and operational phases of your assets — and improve information management, insight, and profitability.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#cta">Book a demo</a>
+      <a class="btn btn-ghost" href="#product">Explore the platform <span class="u-kbd">↵</span></a>
+    </div>
+    <div class="meta">
+      <span>DEFINING THE CDE CATEGORY SINCE 2001</span>
+      <span>84,000+ COMPANIES</span>
+      <span>ISO 19650</span>
+    </div>
+    <div class="datum"><span class="dm"></span><span class="ln"></span><span class="lb">ISO VIEW · FEDERATED MODEL — STRUCTURE × MEP</span><span class="ln"></span><span class="dm"></span></div>
+    <div class="illo" style="width:min(920px, 100%)">
+      <!-- Filled Isometry: the federated scene — solid slabs from the ramp, the clash duct owns the orange -->
+      <svg viewBox="0 0 920 440" fill="none">
+        <!-- ground platforms -->
+        <polygon points="330,210 540,315 330,420 120,315" fill="#E7E9ED"/>
+        <polygon points="330,420 540,315 540,327 330,432" fill="#DBDCD8"/>
+        <polygon points="330,420 120,315 120,327 330,432" fill="#E3E4E0"/>
+        <polygon points="700,250 830,315 700,380 570,315" fill="#E7E9ED"/>
+        <polygon points="700,380 830,315 830,325 700,390" fill="#DBDCD8"/>
+        <polygon points="700,380 570,315 570,325 700,390" fill="#E3E4E0"/>
+
+        <!-- MAIN STACK — structure (solid slabs, floating) -->
+        <!-- L1 -->
+        <polygon points="330,255 470,325 330,395 190,325" fill="#DBDCD8"/>
+        <polygon points="330,395 470,325 470,343 330,413" fill="#ACB0A9"/>
+        <polygon points="330,395 190,325 190,343 330,413" fill="#BFC2BC"/>
+        <!-- L2 -->
+        <polygon points="330,175 470,245 330,315 190,245" fill="#E3E4E0"/>
+        <polygon points="330,315 470,245 470,263 330,333" fill="#ACB0A9"/>
+        <polygon points="330,315 190,245 190,263 330,333" fill="#BFC2BC"/>
+        <!-- L3 planned: dashed, unfilled -->
+        <polygon points="330,95 470,165 330,235 190,165" stroke="#90949B" stroke-width="1.2" stroke-dasharray="5 5"/>
+
+        <!-- MEP STACK — right (solid slabs) -->
+        <polygon points="700,280 790,325 700,370 610,325" fill="#DBDCD8"/>
+        <polygon points="700,370 790,325 790,339 700,384" fill="#ACB0A9"/>
+        <polygon points="700,370 610,325 610,339 700,384" fill="#BFC2BC"/>
+        <polygon points="700,225 790,270 700,315 610,270" fill="#E3E4E0"/>
+        <polygon points="700,315 790,270 790,284 700,329" fill="#ACB0A9"/>
+        <polygon points="700,315 610,270 610,284 700,329" fill="#BFC2BC"/>
+        <polygon points="700,170 790,215 700,260 610,215" stroke="#90949B" stroke-width="1.2" stroke-dasharray="5 5"/>
+
+        <!-- federation link (annotation) -->
+        <path d="M470 245 L610 270" stroke="#ACB0A9" stroke-width="1" stroke-dasharray="3 5"/>
+        <text x="540" y="246" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#90949B" letter-spacing="1">FEDERATED</text>
+
+        <!-- THE DUCT — the one orange object, running into the structure at L2 -->
+        <polygon points="610,262 422,237 422,247 610,272" fill="#C8371B"/>
+        <polygon points="610,272 422,247 422,259 610,284" fill="#C8371B"/>
+        <!-- clash marker -->
+        <circle cx="416" cy="248" r="11" stroke="#C8371B" stroke-width="1" opacity="0.5"/>
+        <circle cx="416" cy="248" r="5" fill="#C8371B"/>
+        <line x1="416" y1="237" x2="416" y2="96" stroke="#C8371B" stroke-width="1.2"/>
+        <circle cx="416" cy="92" r="3.5" fill="#C8371B"/>
+        <text x="428" y="88" font-family="JetBrains Mono, monospace" font-size="10" fill="#C8371B" letter-spacing="1">CLASH 04 · DUCT × BEAM</text>
+        <text x="428" y="102" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#90949B" letter-spacing="1">X 12.40 · Y 8.06 · Z 9.30 — RFI DRAFTED</text>
+
+        <!-- XYZ axes (annotation) -->
+        <g stroke="#5A5F66" stroke-width="1.3">
+          <line x1="64" y1="396" x2="64" y2="330"/>
+          <line x1="64" y1="396" x2="118" y2="423"/>
+          <line x1="64" y1="396" x2="10" y2="423"/>
+        </g>
+        <g font-family="JetBrains Mono, monospace" font-size="9" fill="#90949B" letter-spacing="1">
+          <text x="58" y="322">Z</text><text x="124" y="431">X</text><text x="0" y="431">Y</text>
+        </g>
+
+        <!-- model labels -->
+        <text x="150" y="438" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#90949B" letter-spacing="1">STR — REV C03</text>
+        <text x="652" y="406" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#90949B" letter-spacing="1">MEP — REV B11</text>
+
+        <!-- dimension line -->
+        <g stroke="#ACB0A9" stroke-width="1">
+          <line x1="560" y1="430" x2="845" y2="430"/>
+          <line x1="845" y1="424" x2="845" y2="436"/><line x1="560" y1="424" x2="560" y2="436"/>
+        </g>
+        <text x="702" y="424" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#90949B" letter-spacing="1.5">18.300 m</text>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<div class="proof">
+  <div class="wrap">
+    <span class="n">JOIN →</span>
+    <div class="marq">
+      <div class="track">
+        <img src="assets/logos/TFL-mono.png" alt="Transport for London" loading="lazy">
+        <img src="assets/logos/Laing-mono.png" alt="Laing O’Rourke" loading="lazy">
+        <img src="assets/logos/Kier-mono.png" alt="Kier" loading="lazy">
+        <img src="assets/logos/McLaren-mono.png" alt="McLaren" loading="lazy">
+        <img src="assets/logos/Berkeley-mono.png" alt="Berkeley Group" loading="lazy">
+        <img src="assets/logos/Royal-mono.png" alt="Royal HaskoningDHV" loading="lazy">
+        <img src="assets/logos/TFL-mono.png" alt="Transport for London" loading="lazy">
+        <img src="assets/logos/Laing-mono.png" alt="Laing O’Rourke" loading="lazy">
+        <img src="assets/logos/Kier-mono.png" alt="Kier" loading="lazy">
+        <img src="assets/logos/McLaren-mono.png" alt="McLaren" loading="lazy">
+        <img src="assets/logos/Berkeley-mono.png" alt="Berkeley Group" loading="lazy">
+        <img src="assets/logos/Royal-mono.png" alt="Royal HaskoningDHV" loading="lazy">
+      </div>
+    </div>
+    <span class="n">&amp; 84K+ COMPANIES THAT USE ASITE</span>
+  </div>
+</div>
+
+<section id="video">
+  <div class="wrap">
+    <div class="sec-eyebrow">SEE IT WORK</div>
+    <h2>Two minutes on the register</h2>
+    <p class="lead">How a hold is found, named, answered from the inbox, and released — without one raised voice.</p>
+    <div class="vid" id="player">
+      <div class="stage">
+        <div class="reel">
+          <img class="frame on" src="https://images.unsplash.com/photo-1751808830304-51c95ed33b10?w=1200&q=70&auto=format&fit=crop" alt="Tower cranes against the sky" loading="lazy">
+          <img class="frame" src="https://images.unsplash.com/photo-1758518732175-5d608ba3abdf?w=1200&q=70&auto=format&fit=crop" alt="Executives in a project meeting" loading="lazy">
+          <img class="frame" src="https://images.unsplash.com/photo-1635712707475-6038e8bf5068?w=1200&q=70&auto=format&fit=crop" alt="Metro station infrastructure" loading="lazy">
+          <img class="frame" src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=1200&q=70&auto=format&fit=crop" alt="Civil engineer on a construction site" loading="lazy">
+          <img class="frame" src="https://images.unsplash.com/photo-1762896498171-32c406e0144f?w=1200&q=70&auto=format&fit=crop" alt="City skyline under construction" loading="lazy">
+          <img class="frame" src="https://images.unsplash.com/photo-1716703435453-a7733d600d68?w=1200&q=70&auto=format&fit=crop" alt="Project team around the table" loading="lazy">
+          <img class="frame" src="https://images.unsplash.com/photo-1684497404598-6e844dff9cde?w=1200&q=70&auto=format&fit=crop" alt="Construction site at dusk" loading="lazy">
+          <img class="frame" src="https://images.unsplash.com/photo-1664190425588-a2c96bc61abb?w=1200&q=70&auto=format&fit=crop" alt="Airport terminal under construction" loading="lazy">
+        </div>
+        <div class="vgrad"></div>
+        <button class="play" id="playToggle" type="button" aria-label="Play or pause the reel"></button>
+      </div>
+      <div class="bar">
+        <b>Watch: the register holds the line</b>
+        <span class="mn">02:14 · PRODUCT TOUR</span>
+        <span class="tl"><i id="vprog"></i></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="platform">
+  <div class="wrap">
+    <div class="sec-eyebrow">THE PLATFORM</div>
+    <h2>Transform project risk into clarity and control</h2>
+    <p class="lead">Three instruments, one register. The cross marks the one your project stands on.</p>
+    <div class="feat">
+      <div class="fcard">
+        <span class="lic"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#5A5F66" stroke-width="1.5"><rect x="3" y="4" width="24" height="22" rx="2"/><line x1="3" y1="11" x2="27" y2="11"/><line x1="9" y1="16" x2="21" y2="16" stroke="#C8371B"/><line x1="9" y1="21" x2="18" y2="21" stroke="#90949B"/></svg></span>
+        <b>Common Data Environment</b>
+        <p>A single source of truth for your information. Control project data in a standards-based collaborative platform with powerful workflows — built for Information Managers.</p>
+        <span class="mn">DEFINING THE CATEGORY SINCE 2001</span>
+      </div>
+      <div class="fcard flag">
+        <div class="cross"></div>
+        <span class="lic"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#5A5F66" stroke-width="1.5"><path d="M15 3 L26 9 V21 L15 27 L4 21 V9 Z"/><path d="M15 3 V15 M15 15 L26 9 M15 15 L4 9" stroke="#90949B"/><circle cx="15" cy="15" r="2" fill="#C8371B" stroke="none"/></svg></span>
+        <b>Asite 3D Repo</b>
+        <p>BIM design coordination in the browser. Augment and interrogate your models through open, transparent collaborative working — on projects of every size.</p>
+        <span class="mn">OPEN STANDARDS · IN-BROWSER</span>
+      </div>
+      <div class="fcard">
+        <span class="lic"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#5A5F66" stroke-width="1.5"><path d="M8 4 H22 L26 8 V26 H8 Z" /><path d="M22 4 V8 H26" stroke="#90949B"/><line x1="12" y1="14" x2="22" y2="14" stroke="#90949B"/><line x1="12" y1="19" x2="22" y2="19" stroke="#90949B"/><path d="M4 12 L8 16 L4 20" stroke="#C8371B"/></svg></span>
+        <b>Asite Playbook</b>
+        <p>The go-to tool for Information Managers: configure information delivery processes and schedules, and turn ISO 19650 into a practical delivery engine.</p>
+        <span class="mn">ISO 19650 · DELIVERY PLANS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="product">
+  <div class="wrap">
+    <div class="sec-eyebrow">01 — PRODUCT</div>
+    <h2>The register, three ways up</h2>
+    <p class="lead">One source of truth, read at every altitude — the boardroom, the first morning, and the site gate. Same data, same calm.</p>
+    <div class="bigshot">
+      <div class="chrome"><i></i><i></i><i></i><span class="url">app.asite.com / portfolio / executive</span></div>
+      <img src="assets/shots/da4.png" alt="The register, three ways up" loading="lazy">
+      <span class="fade"></span>
+    </div>
+    <div class="feat" style="margin-top:20px">
+      <div class="fcard">
+        <b>First-run welcome</b>
+        <p>Day one opens with a welcome, not a wall — the isometric register says where to start.</p>
+        <span class="mn">DAY ONE · GUIDED</span>
+      </div>
+      <div class="fcard">
+        <b>Project dashboard</b>
+        <p>Milestones, pending tasks, and the one active hold — sitting in the timeline where it actually is.</p>
+        <span class="mn">HOLDS · RFI-LINKED</span>
+      </div>
+      <div class="fcard">
+        <b>Site Diary</b>
+        <p>The day’s weather, labour, and pours — recorded in the filled-art voice.</p>
+        <span class="mn">FILLED ART · WK 24</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="sec-eyebrow">02 — WORK ON THE GO</div>
+    <h2>Files to fingertips</h2>
+    <p class="lead">A controlled files workspace — folders first, live previews, list ⇄ grid — and every surface a document needs around it.</p>
+    <div class="bigshot">
+      <div class="chrome"><i></i><i></i><i></i><span class="url">app.asite.com / city-hospital / files</span></div>
+      <img src="assets/shots/sb.png" alt="Files to fingertips" loading="lazy">
+      <span class="fade"></span>
+    </div>
+    <div class="feat" style="margin-top:20px">
+      <div class="fcard">
+        <b>Document canvas</b>
+        <p>Drawings carry their own conversation — annotations and comments stay on the sheet.</p>
+        <span class="mn">ANNOTATIONS · COMMENTS</span>
+      </div>
+      <div class="fcard">
+        <b>Native editor</b>
+        <p>Specifications written in the product — versioned, referenced, alive.</p>
+        <span class="mn">LIVING DOCUMENTS</span>
+      </div>
+      <div class="fcard">
+        <b>Command palette</b>
+        <p>⌘K reaches every file, RFI, doc, and conversion. The keyboard is the crane.</p>
+        <span class="mn">⌘K · EVERYTHING</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="email">
+  <div class="wrap">
+    <div class="sec-eyebrow">03 — ALL-IN-ONE EMAIL</div>
+    <h2>The inbox that files itself</h2>
+    <p class="lead">aMail syncs every address that touches the project. The morning opens with a summary, not a pile.</p>
+    <div class="bigshot">
+      <div class="chrome"><i></i><i></i><i></i><span class="url">amail.asite.com / mer-tower-c / summary</span></div>
+      <img src="assets/shots/m0.png" alt="The inbox that files itself" loading="lazy">
+      <span class="fade"></span>
+    </div>
+    <div class="feat" style="margin-top:20px">
+      <div class="fcard">
+        <b>Connected inbox</b>
+        <p>Outlook, Gmail, and shared addresses — three accounts, one register, filed chips on every thread.</p>
+        <span class="mn">3 ACCOUNTS · SYNCED</span>
+      </div>
+      <div class="fcard">
+        <b>Rules &amp; continuity</b>
+        <p>Create the rule once; aMail files forever. When people leave, their threads don’t.</p>
+        <span class="mn">2,847 FILED THIS QUARTER</span>
+      </div>
+      <div class="fcard">
+        <b>Secure links</b>
+        <p>Send attachments and secure links straight from the mailbox — no downloads, no copies.</p>
+        <span class="mn">NO DOWNLOADS · AUDITED</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="intelligence">
+  <div class="wrap">
+    <div class="sec-eyebrow">04 — DATA AND INTELLIGENCE</div>
+    <h2>Readings, not reports</h2>
+    <p class="lead">Fourteen weeks of register activity on one panel — and Asite Intelligence open beside it, answering from the same numbers.</p>
+    <div class="bigshot">
+      <div class="chrome"><i></i><i></i><i></i><span class="url">app.asite.com / mer-tower-c / analytics</span></div>
+      <img src="assets/shots/da2-ai.png" alt="Readings, not reports" loading="lazy">
+      <span class="fade"></span>
+    </div>
+    <div class="feat" style="margin-top:20px">
+      <div class="fcard">
+        <b>Convert — paper to data</b>
+        <p>Site paper in, structured fields out — confidence scored, human confirmed.</p>
+        <span class="mn">OCR · 97% CONFIDENCE</span>
+      </div>
+      <div class="fcard">
+        <b>Asite Intelligence</b>
+        <p>Answers cite the register and nothing writes without you. One spark, rationed like the orange.</p>
+        <span class="mn">✦ ⌘I · CITES THE REGISTER</span>
+      </div>
+      <div class="fcard">
+        <b>Executive packs</b>
+        <p>Register figures feed the QPR pack directly — export the truth, don’t retype it.</p>
+        <span class="mn">EXPORT FEEDS QPR</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="numbers">
+  <div class="wrap">
+    <div class="sec-eyebrow">PROVEN PROJECT DELIVERY AND CONTROLS</div>
+    <h2>The numbers are the argument</h2>
+    <div class="nums">
+      <div class="num hot"><div class="v">84,000+</div><div class="l">companies trust Asite with their project data</div><span class="s">AND COUNTING</span></div>
+      <div class="num"><div class="v">2001</div><div class="l">defining the CDE category since the beginning</div><span class="s">25 YEARS OF REGISTERS</span></div>
+      <div class="num"><div class="v">70%</div><div class="l">tendering cost saved by Laing O'Rourke on Heathrow T5 packages</div><span class="s">PACKAGES &gt; £10M</span></div>
+      <div class="num"><div class="v">1</div><div class="l">source of truth — every phase, every partner, every asset</div><span class="s">CONCEPT TO COMPLETION</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="wrap">
+    <div class="sec-eyebrow">CASE STUDIES</div>
+    <h2>Out in the wild, holding the line</h2>
+    <div class="cases">
+      <div class="case">
+        <div class="case-ph"><img src="https://images.unsplash.com/photo-1691435006749-c9485d527d44?w=1200&q=70&auto=format&fit=crop" alt="Transit tunnel infrastructure" loading="lazy"></div>
+        <div class="case-body">
+          <span class="tag">CASE STUDY · INFRASTRUCTURE</span>
+          <h3>Helping rebuild New York's transit system</h3>
+          <p>New York's MTA needed private developers, public agencies, and utility companies to coordinate seamlessly — from permits to build within 200 feet of MTA property to complex joint development projects. A streamlined process was critical.</p>
+          <div class="who"><span class="ln"></span><span>METROPOLITAN TRANSPORTATION AUTHORITY</span></div>
+        </div>
+      </div>
+      <div class="case">
+        <div class="case-ph"><img src="https://images.unsplash.com/photo-1664190425588-a2c96bc61abb?w=1200&q=70&auto=format&fit=crop" alt="Airport terminal under construction" loading="lazy"></div>
+        <div class="case-body">
+          <span class="tag">CASE STUDY · AVIATION</span>
+          <h3>70% saved on T5 tendering packages</h3>
+          <p>Laing O'Rourke, first-tier civil engineering provider on BAA's Terminal 5, cut the cost of tendering two packages worth in excess of £10m by 70% — by running them through Asite.</p>
+          <div class="who"><span class="ln"></span><span>LAING O'ROURKE · HEATHROW TERMINAL 5</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="security">
+  <div class="wrap">
+    <div class="sec-eyebrow">WHY ASITE IS THE PREFERRED CDE</div>
+    <h2>Security and data privacy, by design and by default</h2>
+    <div class="sec-band">
+      <svg class="shield" viewBox="0 0 54 60" fill="none">
+        <path d="M27 2 L50 10 V28 C50 44 40 53 27 58 C14 53 4 44 4 28 V10 Z" stroke="#90949B" stroke-width="1.5"/>
+        <path d="M18 29 L25 36 L37 22" stroke="#C8371B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <b>Your register is the project record. We treat it that way.</b>
+        <p>Standards-based information management with audited workflows, controlled distribution, and information that survives staff turnover, project end dates, and storage wipes.</p>
+      </div>
+      <span class="mn">ISO 19650 · ISO 27001<br>SOC 2 · CERTIFICATIONS ↗</span>
+    </div>
+  </div>
+</section>
+
+<section class="ctafield" id="cta">
+  <div class="wrap">
+    <h2>See the whole project.</h2>
+    <p>Book a product demo — see Asite in action on a register like yours, with your standards and your supply chain.</p>
+    <a class="btn btn-ink" href="#top">Book a demo</a>
+    <div class="mn">NO SHOUTING. JUST READINGS.</div>
+  </div>
+</section>
+
+<div class="stripeband"></div>
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div class="col">
+        <div style="display:flex; align-items:center; gap:10px"><svg width="24" height="25" viewBox="0 0 377 396"><use href="#amark"/></svg><span style="font:590 15px/1 var(--font-ui); color:var(--text-1)">Asite</span></div>
+        <p class="desc">The cloud collaboration system for seamless collaboration across disciplines — from concept to completion, and beyond.</p>
+      </div>
+      <div class="col"><div class="mn-h">PRODUCTS</div><a href="#platform">Common Data Environment</a><a href="#platform">Asite Field</a><a href="#platform">Project Financials</a><a href="#platform">Asite Playbook</a><a href="#platform">aMail</a><a href="#platform">3D Repo</a></div>
+      <div class="col"><div class="mn-h">COMPANY</div><a href="#security">About</a><a href="#security">Leadership</a><a href="#security">Awards</a><a href="#security">Offices</a><a href="#security">Careers</a></div>
+      <div class="col"><div class="mn-h">INSIGHTS</div><a href="#cases">Case studies</a><a href="#cases">Blog</a><a href="#cases">Webinars</a><a href="#cases">News</a><a href="#cases">Events</a></div>
+      <div class="col"><div class="mn-h">ECOSYSTEM</div><a href="#platform">Integrations</a><a href="#platform">Marketplace</a><a href="#platform">API guide</a><a href="#platform">Become a partner</a></div>
+    </div>
+    <div class="legal">
+      <span>© 2026 ASITE</span><span>PRIVACY</span><span>TERMS</span><span>CARBON REDUCTION PLAN</span>
+      <span class="r">REGISTERED · LONDON</span>
+    </div>
+  </div>
+</footer>
+
+<div class="dock">
+  <a class="backlink" href="web.html#w10">‹ BACK TO THE STYLE GUIDE</a>
+  <div class="themeswitch" role="group" aria-label="Theme">
+    <a href="../landing.html" aria-label="Switch to dark theme">● DARK</a>
+    <span class="ts-on">○ LIGHT</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  var p=document.getElementById('player'); if(!p) return;
+  var frames=p.querySelectorAll('.frame'), prog=document.getElementById('vprog'), btn=document.getElementById('playToggle');
+  var i=0, n=frames.length, timer=null, dur=4200, playing=false;
+  var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function show(k){
+    for(var j=0;j<n;j++) frames[j].classList.toggle('on', j===k);
+    if(prog){ prog.style.transition='none'; prog.style.width='0%'; void prog.offsetWidth;
+      if(playing && !reduce){ prog.style.transition='width '+dur+'ms linear'; prog.style.width='100%'; } }
+  }
+  function step(){ i=(i+1)%n; show(i); }
+  function play(){ if(playing) return; playing=true; p.classList.add('playing'); show(i); timer=setInterval(step,dur); }
+  function pause(){ playing=false; p.classList.remove('playing'); if(timer){ clearInterval(timer); timer=null; }
+    if(prog){ var w=getComputedStyle(prog).width; prog.style.transition='none'; prog.style.width=w; } }
+  if(btn) btn.addEventListener('click', function(){ playing ? pause() : play(); });
+  show(0);
+})();
+</script>
+</body>
+</html>

@@ -10,12 +10,11 @@
    …re-housed in TQI's own identity:
      · plain WHITE canvas (not obsidian)
      · Survey Red-Orange #C8371B as the single intent
-     · Newsreader serif for hero / slides / print only (never app UI)
+     · one typeface — Inter everywhere, including display (no serif)
      · the Asite mark for product chrome; the spark / orb for Intelligence
    ============================================================ */
 
-/* Display serif — hero / slides / print ONLY. Bundle as woff2 for offline/print. */
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,360;6..72,400;6..72,500&display=swap');
+/* v2: one typeface — Inter carries everything, including display. No serif. */
 @font-face { font-family:'Inter';          src:url('assets/fonts/Inter-400.woff2') format('woff2');        font-weight:400; font-display:swap; }
 @font-face { font-family:'Inter';          src:url('assets/fonts/Inter-500.woff2') format('woff2');        font-weight:500; font-display:swap; }
 @font-face { font-family:'Inter';          src:url('assets/fonts/Inter-600.woff2') format('woff2');        font-weight:600; font-display:swap; }
@@ -56,10 +55,9 @@
   --intent-line:   rgba(200,55,27,0.22);
   --intent-glow:   0 0 0 1px rgba(200,55,27,0.30), 0 0 22px rgba(200,55,27,0.13);
 
-  /* Ember — the only gradient. Hero fields only, never UI chrome. */
-  --aurora:
-    radial-gradient(640px 320px at 16% 0%, rgba(200,55,27,0.06), transparent 64%),
-    radial-gradient(560px 300px at 82% 6%, rgba(224,67,31,0.045), transparent 60%);
+  /* v2: gradient backgrounds discontinued. Hero fields are plain white;
+     separation comes from hairlines + light, never a wash. */
+  --aurora: none;
 
   /* ---- 4. STATUS — desaturated, dot-first. Never a filled pill. ---- */
   --st-done:     #2E9E68;
@@ -68,14 +66,14 @@
   --st-review:   #5C84A0;
   --st-backlog:  #8E9299;
 
-  /* ---- 5. TYPE — Newsreader (serif) for hero/slides/print titles ONLY;
-     Inter 400/500/600 approximating Linear's 400/510/590 voice carries
-     all app UI; JetBrains Mono for IDs, revs, telemetry. ---- */
-  --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  /* ---- 5. TYPE — one typeface. Inter carries display + all UI
+     (400/500/600 for UI; display runs bold at 700);
+     JetBrains Mono for IDs, revs, telemetry. No serif. ---- */
   --font-ui:      'Inter','Segoe UI',sans-serif;
+  --font-display: var(--font-ui);
   --font-mono:    'JetBrains Mono','SF Mono',monospace;
 
-  --text-display: 400 clamp(40px,4.6vw,60px)/1.06 var(--font-display);
+  --text-display: 700 clamp(40px,4.6vw,60px)/1.04 var(--font-display);
   --text-h1:      600 30px/1.18 var(--font-ui);
   --text-h2:      600 20px/1.3  var(--font-ui);
   --text-h3:      500 15px/1.4  var(--font-ui);
@@ -84,7 +82,7 @@
   --text-micro:   500 11px/1.4  var(--font-ui);
   --text-mono:    400 12px/1.45 var(--font-mono);
 
-  --track-display: -0.012em;
+  --track-display: -0.022em;   /* Inter display wants tight tracking at large sizes */
   --track-h1: -0.018em;       /* tighter the larger, Linear-style */
   --track-h2: -0.012em;
   --track-h:  -0.008em;

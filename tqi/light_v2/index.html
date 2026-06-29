@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asite — The Quiet Instrument · Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg-0); color:var(--text-2); font:var(--text-body); -webkit-font-smoothing:antialiased; }
+  ::selection { background:rgba(200, 55, 27,0.18); color:#16181C; }
+  .wrap { max-width:1100px; margin:0 auto; padding:0 var(--space-8); }
+  .m-body { fill:var(--mkb, #16181C); } .m-arrow { fill:var(--mka, #C8371B); }
+  .m-ink { --mkb:#16181C; --mka:#16181C; }
+  .m-lite { --mkb:#F3F4F6; --mka:#C8371B; }
+
+  nav { position:sticky; top:0; z-index:50; background:rgba(250,250,249,0.86); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+  nav .wrap { display:flex; align-items:center; gap:var(--space-2); height:56px; }
+  .nav-mark { display:flex; align-items:center; gap:10px; margin-right:var(--space-6); text-decoration:none; }
+  .nav-mark span { font:590 14px/1 var(--font-ui); letter-spacing:-0.01em; color:var(--text-1); }
+  .ntab { font:500 12.5px/1 var(--font-ui); color:var(--text-2); text-decoration:none; padding:7px 12px;
+    border-radius:var(--r-sm); transition:background var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+  .ntab:hover { color:var(--text-1); background:var(--bg-2); }
+  .ntab.on { background:var(--intent-wash); color:var(--text-1); }
+  .nspacer { margin-left:auto; }
+
+  /* floating on-page nav */
+  .fnav { position:fixed; top:50%; right:18px; transform:translateY(-50%); z-index:60;
+    display:flex; flex-direction:column; gap:1px; padding:9px 7px; max-height:80vh; overflow:auto;
+    background:rgba(255,255,255,0.88); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border-radius:var(--r-lg); box-shadow:var(--inset), 0 16px 40px rgba(22,24,28,0.10); }
+  .fnav .fcap { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); padding:2px 9px 7px; }
+  .fnav a { display:flex; align-items:center; gap:8px; font:450 11.5px/1 var(--font-ui); color:var(--text-2);
+    text-decoration:none; padding:5px 9px; border-radius:var(--r-sm); white-space:nowrap;
+    transition:background var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+  .fnav a::before { content:""; width:3px; height:3px; border-radius:50%; background:var(--text-3); flex:none; }
+  .fnav a:hover { color:var(--text-1); background:var(--bg-3); }
+  .fnav a.on { color:var(--text-1); background:var(--intent-wash); }
+  .fnav a.on::before { background:var(--intent-bright); }
+  @media (max-width:1320px){ .fnav{ display:none; } }
+
+  header.hero { position:relative; padding:140px 0 120px; background:var(--aurora), var(--bg-0); border-bottom:1px solid var(--border); }
+  .chip { display:inline-flex; align-items:center; gap:8px; font:500 12px/1 var(--font-ui); color:var(--text-2);
+    background:var(--bg-2); border-radius:999px; box-shadow:var(--inset); padding:6px 12px; margin-bottom:var(--space-6); }
+  .chip i { width:7px; height:7px; border-radius:50%; background:var(--intent); }
+  h1 { font:var(--text-display); letter-spacing:var(--track-display); color:var(--text-1); max-width:760px; }
+  .hero-sub { margin-top:var(--space-6); max-width:560px; font-size:16px; line-height:1.65; color:var(--text-2); }
+  .hero-meta { margin-top:var(--space-12); display:flex; gap:var(--space-8); flex-wrap:wrap; font:var(--text-small); color:var(--text-3); }
+  .hero-meta b { color:var(--text-2); font-weight:500; display:block; font-size:13px; }
+
+  section { padding:var(--space-24) 0; border-bottom:1px solid var(--border); }
+  .idx { font:500 12px/1.4 var(--font-mono); color:var(--intent-bright); margin-bottom:var(--space-3); letter-spacing:0.04em; }
+  h2 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--text-1); margin-bottom:var(--space-3); }
+  .sub { max-width:600px; margin-bottom:var(--space-12); line-height:1.65; }
+
+  /* logo */
+  .logo-stage { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); }
+  .stage-cell { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-12);
+    display:flex; align-items:center; justify-content:center; gap:var(--space-6); min-height:240px; }
+  .stage-cell .word { font:590 40px/1 var(--font-ui); letter-spacing:-0.02em; color:var(--text-1); }
+  .logo-note { font:var(--text-small); color:var(--text-3); margin-top:var(--space-4); max-width:620px; }
+
+  /* color */
+  .ramp { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-3); margin-bottom:var(--space-8); }
+  .ramp .cell { border-radius:var(--r-md); box-shadow:var(--inset); padding:var(--space-4); height:120px;
+    display:flex; flex-direction:column; justify-content:flex-end; cursor:pointer; transition:transform var(--t-fast) var(--ease); }
+  .ramp .cell:hover { transform:translateY(-2px); }
+  .ramp .nm { font:500 13px/1.4 var(--font-ui); color:var(--text-1); }
+  .ramp .hx { font:var(--text-mono); font-size:11px; color:var(--text-3); }
+  .accent-row { display:grid; grid-template-columns:2fr 1fr 1fr; gap:var(--space-3); margin-bottom:var(--space-8); }
+  .rule-note { display:flex; gap:11px; font:var(--text-small); color:var(--text-3); max-width:560px; }
+  .rule-note::before { content:""; flex:none; width:8px; height:8px; margin-top:5px; background:var(--intent); transform:rotate(45deg); border-radius:1px; }
+  .dots { display:flex; gap:var(--space-6); flex-wrap:wrap; margin-bottom:var(--space-8); }
+  .dots span { display:flex; align-items:center; gap:8px; font:var(--text-small); color:var(--text-2); }
+
+  /* personality imagery */
+  .img-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); }
+  .icard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); overflow:hidden; }
+  .icanvas { height:200px; background:var(--bg-2); display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--border); }
+  .icard .itxt { padding:var(--space-6); }
+  .icard .itxt b { font:560 14px/1.4 var(--font-ui); color:var(--text-1); display:block; }
+  .icard .itxt em { font:500 11px/1.4 var(--font-mono); color:var(--intent-bright); font-style:normal; display:block; margin-bottom:8px; }
+  .icard .itxt p { font:var(--text-small); color:var(--text-2); line-height:1.6; margin-top:6px; }
+  @media (max-width:880px){ .img-grid{grid-template-columns:1fr;} }
+
+
+  /* motifs (moved from expressions) */
+  .mgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-4); }
+  .mcard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); overflow:hidden; }
+  .mstage { height:150px; background:var(--bg-2); display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--border); }
+  .mcard .mt { padding:var(--space-4); }
+  .mcard .mt b { font:560 13px/1.4 var(--font-ui); color:var(--text-1); display:block; }
+  .mcard .mt p { font:400 12px/1.55 var(--font-ui); color:var(--text-3); margin-top:4px; }
+  /* instances (moved from expressions) */
+  .xgrid { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-4); }
+  .xcell { border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--inset); position:relative; }
+  .xcap { position:absolute; left:14px; bottom:12px; font:500 10px/1.4 var(--font-mono); letter-spacing:0.08em; color:var(--text-3);
+    background:rgba(8,9,10,0.7); backdrop-filter:blur(6px); border-radius:5px; padding:4px 8px; }
+  .stripeband { background:repeating-linear-gradient(90deg, var(--intent) 0 28px, #16181C 28px 56px); }
+  .display { font-family:var(--font-display); font-weight:700; letter-spacing:-0.01em; }
+
+  .sub2x { max-width:600px; margin-bottom:var(--space-8); line-height:1.65; font-size:14px; color:var(--text-3); }
+  #motifs h2, #instances h2 { font:var(--text-h1); letter-spacing:var(--track-h); color:var(--text-1); margin-bottom:var(--space-3); }
+
+  /* type */
+  .type-list { display:flex; flex-direction:column; }
+  .trow { display:grid; grid-template-columns:230px 1fr; gap:var(--space-6); padding:var(--space-6) 0; border-top:1px solid var(--border); }
+  .trow .meta { font:var(--text-mono); font-size:11px; color:var(--text-3); padding-top:6px; }
+  .trow .sample { color:var(--text-1); }
+
+  /* icons */
+  .icon-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:var(--space-3); }
+  .icell { background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-4);
+    display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .icell svg { stroke:var(--text-2); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+  .icell:hover svg { stroke:var(--text-1); }
+  .icell span { font:500 11px/1.4 var(--font-ui); color:var(--text-3); }
+  .icell.hold svg { stroke:var(--intent); }
+  @media (max-width:880px){ .icon-grid{grid-template-columns:repeat(3,1fr);} }
+
+  /* surfaces */
+  .depth-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
+  .depth-card { border-radius:var(--r-lg); padding:var(--space-6); min-height:170px; display:flex; flex-direction:column; justify-content:flex-end; }
+  .depth-card b { font:560 14px/1.4 var(--font-ui); color:var(--text-1); }
+  .depth-card span { font:var(--text-small); color:var(--text-3); }
+
+  /* spacing */
+  .sp-row { display:flex; align-items:center; gap:var(--space-4); padding:9px 0; border-top:1px solid var(--border); }
+  .sp-row .tk { font:var(--text-mono); font-size:11px; color:var(--text-3); width:120px; }
+  .sp-row .bar2 { height:18px; background:var(--intent-wash); border-radius:4px; position:relative; }
+  .sp-row .bar2::after { content:""; position:absolute; inset:0; border-radius:4px; box-shadow:inset 0 0 0 1px rgba(200, 55, 27,0.35); }
+  .sp-row .use2 { font:400 12px/1.4 var(--font-ui); color:var(--text-3); }
+
+  /* cards section */
+  .card-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-4); }
+  .cardx { border-radius:var(--r-md); padding:var(--space-4); min-height:150px; display:flex; flex-direction:column;
+    transition:background var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease), transform var(--t-base) var(--ease); }
+  .cardx .hint { font:var(--text-mono); font-size:10px; color:var(--intent-bright); opacity:0; transition:opacity var(--t-base) var(--ease); margin-top:4px; }
+  .cardx:hover .hint { opacity:1; }
+  .cv-default:hover { background:var(--bg-2); box-shadow:var(--inset); }
+  .cv-raised:hover { box-shadow:var(--inset), 0 16px 32px rgba(22,24,28,0.10); transform:translateY(-4px); }
+  .cv-inter { cursor:pointer; }
+  .cv-inter:hover { background:var(--bg-3); transform:translateY(-2px); }
+  .cv-sel:hover { box-shadow:var(--inset), 0 0 0 1px var(--intent); background:rgba(200, 55, 27,0.18); }
+  .cardx .ttl { font:560 13px/1.4 var(--font-ui); color:var(--text-1); }
+  .cardx .bd { font:400 12px/1.55 var(--font-ui); color:var(--text-3); margin-top:4px; flex:1; }
+  .cardx .ft { font:var(--text-mono); font-size:10px; color:var(--text-3); }
+  @media (max-width:880px){ .card-grid{grid-template-columns:1fr 1fr;} }
+
+  /* overlays */
+  .ov-grid { display:grid; grid-template-columns:1.3fr 1fr; gap:var(--space-4); }
+  .ov-stage { background:var(--bg-0); border-radius:var(--r-lg); box-shadow:var(--inset); min-height:340px;
+    display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .ov-stage::before { content:""; position:absolute; inset:0; background:var(--bg-overlay); }
+  .dlg { position:relative; width:380px; background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); padding:24px; }
+  .dlg h5 { font:560 15px/1.4 var(--font-ui); color:var(--text-1); display:flex; align-items:center; gap:10px; }
+  .dlg p { font:400 13px/1.6 var(--font-ui); color:var(--text-2); margin:10px 0 20px; }
+  .dlg .acts { display:flex; gap:10px; justify-content:flex-end; align-items:center; }
+  .menu { width:230px; background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-pop); padding:6px; position:relative; }
+  .menu .mi { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:var(--r-sm);
+    font:500 12.5px/1.4 var(--font-ui); color:var(--text-2); }
+  .menu .mi:hover, .menu .mi.on { background:var(--bg-3); color:var(--text-1); }
+  .menu .mi .u-kbd { margin-left:auto; }
+  .menu .mi.danger { color:var(--st-blocked); }
+  .menu .dv { height:1px; background:var(--border); margin:5px 6px; }
+
+  /* table section */
+  .tblx { width:100%; border-collapse:collapse; background:var(--bg-1); border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--inset), var(--shadow-card); }
+  .tblx thead th { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3);
+    text-align:left; padding:11px 16px; border-bottom:1px solid var(--border-strong); background:var(--bg-1); }
+  .tblx td { padding:11px 16px; border-bottom:1px solid var(--border); font:400 13px/1.5 var(--font-ui); color:var(--text-2); }
+  .tblx td.rf { font:400 11.5px/1.5 var(--font-mono); color:var(--text-3); }
+  .tblx td.tt { font:500 13px/1.5 var(--font-ui); color:var(--text-1); }
+  .tblx td.num { font:400 11.5px/1.5 var(--font-mono); color:var(--text-2); text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .tblx tr.grp td { padding:16px 16px 6px; font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); border-bottom:none; }
+  .tblx tr.grp:hover td { background:none; }
+  .tblx tr:hover td { background:var(--bg-2); }
+  .tblx tr.sel td { background:var(--intent-wash); }
+  .tblx tr:last-child td { border-bottom:none; }
+
+  /* data entry */
+  .fgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
+  .fcard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-6); display:flex; flex-direction:column; gap:10px; }
+  .flab { font:var(--text-micro); letter-spacing:var(--track-micro); text-transform:uppercase; color:var(--text-3); }
+  .frule { font:400 11.5px/1.55 var(--font-ui); color:var(--text-3); margin-top:auto; }
+  .inp { width:100%; background:var(--bg-0); border:1px solid var(--border); border-radius:var(--r-md); color:var(--text-1);
+    font:400 13px/1.4 var(--font-ui); padding:9px 12px; outline:none; transition:border-color var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease); }
+  .inp::placeholder { color:var(--text-3); }
+  .inp:focus { border-color:var(--intent); box-shadow:0 0 0 3px var(--intent-wash); }
+  .inp.mono { font:400 12.5px/1.4 var(--font-mono); text-transform:uppercase; }
+  textarea.inp { min-height:88px; resize:vertical; line-height:1.55; }
+  .unitwrap { position:relative; }
+  .unitwrap .inp { font:400 12.5px/1.4 var(--font-mono); text-align:right; padding-right:44px; font-variant-numeric:tabular-nums; }
+  .unitwrap .unit { position:absolute; right:12px; top:50%; transform:translateY(-50%); font:400 11px/1 var(--font-mono); color:var(--text-3); pointer-events:none; }
+  .tgl { display:flex; align-items:center; gap:10px; cursor:pointer; font:400 13px/1.4 var(--font-ui); color:var(--text-1); }
+  .tgl input { position:absolute; opacity:0; }
+  .tgl .tk { width:34px; height:20px; border-radius:999px; background:var(--bg-3); box-shadow:var(--inset); position:relative; flex:none; transition:background var(--t-base) var(--ease); }
+  .tgl .tk::after { content:""; position:absolute; top:3px; left:3px; width:14px; height:14px; border-radius:50%; background:var(--text-2); transition:transform var(--t-base) var(--ease), background var(--t-base) var(--ease); }
+  .tgl input:checked + .tk { background:var(--intent); }
+  .tgl input:checked + .tk::after { transform:translateX(14px); background:#FFF; }
+  .pick { display:flex; align-items:center; gap:10px; cursor:pointer; font:400 13px/1.4 var(--font-ui); color:var(--text-1); padding:3px 0; }
+  .pick input { appearance:none; -webkit-appearance:none; width:15px; height:15px; margin:0; flex:none; background:var(--bg-0);
+    border:1px solid var(--border-strong, var(--border)); cursor:pointer; position:relative; transition:background var(--t-base) var(--ease), border-color var(--t-base) var(--ease); }
+  .pick input[type="checkbox"] { border-radius:4px; }
+  .pick input[type="radio"] { border-radius:50%; }
+  .pick input:checked { background:var(--intent); border-color:var(--intent); }
+  .pick input[type="checkbox"]:checked::after { content:""; position:absolute; left:4.5px; top:1.5px; width:3.5px; height:7.5px;
+    border:solid #FFF; border-width:0 1.5px 1.5px 0; transform:rotate(45deg); }
+  .pick input[type="radio"]:checked::after { content:""; position:absolute; inset:4px; border-radius:50%; background:#FFF; }
+  .pick input:focus-visible { outline:none; box-shadow:0 0 0 3px var(--intent-wash); }
+  .selx { display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--bg-0); border:1px solid var(--border);
+    border-radius:var(--r-md); color:var(--text-1); font:400 13px/1.4 var(--font-ui); padding:9px 12px; cursor:pointer; }
+  .selx .car2 { font-size:9px; color:var(--text-3); }
+  .selmenu { margin-top:6px; background:var(--bg-1); border-radius:var(--r-md); box-shadow:var(--inset), var(--shadow-card); padding:5px; }
+  .selmenu div { font:400 12.5px/1.4 var(--font-ui); color:var(--text-2); padding:6px 9px; border-radius:var(--r-sm); }
+  .selmenu div.on { background:var(--intent-wash); color:var(--text-1); }
+  .lrow { display:flex; align-items:center; gap:10px; padding:7px 10px; background:var(--bg-0); border:1px solid var(--border); border-radius:var(--r-md); font:400 12.5px/1.4 var(--font-ui); color:var(--text-1); }
+  .lrow + .lrow { margin-top:5px; }
+  .lrow .ix { font:400 10.5px/1 var(--font-mono); color:var(--intent-bright); width:16px; flex:none; }
+  .lrow .blt { width:4px; height:4px; border-radius:50%; background:var(--text-3); flex:none; margin:0 6px; }
+  .lrow .grip { margin-left:auto; color:var(--text-3); font-size:10px; letter-spacing:2px; cursor:grab; }
+  @media (max-width:880px){ .fgrid{grid-template-columns:1fr;} }
+
+  /* components */
+  .comp-stage { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-12);
+    display:flex; flex-direction:column; gap:var(--space-8); }
+  .row { display:flex; gap:var(--space-4); align-items:center; flex-wrap:wrap; }
+  .btn { font:560 13px/1 var(--font-ui); padding:9px 16px; border-radius:var(--r-md); border:none; cursor:pointer;
+    transition:all var(--t-fast) var(--ease); }
+  .btn-primary { background:var(--intent); color:#fff; }
+  .btn-primary:hover { background:var(--intent-bright); }
+  .btn-secondary { background:var(--bg-3); color:var(--text-1); box-shadow:var(--inset); }
+  .btn-secondary:hover { background:#202125; }
+  .btn-ghost { background:none; color:var(--text-2); }
+  .btn-ghost:hover { color:var(--text-1); }
+  .input { background:var(--bg-0); border:1px solid var(--border); border-radius:var(--r-md); color:var(--text-1);
+    font:400 13px/1.4 var(--font-ui); padding:9px 12px; outline:none; min-width:280px; transition:border-color var(--t-fast) var(--ease); }
+  .input:focus { border-color:var(--intent); box-shadow:0 0 0 3px var(--intent-wash); }
+  .annotation { font:var(--text-small); color:var(--text-3); }
+  .prop { display:inline-flex; align-items:center; gap:7px; font:500 12px/1 var(--font-ui); color:var(--text-2);
+    background:var(--bg-2); box-shadow:var(--inset); border-radius:var(--r-sm); padding:5px 10px; }
+
+  /* principles */
+  .princ { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); }
+  .pcard { background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset), var(--shadow-card); padding:var(--space-6); }
+  .pcard b { font:560 14px/1.5 var(--font-ui); color:var(--text-1); display:block; margin-bottom:6px; }
+  .pcard p { font:var(--text-small); color:var(--text-2); line-height:1.6; }
+
+  footer { padding:var(--space-8) 0; }
+  footer .wrap { display:flex; justify-content:space-between; font:var(--text-small); color:var(--text-3); }
+  footer a { color:var(--text-2); }
+  @media (max-width:880px){ .logo-stage,.princ,.depth-grid{grid-template-columns:1fr;} .ramp{grid-template-columns:1fr 1fr;} .accent-row{grid-template-columns:1fr;} .trow{grid-template-columns:1fr;} }
+
+  /* mode toggle dock */
+  .dock { position:fixed; left:16px; bottom:16px; z-index:60; display:flex; align-items:center; gap:8px; }
+  .themeswitch { display:inline-flex; align-items:center; gap:2px; background:rgba(255,255,255,0.88); backdrop-filter:blur(10px); box-shadow:var(--inset); border-radius:999px; padding:3px; font:500 10px/1 var(--font-mono); letter-spacing:0.08em; }
+  .themeswitch a, .themeswitch span { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:999px; color:var(--text-3); text-decoration:none; }
+  .themeswitch .ts-on { background:var(--intent); color:#fff; }
+  .themeswitch a:hover { color:var(--text-1); }
+
+  /* ===== Light theme: INK primary, ORANGE accent =====
+     Primary actions are ink (#16181C). Survey Orange is the accent only —
+     focus, links, selection washes, status, and the live AI signal
+     (orb, spark, run pulse, caret). No large orange fills. */
+  .btn-primary { background:var(--text-1) !important; color:#fff !important; }
+  .btn-primary:hover { background:#000 !important; box-shadow:none !important; }
+  .ai-entry .go, .sc-input .go { background:var(--text-1) !important; }
+  .ai-entry .go:hover, .sc-input .go:hover { background:#000 !important; }
+  .ctafield { background:var(--text-1) !important; }
+  .ctafield h2 { color:#fff !important; }
+  .ctafield p { color:rgba(255,255,255,0.82) !important; }
+  .ctafield .mn { color:rgba(255,255,255,0.55) !important; }
+  .ctafield .btn-ink { background:var(--intent) !important; color:#fff !important; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="amark" viewBox="0 0 377 396">
+      <path class="m-body" fill-rule="evenodd" clip-rule="evenodd" d="M62.2865 5.49758C48.8039 8.10323 56.8012 26.2896 96.8901 24.907L230.691 23.7371C236.176 23.7371 246.532 24.588 249.3 27.4595L289.645 50.804C305.024 61.4393 295.182 59.8972 284.519 60.2162L126.367 65.5339C108.835 66.1188 106.169 68.2459 92.3788 58.3019C41.4218 21.4505 7.3821 5.49758 0 62.1838C0.615175 118.905 1.24744 175.769 1.89679 232.774C2.81955 245.377 24.4532 247.451 24.8121 231.498C24.8121 174.174 24.8121 126.74 24.8121 69.4158C24.8121 58.036 29.9385 56.6002 40.1915 65.3744L68.0794 92.4412C77.6146 100.949 77.9735 111.106 77.8709 125.411V295.895C77.2045 307.806 80.6905 323.653 66.4389 308.817L36.7055 276.273C19.0192 263.404 17.7888 283.132 21.3261 288.929C40.5132 319.361 61.7558 348.344 84.8942 375.66C102.734 396.452 99.2996 396.93 123.804 395.016L343.473 372.682C360.39 370.555 375.821 354.017 377 322.004V155.987C374.744 121.316 341.115 122.858 343.012 155.987L344.242 307.487C343.575 328.439 341.73 328.758 316.2 334.501C296.566 338.808 200.496 351.677 146.412 348.539C126.777 347.423 120.421 342.477 120.421 325.993V134.557C120.421 109.564 136.261 101.322 159.074 99.9923L352.444 91.6968C383.203 83.7735 358.186 49.1555 343.473 42.4021C327.683 35.436 273.189 9.96441 249.095 2.04111C244.671 0.289835 239.91 -0.348017 235.202 0.179926L62.2865 5.49758Z"/>
+      <path class="m-arrow" fill-rule="evenodd" clip-rule="evenodd" d="M152.769 227.51L152.41 197.784L251.607 191.722L205.212 150.776L247.864 149.234L300.975 199.432L236.689 267.924L202.854 264.627L249.351 217.991L152.769 227.51Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="nav-mark" href="index.html"><svg width="22" height="23" viewBox="0 0 377 396"><use href="#amark"/></svg><span>Asite</span></a>
+    <a class="ntab on" href="index.html">Language</a>
+    <a class="ntab" href="screens.html">Product</a>
+    <a class="ntab" href="web.html">Website</a>
+    <a class="ntab" href="slides.html">Slides</a>
+    <a class="ntab" href="ai-hub.html"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:5px"><path d="M12 2.5 L13.9 9 L20.5 11 L13.9 13 L12 21 L10.1 13 L3.5 11 L10.1 9 Z"/></svg>AI Hub</a>
+    <span class="nspacer"></span>
+  </div>
+</nav>
+
+<aside class="fnav" aria-label="On this page">
+  <div class="fcap">On this page</div>
+  <a href="#logo">Logo</a>
+  <a href="#color">Color</a>
+  <a href="#personality">Color, applied</a>
+  <a href="#type">Typography</a>
+  <a href="#icons">Icons</a>
+  <a href="#illustration">Illustration</a>
+  <a href="#motifs">Motifs</a>
+  <a href="#depth">Surfaces</a>
+  <a href="#spacing">Spacing</a>
+  <a href="#cards">Cards</a>
+  <a href="#overlays">Overlays</a>
+  <a href="#tables">Tables</a>
+  <a href="#inputs">Data entry</a>
+  <a href="#comp">Components</a>
+  <a href="#princ">Principles</a>
+  <a href="#instances">In the world</a>
+</aside>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="chip"><i></i>Asite · Visual Language — Light Mode</div>
+    <h1>The Quiet Instrument.</h1>
+    <p class="hero-sub">The same instrument in daylight: a paper-light monochrome surface, instrument-panel density, and one rationed orange signal — software that earns trust by never raising its voice.</p>
+    <div class="hero-meta">
+      <div><b>Idiom</b>Linear-school software craft</div>
+      <div><b>Intent</b>Survey Orange · one per screen</div>
+      <div><b>Type</b>Inter Variable · tight tracking</div>
+      <div><b>Depth</b>Borders &amp; light, never fills</div>
+    </div>
+  </div>
+</header>
+
+<section id="logo">
+  <div class="wrap">
+    <div class="idx">01 — Logo</div>
+    <h2>Monochrome body, orange intent</h2>
+    <p class="sub">The same Asite mark, stripped of chrome. The body sets in primary text gray — it behaves like type, not like an object. The arrow is the only place the accent is permitted at brand level.</p>
+    <div class="logo-stage">
+      <div class="stage-cell">
+        <svg width="120" height="126" viewBox="0 0 377 396"><use href="#amark"/></svg>
+      </div>
+      <div class="stage-cell" style="background:var(--aurora), var(--bg-1)">
+        <svg width="56" height="59" viewBox="0 0 377 396"><use href="#amark"/></svg>
+        <span class="word">Asite</span>
+      </div>
+    </div>
+    <p class="logo-note">Wordmark is Inter 590 at -2% tracking, sentence case — no more caps, no more wide tracking. The lockup reads as a product name, not a monument.</p>
+  </div>
+</section>
+
+<section id="color">
+  <div class="wrap">
+    <div class="idx">02 — Color</div>
+    <h2>A narrow ramp and one signal</h2>
+    <p class="sub">Four surfaces separated by single-digit value steps. Three text grays. One orange. If a screen needs more color than that, the screen is wrong.</p>
+
+    <div class="ramp">
+      <div class="cell" style="background:#FFFFFF"><span class="nm">Canvas</span><span class="hx">#FFFFFF</span></div>
+      <div class="cell" style="background:#FFFFFF"><span class="nm">Chrome</span><span class="hx">#FFFFFF</span></div>
+      <div class="cell" style="background:#F7F8FA"><span class="nm">Card</span><span class="hx">#FCFCFD</span></div>
+      <div class="cell" style="background:#F3F4F6"><span class="nm">Raised</span><span class="hx">#E7E9ED</span></div>
+    </div>
+    <div class="accent-row">
+      <div class="cell ramp-cell" style="background:var(--intent); border-radius:var(--r-md); padding:var(--space-4); height:120px; display:flex; flex-direction:column; justify-content:flex-end">
+        <span class="nm" style="font:500 13px/1.4 var(--font-ui); color:#fff">Survey Orange — the intent</span><span class="hx" style="font:var(--text-mono); font-size:11px; color:rgba(22,24,28,0.7)">#C8371B — decisions only</span>
+      </div>
+      <div class="cell" style="background:var(--intent-wash); border-radius:var(--r-md); padding:var(--space-4); height:120px; display:flex; flex-direction:column; justify-content:flex-end">
+        <span style="font:500 13px/1.4 var(--font-ui); color:var(--intent-bright)">Intent Wash</span><span style="font:var(--text-mono); font-size:11px; color:var(--text-3)">14% — selection</span>
+      </div>
+      <div class="cell" style="background:var(--bg-2); box-shadow:var(--inset); border-radius:var(--r-md); padding:var(--space-4); height:120px; display:flex; flex-direction:column; justify-content:flex-end">
+        <span style="font:500 13px/1.4 var(--font-ui); color:#16181C">Text 1 / 2 / 3</span><span style="font:var(--text-mono); font-size:11px; color:var(--text-3)">#16181C · #5A5F66 · #90949B</span>
+      </div>
+    </div>
+
+    <div class="dots">
+      <span><i class="u-dot" style="background:var(--st-done)"></i>Done</span>
+      <span><i class="u-dot" style="background:var(--st-progress)"></i>In progress</span>
+      <span><i class="u-dot" style="background:var(--st-review)"></i>In review</span>
+      <span><i class="u-dot" style="background:var(--st-blocked)"></i>Blocked</span>
+      <span><i class="u-dot" style="background:var(--st-backlog)"></i>Backlog</span>
+    </div>
+    <p class="rule-note">The ration: orange appears once per screen as the primary action or focus ring. Status is always a dot plus plain text — never a filled pill, never a colored row.</p>
+  </div>
+</section>
+
+<section id="personality">
+  <div class="wrap">
+    <div class="idx">02b — Color, in the world</div>
+    <h2>Where the orange comes from</h2>
+    <p class="sub">The intent color isn't a brand whim — it's lifted from the site. On every project in the world, this exact orange already means one thing: <span style="color:var(--text-1)">a human decision, made visible.</span> The palette's personality lives in four objects.</p>
+
+    <div class="img-grid">
+      <div class="icard">
+        <div class="icanvas">
+          <svg width="220" height="150" viewBox="0 0 220 150" fill="none">
+            <line x1="20" y1="122" x2="200" y2="122" stroke="#CFD1CC" stroke-width="1.5"/>
+            <path d="M55 104 Q55 48 110 48 Q165 48 165 104 Z" fill="#C8371B"/>
+            <path d="M98 48 Q98 38 110 38 Q122 38 122 48 L122 60 Q116 57 110 57 Q104 57 98 60 Z" fill="#E0431F"/>
+            <rect x="42" y="104" width="136" height="13" rx="6.5" fill="#C8371B"/>
+            <path d="M84 58 Q78 76 78 104 M136 58 Q142 76 142 104" stroke="#C8371B" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <div class="itxt"><em>OWNERSHIP</em><b>The surveyor's cap</b>
+          <p>The first thing you see on site is who is responsible. Orange on a head means a person who answers for the line they set. In product: the accent marks what's yours to act on.</p>
+        </div>
+      </div>
+
+      <div class="icard">
+        <div class="icanvas">
+          <svg width="220" height="150" viewBox="0 0 220 150" fill="none">
+            <g stroke="#CFD1CC" stroke-width="1.5">
+              <line x1="14" y1="118" x2="206" y2="118"/>
+              <line x1="34" y1="96" x2="186" y2="96" opacity="0.6"/>
+              <line x1="50" y1="78" x2="170" y2="78" opacity="0.35"/>
+            </g>
+            <g stroke="#C8371B" stroke-width="9" stroke-linecap="round">
+              <line x1="88" y1="88" x2="132" y2="112"/>
+              <line x1="132" y1="88" x2="88" y2="112"/>
+            </g>
+            <circle cx="110" cy="100" r="2.5" fill="#16181C"/>
+            <text x="146" y="106" font-family="JetBrains Mono, monospace" font-size="10" fill="#90949B">SO-114</text>
+          </svg>
+        </div>
+        <div class="itxt"><em>DECISION</em><b>The setting-out mark</b>
+          <p>A spray cross on concrete is an instruction crews build from — intent, committed, unambiguous. In product: orange appears only where a decision happens, and exactly once.</p>
+        </div>
+      </div>
+
+      <div class="icard">
+        <div class="icanvas">
+          <svg width="220" height="150" viewBox="0 0 220 150" fill="none">
+            <g stroke="#90949B" stroke-width="2" stroke-linecap="round">
+              <line x1="62" y1="68" x2="44" y2="124"/>
+              <line x1="62" y1="68" x2="80" y2="124"/>
+              <line x1="62" y1="66" x2="62" y2="96"/>
+            </g>
+            <rect x="46" y="44" width="32" height="22" rx="5" fill="#CFD1CC" stroke="#90949B" stroke-width="1.5"/>
+            <circle cx="78" cy="55" r="5" fill="#FFFFFF" stroke="#5A5F66" stroke-width="1.5"/>
+            <line x1="84" y1="55" x2="168" y2="55" stroke="#C8371B" stroke-width="1.5" stroke-dasharray="2 5"/>
+            <circle cx="174" cy="55" r="4" fill="#C8371B"/>
+            <line x1="174" y1="42" x2="174" y2="68" stroke="#C8371B" stroke-width="1.5" opacity="0.5"/>
+            <text x="150" y="80" font-family="JetBrains Mono, monospace" font-size="10" fill="#90949B">±0.5</text>
+          </svg>
+        </div>
+        <div class="itxt"><em>LIVE PRECISION</em><b>The total station beam</b>
+          <p>The instrument is gray; only the live point burns. Measurement is calm until it lands. In product: focus rings, the active row, the cursor of work — the beam, nothing else.</p>
+        </div>
+      </div>
+
+      <div class="icard">
+        <div class="icanvas">
+          <svg width="220" height="150" viewBox="0 0 220 150" fill="none">
+            <line x1="20" y1="124" x2="200" y2="124" stroke="#CFD1CC" stroke-width="1.5"/>
+            <g>
+              <rect x="104" y="28" width="9" height="24" fill="#C8371B"/>
+              <rect x="104" y="52" width="9" height="24" fill="#16181C"/>
+              <rect x="104" y="76" width="9" height="24" fill="#C8371B"/>
+              <rect x="104" y="100" width="9" height="24" fill="#16181C"/>
+            </g>
+            <path d="M99 124 L118 124" stroke="#90949B" stroke-width="2"/>
+            <circle cx="170" cy="118" r="3" fill="none" stroke="#90949B" stroke-width="1.5"/>
+            <line x1="108.5" y1="24" x2="108.5" y2="28" stroke="#C8371B" stroke-width="2"/>
+            <text x="126" y="44" font-family="JetBrains Mono, monospace" font-size="10" fill="#90949B">1.0m</text>
+          </svg>
+        </div>
+        <div class="itxt"><em>SHARED SCALE</em><b>The ranging pole</b>
+          <p>Orange and white in metre bands — scale everyone reads from any distance, no explanation needed. In product: the accent is a unit of meaning, repeated identically, never improvised.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="type">
+  <div class="wrap">
+    <div class="idx">03 — Typography</div>
+    <h2>One typeface, all the way down</h2>
+    <p class="sub">Inter carries everything — display, headings and body, one family throughout. At hero scale it runs bold (700) with tight tracking; below, weights step down to 400–600 for headings and body. JetBrains Mono keeps the Berkeley Mono role: engineering alphanumerics only. No serif.</p>
+    <div class="type-list">
+      <div class="trow"><div class="meta">display · INTER 700 · 60/1.04 · tight tracking</div><div class="sample" style="font:var(--text-display); letter-spacing:var(--track-display); font-size:48px">Command the build.</div></div>
+      <div class="trow"><div class="meta">display alt · INTER + accent period</div><div class="sample" style="font:var(--text-display); letter-spacing:var(--track-display); font-size:48px">Built to hold<span style="color:var(--intent)">.</span></div></div>
+      <div class="trow"><div class="meta">h1 · INTER 590 · 34/1.15 · -1.2%</div><div class="sample" style="font:var(--text-h1); letter-spacing:var(--track-h)">Heavy data, held to tolerance</div></div>
+      <div class="trow"><div class="meta">h2 · 560 · 22/1.25</div><div class="sample" style="font:var(--text-h2); letter-spacing:var(--track-h)">Common data environment</div></div>
+      <div class="trow"><div class="meta">body · 400 · 15/1.6 · text-2</div><div class="sample" style="font:var(--text-body); color:var(--text-2); max-width:560px">Every drawing revision, RFI, and field observation flows into a single environment — versioned, auditable, visible from bid to handover.</div></div>
+      <div class="trow"><div class="meta">micro · 500 · 11/1.4 · +2%</div><div class="sample" style="font:var(--text-micro); letter-spacing:var(--track-micro); color:var(--text-3); text-transform:uppercase">Updated 4 minutes ago · 230 files</div></div>
+      <div class="trow"><div class="meta">mono · JetBrains · 12.5</div><div class="sample" style="font:var(--text-mono); color:var(--text-2)">MCG-TWRC-STR-DWG-0412 · REV C03 · ±0.5mm</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="icons">
+  <div class="wrap">
+    <div class="idx">03b — Iconography</div>
+    <h2>Site tools, drawn calm</h2>
+    <p class="sub">A 20px grid, 1.5px stroke, rounded joins. Icons inherit text color — gray at rest, white when active — and never carry the accent, with one exception: the hold-point diamond, which is a signal by definition.</p>
+    <div class="icon-grid">
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 20 20"><path d="M3.5 9.5 L10 3.5 L16.5 9.5 V16 H12 V12 H8 V16 H3.5 Z"/></svg><span>Today</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 20 20"><circle cx="10" cy="10" r="6.5"/><circle cx="10" cy="10" r="1.4" fill="currentColor" stroke="none"/><path d="M10 1.5 V3.5 M10 16.5 V18.5 M1.5 10 H3.5 M16.5 10 H18.5"/></svg><span>RFIs</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 20 20"><path d="M4 3.5 H11 L16 8.5 V16.5 H4 Z"/><path d="M11 3.5 V8.5 H16"/></svg><span>Files</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="14" rx="1.5"/><path d="M7 7.5 H13 M7 10.5 H13 M7 13.5 H10.5"/></svg><span>Docs</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 20 20"><path d="M4 7 H14 L11.5 4.5 M16 13 H6 L8.5 15.5"/></svg><span>Convert</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 20 20"><path d="M10 2.5 L16.5 6 V14 L10 17.5 L3.5 14 V6 Z M3.5 6 L10 9.5 L16.5 6 M10 9.5 V17.5"/></svg><span>Models</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 20 20"><path d="M4.5 12 Q4.5 6 10 6 Q15.5 6 15.5 12 Z"/><path d="M3 12 H17 M8.5 6 Q8.5 3.5 10 3.5 Q11.5 3.5 11.5 6"/></svg><span>Field</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.5"/><path d="M13.2 13.2 L17 17"/></svg><span>Search</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 20 20"><path d="M3.5 5 H16.5 L11.5 10.5 V15.5 L8.5 17 V10.5 Z"/></svg><span>Filter</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 20 20"><path d="M10 13 V3.5 M6.5 7 L10 3.5 L13.5 7"/><path d="M4 13.5 V16.5 H16 V13.5"/></svg><span>Upload</span></div>
+      <div class="icell"><svg width="32" height="32" viewBox="0 0 20 20"><path d="M4 4.5 H16 V13 H9.5 L6 16 V13 H4 Z"/></svg><span>Comment</span></div>
+      <div class="icell hold"><svg width="32" height="32" viewBox="0 0 20 20"><rect x="5.5" y="5.5" width="9" height="9" transform="rotate(45 10 10)"/></svg><span>Hold point</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="illustration">
+  <div class="wrap">
+    <div class="idx">03c — Illustration</div>
+    <h2>Drawn with the same pen</h2>
+    <p class="sub">Illustration is the icon grammar at scale — four grays, one orange decision. Four modes on two axes: <span style="color:var(--text-1)">Line</span> or <span style="color:var(--text-1)">Filled</span>, in <span style="color:var(--text-1)">elevation</span> or <span style="color:var(--text-1)">isometry</span>. Line modes explain — precision contexts, product adjacency. Filled modes feel — brand moments, covers, personality (the surveyor's cap was the first). Never mix modes in one composition.</p>
+
+    <div class="img-grid">
+      <div class="icard">
+        <div class="icanvas" style="height:260px">
+          <svg width="380" height="220" viewBox="0 0 560 330" fill="none" stroke-linecap="round">
+            <line x1="20" y1="300" x2="540" y2="300" stroke="#CFD1CC" stroke-width="1.5"/>
+            <g stroke="#C8371B" stroke-width="5"><line x1="70" y1="291" x2="92" y2="309"/><line x1="92" y1="291" x2="70" y2="309"/></g>
+            <rect x="200" y="90" width="170" height="210" stroke="#3A4046" stroke-width="1.5"/>
+            <g stroke="#CFD1CC" stroke-width="1.2"><line x1="200" y1="260" x2="370" y2="260"/><line x1="200" y1="220" x2="370" y2="220"/><line x1="200" y1="180" x2="370" y2="180"/><line x1="200" y1="140" x2="370" y2="140"/></g>
+            <rect x="200" y="56" width="170" height="34" stroke="#CFD1CC" stroke-width="1.2" stroke-dasharray="4 6"/>
+            <g stroke="#3A4046" stroke-width="1.4">
+              <line x1="120" y1="300" x2="120" y2="50"/><line x1="134" y1="300" x2="134" y2="50"/>
+              <line x1="120" y1="100" x2="134" y2="128"/><line x1="134" y1="100" x2="120" y2="128"/>
+              <line x1="120" y1="170" x2="134" y2="198"/><line x1="134" y1="170" x2="120" y2="198"/>
+              <line x1="120" y1="240" x2="134" y2="268"/><line x1="66" y1="50" x2="420" y2="50"/>
+              <line x1="127" y1="26" x2="127" y2="50"/><line x1="127" y1="26" x2="300" y2="50"/><line x1="127" y1="26" x2="66" y2="50"/>
+            </g>
+            <line x1="330" y1="50" x2="330" y2="112" stroke="#90949B" stroke-width="1.2"/>
+            <circle cx="330" cy="118" r="4" fill="#C8371B"/>
+            <g stroke="#90949B" stroke-width="1.4"><line x1="470" y1="300" x2="460" y2="254"/><line x1="470" y1="300" x2="480" y2="254"/><line x1="470" y1="294" x2="470" y2="248"/></g>
+            <rect x="461" y="234" width="18" height="13" rx="3" stroke="#5A5F66" stroke-width="1.4"/>
+            <line x1="459" y1="238" x2="376" y2="156" stroke="#C8371B" stroke-width="1.2" stroke-dasharray="2 6"/>
+            <circle cx="372" cy="152" r="3.4" fill="#C8371B"/>
+          </svg>
+        </div>
+        <div class="itxt">
+          <em>MODE 01 — LINE ART</em>
+          <b>The site, in elevation</b>
+          <p>Expressive scenes built from the things a site contains: cranes, slabs, instruments, marks. Poured work is solid; <span style="color:var(--text-1)">planned work is dashed</span>; the beam connects the instrument to its point. For heroes, empty states, and storytelling.</p>
+        </div>
+      </div>
+      <div class="icard">
+        <div class="icanvas" style="height:260px">
+          <svg width="340" height="220" viewBox="0 0 480 330" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M90 240 L240 165 L390 240 L240 315 Z" stroke="#E3E4E0" stroke-width="1.5"/>
+            <path d="M160 215 L240 175 L320 215 L240 255 Z" fill="#E7E9ED" stroke="#CFD1CC" stroke-width="1.5"/>
+            <path d="M160 215 L240 255 L240 272 L160 232 Z" fill="#101214" stroke="#CFD1CC" stroke-width="1.5"/>
+            <path d="M320 215 L240 255 L240 272 L320 232 Z" fill="#FCFCFD" stroke="#CFD1CC" stroke-width="1.5"/>
+            <path d="M172 162 L240 128 L308 162 L240 196 Z" fill="rgba(200, 55, 27,0.13)" stroke="#C8371B" stroke-width="1.5"/>
+            <path d="M172 162 L240 196 L240 211 L172 177 Z" fill="#FCFCFD" stroke="#C8371B" stroke-width="1.2" stroke-opacity="0.5"/>
+            <path d="M308 162 L240 196 L240 211 L308 177 Z" fill="#FCFCFD" stroke="#C8371B" stroke-width="1.2" stroke-opacity="0.5"/>
+            <path d="M184 112 L240 84 L296 112 L240 140 Z" stroke="#CFD1CC" stroke-width="1.3" stroke-dasharray="4 6"/>
+            <path d="M198 40 L240 19 L282 40 L240 61 Z" stroke="#90949B" stroke-width="1.2" stroke-dasharray="4 5"/>
+            <circle cx="240" cy="40" r="3.6" fill="#C8371B"/>
+            <line x1="240" y1="46" x2="240" y2="78" stroke="#C8371B" stroke-width="1.1" stroke-dasharray="2 6"/>
+            <line x1="312" y1="162" x2="380" y2="136" stroke="#90949B" stroke-width="1.2" stroke-dasharray="2 6"/>
+            <circle cx="384" cy="134" r="3" fill="#C8371B"/>
+            <text x="394" y="138" font-family="JetBrains Mono, monospace" font-size="10" fill="#5A5F66">HOLD</text>
+          </svg>
+        </div>
+        <div class="itxt">
+          <em>MODE 02 — LINE ISOMETRY</em>
+          <b>The register, as object</b>
+          <p>Data given mass: 2:1 axonometric slabs on a platform, faces stepped through the surface ramp, the data plane floating above. <span style="color:var(--text-1)">States read as material</span> — solid is done, washed orange is held, dashed is planned. For product moments and 3D narratives.</p>
+        </div>
+      </div>
+
+      <div class="icard">
+        <div class="icanvas" style="height:260px">
+          <svg width="380" height="220" viewBox="0 0 560 320" fill="none">
+            <!-- ground band -->
+            <rect x="30" y="288" width="500" height="7" rx="3.5" fill="#E7E9ED"/>
+            <!-- tower silhouettes -->
+            <rect x="220" y="84" width="150" height="204" fill="#E7E9ED"/>
+            <rect x="220" y="84" width="150" height="14" fill="#E3E4E0"/>
+            <rect x="252" y="120" width="22" height="10" fill="#101214"/><rect x="296" y="120" width="22" height="10" fill="#101214"/>
+            <rect x="252" y="156" width="22" height="10" fill="#101214"/><rect x="296" y="156" width="22" height="10" fill="#101214"/>
+            <rect x="252" y="192" width="22" height="10" fill="#101214"/><rect x="296" y="192" width="22" height="10" fill="#101214"/>
+            <rect x="110" y="190" width="84" height="98" fill="#FCFCFD"/>
+            <rect x="110" y="190" width="84" height="10" fill="#1F2125"/>
+            <!-- crane silhouette -->
+            <rect x="404" y="58" width="11" height="230" fill="#E3E4E0"/>
+            <rect x="318" y="52" width="190" height="9" rx="4" fill="#E3E4E0"/>
+            <rect x="488" y="61" width="22" height="18" fill="#E7E9ED"/>
+            <rect x="346" y="61" width="3" height="48" fill="#CFD1CC"/>
+            <rect x="338" y="109" width="19" height="16" fill="#C8371B"/>
+            <!-- the surveyor's cap, foreground -->
+            <path d="M62 268 Q62 230 100 230 Q138 230 138 268 Z" fill="#C8371B"/>
+            <path d="M92 230 Q92 222 100 222 Q108 222 108 230 L108 238 Q104 236 100 236 Q96 236 92 238 Z" fill="#E0431F"/>
+            <rect x="52" y="268" width="96" height="10" rx="5" fill="#C8371B"/>
+            <path d="M80 237 Q76 250 76 268 M120 237 Q124 250 124 268" stroke="#C8371B" stroke-width="2" fill="none"/>
+            <!-- laser dot on tower -->
+            <circle cx="370" cy="160" r="3.5" fill="#16181C"/>
+          </svg>
+        </div>
+        <div class="itxt">
+          <em>MODE 03 — FILLED ART</em>
+          <b>The site, as substance</b>
+          <p>Flat silhouettes from the surface ramp — no internal strokes, shapes carry the story. <span style="color:var(--text-1)">One object owns the orange</span>, filled solid like the surveyor's cap. For covers, culture, personality moments.</p>
+        </div>
+      </div>
+
+      <div class="icard">
+        <div class="icanvas" style="height:260px">
+          <svg width="340" height="220" viewBox="0 0 480 330" fill="none">
+            <!-- soft shadow -->
+            <ellipse cx="240" cy="296" rx="150" ry="22" fill="#000000" opacity="0.35"/>
+            <!-- platform -->
+            <path d="M90 250 L240 175 L390 250 L240 325 Z" fill="#101214"/>
+            <!-- slab 1 -->
+            <path d="M160 222 L240 182 L320 222 L240 262 Z" fill="#E3E4E0"/>
+            <path d="M160 222 L240 262 L240 280 L160 240 Z" fill="#FCFCFD"/>
+            <path d="M320 222 L240 262 L240 280 L320 240 Z" fill="#E7E9ED"/>
+            <!-- slab 2: held, solid orange -->
+            <path d="M172 168 L240 134 L308 168 L240 202 Z" fill="#C8371B"/>
+            <path d="M172 168 L240 202 L240 218 L172 184 Z" fill="#C8371B"/>
+            <path d="M308 168 L240 202 L240 218 L308 184 Z" fill="#E04E1F"/>
+            <!-- slab 3 -->
+            <path d="M184 118 L240 90 L296 118 L240 146 Z" fill="#E3E4E0"/>
+            <path d="M184 118 L240 146 L240 161 L184 133 Z" fill="#FCFCFD"/>
+            <path d="M296 118 L240 146 L240 161 L296 133 Z" fill="#E7E9ED"/>
+            <!-- data plane chip -->
+            <path d="M204 42 L240 24 L276 42 L240 60 Z" fill="#E7E9ED"/>
+            <circle cx="240" cy="42" r="3.6" fill="#E0431F"/>
+            <!-- material cubes -->
+            <path d="M118 270 L142 258 L166 270 L142 282 Z" fill="#E3E4E0"/>
+            <path d="M118 270 L142 282 L142 296 L118 284 Z" fill="#FCFCFD"/>
+            <path d="M166 270 L142 282 L142 296 L166 284 Z" fill="#E7E9ED"/>
+          </svg>
+        </div>
+        <div class="itxt">
+          <em>MODE 04 — FILLED ISOMETRY</em>
+          <b>The object, made solid</b>
+          <p>The iso grammar with faces filled and outlines gone — top, left, right stepped through the ramp; <span style="color:var(--text-1)">the held slab goes solid orange</span> with darkened sides. For app icons, launch art, roadmap monuments.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-4); margin-top:var(--space-8)" class="img-grid">
+      <div class="pcard" style="background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-6)">
+        <b style="font:560 13.5px/1.5 var(--font-ui); color:var(--text-1); display:block; margin-bottom:5px">One pen</b>
+        <p style="font:400 12.5px/1.6 var(--font-ui); color:var(--text-2)">1.5px strokes, rounded caps — identical to the icons. If it looks drawn by a different hand, it's off-brand.</p>
+      </div>
+      <div class="pcard" style="background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-6)">
+        <b style="font:560 13.5px/1.5 var(--font-ui); color:var(--text-1); display:block; margin-bottom:5px">Dashed means not yet</b>
+        <p style="font:400 12.5px/1.6 var(--font-ui); color:var(--text-2)">Future floors, planned slabs, data planes — anything that doesn't exist yet is drawn in dashes.</p>
+      </div>
+      <div class="pcard" style="background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-6)">
+        <b style="font:560 13.5px/1.5 var(--font-ui); color:var(--text-1); display:block; margin-bottom:5px">Orange is the live point</b>
+        <p style="font:400 12.5px/1.6 var(--font-ui); color:var(--text-2)">One decision per scene: the hook point, the held slab, the beam's landing. Never two.</p>
+      </div>
+      <div class="pcard" style="background:var(--bg-1); border-radius:var(--r-lg); box-shadow:var(--inset); padding:var(--space-6)">
+        <b style="font:560 13.5px/1.5 var(--font-ui); color:var(--text-1); display:block; margin-bottom:5px">Grays build, never decorate</b>
+        <p style="font:400 12.5px/1.6 var(--font-ui); color:var(--text-2)">Fills come from the four-surface ramp only. No gradients inside artwork; depth is face-shading, not light effects.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="motifs" style="padding-top:var(--space-8)">
+  <div class="wrap">
+    <div class="idx">03d — Motifs</div>
+    <h2>The motifs</h2>
+    <p class="sub2x">Each motif is a site gesture, abstracted. They never stack — pick one per composition.</p>
+    <div class="mgrid">
+      <div class="mcard">
+        <div class="mstage">
+          <svg width="180" height="80" viewBox="0 0 180 80">
+            <line x1="14" y1="40" x2="140" y2="40" stroke="#90949B" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round"/>
+            <circle cx="156" cy="40" r="5" fill="#C8371B"/>
+            <circle cx="156" cy="40" r="11" fill="none" stroke="#C8371B" stroke-opacity="0.3" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="mt"><b>The Beam</b><p>A dashed leader that ends in a burning point. Direction, then arrival. For pointing at anything.</p></div>
+      </div>
+      <div class="mcard">
+        <div class="mstage">
+          <svg width="180" height="80" viewBox="0 0 180 80">
+            <g stroke="#C8371B" stroke-width="10" stroke-linecap="round">
+              <line x1="72" y1="24" x2="108" y2="56"/>
+              <line x1="108" y1="24" x2="72" y2="56"/>
+            </g>
+            <circle cx="90" cy="40" r="2" fill="#16181C"/>
+          </svg>
+        </div>
+        <div class="mt"><b>The Setting-out Cross</b><p>A decision, committed. Marks the single most important point of any artefact.</p></div>
+      </div>
+      <div class="mcard">
+        <div class="mstage" style="padding:0; align-items:stretch">
+          <div style="flex:1; display:flex; flex-direction:column">
+            <div style="flex:1"></div>
+            <div class="stripeband" style="height:22px"></div>
+            <div style="flex:1"></div>
+          </div>
+        </div>
+        <div class="mt"><b>The Metre Band</b><p>Ranging-pole stripes as an edge device. Shared scale — used on covers, lanyards, hoardings.</p></div>
+      </div>
+      <div class="mcard">
+        <div class="mstage">
+          <svg width="180" height="80" viewBox="0 0 180 80">
+            <rect x="26" y="26" width="128" height="28" rx="6" fill="rgba(200, 55, 27,0.13)"/>
+            <rect x="38" y="36" width="70" height="8" rx="2" fill="#90949B"/>
+            <rect x="116" y="36" width="26" height="8" rx="2" fill="#C8371B"/>
+          </svg>
+        </div>
+        <div class="mt"><b>The Wash</b><p>13% orange ground marking selection or uncertainty — attention without alarm.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="depth">
+  <div class="wrap">
+    <div class="idx">04 — Surfaces &amp; Depth</div>
+    <h2>Borders and light, never fills</h2>
+    <p class="sub">Cards gain presence through a 1px inset border and a soft shadow. Radii are 6–16px — machined plastic, not stone. v2 has no gradient backgrounds: hero fields and empty states sit on plain white, separated by hairlines alone.</p>
+    <div class="depth-grid">
+      <div class="depth-card" style="background:var(--bg-2); box-shadow:var(--inset)"><b>Inset border</b><span>rgba(22,24,28,.06) — the default card</span></div>
+      <div class="depth-card" style="background:var(--bg-2); box-shadow:var(--inset), var(--shadow-card)"><b>+ Soft shadow</b><span>popovers, hovers — depth without contrast</span></div>
+      <div class="depth-card" style="background:var(--bg-1); box-shadow:var(--inset), var(--shadow-card)"><b>Plain white</b><span>no gradient washes — separation is structural</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="spacing">
+  <div class="wrap">
+    <div class="idx">04b — Spacing &amp; Grid</div>
+    <h2>A 4px pulse</h2>
+    <p class="sub">Every gap is a multiple of 4. Components breathe in 8s and 12s; sections in 48s and 96s. If a measurement isn't on the pulse, it's a bug.</p>
+    <div>
+      <div class="sp-row"><span class="tk">--space-1 · 4px</span><div class="bar2" style="width:4px"></div><span class="use2">icon-to-dot gaps</span></div>
+      <div class="sp-row"><span class="tk">--space-2 · 8px</span><div class="bar2" style="width:8px"></div><span class="use2">chip gaps, dot-to-text</span></div>
+      <div class="sp-row"><span class="tk">--space-3 · 12px</span><div class="bar2" style="width:12px"></div><span class="use2">inside compact controls</span></div>
+      <div class="sp-row"><span class="tk">--space-4 · 16px</span><div class="bar2" style="width:16px"></div><span class="use2">card padding, grid gaps</span></div>
+      <div class="sp-row"><span class="tk">--space-6 · 24px</span><div class="bar2" style="width:24px"></div><span class="use2">panel padding</span></div>
+      <div class="sp-row"><span class="tk">--space-8 · 32px</span><div class="bar2" style="width:32px"></div><span class="use2">between content blocks</span></div>
+      <div class="sp-row"><span class="tk">--space-12 · 48px</span><div class="bar2" style="width:48px"></div><span class="use2">section sub-breaks</span></div>
+      <div class="sp-row" style="border-bottom:1px solid var(--border)"><span class="tk">--space-24 · 96px</span><div class="bar2" style="width:96px"></div><span class="use2">page sections</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="cards">
+  <div class="wrap">
+    <div class="idx">04c — Cards</div>
+    <h2>Four cards, one family</h2>
+    <p class="sub">All cards share the inset border. They differ only in how they sit: flat, lifted, willing, or chosen. <span style="color:var(--text-1)">Hover each one — it performs its own definition.</span></p>
+    <div class="card-grid">
+      <div class="cardx cv-default" style="background:var(--bg-2); box-shadow:var(--inset)">
+        <div class="ttl">Default</div><div class="bd">bg-2 + inset border. The resting state of all content.</div><div class="ft">--inset</div>
+        <div class="hint">hover: nothing moves. that's the point.</div>
+      </div>
+      <div class="cardx cv-raised" style="background:var(--bg-2); box-shadow:var(--inset), var(--shadow-card)">
+        <div class="ttl">Raised</div><div class="bd">Adds the soft shadow. Popovers, drag states, anything temporarily above the page.</div><div class="ft">--inset + --shadow-card</div>
+        <div class="hint">hover: lifts further off the page.</div>
+      </div>
+      <div class="cardx cv-inter" style="background:var(--bg-2); box-shadow:var(--inset)">
+        <div class="ttl">Interactive ↗</div><div class="bd">Hover lifts to bg-3, cursor points. Never a border change — surfaces move, strokes don't.</div><div class="ft">hover: bg-3</div>
+        <div class="hint">hover: surface rises, no stroke change.</div>
+      </div>
+      <div class="cardx cv-sel" style="background:var(--intent-wash); box-shadow:var(--inset), 0 0 0 1px rgba(200, 55, 27,0.35)">
+        <div class="ttl">Selected</div><div class="bd">The wash plus a 1px intent ring. The only card allowed to speak in color.</div><div class="ft">--intent-wash</div>
+        <div class="hint">hover: the ring commits to full intent.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="overlays">
+  <div class="wrap">
+    <div class="idx">04d — Overlays</div>
+    <h2>Dialogs &amp; dropdowns</h2>
+    <p class="sub">Overlays dim the world by 60% and float on the pop shadow. Dialogs ask exactly one question; destructive intent is named, never red-buttoned by default.</p>
+    <div class="ov-grid">
+      <div class="ov-stage">
+        <div class="dlg">
+          <h5><svg width="18" height="18" viewBox="0 0 20 20" style="stroke:var(--intent); fill:none; stroke-width:1.6"><rect x="5.5" y="5.5" width="9" height="9" transform="rotate(45 10 10)"/></svg>Lift hold on L24–L28?</h5>
+          <p>RFI-0847 is resolved. Lifting the hold releases pour P-1131 for sign-off and notifies 4 people.</p>
+          <div class="acts">
+            <button class="btn btn-ghost">Cancel</button>
+            <span class="u-kbd">esc</span>
+            <button class="btn btn-primary">Lift hold</button>
+            <span class="u-kbd">↵</span>
+          </div>
+        </div>
+      </div>
+      <div class="ov-stage" style="align-items:flex-start; padding-top:44px">
+        <div class="menu">
+          <div class="mi on"><svg width="15" height="15" viewBox="0 0 20 20" style="stroke:currentColor; fill:none; stroke-width:1.5"><path d="M4 16.5 V7 L10 3.5 L16 7 V16.5"/></svg>Open<span class="u-kbd">↵</span></div>
+          <div class="mi"><svg width="15" height="15" viewBox="0 0 20 20" style="stroke:currentColor; fill:none; stroke-width:1.5"><path d="M10 13 V3.5 M6.5 7 L10 3.5 L13.5 7 M4 13.5 V16.5 H16 V13.5"/></svg>Share…<span class="u-kbd">S</span></div>
+          <div class="mi"><svg width="15" height="15" viewBox="0 0 20 20" style="stroke:currentColor; fill:none; stroke-width:1.5"><path d="M4 7 H14 L11.5 4.5 M16 13 H6 L8.5 15.5"/></svg>Convert to native doc</div>
+          <div class="dv"></div>
+          <div class="mi"><svg width="15" height="15" viewBox="0 0 20 20" style="stroke:currentColor; fill:none; stroke-width:1.5"><rect x="5.5" y="5.5" width="9" height="9" transform="rotate(45 10 10)"/></svg>Place hold…</div>
+          <div class="mi danger"><svg width="15" height="15" viewBox="0 0 20 20" style="stroke:currentColor; fill:none; stroke-width:1.5"><path d="M5 6 H15 M8 6 V4.5 H12 V6 M6.5 6 L7.2 16 H12.8 L13.5 6"/></svg>Supersede…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tables">
+  <div class="wrap">
+    <div class="idx">04e — Tables &amp; Lists</div>
+    <h2>Registers, not spreadsheets</h2>
+    <p class="sub">Rows are 44px instruments: dot, mono ref, sentence-case title, chip properties. Hover lifts the surface; selection takes the wash. No zebra stripes, no vertical rules — the grid is implied, never drawn.</p>
+    <table class="tblx">
+      <thead><tr><th style="width:36px"></th><th style="width:130px">Ref</th><th>Title</th><th style="width:140px">Property</th><th style="width:84px; text-align:right">Qty</th><th style="width:90px; text-align:right">Meta</th></tr></thead>
+      <tr class="grp"><td colspan="6">Level 26 — Structure</td></tr>
+      <tr><td><i class="u-dot" style="background:var(--st-done)"></i></td><td class="rf">STR-DWG-0412</td><td class="tt">Core wall reinforcement L24–L28</td><td><span style="font:500 11.5px/1 var(--font-ui); color:var(--text-2); background:var(--bg-3); box-shadow:var(--inset); border-radius:var(--r-sm); padding:4px 9px">Rev C03</span></td><td class="num">412 m³</td><td class="rf" style="text-align:right">09 JUN</td></tr>
+      <tr class="sel"><td><i class="u-dot" style="background:var(--st-blocked)"></i></td><td class="rf">RFI-0847</td><td class="tt">Cover clash at L26 — selected row</td><td><span style="font:500 11.5px/1 var(--font-ui); color:var(--text-2); background:var(--bg-3); box-shadow:var(--inset); border-radius:var(--r-sm); padding:4px 9px">Holds pour</span></td><td class="num">—</td><td class="rf" style="text-align:right">2D OVER</td></tr>
+      <tr class="grp"><td colspan="6">Level 25 — Quality</td></tr>
+      <tr><td><i class="u-dot" style="background:var(--st-progress)"></i></td><td class="rf">MAT-019</td><td class="tt">Type 2 coupler approval</td><td><span style="font:500 11.5px/1 var(--font-ui); color:var(--text-2); background:var(--bg-3); box-shadow:var(--inset); border-radius:var(--r-sm); padding:4px 9px">In review</span></td><td class="num">1,840 ea</td><td class="rf" style="text-align:right">WK 25</td></tr>
+      <tr><td><i class="u-dot" style="background:var(--st-backlog)"></i></td><td class="rf">ITP-044</td><td class="tt">L25 rebar inspection</td><td><span style="font:500 11.5px/1 var(--font-ui); color:var(--text-2); background:var(--bg-3); box-shadow:var(--inset); border-radius:var(--r-sm); padding:4px 9px">Scheduled</span></td><td class="num">38 t</td><td class="rf" style="text-align:right">WK 25</td></tr>
+    </table>
+    <div class="princ" style="margin-top:var(--space-6)">
+      <div class="pcard"><b>Numbers right-align; units stay attached</b><p>Quantities set in mono, tabular figures, flush right — magnitudes compare down the column at a glance. The unit travels with its number ("412 m³", never a separate column). An empty cell reads "—": an instrument never leaves a dial blank.</p></div>
+      <div class="pcard"><b>Groups are bands, not boxes</b><p>A register groups rows with a micro-caps band — a label that passes through, like a chainage marker. Never nested tables, never indentation, never a heavier border. The band has no hover: it isn't a row, it's a reading of where you are.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="inputs">
+  <div class="wrap">
+    <div class="idx">04f — Data Entry</div>
+    <h2>Every value has a correct field</h2>
+    <p class="sub">Entry is where the product asks instead of reads — so it asks precisely. The type of the value chooses the control: <span style="color:var(--text-1)">text gets the sans, references and quantities get the mono, decisions get exactly the options that exist.</span> All fields share one focus behavior: intent border plus wash ring. These are live — click in.</p>
+    <div class="fgrid">
+      <div class="fcard">
+        <div class="flab">Text — short</div>
+        <input class="inp" type="text" placeholder="Pour location">
+        <div class="frule">Single line, sans, sentence case. For names, titles, locations — anything a human would say aloud.</div>
+      </div>
+      <div class="fcard">
+        <div class="flab">Text — long</div>
+        <textarea class="inp" placeholder="Describe the observed condition…"></textarea>
+        <div class="frule">Narrative entry. Grows with content, resizes vertically only. Mono never sets prose.</div>
+      </div>
+      <div class="fcard">
+        <div class="flab">Alphanumeric — reference</div>
+        <input class="inp mono" type="text" value="RFI-0847">
+        <div class="frule">Engineering refs take the mono — stencil duty. Uppercase enforced on entry, tabular spacing, no autocorrect.</div>
+      </div>
+      <div class="fcard">
+        <div class="flab">Float — quantity</div>
+        <div class="unitwrap"><input class="inp" type="text" value="412.50" inputmode="decimal"><span class="unit">m³</span></div>
+        <div class="frule">Right-aligned, tabular figures, unit fixed inside the field. The unit is part of the value, not the label.</div>
+      </div>
+      <div class="fcard">
+        <div class="flab">Boolean — toggle</div>
+        <label class="tgl"><input type="checkbox" checked><span class="tk"></span>Notify approvers on upload</label>
+        <label class="tgl" style="margin-top:8px"><input type="checkbox"><span class="tk"></span>Lock revision after issue</label>
+        <div class="frule">For states that apply immediately. One toggle, one present-tense sentence. Orange means on — nothing else here may use it.</div>
+      </div>
+      <div class="fcard">
+        <div class="flab">Boolean — checkboxes</div>
+        <label class="pick"><input type="checkbox" checked>Drawings</label>
+        <label class="pick"><input type="checkbox" checked>Specifications</label>
+        <label class="pick"><input type="checkbox">Method statements</label>
+        <div class="frule">Many of many. Checks confirm a submitted choice — they don't act until the form does.</div>
+      </div>
+      <div class="fcard">
+        <div class="flab">Select — one of few</div>
+        <label class="pick"><input type="radio" name="r1" checked>Hold point</label>
+        <label class="pick"><input type="radio" name="r1">Witness point</label>
+        <label class="pick"><input type="radio" name="r1">Surveillance</label>
+        <div class="frule">Radio when every option fits on screen (≤5). All choices visible — the form never hides what it's asking.</div>
+      </div>
+      <div class="fcard">
+        <div class="flab">Select — one of many</div>
+        <div class="selx">Discipline — Structural <span class="car2">▾</span></div>
+        <div class="selmenu">
+          <div>Architectural</div>
+          <div class="on">Structural</div>
+          <div>MEP</div>
+        </div>
+        <div class="frule">Dropdown when options exceed five. Opens a raised bg-2 panel; the chosen row takes the wash, type-ahead from the first key.</div>
+      </div>
+      <div class="fcard">
+        <div class="flab">Lists — ordered &amp; unordered</div>
+        <div class="lrow"><span class="ix">01</span>Excavate to formation level<span class="grip">⋮⋮</span></div>
+        <div class="lrow"><span class="ix">02</span>Blind with 50mm concrete<span class="grip">⋮⋮</span></div>
+        <div class="lrow" style="margin-top:12px"><span class="blt"></span>Permit to dig<span class="grip">⋮⋮</span></div>
+        <div class="lrow"><span class="blt"></span>Service clearance cert<span class="grip">⋮⋮</span></div>
+        <div class="frule">Sequence matters → mono indices. Sequence doesn't → dots. Both drag to reorder; numbering recalculates, it is never typed.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp">
+  <div class="wrap">
+    <div class="idx">05 — Components</div>
+    <h2>Instrument controls</h2>
+    <p class="sub">Quiet by default, orange exactly once. Keyboard is a first-class citizen — every action shows its shortcut.</p>
+    <div class="comp-stage">
+      <div class="row">
+        <button class="btn btn-primary">New RFI</button>
+        <button class="btn btn-secondary">Filter</button>
+        <button class="btn btn-ghost">Export</button>
+        <span class="annotation">← one orange per screen; everything else is surface</span>
+      </div>
+      <div class="row">
+        <input class="input" value="Search files, RFIs, drawings…" />
+        <span class="u-kbd">⌘</span><span class="u-kbd">K</span>
+        <span class="annotation">focus = intent ring at 3px wash</span>
+      </div>
+      <div class="row">
+        <span class="prop"><i class="u-dot" style="background:var(--st-progress)"></i>In progress</span>
+        <span class="prop"><i class="u-dot" style="background:var(--st-review)"></i>In review</span>
+        <span class="prop">STR · Structural</span>
+        <span class="prop">Due 13 Jun</span>
+        <span class="annotation">properties are chips on bg-2 — status is dot + text</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="princ">
+  <div class="wrap">
+    <div class="idx">06 — Principles</div>
+    <h2>The craft contract</h2>
+    <p class="sub" style="margin-bottom:var(--space-8)">Four rules that keep this direction honest.</p>
+    <div class="princ">
+      <div class="pcard"><b>Ration the signal</b><p>Orange appears once per screen. The moment two things glow, neither is primary. Status lives in dots, selection in a 14% wash.</p></div>
+      <div class="pcard"><b>Depth is light, not paint</b><p>No filled panels against filled panels. A 1px inset border and a soft shadow carry all elevation. Surfaces stay within a four-step ramp.</p></div>
+      <div class="pcard"><b>Density is respect</b><p>AEC professionals live in registers. Tight line-heights, 13px working text, properties inline — never make an engineer scroll for what could be a column.</p></div>
+      <div class="pcard"><b>The keyboard is the crane</b><p>Every action has a shortcut and shows it. ⌘K reaches everything. Speed is the feature that says we understand site-time.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="instances" style="border-bottom:none">
+  <div class="wrap">
+    <div class="idx">07 — In the world</div>
+    <h2>Brand, in the world</h2>
+    <p class="sub2x">The language in the world. Hover any artefact in code — every one is built from tokens, no images.</p>
+    <div class="xgrid">
+
+      <!-- OG / social card -->
+      <div class="xcell" style="aspect-ratio:1.91/1; background:var(--aurora), var(--bg-1); padding:36px; display:flex; flex-direction:column">
+        <svg width="30" height="32" viewBox="0 0 377 396"><use href="#amark"/></svg>
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end">
+          <div class="display" style="font-size:34px; color:var(--text-1); line-height:1.12">Two million documents.<br>One source of truth<span style="color:var(--intent)">.</span></div>
+          <div style="display:flex; gap:14px; margin-top:16px; font:500 11px/1 var(--font-mono); color:var(--text-3); letter-spacing:0.05em"><span>ASITE.COM</span><span>COMMON DATA ENVIRONMENT</span></div>
+        </div>
+        <span class="xcap">SOCIAL / OG CARD · 1200×630</span>
+      </div>
+
+      <!-- report cover -->
+      <div class="xcell" style="aspect-ratio:1.91/1; background:var(--bg-1); display:grid; grid-template-columns:1fr 64px">
+        <div style="padding:36px; display:flex; flex-direction:column">
+          <span style="font:500 11px/1 var(--font-mono); color:var(--text-3); letter-spacing:0.08em">QPR · Q2 2026 · MERIDIAN TOWER C</span>
+          <div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end">
+            <div class="display" style="font-size:38px; color:var(--text-1)">Held to<br>tolerance</div>
+            <p style="margin-top:12px; font:400 12.5px/1.6 var(--font-ui); color:var(--text-3); max-width:300px">Information performance report — issued to the steering group.</p>
+          </div>
+        </div>
+        <div class="stripeband" style="background:repeating-linear-gradient(0deg, var(--intent) 0 34px, #16181C 34px 68px)"></div>
+        <span class="xcap">REPORT COVER · METRE BAND EDGE</span>
+      </div>
+
+      <!-- hoarding banner — orange field -->
+      <div class="xcell" style="grid-column:1/-1; aspect-ratio:4.6/1; background:var(--intent); display:flex; align-items:center; padding:0 48px; gap:36px">
+        <svg class="m-ink" width="56" height="59" viewBox="0 0 377 396" style="flex:none"><use href="#amark"/></svg>
+        <div class="display" style="font-size:clamp(22px,3.4vw,44px); color:#1A0E08; white-space:nowrap">This site runs on one source of truth<span style="color:#16181C">.</span></div>
+        <div style="margin-left:auto; text-align:right; font:500 11px/1.7 var(--font-mono); color:rgba(26,14,8,0.7); letter-spacing:0.05em">ASITE × MCG<br>TOWER C · GATE 3</div>
+        <span class="xcap" style="background:rgba(26,14,8,0.8); color:rgba(247,248,248,0.8)">SITE HOARDING · THE ORANGE FIELD</span>
+      </div>
+
+      <!-- app icon set -->
+      <div class="xcell" style="aspect-ratio:1.91/1; background:var(--bg-2); display:flex; align-items:center; justify-content:center; gap:36px">
+        <div style="width:104px; height:104px; border-radius:24px; background:var(--bg-0); box-shadow:var(--inset), var(--shadow-card); display:flex; align-items:center; justify-content:center">
+          <svg width="52" height="55" viewBox="0 0 377 396"><use href="#amark"/></svg>
+        </div>
+        <div style="width:104px; height:104px; border-radius:24px; background:var(--intent); box-shadow:var(--shadow-card); display:flex; align-items:center; justify-content:center">
+          <svg class="m-ink" width="52" height="55" viewBox="0 0 377 396"><use href="#amark"/></svg>
+        </div>
+        <div style="width:104px; height:104px; border-radius:24px; background:#16181C; box-shadow:var(--shadow-card); display:flex; align-items:center; justify-content:center">
+          <svg class="m-lite" width="52" height="55" viewBox="0 0 377 396"><use href="#amark"/></svg>
+        </div>
+        <span class="xcap">APP ICON · DARK / FIELD / LIGHT</span>
+      </div>
+
+      <!-- badge -->
+      <div class="xcell" style="aspect-ratio:1.91/1; background:var(--bg-2); display:flex; align-items:center; justify-content:center">
+        <div style="width:200px; background:var(--bg-1); border-radius:14px; box-shadow:var(--inset), var(--shadow-pop); overflow:hidden">
+          <div class="stripeband" style="height:14px"></div>
+          <div style="padding:18px; text-align:center">
+            <svg width="30" height="32" viewBox="0 0 377 396"><use href="#amark"/></svg>
+            <div style="font:560 15px/1.3 var(--font-ui); color:var(--text-1); margin-top:10px">Charles Njoku</div>
+            <div style="font:400 11px/1.5 var(--font-ui); color:var(--text-3)">Information Manager · MCG</div>
+            <div style="margin-top:12px; display:inline-block; font:500 9.5px/1 var(--font-mono); color:var(--intent-bright); background:var(--intent-wash); border-radius:4px; padding:4px 8px; letter-spacing:0.06em">SITE ACCESS · ZONE A</div>
+          </div>
+        </div>
+        <span class="xcap">EVENT / SITE BADGE</span>
+      </div>
+
+      <!-- stickers -->
+      <div class="xcell" style="aspect-ratio:1.91/1; background:var(--bg-1); display:flex; align-items:center; justify-content:center; gap:28px">
+        <div style="width:110px; height:110px; border-radius:50%; background:var(--intent); display:flex; flex-direction:column; align-items:center; justify-content:center; transform:rotate(-8deg); box-shadow:var(--shadow-card)">
+          <svg width="26" height="26" viewBox="0 0 20 20" style="stroke:#1A0E08; fill:none; stroke-width:1.8"><rect x="5.5" y="5.5" width="9" height="9" transform="rotate(45 10 10)"/></svg>
+          <span class="display" style="font-size:13px; color:#1A0E08; margin-top:6px">Hold point</span>
+        </div>
+        <div style="padding:10px 18px; border-radius:999px; background:var(--bg-2); box-shadow:var(--inset), var(--shadow-card); transform:rotate(4deg); font:500 12px/1 var(--font-mono); color:var(--text-1); letter-spacing:0.04em">SURVEYED ✓ ±0.5MM</div>
+        <div style="width:84px; height:84px; border-radius:16px; background:#16181C; display:flex; align-items:center; justify-content:center; transform:rotate(-3deg); box-shadow:var(--shadow-card)">
+          <svg width="44" height="44" viewBox="0 0 20 20" style="stroke:#C8371B; fill:none; stroke-width:2; stroke-linecap:round"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg>
+        </div>
+        <span class="xcap">STICKER SHEET</span>
+      </div>
+
+      <!-- empty state -->
+      <div class="xcell" style="grid-column:1/-1; aspect-ratio:4.6/1; background:var(--bg-1); display:flex; align-items:center; justify-content:center; gap:28px">
+        <svg width="150" height="64" viewBox="0 0 180 80">
+          <line x1="6" y1="40" x2="120" y2="40" stroke="#90949B" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round"/>
+          <circle cx="138" cy="40" r="5" fill="#C8371B"/>
+          <circle cx="138" cy="40" r="11" fill="none" stroke="#C8371B" stroke-opacity="0.3" stroke-width="1.5"/>
+        </svg>
+        <div>
+          <div style="font:560 15px/1.4 var(--font-ui); color:var(--text-1)">No RFIs holding pours</div>
+          <div style="font:400 12.5px/1.6 var(--font-ui); color:var(--text-3)">The beam found nothing. Enjoy it while it lasts — or press <span style="font:500 10px/1 var(--font-ui); color:var(--text-2); background:var(--bg-3); border-radius:4px; box-shadow:var(--inset); padding:2px 5px">C</span> to create one.</div>
+        </div>
+        <span class="xcap">EMPTY STATE · THE BEAM</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Asite — The Quiet Instrument · Light</span>
+    <span><a href="screens.html">Product</a> · 2026</span>
+  </div>
+</footer>
+<script>
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('.fnav a'))
+      .filter(function(l){ return l.getAttribute('href').indexOf('#') === 0; });
+    var map = links.map(function(l){ return [document.getElementById(l.getAttribute('href').slice(1)), l]; })
+      .filter(function(x){ return x[0]; });
+    if(!map.length) return;
+    function spy(){
+      var cur = map[0][1];
+      for (var i=0;i<map.length;i++){ if (map[i][0].getBoundingClientRect().top <= 130) cur = map[i][1]; }
+      links.forEach(function(l){ l.classList.toggle('on', l === cur); });
+    }
+    addEventListener('scroll', spy, {passive:true}); spy();
+  })();
+</script>
+
+<div class="dock">
+  <div class="themeswitch" role="group" aria-label="Theme">
+    <a href="../index.html" aria-label="Switch to dark theme">● DARK</a>
+    <span class="ts-on">○ LIGHT</span>
+  </div>
+</div>
+</body>
+</html>

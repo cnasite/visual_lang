@@ -1,0 +1,122 @@
+{
+  "$description": "The Quiet Instrument — Light v2 — Plain-white canvas, one rationed Survey Red-Orange (#C8371B) signal, instrument-panel density. Depth from 1px borders + light, never fills. One typeface (Inter) including display at 700; no serif. No gradient backgrounds. Primary actions are INK; the accent is reserved for focus, links, status and the live AI signal.",
+  "surface": {
+    "bg-0": { "$type": "color", "$value": "#FFFFFF" },
+    "bg-1": { "$type": "color", "$value": "#FFFFFF" },
+    "bg-2": { "$type": "color", "$value": "#FAFAF9" },
+    "bg-3": { "$type": "color", "$value": "#F3F3F1" },
+    "bg-overlay": { "$type": "color", "$value": "rgba(22,24,28,0.34)" }
+  },
+  "border": {
+    "border": { "$type": "color", "$value": "rgba(22,24,28,0.09)" },
+    "border-strong": { "$type": "color", "$value": "rgba(22,24,28,0.16)" }
+  },
+  "text": {
+    "text-1": { "$type": "color", "$value": "#16181C" },
+    "text-2": { "$type": "color", "$value": "#5A5F66" },
+    "text-3": { "$type": "color", "$value": "#8E9299" }
+  },
+  "intent": {
+    "intent": { "$type": "color", "$value": "#C8371B" },
+    "intent-bright": { "$type": "color", "$value": "#E0431F" },
+    "intent-press": { "$type": "color", "$value": "#A92D14" },
+    "intent-wash": { "$type": "color", "$value": "rgba(200,55,27,0.09)" },
+    "intent-line": { "$type": "color", "$value": "rgba(200,55,27,0.22)" }
+  },
+  "action": {
+    "$description": "Light model: INK primary, accent reserved. Primary buttons use ink; the accent never fills large surfaces.",
+    "primary": { "$type": "color", "$value": "#16181C" },
+    "primary-hover": { "$type": "color", "$value": "#000000" },
+    "on-primary": { "$type": "color", "$value": "#FFFFFF" },
+    "accent": { "$type": "color", "$value": "#C8371B" }
+  },
+  "status": {
+    "done": { "$type": "color", "$value": "#2E9E68" },
+    "progress": { "$type": "color", "$value": "#B98A1D" },
+    "blocked": { "$type": "color", "$value": "#D8504F" },
+    "review": { "$type": "color", "$value": "#5C84A0" },
+    "backlog": { "$type": "color", "$value": "#8E9299" }
+  },
+  "effect": {
+    "inset": { "$type": "shadow", "$value": "inset 0 0 0 1px rgba(22,24,28,0.06)" },
+    "shadow-card": { "$type": "shadow", "$value": "0 1px 1px rgba(22,24,28,0.04), 0 8px 24px rgba(22,24,28,0.06)" },
+    "shadow-pop": { "$type": "shadow", "$value": "0 4px 32px rgba(22,24,28,0.14)" },
+    "intent-glow": { "$type": "shadow", "$value": "0 0 0 1px rgba(200,55,27,0.30), 0 0 22px rgba(200,55,27,0.13)" }
+  },
+  "gradient": {
+    "$description": "v2 discontinues gradient backgrounds. Hero fields and empty states sit on plain white; separation is structural (hairline + light).",
+    "aurora": { "$type": "other", "$value": "none" }
+  },
+  "radius": {
+    "sm": { "$type": "dimension", "$value": "6px" },
+    "md": { "$type": "dimension", "$value": "8px" },
+    "lg": { "$type": "dimension", "$value": "10px" },
+    "xl": { "$type": "dimension", "$value": "14px" }
+  },
+  "spacing": {
+    "1": { "$type": "dimension", "$value": "4px" },
+    "2": { "$type": "dimension", "$value": "8px" },
+    "3": { "$type": "dimension", "$value": "12px" },
+    "4": { "$type": "dimension", "$value": "16px" },
+    "5": { "$type": "dimension", "$value": "20px" },
+    "6": { "$type": "dimension", "$value": "24px" },
+    "8": { "$type": "dimension", "$value": "32px" },
+    "12": { "$type": "dimension", "$value": "48px" },
+    "16": { "$type": "dimension", "$value": "64px" },
+    "20": { "$type": "dimension", "$value": "80px" },
+    "24": { "$type": "dimension", "$value": "96px" }
+  },
+  "fontFamily": {
+    "display": { "$type": "fontFamily", "$value": "Inter" },
+    "ui": { "$type": "fontFamily", "$value": "Inter" },
+    "mono": { "$type": "fontFamily", "$value": "JetBrains Mono" }
+  },
+  "letterSpacing": {
+    "display": { "$type": "dimension", "$value": "-0.022em" },
+    "h1": { "$type": "dimension", "$value": "-0.018em" },
+    "h2": { "$type": "dimension", "$value": "-0.012em" },
+    "h": { "$type": "dimension", "$value": "-0.008em" },
+    "micro": { "$type": "dimension", "$value": "0.04em" }
+  },
+  "typography": {
+    "display": {
+      "$type": "typography",
+      "$description": "Inter 700, sentence case (never uppercase). Hero, slide titles, covers, print.",
+      "$value": { "fontFamily": "Inter", "fontWeight": 700, "fontSize": "60px", "lineHeight": 1.04, "letterSpacing": "-0.022em" }
+    },
+    "h1": {
+      "$type": "typography",
+      "$value": { "fontFamily": "Inter", "fontWeight": 600, "fontSize": "30px", "lineHeight": 1.18, "letterSpacing": "-0.018em" }
+    },
+    "h2": {
+      "$type": "typography",
+      "$value": { "fontFamily": "Inter", "fontWeight": 600, "fontSize": "20px", "lineHeight": 1.3, "letterSpacing": "-0.012em" }
+    },
+    "h3": {
+      "$type": "typography",
+      "$value": { "fontFamily": "Inter", "fontWeight": 500, "fontSize": "15px", "lineHeight": 1.4 }
+    },
+    "body": {
+      "$type": "typography",
+      "$value": { "fontFamily": "Inter", "fontWeight": 400, "fontSize": "14px", "lineHeight": 1.6 }
+    },
+    "small": {
+      "$type": "typography",
+      "$value": { "fontFamily": "Inter", "fontWeight": 400, "fontSize": "13px", "lineHeight": 1.5 }
+    },
+    "micro": {
+      "$type": "typography",
+      "$description": "Eyebrows / labels — uppercase with +0.04em tracking.",
+      "$value": { "fontFamily": "Inter", "fontWeight": 500, "fontSize": "11px", "lineHeight": 1.4, "letterSpacing": "0.04em" }
+    },
+    "mono": {
+      "$type": "typography",
+      "$value": { "fontFamily": "JetBrains Mono", "fontWeight": 400, "fontSize": "12px", "lineHeight": 1.45 }
+    }
+  },
+  "motion": {
+    "ease": { "$type": "cubicBezier", "$value": [0.25, 0.1, 0.25, 1] },
+    "fast": { "$type": "duration", "$value": "80ms" },
+    "base": { "$type": "duration", "$value": "140ms" }
+  }
+}
