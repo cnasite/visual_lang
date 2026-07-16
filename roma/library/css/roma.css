@@ -1,0 +1,295 @@
+/* ============================================================
+   ASITE — ROMA · roma.css
+   Standalone component stylesheet. Bundles tokens + fonts +
+   component recipes so a team can drop this one file (plus the
+   .woff2 fonts beside it) and build on-brand Roma surfaces.
+   ------------------------------------------------------------
+   Rules that never bend:
+   · FULLY ACHROMATIC. There is no chromatic accent anywhere in
+     the interface. Red survives in exactly two places: the Asite
+     logo artwork, and error/alert communication (--error).
+   · Depth from 1px hairlines + ONE shadow — never fills.
+   · Hierarchy by VALUE (ink → ink-2 → ink-3) and weight (400→500).
+   · Editorial corners: 4px interactive, 8px cards. No pills.
+   · Secondary CTAs carry a FULL border — never a bottom stroke.
+   · Inter for everything; JetBrains Mono for data/figures.
+   ============================================================ */
+
+@font-face { font-family:'Inter'; src:url('Inter-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Inter'; src:url('Inter-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+@font-face { font-family:'Inter'; src:url('Inter-600.woff2') format('woff2'); font-weight:600; font-display:swap; }
+@font-face { font-family:'JetBrains Mono'; src:url('JetBrainsMono-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'JetBrains Mono'; src:url('JetBrainsMono-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+
+:root{
+  --ink:#050505; --ink-black:#000; --ink-nav:#151515; --ink-fine:#292929;
+  --ink-2:#6b6b6b; --ink-3:#7e7e7e; --ink-mute:#929292; --ink-faint:#b3b3b3;
+  --canvas:#fff; --tint:#f3f3f3; --hairline:#e2e2e2; --hairline-strong:#d4d4d4;
+  /* fully achromatic — retired accent repointed to ink / neutral */
+  --focus-ring:rgba(5,5,5,.16); --select-wash:rgba(5,5,5,.05);
+  --signal:var(--ink); --signal-deep:#000; --signal-wash:var(--select-wash); --signal-line:var(--focus-ring);
+  /* brand red lives only in the logo artwork */
+  --brand-red:#FF3131;
+  /* error — the only red allowed in the interface */
+  --error:#E5241B; --error-wash:rgba(229,36,27,.10); --error-line:rgba(229,36,27,.32);
+  --ok:#4B5563; --warn:#6b6b6b; --stop:#E5241B; --info:#6b6b6b; --idle:#b3b3b3;
+  --font-sans:'Inter',ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  --r-sharp:4px; --r-card:8px;
+  --shadow-card:rgba(5,5,5,.08) 0 2px 24px 0;
+  --page-max:1212px; --ease:cubic-bezier(.41,.66,.36,.86);
+}
+
+/* ---- reset ------------------------------------------------ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{background:var(--canvas);color:var(--ink);font-family:var(--font-sans);
+  font-size:16px;line-height:1.4;font-weight:400}
+a{color:inherit;text-decoration:none}
+img,svg{display:block;max-width:100%}
+::selection{background:#050505;color:#fff}
+
+/* ---- type helpers ---------------------------------------- */
+.display   {font-size:clamp(38px,5.4vw,54px);line-height:1;letter-spacing:-1.62px;font-weight:500}
+.heading   {font-size:48px;line-height:1.05;letter-spacing:-1.44px;font-weight:500}
+.heading-sm{font-size:32px;line-height:1.1;letter-spacing:-.74px;font-weight:500}
+.subheading{font-size:20px;line-height:1.2;letter-spacing:-.4px;font-weight:500}
+.body      {font-size:16px;line-height:1.4;font-weight:400}
+.body-sm   {font-size:14px;line-height:1.4;font-weight:400}
+.caption   {font-size:12px;line-height:1.4;color:var(--ink-3)}
+.mono      {font-family:var(--font-mono);font-size:12.5px;line-height:1.5;letter-spacing:0}
+.muted     {color:var(--ink-2)}
+.eyebrow   {font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+
+/* ---- layout ---------------------------------------------- */
+.roma-wrap{max-width:var(--page-max);margin:0 auto;padding:0 24px}
+.band{background:var(--canvas);padding:96px 0}
+.band--tint{background:var(--tint)}
+.band--tight{padding:60px 0}
+.rule{height:1px;background:var(--hairline);border:0}
+
+/* ---- navigation ------------------------------------------ */
+.roma-nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);
+  backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--hairline)}
+.roma-nav__in{max-width:var(--page-max);margin:0 auto;height:56px;padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between}
+.roma-logo{display:flex;align-items:center;gap:9px;color:var(--ink)}
+.roma-logo svg{height:20px;width:auto}
+.roma-logo__word{font-weight:600;font-size:15px;letter-spacing:.16em}
+.roma-nav__links{display:flex;gap:22px}
+.roma-nav__links a{font-size:14px;color:var(--ink-nav);transition:color .2s var(--ease)}
+.roma-nav__links a:hover{color:var(--ink)}
+.roma-nav__act{display:flex;align-items:center;gap:14px}
+
+/* ---- buttons --------------------------------------------- */
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--ink-black);
+  color:#fff;font-size:14px;font-weight:500;padding:10px 20px;border:0;
+  border-radius:var(--r-sharp);cursor:pointer;transition:background .2s var(--ease),transform .2s var(--ease)}
+.btn:hover{background:#1a1a1a}
+.btn--lg{padding:13px 26px;font-size:16px}
+/* secondary CTA — FULL border, never a bottom stroke */
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:none;
+  color:var(--ink);font-size:14px;font-weight:500;padding:9px 18px;
+  border:1px solid var(--hairline-strong);border-radius:var(--r-sharp);
+  cursor:pointer;transition:border-color .2s var(--ease),background .2s var(--ease)}
+.btn-ghost:hover{border-color:var(--ink)}
+/* plain text link (for tertiary nav actions that shouldn't be a button) */
+.btn-link{background:none;border:0;color:var(--ink-2);font-size:14px;padding:9px 0;cursor:pointer;transition:color .2s var(--ease)}
+.btn-link:hover{color:var(--ink)}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;background:none;
+  border:1px solid var(--hairline-strong);color:var(--ink);font-size:14px;font-weight:500;
+  padding:9px 18px;border-radius:var(--r-sharp);cursor:pointer;transition:border-color .2s var(--ease)}
+.btn-outline:hover{border-color:var(--ink)}
+.btn-muted{background:none;border:1px solid rgba(0,0,0,.28);color:rgba(0,0,0,.4);
+  font-size:14px;padding:9px 18px;border-radius:var(--r-sharp);cursor:not-allowed}
+
+/* ---- tab row --------------------------------------------- */
+.tabrow{display:flex;gap:8px;overflow-x:auto;border-bottom:1px solid var(--hairline)}
+.tab{font-size:14px;font-weight:400;color:rgba(0,0,0,.4);padding:10px 2px;
+  border:0;background:none;border-bottom:1px solid transparent;margin-bottom:-1px;
+  cursor:pointer;white-space:nowrap;transition:color .2s var(--ease),border-color .2s var(--ease)}
+.tab:hover{color:var(--ink-2)}
+.tab[aria-selected="true"],.tab.is-active{color:var(--ink);border-bottom-color:var(--ink)}
+
+/* ---- cards ----------------------------------------------- */
+.card{background:var(--canvas);border-radius:var(--r-card);border:1px solid var(--hairline);padding:24px}
+.band--tint .card{border-color:transparent;box-shadow:var(--shadow-card)}
+.card__title{font-size:16px;font-weight:500;letter-spacing:-.2px}
+.card__meta{font-size:12px;color:var(--ink-3);margin-top:2px}
+
+/* ---- frames (images / previews) -------------------------- */
+.frame{border:1px solid var(--hairline);border-radius:var(--r-card);padding:3px;background:var(--canvas)}
+.frame img{border-radius:6px}
+
+/* ---- inputs ---------------------------------------------- */
+.input{width:100%;font-family:var(--font-sans);font-size:14px;color:var(--ink);
+  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-sharp);
+  padding:10px 12px;transition:border-color .2s var(--ease)}
+.input::placeholder{color:var(--ink-mute)}
+.input:focus{outline:0;border-color:var(--ink)}
+
+/* ---- tags / chips ---------------------------------------- */
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);
+  border:1px solid var(--hairline);border-radius:var(--r-sharp);padding:3px 8px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);
+  font-size:11.5px;color:var(--ink-2);border:1px solid var(--hairline);
+  border-radius:var(--r-sharp);padding:4px 8px;background:var(--canvas)}
+
+/* ---- status (dot + text, never a filled pill) ------------ */
+.status{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink)}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--idle);flex:0 0 auto}
+.status--ok::before{background:var(--ok)} .status--warn::before{background:var(--warn)}
+.status--stop::before{background:var(--stop)} .status--info::before{background:var(--info)}
+
+/* ---- trust logo bar -------------------------------------- */
+.logobar{display:flex;flex-wrap:wrap;align-items:center;gap:40px;justify-content:center}
+.logobar img,.logobar span{height:20px;opacity:.7;filter:grayscale(1)}
+.logobar span{font-size:14px;color:var(--ink-2);display:inline-flex;align-items:center}
+
+/* ---- testimonial ----------------------------------------- */
+.testimonial{background:var(--canvas);border-radius:var(--r-card);box-shadow:var(--shadow-card);padding:26px}
+.testimonial p{font-size:16px;line-height:1.5;color:var(--ink)}
+.testimonial figcaption{display:flex;align-items:center;gap:10px;margin-top:18px}
+.testimonial img{width:32px;height:32px;border-radius:50%}
+.testimonial .name{font-size:14px;font-weight:500}
+.testimonial .role{font-size:12px;color:var(--ink-3)}
+
+/* ---- stat ------------------------------------------------ */
+.stat{display:flex;flex-direction:column;gap:4px}
+.stat__n{font-size:48px;line-height:1;letter-spacing:-1.4px;font-weight:500}
+.stat__l{font-size:13px;color:var(--ink-2)}
+
+/* ---- footer ---------------------------------------------- */
+.roma-foot{background:var(--canvas);border-top:1px solid var(--hairline);padding:56px 0}
+.roma-foot a{color:var(--ink-2);font-size:14px}
+.roma-foot a:hover{color:var(--ink)}
+.roma-foot .fine{color:var(--ink-fine);font-size:12px}
+
+/* ============================================================
+   PRODUCT FRAME — .roma-product
+   Achromatic like everything else. A browser-chrome top bar
+   frames the surface as content. The primary product action is
+   filled ink; the live element is an INK dot that pulses.
+   ============================================================ */
+.roma-product{border:1px solid var(--hairline);border-radius:var(--r-card);
+  overflow:hidden;background:var(--canvas);box-shadow:var(--shadow-card)}
+.roma-product__bar{display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;
+  background:var(--tint);border-bottom:1px solid var(--hairline)}
+.roma-product__bar i{width:9px;height:9px;border-radius:50%;background:var(--hairline-strong);display:block}
+.roma-product__bar .u{margin-left:8px;font-family:var(--font-mono);font-size:11px;color:var(--ink-3)}
+.roma-product__body{padding:20px}
+.roma-product .accent{color:var(--ink)}
+.roma-product .accent-bg{background:var(--ink);color:#fff}
+.roma-product .accent-line{border-color:var(--hairline-strong)}
+.roma-product .accent-wash{background:var(--select-wash)}
+.roma-product .p-focus{outline:0;box-shadow:0 0 0 3px var(--focus-ring);border-color:var(--ink)}
+.roma-product .p-btn{background:var(--ink-black);color:#fff;font-size:13px;font-weight:500;
+  border:0;border-radius:6px;padding:8px 14px;cursor:pointer;transition:background .2s var(--ease)}
+.roma-product .p-btn:hover{background:#1a1a1a}
+.roma-product .p-status{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink)}
+.roma-product .p-status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--idle)}
+.roma-product .p-live::before{background:var(--ink);animation:roma-pulse 1.4s var(--ease) infinite}
+
+/* ============================================================
+   ASITE INTELLIGENCE — achromatic register
+   No AI purple, no robots, no gradients. Intelligence is a
+   4-point spark (setting-out cross → star), rendered in INK.
+   The live agent is a filled-ink spark that pulses; errors use
+   --error. Nothing here is coloured.
+   ============================================================ */
+.spark{width:16px;height:16px;color:var(--ink);flex:0 0 auto}
+.spark--live{color:var(--ink)}
+.spark--live-pulse{color:var(--ink);animation:roma-pulse 1.4s var(--ease) infinite}
+.orb{width:40px;height:40px;border-radius:50%;border:1px solid var(--hairline);
+  display:grid;place-items:center;background:var(--canvas)}
+.orb .spark{width:18px;height:18px}
+.runcard{border:1px solid var(--hairline);border-radius:var(--r-card);background:var(--canvas);padding:16px}
+.runcard__tele{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-3);
+  display:flex;gap:14px;flex-wrap:wrap}
+.reasoning{font-size:13px;color:var(--ink-3);line-height:1.5}
+.toolcall{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-2);
+  background:var(--tint);border-radius:var(--r-sharp);padding:8px 10px}
+.cite{font-family:var(--font-mono);font-size:11px;color:var(--ink-2);
+  border-bottom:1px dotted var(--ink-mute);cursor:pointer}
+.skeleton{background:linear-gradient(90deg,var(--tint) 25%,#ececec 37%,var(--tint) 63%);
+  background-size:400% 100%;animation:roma-shimmer 1.4s ease infinite;border-radius:var(--r-sharp);height:12px}
+
+@keyframes roma-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes roma-shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ============================================================
+   SPEC-PAGE PATTERNS — shared by the Visual Language / Product /
+   Intelligence reference pages. Editorial, achromatic.
+   ============================================================ */
+/* floating on-page section nav */
+.fnav{position:fixed;top:50%;right:18px;transform:translateY(-50%);z-index:60;
+  display:flex;flex-direction:column;gap:1px;padding:10px 8px;max-height:82vh;overflow:auto;
+  background:rgba(255,255,255,.9);backdrop-filter:blur(14px);
+  border:1px solid var(--hairline);border-radius:var(--r-card);box-shadow:var(--shadow-card)}
+.fnav .fcap{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:2px 9px 8px}
+.fnav a{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--ink-2);
+  padding:5px 9px;border-radius:var(--r-sharp);white-space:nowrap;transition:color .2s var(--ease),background .2s var(--ease)}
+.fnav a::before{content:"";width:3px;height:3px;border-radius:50%;background:var(--ink-faint);flex:none}
+.fnav a:hover{color:var(--ink);background:var(--tint)}
+.fnav a.on{color:var(--ink);background:var(--tint)}
+.fnav a.on::before{background:var(--ink)}
+@media(max-width:1320px){.fnav{display:none}}
+
+/* section index number (mono) */
+.idx{font-family:var(--font-mono);font-size:12px;letter-spacing:.04em;color:var(--ink-2);margin-bottom:10px}
+.sec-sub{max-width:62ch;color:var(--ink-2);line-height:1.6;margin-bottom:32px}
+
+/* hero meta row */
+.hero-meta{margin-top:44px;display:flex;gap:44px;flex-wrap:wrap}
+.hero-meta div{font-size:13px;color:var(--ink-2)}
+.hero-meta b{display:block;font-size:11px;font-family:var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;font-weight:400}
+
+/* sharp chip (Roma never uses pills) */
+.romachip{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2);
+  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-sharp);padding:6px 12px}
+.romachip i{width:7px;height:7px;background:var(--ink);display:block}
+
+/* type specimen rows */
+.trow{display:grid;grid-template-columns:220px 1fr;gap:24px;padding:20px 0;border-top:1px solid var(--hairline);align-items:baseline}
+.trow .meta{font-family:var(--font-mono);font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+.trow .sample{color:var(--ink)}
+
+/* icon grid */
+.icongrid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.icell{border:1px solid var(--hairline);border-radius:var(--r-sharp);padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.icell svg{width:22px;height:22px;stroke:var(--ink-2);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.icell:hover svg{stroke:var(--ink)}
+.icell span{font-size:11px;color:var(--ink-3)}
+@media(max-width:760px){.icongrid{grid-template-columns:repeat(3,1fr)}}
+
+/* motif / mode cards */
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.mcard{border:1px solid var(--hairline);border-radius:var(--r-card);overflow:hidden}
+.mstage{height:132px;background:var(--tint);display:grid;place-items:center;border-bottom:1px solid var(--hairline)}
+.mcard .mt{padding:16px}
+.mcard .mt b{font-size:13px;font-weight:500;display:block}
+.mcard .mt p{font-size:12px;color:var(--ink-3);margin-top:5px;line-height:1.55}
+@media(max-width:900px){.mgrid{grid-template-columns:1fr 1fr}}
+
+/* colour ramp */
+.ramp{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ramp .cell{border:1px solid var(--hairline);border-radius:var(--r-card);height:120px;padding:14px;display:flex;flex-direction:column;justify-content:flex-end}
+.ramp .nm{font-size:13px;font-weight:500}
+.ramp .hx{font-family:var(--font-mono);font-size:11px;color:var(--ink-3)}
+
+/* spec section on the language page */
+.spec{padding:80px 0;border-top:1px solid var(--hairline);scroll-margin-top:76px}
+.spec h2{font-size:32px;line-height:1.1;letter-spacing:-.74px;font-weight:500;margin-bottom:6px}
+
+/* ---- utilities ------------------------------------------- */
+.grid{display:grid;gap:24px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.stack-sm{display:flex;flex-direction:column;gap:8px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;align-items:center;gap:12px}
+@media(max-width:900px){.split,.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .roma-nav__links{display:none}}

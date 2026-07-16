@@ -1,0 +1,152 @@
+/* ============================================================
+   ASITE — ROMA
+   The typographer's records room. A strict achromatic
+   foundation — white canvas, near-black ink, a structured
+   gray scale — where letterform precision carries the entire
+   visual weight. Colour is an intrusion, rationed to the
+   product UI inside frames as PROOF OF PRODUCT, never chrome.
+   Depth from 1px hairlines and one subtle shadow. Editorial,
+   not app-friendly: 4px corners, tight negative tracking.
+   ------------------------------------------------------------
+   Idiom: Chronicle / Linear-adjacent editorial.
+   Type:  Inter (Diatype substitute) + JetBrains Mono.
+   ============================================================ */
+
+/* --- Bundled fonts — self-contained so the repo renders
+   identically on GitHub Pages without system fonts. --------- */
+@font-face { font-family:'Inter'; src:url('assets/fonts/Inter-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Inter'; src:url('assets/fonts/Inter-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+@font-face { font-family:'Inter'; src:url('assets/fonts/Inter-600.woff2') format('woff2'); font-weight:600; font-display:swap; }
+@font-face { font-family:'JetBrains Mono'; src:url('assets/fonts/JetBrainsMono-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'JetBrains Mono'; src:url('assets/fonts/JetBrainsMono-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+
+:root {
+
+  /* ----------------------------------------------------------
+     1. INK — a near-black to gray value ramp. Hierarchy is
+     built from VALUE, never from a second hue. #050505 is the
+     ink; #000 is the filled-button anchor.
+     ---------------------------------------------------------- */
+  --ink:        #050505;   /* pitch black — primary text, engraved headlines */
+  --ink-black:  #000000;   /* filled CTA background, icon fills, hardest anchor */
+  --ink-nav:    #151515;   /* charcoal — nav links, active nav */
+  --ink-fine:   #292929;   /* obsidian — footer fine print */
+  --ink-2:      #6b6b6b;   /* graphite — body copy, secondary, workhorse mid-tone */
+  --ink-3:      #7e7e7e;   /* pewter — captions, tertiary */
+  --ink-mute:   #929292;   /* ash — disabled text / borders ONLY */
+  --ink-faint:  #b3b3b3;   /* silver — decorative dividers ONLY, never content text */
+
+  /* ----------------------------------------------------------
+     2. SURFACES — white canvas, one warm-gray tint, hairline.
+     Rhythm comes from alternating #fff / #f3f3f3 bands, never
+     from decorative dividers.
+     ---------------------------------------------------------- */
+  --canvas:     #ffffff;   /* cloud — primary page + card surface */
+  --tint:       #f3f3f3;   /* limestone — alternating section band, muted fill */
+  --hairline:   #e2e2e2;   /* fog — the 1px rule: card / image / input borders */
+  --hairline-strong: #d4d4d4; /* slightly firmer rule where a divider must read */
+
+  /* ----------------------------------------------------------
+     3. FULLY ACHROMATIC — there is NO chromatic accent.
+     Red survives in exactly two places: the Asite logo (carried
+     by the artwork itself) and error/alert communication. The
+     interface builds emphasis from value and weight, never hue.
+     The retired "signal" tokens are repointed to ink / neutral
+     so any legacy reference degrades to achromatic automatically.
+     ---------------------------------------------------------- */
+  --focus-ring:  rgba(5,5,5,0.16);       /* neutral focus ring */
+  --select-wash: rgba(5,5,5,0.05);       /* neutral selection wash */
+  --signal:      var(--ink);             /* retired accent → ink */
+  --signal-deep: #000;                   /* pressed */
+  --signal-wash: var(--select-wash);     /* → neutral wash */
+  --signal-line: var(--focus-ring);      /* → neutral line */
+
+  /* BRAND RED — Neo Red #FF3131. Lives ONLY in the Asite logo
+     artwork (carried by the PNGs); never used as UI colour. */
+  --brand-red:   #FF3131;
+
+  /* ERROR — the one place, besides the logo, red is allowed in
+     the interface. A brand-family red, darkened for legibility.
+     Used for error status, failed runs, destructive alerts. */
+  --error:       #E5241B;
+  --error-wash:  rgba(229,36,27,0.10);
+  --error-line:  rgba(229,36,27,0.32);
+
+  /* Functional status — an 8px dot + plain text. Muted,
+     journalistic, never a filled pill. Only 'stop' is red
+     (it is an error state); the rest are quiet neutrals. */
+  --ok:       #4B5563;   /* achromatic — value, not green */
+  --warn:     #6b6b6b;   /* achromatic — value, not amber */
+  --stop:     #E5241B;   /* error red (brand family) */
+  --info:     #6b6b6b;   /* achromatic */
+  --idle:     #b3b3b3;
+
+  /* ----------------------------------------------------------
+     4. TYPE — Inter as the single Diatype substitute for the
+     whole shell; JetBrains Mono for figures, telemetry,
+     references and code. Weights capped at 400 / 500 / 600 —
+     never heavier; heavier weights crush the letterform.
+     ---------------------------------------------------------- */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --w-regular: 400;
+  --w-medium:  500;
+  --w-semi:    600;   /* reserved for logo lockup + rare emphasis */
+
+  /* Type scale — Chronicle proof sheet. Tight negative tracking
+     compresses letterforms so display text feels engraved. */
+  --t-caption:     12px;  --lh-caption:     1.4;   --tr-caption:      0;
+  --t-body-sm:     14px;  --lh-body-sm:     1.4;   --tr-body-sm:      0;
+  --t-body:        16px;  --lh-body:        1.4;   --tr-body:         0;
+  --t-subheading:  20px;  --lh-subheading:  1.2;   --tr-subheading:  -0.40px;
+  --t-heading-sm:  32px;  --lh-heading-sm:  1.1;   --tr-heading-sm:  -0.74px;
+  --t-heading:     48px;  --lh-heading:     1.05;  --tr-heading:     -1.44px;
+  --t-display:     54px;  --lh-display:     1.0;   --tr-display:     -1.62px;
+  /* Fluid display for hero use */
+  --t-display-fluid: clamp(38px, 5.4vw, 54px);
+
+  /* ----------------------------------------------------------
+     5. SPACE — 4px base, comfortable density.
+     ---------------------------------------------------------- */
+  --s-4:4px; --s-8:8px; --s-12:12px; --s-16:16px; --s-20:20px;
+  --s-24:24px; --s-32:32px; --s-48:48px; --s-60:60px; --s-80:80px;
+  --s-100:100px; --s-128:128px;
+
+  /* ----------------------------------------------------------
+     6. SHAPE — sharp editorial corners. 4px for interactive
+     (buttons, inputs, tags); 8px for cards + image frames.
+     Nothing pill-shaped; pills break the typographic register.
+     ---------------------------------------------------------- */
+  --r-sharp: 4px;   /* buttons, inputs, tags */
+  --r-card:  8px;   /* cards, image frames, product frames */
+
+  /* ----------------------------------------------------------
+     7. ELEVATION — exactly ONE shadow. Applied only to white
+     cards sitting on a gray band. No white-on-white shadow,
+     no layered depth.
+     ---------------------------------------------------------- */
+  --shadow-card: rgba(5,5,5,0.08) 0px 2px 24px 0px;
+
+  /* ----------------------------------------------------------
+     8. LAYOUT
+     ---------------------------------------------------------- */
+  --page-max: 1212px;
+  --section-gap: 96px;   /* 80–128 range */
+  --card-pad: 24px;
+
+  /* ----------------------------------------------------------
+     9. MOTION — precise, responsive, never theatrical.
+     0.2s for colour/border, 0.3s for transforms, 0.4s max for
+     layout reveals. No spring, no bounce.
+     ---------------------------------------------------------- */
+  --ease: cubic-bezier(0.41,0.66,0.36,0.86);
+  --dur-color: 0.2s;
+  --dur-move:  0.3s;
+  --dur-layout:0.4s;
+}
+
+/* Reduced-motion honoured everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
