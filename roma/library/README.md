@@ -1,7 +1,7 @@
 # Roma — Asite Asset Library
 
-The reusable parts of the **Roma** visual language. Teams building Roma UIs
-work from this folder so components stay consistent across products.
+The reusable parts of the **Roma** visual language. Teams building Roma UIs work
+from this folder so components stay consistent.
 
 ## What's here
 
@@ -9,12 +9,12 @@ work from this folder so components stay consistent across products.
 library/
   css/
     roma.css              Standalone stylesheet — tokens + fonts + every component recipe.
-    Inter-400/500/600.woff2, JetBrainsMono-400/500.woff2   Bundled fonts (self-contained).
-  icons/                  Line icons — 24px grid, 1.5px stroke, currentColor. Includes spark.svg.
+    Inter / JetBrainsMono .woff2   Bundled fonts (self-contained).
+  icons/                  90+ line icons — 24px grid, 1.5px stroke, currentColor.
   index.html              Live component gallery (open in a browser).
   ../tokens.css           Canonical CSS custom properties.
-  ../tokens.json          Machine-readable token mirror (source of truth for agents).
-  ../assets/logos/        The must-use Asite logo set (see below).
+  ../tokens.json          Machine-readable token mirror.
+  ../assets/logos/        The verbatim Asite logo set (see below).
 ```
 
 ## Use it in one line
@@ -23,39 +23,34 @@ library/
 <link rel="stylesheet" href="library/css/roma.css">
 ```
 
-`roma.css` is self-contained: it declares the `:root` tokens, `@font-face`s the
-bundled fonts (relative to the `css/` folder), a reset, and every component
-class. Drop the file plus the five `.woff2` fonts and you have the whole system.
+`roma.css` is self-contained: `:root` tokens, `@font-face`s, a reset, and every
+component class.
 
-## The one rule that governs everything
+## The rule that governs everything
 
-**Achromatic shell. Asite Red (`--signal`, `#FA3C2D`) is the only chromatic
-colour, and it is permitted _only_ inside a `.roma-product` frame** — the live
-element, the primary product action, the streaming agent, key focus. It is the
-same red as the brand cube. Anywhere else — nav, buttons, backgrounds, type — is
-a bug.
+**Fully achromatic.** There is no accent colour. Red survives in exactly two
+places: the **Asite logo** (Neo Red `#FF3131`, carried by the artwork) and
+**errors** (`--error` `#E5241B`). Anywhere else, red is a bug. The primary action
+is filled ink; secondary CTAs carry a **full border** (never a bottom stroke).
 
-## Logo set (must-use)
+## Logo set (verbatim — never modify)
 
 | File | Use |
 |---|---|
-| `asite-lockup-ink.svg` | Primary lockup for the light shell — nav, footer, docs. |
-| `asite-lockup-white.svg` | On dark / photographic surfaces. |
-| `asite-lockup-red-dark.svg` | Master brand: red cube + black wordmark. Brand moments, favicons, covers. |
-| `asite-lockup-red-white.svg` | Red cube + white wordmark, for dark brand moments. |
-| `asite-mark-ink/white/red.svg` | Cube glyph only (app rail, avatars, favicons). |
+| `asite-logo-primary.png` | Light surfaces — Neo Red cube + black wordmark. |
+| `asite-logo-white.png` | Dark / photographic surfaces. |
+| `asite-logo-red-white.png` | Dark brand — Neo Red cube + white wordmark. |
+| `asite-cube-*.png` | Cube-only crops — app rail, avatars, favicons. |
 
-In the Roma shell, nav and footer use the **ink** lockup (Chronicle-style
-editorial black). The red-cube lockup is the master brand asset; the cube's red
-is the same `--signal` as the product accent, so logo and product share one
-chromatic identity.
+## Component classes (index)
 
-## Component classes (quick index)
-
-`roma-nav` · `btn` / `btn-ghost` / `btn-outline` / `btn-muted` · `tabrow` / `tab`
-· `card` · `frame` · `input` · `tag` / `chip` · `status` (+ `--ok/--warn/--stop/--info`)
-· `logobar` · `testimonial` · `stat` · `roma-foot` · `roma-product` (+ `p-btn`,
-`p-status`, `p-live`, `accent*`) · `spark` / `orb` / `runcard` / `cite` /
-`skeleton` (Asite Intelligence).
+Buttons (`btn` / `btn-ghost` full-border / `btn-outline` / `btn-link`) ·
+`segment` · `tab`/`tabrow` · `crumbs` · `pager` · `badge` (+ `--error`) ·
+`avatar` / `avatar-stack` · `tip` (tooltip) · `toast` (+ `--error`) · `banner`
+(+ `--error`) · `progress` / `steps` · `acc` (accordion) · `empty` · `kv` ·
+`menu` (+ `mi--danger`) · `status` (+ `--ok/--warn/--info/--stop`) · `tag`/`chip`
+· `input` / `toggle` / `check` / `radio` · `reg` & `dtbl` tables (checkbox-select,
+progress cell, avatar cell, expandable row) · `roma-product` frame ·
+`spark`/`orb`/`runcard`/`cite`/`skeleton` (Asite Intelligence).
 
 See `index.html` for a rendered specimen of each.

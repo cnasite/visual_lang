@@ -4,97 +4,72 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Asite — Roma · Visual Language</title>
-<meta name="description" content="Roma — Asite's editorial visual language. A strict achromatic proof sheet where letterform precision carries the weight and Asite Red is rationed to the product as proof.">
+<meta name="description" content="Roma — Asite's editorial visual language. A fully achromatic proof sheet where letterform precision carries the weight. Red survives only in the logo and in errors.">
 <link rel="stylesheet" href="library/css/roma.css">
 <style>
   html{scroll-behavior:smooth}
   .hero{padding:132px 0 104px;border-bottom:1px solid var(--hairline)}
   .hero h1{max-width:16ch}
-  /* logo stage */
   .logo-stage{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .stage-cell{border:1px solid var(--hairline);border-radius:var(--r-card);min-height:200px;display:grid;place-items:center;padding:40px}
+  .stage-cell{border:1px solid var(--hairline);border-radius:var(--r-card);min-height:180px;display:grid;place-items:center;padding:40px}
   .stage-cell.dark{background:#050505;border-color:#050505}
-  .stage-cell img{height:40px}
+  .stage-cell img{height:34px;width:auto}
   .logo-note{font-size:13px;color:var(--ink-3);margin-top:16px;max-width:64ch;line-height:1.6}
-  /* colour */
-  .signalrow{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-top:16px}
+  .signalrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
   .sigcell{border:1px solid var(--hairline);border-radius:var(--r-card);height:96px;padding:14px;display:flex;flex-direction:column;justify-content:flex-end}
   .dots{display:flex;gap:24px;flex-wrap:wrap;margin-top:24px}
   .note{display:flex;gap:11px;font-size:13px;color:var(--ink-3);max-width:64ch;margin-top:22px;line-height:1.6}
   .note::before{content:"";flex:none;width:8px;height:8px;margin-top:6px;background:var(--ink);transform:rotate(45deg)}
-  /* origin objects */
-  .objgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  .obj{border:1px solid var(--hairline);border-radius:var(--r-card);padding:20px;display:flex;flex-direction:column;gap:8px}
-  .obj .k{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
-  .obj b{font-size:15px;font-weight:500}
-  .obj p{font-size:13px;color:var(--ink-2);line-height:1.55}
-  .obj .fig{font-family:var(--font-mono);font-size:12px;color:var(--ink-3);margin-top:auto}
-  @media(max-width:900px){.objgrid{grid-template-columns:1fr 1fr}.logo-stage{grid-template-columns:1fr}.signalrow{grid-template-columns:1fr}}
-  /* cards family */
+  .twored{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .rc{border:1px solid var(--hairline);border-radius:var(--r-card);padding:22px}
+  .rc .k{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .rc p{font-size:13px;color:var(--ink-2);line-height:1.55;margin-top:12px}
   .cardfam{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  .fcard{border:1px solid var(--hairline);border-radius:var(--r-card);padding:18px;min-height:132px;display:flex;flex-direction:column;transition:box-shadow .3s var(--ease),background .2s var(--ease)}
+  .fcard{border:1px solid var(--hairline);border-radius:var(--r-card);padding:18px;min-height:130px;display:flex;flex-direction:column;transition:box-shadow .3s var(--ease),background .2s var(--ease)}
   .fcard b{font-size:14px;font-weight:500}
   .fcard .d{font-family:var(--font-mono);font-size:11px;color:var(--ink-3);margin-top:6px}
   .fcard .h{font-size:12px;color:var(--ink-3);margin-top:auto}
   .fcard.raised:hover{box-shadow:var(--shadow-card)}
   .fcard.inter:hover{background:var(--tint);cursor:pointer}
-  .fcard.sel{background:var(--signal-wash);border-color:var(--signal-line)}
-  @media(max-width:900px){.cardfam{grid-template-columns:1fr 1fr}}
-  /* spacing scale */
+  .fcard.sel{background:var(--select-wash);border-color:var(--hairline-strong);box-shadow:inset 0 0 0 1px var(--ink)}
   .spacerow{display:flex;align-items:center;gap:16px;padding:9px 0;border-top:1px solid var(--hairline)}
   .spacebar{background:var(--ink);height:12px}
   .spacerow .m{font-family:var(--font-mono);font-size:12px;color:var(--ink-2);width:150px}
   .spacerow .u{font-size:13px;color:var(--ink-3)}
-  /* overlays */
-  .ov{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start}
-  .dialog{border:1px solid var(--hairline);border-radius:var(--r-card);box-shadow:var(--shadow-card);padding:22px;max-width:420px}
+  .ov{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  .dialog{border:1px solid var(--hairline);border-radius:var(--r-card);box-shadow:var(--shadow-card);padding:22px}
   .dialog h4{font-size:17px;font-weight:500;letter-spacing:-.3px;margin-bottom:8px}
   .dialog p{font-size:14px;color:var(--ink-2);line-height:1.5;margin-bottom:18px}
   .dialog .acts{display:flex;gap:10px;justify-content:flex-end}
   .kbd{font-family:var(--font-mono);font-size:10px;color:var(--ink-3);border:1px solid var(--hairline);border-radius:3px;padding:1px 5px;margin-left:6px}
-  .menu{border:1px solid var(--hairline);border-radius:var(--r-card);box-shadow:var(--shadow-card);padding:6px;max-width:260px}
-  .menu .mi{display:flex;align-items:center;justify-content:space-between;padding:9px 10px;border-radius:var(--r-sharp);font-size:13.5px;color:var(--ink)}
-  .menu .mi:hover{background:var(--tint)}
-  /* register table */
-  .reg{width:100%;border-collapse:collapse;font-size:13.5px}
+  .reg,.dtbl{width:100%;border-collapse:collapse;font-size:13.5px}
   .reg th{text-align:left;font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:400;padding:8px 12px}
   .reg td{padding:11px 12px;border-top:1px solid var(--hairline);color:var(--ink)}
   .reg tr:hover td{background:var(--tint)}
   .reg .band td{background:var(--tint);font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
   .reg .num{font-family:var(--font-mono);text-align:right;font-variant-numeric:tabular-nums}
   .reg .refc{font-family:var(--font-mono);font-size:12px;color:var(--ink-2)}
-  /* data entry */
   .fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
   .field-c{border:1px solid var(--hairline);border-radius:var(--r-card);padding:18px}
   .field-c .lab{font-size:12px;font-family:var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
   .field-c p{font-size:12.5px;color:var(--ink-3);line-height:1.5;margin-top:10px}
   .toggle{width:34px;height:20px;border-radius:999px;background:var(--hairline-strong);position:relative;flex:none}
   .toggle::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff}
-  .toggle.on{background:var(--signal)}.toggle.on::after{left:16px}
-  @media(max-width:900px){.fields{grid-template-columns:1fr}.ov{grid-template-columns:1fr}}
-  /* principles */
-  .princ{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .pr{border:1px solid var(--hairline);border-radius:var(--r-card);padding:22px}
-  .pr b{font-size:15px;font-weight:500;display:block;margin-bottom:8px}
-  .pr p{font-size:13.5px;color:var(--ink-2);line-height:1.55}
-  /* in the world */
-  .world{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  .art{border:1px solid var(--hairline);border-radius:var(--r-card);overflow:hidden;aspect-ratio:1.2;display:flex;flex-direction:column;justify-content:space-between;padding:20px;position:relative}
-  .art .cap{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
-  .art.dark{background:#050505;color:#fff}
-  .art.tintbg{background:var(--tint)}
-  .art .big{font-size:24px;line-height:1.05;letter-spacing:-.8px;font-weight:500}
-  @media(max-width:900px){.world,.princ{grid-template-columns:1fr}.icongrid{grid-template-columns:repeat(3,1fr)}.cardfam,.mgrid{grid-template-columns:1fr 1fr}}
+  .toggle.on{background:var(--ink)}.toggle.on::after{left:16px}
+  .compgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .compcard{border:1px solid var(--hairline);border-radius:var(--r-card);padding:20px}
+  .compcard .ct{font-size:13px;font-weight:500;margin-bottom:14px}
+  .compcard .cm{font-family:var(--font-mono);font-size:10px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+  @media(max-width:900px){.objgrid,.logo-stage,.signalrow,.twored,.ov,.fields,.compgrid{grid-template-columns:1fr}.cardfam,.mgrid{grid-template-columns:1fr 1fr}.icongrid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
 
-<!-- floating on-page nav -->
 <nav class="fnav" aria-label="On this page">
   <span class="fcap">On this page</span>
   <a href="#logo">Logo</a>
   <a href="#color">Colour</a>
-  <a href="#origin">Where red comes from</a>
+  <a href="#redlives">Where red lives</a>
   <a href="#type">Typography</a>
   <a href="#icons">Icons</a>
   <a href="#illustration">Illustration</a>
@@ -106,14 +81,11 @@
   <a href="#tables">Tables</a>
   <a href="#inputs">Data entry</a>
   <a href="#comp">Components</a>
-  <a href="#princ">Principles</a>
-  <a href="#world">In the world</a>
 </nav>
 
-<!-- top nav -->
 <nav class="roma-nav">
   <div class="roma-nav__in">
-    <a class="roma-logo" href="index.html" aria-label="Asite Roma"><img src="assets/logos/asite-mark-ink.svg" alt="" style="height:20px"><span class="roma-logo__word">ASITE</span></a>
+    <a class="roma-logo" href="index.html" aria-label="Asite Roma"><img src="assets/logos/asite-logo-primary.png" alt="Asite" style="height:22px"></a>
     <div class="roma-nav__links">
       <a href="index.html" style="color:var(--ink)">Language</a>
       <a href="screens.html">Product</a>
@@ -121,7 +93,7 @@
       <a href="library/index.html">Library</a>
     </div>
     <div class="roma-nav__act">
-      <a href="tokens.json" class="btn-ghost">tokens.json</a>
+      <a href="tokens.json" class="btn-link">tokens.json</a>
       <a href="library/index.html" class="btn">Asset library</a>
     </div>
   </div>
@@ -132,12 +104,12 @@
   <div class="roma-wrap">
     <span class="romachip"><i></i>Asite · Visual Language — Roma</span>
     <h1 class="display" style="margin:20px 0 22px">The record is the design.</h1>
-    <p class="body muted" style="max-width:58ch">A strict achromatic proof sheet — white canvas, near-black ink, a structured gray scale. Letterform precision carries the weight; colour is an intrusion, rationed to the product as proof of what Asite makes. Software that earns trust by never raising its voice.</p>
+    <p class="body muted" style="max-width:58ch">A fully achromatic proof sheet — white canvas, near-black ink, a structured gray scale. Letterform precision carries the weight; the interface has no colour at all. Red survives in exactly two places: the Asite logo, and an error. Software that earns trust by never raising its voice.</p>
     <div class="hero-meta">
       <div><b>Idiom</b>Editorial proof-sheet</div>
-      <div><b>Signal</b>Asite Red · product frame only</div>
+      <div><b>Colour</b>Fully achromatic</div>
+      <div><b>Red</b>Logo &amp; errors only</div>
       <div><b>Type</b>Inter + JetBrains Mono</div>
-      <div><b>Depth</b>Hairlines &amp; light, never fills</div>
     </div>
   </div>
 </header>
@@ -146,15 +118,15 @@
 <section id="logo" class="spec">
   <div class="roma-wrap">
     <div class="idx">01 — Logo</div>
-    <h2>Monochrome body, one red cube.</h2>
-    <p class="sec-sub">The Asite mark, stripped of chrome. In the shell the lockup sets in ink and behaves like type, not an object. The cube's red is the same Asite Red as the product signal — logo and product share one chromatic identity, so the red cube is the only place the accent is permitted at brand level.</p>
+    <h2>The mark, used verbatim.</h2>
+    <p class="sec-sub">The official Asite lockup, unmodified. Neo Red lives in the cube — it is the one place any red appears in the brand. The primary lockup leads on light surfaces; the white lockup on dark. Never redraw, recolour, or re-space the mark.</p>
     <div class="logo-stage">
-      <div class="stage-cell"><img src="assets/logos/asite-lockup-ink.svg" alt="Asite ink lockup"></div>
-      <div class="stage-cell dark"><img src="assets/logos/asite-lockup-white.svg" alt="Asite white lockup"></div>
-      <div class="stage-cell"><img src="assets/logos/asite-lockup-red-dark.svg" alt="Asite red cube lockup"></div>
-      <div class="stage-cell dark"><img src="assets/logos/asite-lockup-red-white.svg" alt="Asite red cube, white wordmark"></div>
+      <div class="stage-cell"><img src="assets/logos/asite-logo-primary.png" alt="Asite primary — Neo Red cube, black wordmark"></div>
+      <div class="stage-cell dark"><img src="assets/logos/asite-logo-white.png" alt="Asite all-white"></div>
+      <div class="stage-cell dark"><img src="assets/logos/asite-logo-red-white.png" alt="Asite Neo Red cube, white wordmark"></div>
+      <div class="stage-cell"><img src="assets/logos/asite-cube-primary.png" alt="Asite cube mark" style="height:56px"></div>
     </div>
-    <p class="logo-note">Wordmark is set wide-tracked uppercase in Inter (Helvetica Neue substitute). The ink lockup is the shell default — nav, footer, docs. The red-cube lockup is the master brand asset, reserved for deliberate brand moments: covers, favicons, hoardings.</p>
+    <p class="logo-note">Files supplied verbatim: <span class="mono">asite-logo-primary.png</span> (light), <span class="mono">asite-logo-white.png</span> (dark), <span class="mono">asite-logo-red-white.png</span> (dark brand), plus cube-only crops for app rails, avatars and favicons. Neo Red is <span class="mono">#FF3131</span> and appears only inside the mark.</p>
   </div>
 </section>
 
@@ -162,8 +134,8 @@
 <section id="color" class="spec">
   <div class="roma-wrap">
     <div class="idx">02 — Colour</div>
-    <h2>A narrow ramp and one signal.</h2>
-    <p class="sec-sub">Everything in the shell is drawn from a single achromatic ramp: four surfaces separated by hairlines, three text grays. One red — and it appears only inside a product frame. If a screen needs more colour than that, the screen is wrong.</p>
+    <h2>A narrow ramp, no accent.</h2>
+    <p class="sec-sub">Everything is drawn from a single achromatic ramp: four surfaces separated by hairlines, three text grays. There is no brand colour in the interface. Hierarchy is built from value and weight — never hue.</p>
     <div class="ramp">
       <div class="cell" style="background:#fff"><span class="nm">Canvas</span><span class="hx">#FFFFFF</span></div>
       <div class="cell" style="background:#f3f3f3"><span class="nm">Tint</span><span class="hx">#F3F3F3</span></div>
@@ -171,32 +143,40 @@
       <div class="cell" style="background:#050505"><span class="nm" style="color:#fff">Ink</span><span class="hx" style="color:#b3b3b3">#050505</span></div>
     </div>
     <div class="signalrow">
-      <div class="sigcell" style="border-color:var(--signal-line)"><span class="ramp" style="display:block"></span><span class="nm accent" style="color:var(--signal)">Asite Red — the signal</span><span class="hx">#FA3C2D · product frame only</span></div>
-      <div class="sigcell" style="background:var(--signal-wash);border-color:var(--signal-line)"><span class="nm">Wash</span><span class="hx">12% · selection</span></div>
       <div class="sigcell"><span class="nm">Text 1 / 2 / 3</span><span class="hx">#050505 · #6b6b6b · #7e7e7e</span></div>
+      <div class="sigcell"><span class="nm">Selection wash</span><span class="hx">rgba(5,5,5,.05) · neutral, no hue</span></div>
     </div>
     <div class="dots">
       <span class="status status--ok">Approved</span>
       <span class="status status--warn">In review</span>
-      <span class="status status--stop">Blocked</span>
       <span class="status status--info">Shared</span>
       <span class="status">Backlog</span>
+      <span class="status status--stop">Error</span>
     </div>
-    <p class="note">The ration: red appears once inside a product frame as the primary action or the live element. Status is always a dot plus plain text — never a filled pill, never a coloured row. In the shell — nav, buttons, backgrounds, type — there is no colour at all.</p>
+    <p class="note">Status is a dot plus plain text — never a filled pill, never a coloured row. Every status dot is a neutral value except one: <b style="color:var(--stop)">error</b>, which is the single red the interface is allowed.</p>
   </div>
 </section>
 
-<!-- 02b WHERE THE RED COMES FROM -->
-<section id="origin" class="spec">
+<!-- 02b WHERE RED LIVES -->
+<section id="redlives" class="spec">
   <div class="roma-wrap">
-    <div class="idx">02b — Colour, in the world</div>
-    <h2>Where the red comes from.</h2>
-    <p class="sec-sub">The signal isn't a brand whim. It's the red of the Asite cube and the red of the site — on every project in the world this colour already means one thing: a human decision, made visible. Its personality lives in four objects.</p>
-    <div class="objgrid">
-      <div class="obj"><span class="k">Ownership</span><b>The surveyor's cap</b><p>The first thing you see on site is who is responsible. Red on a head means a person who answers for the line they set. In product: the accent marks what's yours to act on.</p><span class="fig">SO-114</span></div>
-      <div class="obj"><span class="k">Decision</span><b>The setting-out mark</b><p>A spray cross on concrete is an instruction crews build from — intent, committed, unambiguous. In product: red appears only where a decision happens, and exactly once.</p><span class="fig">±0.5</span></div>
-      <div class="obj"><span class="k">Live precision</span><b>The total-station beam</b><p>The instrument is gray; only the live point burns. Measurement is calm until it lands. In product: the focus ring, the active row, the streaming agent — the beam, nothing else.</p><span class="fig">1.0m</span></div>
-      <div class="obj"><span class="k">Shared scale</span><b>The ranging pole</b><p>Red and white in metre bands — scale everyone reads from any distance. In product: the accent is a unit of meaning, repeated identically, never improvised.</p><span class="fig">m</span></div>
+    <div class="idx">02b — Colour, contained</div>
+    <h2>Where red lives.</h2>
+    <p class="sec-sub">Red is powerful precisely because it is rare. Roma quarantines it to two jobs, and nothing else may borrow it.</p>
+    <div class="twored">
+      <div class="rc">
+        <div class="k">01 · The logo</div>
+        <img src="assets/logos/asite-logo-primary.png" alt="" style="height:30px">
+        <p>Neo Red <span class="mono">#FF3131</span> lives in the cube. It is brand, not interface — carried by the artwork itself, never reproduced as a UI colour, fill, or text.</p>
+      </div>
+      <div class="rc">
+        <div class="k">02 · Errors</div>
+        <div class="toast toast--error" style="box-shadow:none">
+          <svg viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+          <div><div class="t-title">Upload failed</div><div class="t-body">The structural model was unreachable. No data was changed.</div></div>
+        </div>
+        <p>Error red <span class="mono">#E5241B</span> — a darkened brand-family red for legibility. Used for failed states, destructive confirmation, and validation. Nothing decorative.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -223,22 +203,9 @@
 <section id="icons" class="spec">
   <div class="roma-wrap">
     <div class="idx">03b — Iconography</div>
-    <h2>Site tools, drawn calm.</h2>
-    <p class="sec-sub">A 24px grid, 1.5px stroke, rounded joins. Icons inherit text colour — gray at rest, ink when active — and never carry the accent, with one exception: the live spark inside a product frame, which is a signal by definition.</p>
-    <div class="icongrid">
-      <div class="icell"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Today</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>RFIs</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M4 5h6l2 2h8v12H4z"/></svg><span>Files</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/></svg><span>Docs</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M4 8l4-4 4 4M8 4v11M20 16l-4 4-4-4M16 20V9"/></svg><span>Convert</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M12 3l8 4-8 4-8-4 8-4Z"/><path d="M4 12l8 4 8-4"/></svg><span>Models</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg><span>Field</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><span>Search</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M4 5h16l-6 8v6l-4-2v-4z"/></svg><span>Filter</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg><span>Upload</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span>Comment</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M12 4l8 8-8 8-8-8z"/></svg><span>Hold point</span></div>
-    </div>
+    <h2>Site tools &amp; functional icons.</h2>
+    <p class="sec-sub">A 24px grid, 1.5px stroke, rounded joins. Icons inherit text colour — gray at rest, ink when active — and never carry colour. The full set (90+) lives in the <a href="library/index.html" style="border-bottom:1px solid var(--hairline-strong)">asset library</a>; a sample below.</p>
+    <div class="icongrid" id="iconwall"></div>
   </div>
 </section>
 
@@ -247,12 +214,12 @@
   <div class="roma-wrap">
     <div class="idx">03c — Illustration</div>
     <h2>Drawn with the same pen.</h2>
-    <p class="sec-sub">Illustration is the icon grammar at scale — four grays, one red decision. Line work explains; a single filled silhouette carries a brand moment. Never mix registers in one composition, and never more than one red decision per scene.</p>
+    <p class="sec-sub">Illustration is the icon grammar at scale — four grays, no colour. Line work explains; a single filled silhouette carries a brand moment. Never mix registers in one composition; the darkest fill is the anchor.</p>
     <div class="mgrid">
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 80" width="120" height="80" fill="none" stroke="#050505" stroke-width="1.5"><path d="M12 64h96"/><path d="M30 64V28h34v36"/><path d="M64 40h22v24" stroke-dasharray="4 4"/><path d="M20 20l40 8" /><rect x="56" y="24" width="8" height="8" fill="#FA3C2D" stroke="none"/></svg></div><div class="mt"><b>Line · elevation</b><p>Scenes from the things a site contains. Poured work solid, planned work dashed. Heroes and empty states.</p></div></div>
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 80" width="120" height="80" fill="none" stroke="#050505" stroke-width="1.5"><path d="M30 46l30-16 30 16-30 16z"/><path d="M30 46v14l30 16 30-16V46"/><path d="M60 30v-8"/><circle cx="60" cy="18" r="3" fill="#FA3C2D" stroke="none"/></svg></div><div class="mt"><b>Line · isometry</b><p>Data given mass — 2:1 axonometric slabs stepped through the ramp. Product moments and 3D narratives.</p></div></div>
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 80" width="120" height="80"><path d="M24 60h30V34h-30z" fill="#e2e2e2"/><path d="M60 60h20V24h-20z" fill="#6b6b6b"/><circle cx="92" cy="30" r="9" fill="#FA3C2D"/></svg></div><div class="mt"><b>Filled · art</b><p>Flat silhouettes from the ramp — one object owns the red. Covers, culture, personality.</p></div></div>
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 80"><path d="M40 40l20-11 20 11-20 11z" fill="#f3f3f3"/><path d="M40 40v13l20 11V51z" fill="#b3b3b3"/><path d="M60 51l20-11v13L60 64z" fill="#6b6b6b"/><path d="M52 33l8-4 8 4-8 4z" fill="#FA3C2D"/></svg></div><div class="mt"><b>Filled · isometry</b><p>Faces filled, outlines gone; the held slab goes solid red. App icons, launch art.</p></div></div>
+      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 80" width="120" height="80" fill="none" stroke="#050505" stroke-width="1.5"><path d="M12 64h96"/><path d="M30 64V28h34v36"/><path d="M64 40h22v24" stroke-dasharray="4 4"/><path d="M20 20l40 8"/><rect x="56" y="24" width="8" height="8" fill="#050505" stroke="none"/></svg></div><div class="mt"><b>Line · elevation</b><p>Scenes from the things a site contains. Poured work solid, planned work dashed. Heroes and empty states.</p></div></div>
+      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 80" width="120" height="80" fill="none" stroke="#050505" stroke-width="1.5"><path d="M30 46l30-16 30 16-30 16z"/><path d="M30 46v14l30 16 30-16V46"/><path d="M60 30v-8"/><circle cx="60" cy="18" r="3" fill="#050505" stroke="none"/></svg></div><div class="mt"><b>Line · isometry</b><p>Data given mass — 2:1 axonometric slabs stepped through the ramp. Product moments and 3D narratives.</p></div></div>
+      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 80"><path d="M24 60h30V34h-30z" fill="#e2e2e2"/><path d="M60 60h20V24h-20z" fill="#6b6b6b"/><circle cx="92" cy="30" r="9" fill="#050505"/></svg></div><div class="mt"><b>Filled · art</b><p>Flat silhouettes from the ramp — the darkest fill is the anchor. Covers, culture, personality.</p></div></div>
+      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 80"><path d="M40 40l20-11 20 11-20 11z" fill="#f3f3f3"/><path d="M40 40v13l20 11V51z" fill="#b3b3b3"/><path d="M60 51l20-11v13L60 64z" fill="#6b6b6b"/><path d="M52 33l8-4 8 4-8 4z" fill="#050505"/></svg></div><div class="mt"><b>Filled · isometry</b><p>Faces filled, outlines gone; the acted-on slab goes solid ink. App icons, launch art.</p></div></div>
     </div>
   </div>
 </section>
@@ -262,12 +229,12 @@
   <div class="roma-wrap">
     <div class="idx">03d — Motifs</div>
     <h2>The motifs.</h2>
-    <p class="sec-sub">Each motif is a site gesture, abstracted. They never stack — pick one per composition.</p>
+    <p class="sec-sub">Each motif is a site gesture, abstracted, and rendered in ink. They never stack — pick one per composition.</p>
     <div class="mgrid">
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60" stroke="#050505" stroke-width="1.5" fill="none"><path d="M14 30h72" stroke-dasharray="5 5"/><circle cx="98" cy="30" r="5" fill="#FA3C2D" stroke="none"/></svg></div><div class="mt"><b>The Beam</b><p>A dashed leader ending in a burning point. Direction, then arrival. For pointing at anything.</p></div></div>
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60" stroke="#FA3C2D" stroke-width="2" fill="none"><path d="M60 18v24M48 30h24"/></svg></div><div class="mt"><b>The Setting-out Cross</b><p>A decision, committed. Marks the single most important point of any artefact.</p></div></div>
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60"><rect x="20" y="24" width="16" height="12" fill="#FA3C2D"/><rect x="36" y="24" width="16" height="12" fill="#fff" stroke="#e2e2e2"/><rect x="52" y="24" width="16" height="12" fill="#FA3C2D"/><rect x="68" y="24" width="16" height="12" fill="#fff" stroke="#e2e2e2"/><rect x="84" y="24" width="16" height="12" fill="#FA3C2D"/></svg></div><div class="mt"><b>The Metre Band</b><p>Ranging-pole stripes as an edge device. Shared scale — covers, lanyards, hoardings.</p></div></div>
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60"><rect x="30" y="16" width="60" height="28" rx="4" fill="var(--signal-wash)" stroke="var(--signal-line)"/></svg></div><div class="mt"><b>The Wash</b><p>12% red ground marking selection or uncertainty — attention without alarm.</p></div></div>
+      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60" stroke="#050505" stroke-width="1.5" fill="none"><path d="M14 30h72" stroke-dasharray="5 5"/><circle cx="98" cy="30" r="5" fill="#050505" stroke="none"/></svg></div><div class="mt"><b>The Beam</b><p>A dashed leader ending in a solid point. Direction, then arrival. For pointing at anything.</p></div></div>
+      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60" stroke="#050505" stroke-width="2" fill="none"><path d="M60 18v24M48 30h24"/></svg></div><div class="mt"><b>The Setting-out Cross</b><p>A decision, committed. Marks the single most important point of any artefact.</p></div></div>
+      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60"><rect x="20" y="24" width="16" height="12" fill="#050505"/><rect x="36" y="24" width="16" height="12" fill="#fff" stroke="#e2e2e2"/><rect x="52" y="24" width="16" height="12" fill="#050505"/><rect x="68" y="24" width="16" height="12" fill="#fff" stroke="#e2e2e2"/><rect x="84" y="24" width="16" height="12" fill="#050505"/></svg></div><div class="mt"><b>The Metre Band</b><p>Ranging-pole stripes as an edge device, in ink and white. Shared scale — covers, hoardings.</p></div></div>
+      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60"><rect x="30" y="16" width="60" height="28" rx="4" fill="var(--select-wash)" stroke="var(--hairline-strong)"/></svg></div><div class="mt"><b>The Wash</b><p>A neutral 5% ink ground marking selection or uncertainty — attention without alarm.</p></div></div>
     </div>
   </div>
 </section>
@@ -291,7 +258,7 @@
   <div class="roma-wrap">
     <div class="idx">04b — Spacing &amp; Motion</div>
     <h2>A 4px pulse.</h2>
-    <p class="sec-sub">Every gap is a multiple of 4. Components breathe in 8s and 12s; sections in 48s and 96s. Motion is precise and never theatrical: 0.2s for colour, 0.3s for transforms, 0.4s for layout — no spring, no bounce. If a measurement isn't on the pulse, it's a bug.</p>
+    <p class="sec-sub">Every gap is a multiple of 4. Components breathe in 8s and 12s; sections in 48s and 96s. Motion is precise and never theatrical: 0.2s for colour, 0.3s for transforms, 0.4s for layout — no spring, no bounce.</p>
     <div>
       <div class="spacerow"><span class="m">--s-4 · 4px</span><span class="spacebar" style="width:4px"></span><span class="u">icon-to-dot gaps</span></div>
       <div class="spacerow"><span class="m">--s-8 · 8px</span><span class="spacebar" style="width:8px"></span><span class="u">chip gaps, dot-to-text</span></div>
@@ -309,12 +276,12 @@
   <div class="roma-wrap">
     <div class="idx">04c — Cards</div>
     <h2>Four cards, one family.</h2>
-    <p class="sec-sub">All cards share the hairline border. They differ only in how they sit: flat, lifted, willing, or chosen. Hover each — it performs its own definition. Only the selected card is allowed to speak in red, and only because it represents a product selection.</p>
+    <p class="sec-sub">All cards share the hairline border. They differ only in how they sit: flat, lifted, willing, or chosen. Hover each — it performs its own definition. The selected card takes a neutral wash and an ink ring; no card ever fills with colour.</p>
     <div class="cardfam">
       <div class="fcard"><b>Default</b><span class="d">hairline border</span><span class="h">nothing moves. that's the point.</span></div>
       <div class="fcard raised"><b>Raised</b><span class="d">+ soft shadow</span><span class="h">hover: lifts off the page.</span></div>
       <div class="fcard inter"><b>Interactive ↗</b><span class="d">hover: tint</span><span class="h">surface moves, strokes don't.</span></div>
-      <div class="fcard sel"><b>Selected</b><span class="d">wash + red ring</span><span class="h">the one card that speaks in colour.</span></div>
+      <div class="fcard sel"><b>Selected</b><span class="d">wash + ink ring</span><span class="h">chosen, in value not hue.</span></div>
     </div>
   </div>
 </section>
@@ -323,20 +290,33 @@
 <section id="overlays" class="spec">
   <div class="roma-wrap">
     <div class="idx">04d — Overlays</div>
-    <h2>Dialogs &amp; dropdowns.</h2>
-    <p class="sec-sub">Overlays dim the world and float on the one shadow. Dialogs ask exactly one question; destructive intent is named, never red-buttoned by default.</p>
-    <div class="ov">
+    <h2>Dialogs, menus, toasts.</h2>
+    <p class="sec-sub">Overlays dim the world and float on the one shadow. Dialogs ask exactly one question; destructive intent is named in words, and only a failed or destructive action is allowed the error red.</p>
+    <div class="ov" style="margin-bottom:16px">
       <div class="dialog">
         <h4>Lift hold on L24–L28?</h4>
         <p>RFI-0847 is resolved. Lifting the hold releases pour P-1131 for sign-off and notifies 4 people.</p>
         <div class="acts"><button class="btn-ghost">Cancel<span class="kbd">esc</span></button><button class="btn">Lift hold<span class="kbd" style="border-color:rgba(255,255,255,.3);color:#fff">↵</span></button></div>
       </div>
+      <div class="dialog">
+        <h4>Delete transmittal TRN-2201?</h4>
+        <p>This permanently removes 14 issued drawings from the transmittal. This can't be undone.</p>
+        <div class="acts"><button class="btn-ghost">Cancel</button><button class="btn" style="background:var(--error)">Delete transmittal</button></div>
+      </div>
+    </div>
+    <div class="ov">
       <div class="menu">
-        <div class="mi">Open<span class="kbd">↵</span></div>
-        <div class="mi">Share…<span class="kbd">S</span></div>
-        <div class="mi">Convert to native doc</div>
-        <div class="mi">Place hold…</div>
-        <div class="mi">Supersede…</div>
+        <div class="mcap">Document</div>
+        <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 5v14M5 12h14"/></svg>Open<span class="k">↵</span></div>
+        <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></svg>Share…<span class="k">S</span></div>
+        <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>Duplicate<span class="k">D</span></div>
+        <div class="msep"></div>
+        <div class="mi mi--danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>Delete…</div>
+      </div>
+      <div class="stack" style="gap:12px">
+        <div class="toast"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><div><div class="t-title">Transmittal issued</div><div class="t-body">14 drawings sent to Arup · TRN-2201.</div></div></div>
+        <div class="toast toast--error"><svg viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg><div><div class="t-title">Upload failed</div><div class="t-body">2 files exceeded the size limit. Retry?</div></div></div>
+        <div class="tip" style="align-self:flex-start"><button class="btn-ghost">Hover for tooltip</button><span class="tip__b">Filed automatically against the register</span></div>
       </div>
     </div>
   </div>
@@ -347,8 +327,8 @@
   <div class="roma-wrap">
     <div class="idx">04e — Tables &amp; Lists</div>
     <h2>Registers, not spreadsheets.</h2>
-    <p class="sec-sub">Rows are 44px instruments: dot, mono ref, sentence-case title, chip properties. Hover lifts the surface; groups are micro-caps bands, not boxes. No zebra stripes, no vertical rules — the grid is implied, never drawn. Numbers right-align in mono, tabular figures, units attached.</p>
-    <table class="reg">
+    <p class="sec-sub">Rows are instruments: dot, mono ref, sentence-case title, chip properties. Groups are micro-caps bands, not boxes. No zebra stripes, no vertical rules. Below: the register, then a data table showing selection, progress, avatar, and expandable cell types.</p>
+    <table class="reg" style="margin-bottom:36px">
       <thead><tr><th>Ref</th><th>Title</th><th>Property</th><th class="num">Qty</th><th>Meta</th></tr></thead>
       <tbody>
         <tr class="band"><td colspan="5">Level 26 — Structure</td></tr>
@@ -356,7 +336,15 @@
         <tr><td class="refc">RFI-0847</td><td>Cover clash at L26</td><td><span class="status status--warn" style="font-size:12px">Holds pour</span></td><td class="num">—</td><td class="refc">2D OVER</td></tr>
         <tr class="band"><td colspan="5">Level 25 — Quality</td></tr>
         <tr><td class="refc">MAT-019</td><td>Type 2 coupler approval</td><td><span class="status status--info" style="font-size:12px">In review</span></td><td class="num">1,840 ea</td><td class="refc">WK 25</td></tr>
-        <tr><td class="refc">ITP-044</td><td>L25 rebar inspection</td><td><span class="status" style="font-size:12px">Scheduled</span></td><td class="num">38 t</td><td class="refc">WK 25</td></tr>
+      </tbody>
+    </table>
+    <table class="dtbl">
+      <thead><tr><th style="width:20px"></th><th>Package</th><th>Owner</th><th>Progress</th><th class="num">Value</th><th>State</th></tr></thead>
+      <tbody>
+        <tr class="sel"><td><span class="check on"></span></td><td>Foundation &amp; substructure<br><span class="rf">MKT-2026-0142</span></td><td><span class="avatar-stack"><span class="avatar">AO</span><span class="avatar">SP</span></span></td><td><span class="cell-prog"><span class="progress"><i style="width:82%"></i></span>82%</span></td><td class="num">£1,161,250</td><td><span class="status status--ok" style="font-size:12px">Compliant</span></td></tr>
+        <tr><td><span class="check"></span></td><td><span class="expand">▸</span> Superstructure — steel<br><span class="rf">MKT-2026-0143</span></td><td><span class="avatar">CN</span></td><td><span class="cell-prog"><span class="progress"><i style="width:45%"></i></span>45%</span></td><td class="num">£2,004,900</td><td><span class="status status--warn" style="font-size:12px">In review</span></td></tr>
+        <tr class="subrow"><td></td><td colspan="5">3 sub-bidders · lowest compliant £1.98M · 1 non-compliant</td></tr>
+        <tr><td><span class="check"></span></td><td>MEP first fix<br><span class="rf">MKT-2026-0144</span></td><td><span class="avatar">SP</span></td><td><span class="cell-prog"><span class="progress"><i style="width:12%"></i></span>12%</span></td><td class="num">£860,400</td><td><span class="status status--stop" style="font-size:12px">Failed check</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -367,70 +355,43 @@
   <div class="roma-wrap">
     <div class="idx">04f — Data Entry</div>
     <h2>Every value has a correct field.</h2>
-    <p class="sec-sub">Entry is where the product asks instead of reads — so it asks precisely. The type of the value chooses the control: text takes the sans, references and quantities take the mono, decisions get exactly the options that exist. All fields share one focus behaviour.</p>
+    <p class="sec-sub">The type of the value chooses the control: text takes the sans, references and quantities take the mono, decisions get exactly the options that exist. All fields share one focus behaviour — an ink border and neutral ring.</p>
     <div class="fields">
-      <div class="field-c"><div class="lab">Text — short</div><input class="input" placeholder="Package name"><p>Single line, sans, sentence case. For anything a human would say aloud.</p></div>
-      <div class="field-c"><div class="lab">Alphanumeric — reference</div><input class="input mono" value="MCG-TWRC-STR-DWG-0412" style="text-transform:uppercase"><p>Engineering refs take the mono. Uppercase enforced, tabular spacing.</p></div>
-      <div class="field-c"><div class="lab">Float — quantity</div><div style="display:flex"><input class="input" value="412" style="border-radius:4px 0 0 4px;text-align:right;font-family:var(--font-mono)"><span style="border:1px solid var(--hairline);border-left:0;border-radius:0 4px 4px 0;padding:10px 12px;font-family:var(--font-mono);font-size:13px;color:var(--ink-3)">m³</span></div><p>Right-aligned, tabular figures, unit fixed inside the field.</p></div>
-      <div class="field-c"><div class="lab">Boolean — toggle</div><div class="row" style="gap:10px;margin-bottom:8px"><span class="toggle on"></span><span class="body-sm">Notify approvers on upload</span></div><div class="row" style="gap:10px"><span class="toggle"></span><span class="body-sm">Lock revision after issue</span></div><p>Red means on — nothing else here may use it.</p></div>
-      <div class="field-c"><div class="lab">Select — one of few</div><div class="stack-sm" style="gap:8px"><span class="romachip"><i></i>Hold point</span><span class="romachip" style="opacity:.5"><i style="background:var(--ink-faint)"></i>Witness point</span><span class="romachip" style="opacity:.5"><i style="background:var(--ink-faint)"></i>Surveillance</span></div><p>Radio when every option fits on screen. The form never hides what it asks.</p></div>
-      <div class="field-c"><div class="lab">Select — one of many</div><div class="input row" style="justify-content:space-between">Discipline — Structural<span style="color:var(--ink-3)">▾</span></div><p>Dropdown when options exceed five; the chosen row takes the wash.</p></div>
+      <div class="field-c"><div class="lab">Text — short</div><input class="input" placeholder="Package name"><p>Single line, sans, sentence case.</p></div>
+      <div class="field-c"><div class="lab">Reference — mono</div><input class="input mono" value="MCG-TWRC-STR-DWG-0412" style="text-transform:uppercase"><p>Uppercase enforced, tabular spacing.</p></div>
+      <div class="field-c"><div class="lab">Quantity — unit fixed</div><div style="display:flex"><input class="input" value="412" style="border-radius:4px 0 0 4px;text-align:right;font-family:var(--font-mono)"><span style="border:1px solid var(--hairline);border-left:0;border-radius:0 4px 4px 0;padding:10px 12px;font-family:var(--font-mono);font-size:13px;color:var(--ink-3)">m³</span></div><p>Unit is part of the value, not the label.</p></div>
+      <div class="field-c"><div class="lab">Toggle</div><div class="row" style="gap:10px;margin-bottom:8px"><span class="toggle on"></span><span class="body-sm">Notify approvers on upload</span></div><div class="row" style="gap:10px"><span class="toggle"></span><span class="body-sm">Lock revision after issue</span></div><p>Ink means on. No colour.</p></div>
+      <div class="field-c"><div class="lab">Checkbox &amp; radio</div><div class="row" style="gap:10px;margin-bottom:8px"><span class="check on"></span><span class="body-sm">Drawings</span></div><div class="row" style="gap:10px;margin-bottom:8px"><span class="check"></span><span class="body-sm">Specifications</span></div><div class="row" style="gap:10px"><span class="radio on"></span><span class="body-sm">Hold point</span></div><p>Checks confirm; radios choose one.</p></div>
+      <div class="field-c"><div class="lab">Select — one of many</div><div class="input row" style="justify-content:space-between">Discipline — Structural<span style="color:var(--ink-3)">▾</span></div><p>Dropdown when options exceed five.</p></div>
     </div>
   </div>
 </section>
 
 <!-- 05 COMPONENTS -->
-<section id="comp" class="spec">
+<section id="comp" class="spec" style="border-bottom:1px solid var(--hairline)">
   <div class="roma-wrap">
     <div class="idx">05 — Components</div>
-    <h2>Instrument controls.</h2>
-    <p class="sec-sub">Quiet by default. In the shell, controls are ink; the primary action turns red only inside a product frame. The keyboard is a first-class citizen — every action shows its shortcut.</p>
-    <div class="roma-product" style="max-width:640px">
-      <div class="roma-product__bar"><i></i><i></i><i></i><span class="u">app.asite.com / rfis</span></div>
-      <div class="roma-product__body">
-        <div class="row" style="gap:10px;flex-wrap:wrap"><button class="p-btn">New RFI</button><button class="btn-outline">Filter</button><button class="btn-outline">Export</button><span class="chip" style="margin-left:auto">⌘K</span></div>
-        <p class="body-sm muted" style="margin:14px 0 12px">One red per screen — the primary action; everything else is surface. Focus is the red ring at 3px wash.</p>
-        <div class="row" style="gap:8px;flex-wrap:wrap"><span class="p-status p-live">In progress</span><span class="chip">STR · Structural</span><span class="chip">Due 13 Jun</span><input class="input p-focus" style="max-width:220px;border-color:var(--signal)" value="Search RFIs"></div>
-      </div>
+    <h2>The general set.</h2>
+    <p class="sec-sub">Quiet by default. The primary action is filled ink; every secondary CTA carries a full border. Keyboard is a first-class citizen — every action shows its shortcut.</p>
+    <div class="compgrid">
+      <div class="compcard"><div class="cm">Buttons</div><div class="row" style="gap:10px;flex-wrap:wrap;margin-top:12px"><button class="btn">Request a demo</button><button class="btn-ghost">Watch the tour</button><button class="btn-outline">Explore CDE</button><button class="btn-muted" disabled>Unavailable</button></div></div>
+      <div class="compcard"><div class="cm">Segmented control &amp; tabs</div><div class="row" style="gap:14px;flex-wrap:wrap;margin-top:12px"><div class="segment"><button class="on">Overview</button><button>Files</button><button>Activity</button></div></div></div>
+      <div class="compcard"><div class="cm">Breadcrumbs &amp; pagination</div><div class="stack" style="gap:12px;margin-top:12px"><div class="crumbs">Projects <span class="sep">/</span> Meridian Tower C <span class="sep">/</span> <b>Files</b></div><div class="pager"><button>‹</button><button class="on">1</button><button>2</button><button>3</button><button>›</button></div></div></div>
+      <div class="compcard"><div class="cm">Badges &amp; avatars</div><div class="row" style="gap:16px;margin-top:12px"><span class="row" style="gap:6px"><span class="body-sm">Inbox</span><span class="badge">6</span></span><span class="row" style="gap:6px"><span class="body-sm">Errors</span><span class="badge badge--error">2</span></span><span class="avatar-stack"><span class="avatar">CN</span><span class="avatar">AO</span><span class="avatar">SP</span><span class="avatar badge--quiet" style="color:var(--ink-2)">+4</span></span></div></div>
+      <div class="compcard"><div class="cm">Progress &amp; steps</div><div class="stack" style="gap:14px;margin-top:12px"><div class="progress"><i style="width:64%"></i></div><div class="steps"><span class="s done"><span class="n">✓</span>Raise</span><span class="bar"></span><span class="s now"><span class="n">2</span>Review</span><span class="bar"></span><span class="s"><span class="n">3</span>Issue</span></div></div></div>
+      <div class="compcard"><div class="cm">Inline banner</div><div class="stack" style="gap:10px;margin-top:12px"><div class="banner"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/></svg>5 of 6 threads filed automatically.</div><div class="banner banner--error"><svg viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>RFI-0847 is 2 days overdue.</div></div></div>
+      <div class="compcard"><div class="cm">Accordion</div><details class="acc" style="margin-top:12px"><summary class="acc__h">Metadata rules<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></summary><div class="acc__b">Drawing number, revision, suitability code and discipline are validated on every upload against the register.</div></details></div>
+      <div class="compcard"><div class="cm">Key–value list</div><dl class="kv" style="margin-top:12px"><dt>Ref</dt><dd class="mono">STR-DWG-0412</dd><dt>Rev</dt><dd>C03</dd><dt>Status</dt><dd><span class="status status--ok" style="font-size:12px">Approved</span></dd><dt>Issued</dt><dd>09 Jun 2026</dd></dl></div>
     </div>
+    <div style="margin-top:16px"><div class="empty"><svg viewBox="0 0 24 24"><path d="M4 6h6l2 2h8v11H4z"/></svg><b>No files in review</b><p>When a drawing is submitted for approval it appears here with its metadata QA result.</p><button class="btn">Upload a drawing</button></div></div>
   </div>
 </section>
 
-<!-- 06 PRINCIPLES -->
-<section id="princ" class="spec">
-  <div class="roma-wrap">
-    <div class="idx">06 — Principles</div>
-    <h2>The craft contract.</h2>
-    <p class="sec-sub">Four rules that keep this direction honest.</p>
-    <div class="princ">
-      <div class="pr"><b>Ration the signal</b><p>Red appears once, inside a product frame. The moment two things glow, neither is primary. Status lives in dots, selection in a 12% wash. The shell has no colour at all.</p></div>
-      <div class="pr"><b>Depth is light, not paint</b><p>No filled panels against filled panels. A 1px hairline and one soft shadow carry all elevation. Surfaces stay within a four-step ramp.</p></div>
-      <div class="pr"><b>Density is respect</b><p>AEC professionals live in registers. Tight line-heights, 13–14px working text, properties inline — never make an engineer scroll for what could be a column.</p></div>
-      <div class="pr"><b>The keyboard is the crane</b><p>Every action has a shortcut and shows it. ⌘K reaches everything. Speed is the feature that says we understand site-time.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 07 IN THE WORLD -->
-<section id="world" class="spec" style="border-bottom:1px solid var(--hairline)">
-  <div class="roma-wrap">
-    <div class="idx">07 — In the world</div>
-    <h2>Brand, in the world.</h2>
-    <p class="sec-sub">The language in the world — every artefact built from tokens, no images. The shell stays achromatic; the red cube and the metre band carry the brand.</p>
-    <div class="world">
-      <div class="art tintbg"><span class="cap">Social / OG card · 1200×630</span><div class="big">Two million documents.<br>One source of truth.</div><span class="cap">ASITE.COM · COMMON DATA ENVIRONMENT</span></div>
-      <div class="art"><span class="cap">Report cover · metre-band edge</span><div class="big">Held to<br>tolerance</div><span class="cap">QPR · Q2 2026 · MERIDIAN TOWER C</span></div>
-      <div class="art dark"><span class="cap" style="color:#b3b3b3">Site hoarding · the red field</span><div class="big" style="color:#fff">This site runs on one source of truth.</div><img src="assets/logos/asite-lockup-red-white.svg" alt="" style="height:22px"></div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer class="roma-foot">
   <div class="roma-wrap">
     <div class="row" style="justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px">
       <div class="stack-sm">
-        <a class="roma-logo" href="index.html" style="color:var(--ink)"><img src="assets/logos/asite-mark-ink.svg" alt="" style="height:18px"><span class="roma-logo__word">ASITE</span></a>
+        <a class="roma-logo" href="index.html"><img src="assets/logos/asite-logo-primary.png" alt="Asite" style="height:20px"></a>
         <span class="fine">Roma — Asite Visual Language · Achromatic editorial direction</span>
       </div>
       <div class="row" style="gap:22px"><a href="index.html">Language</a><a href="screens.html">Product</a><a href="ai-hub.html">Intelligence</a><a href="library/index.html">Library</a></div>
@@ -439,11 +400,14 @@
 </footer>
 
 <script>
+  // sample icon wall
+  var icons=["today","rfis","files","docs","convert","models","field","search","filter","upload","edit","trash","download","share","settings","calendar","bell","check","close","copy","link","lock","user","users","folder","star","archive","clock","sort","more-h","export","print"];
+  var wall=document.getElementById('iconwall');
+  icons.forEach(function(n){var d=document.createElement('div');d.className='icell';var img=document.createElement('img');img.src='assets/icons/'+n+'.svg';img.alt=n;img.title=n;img.style.width='22px';img.style.height='22px';img.onerror=function(){d.style.display='none'};var s=document.createElement('span');s.textContent=n;d.appendChild(img);d.appendChild(s);wall.appendChild(d);});
   // floating-nav scroll spy
-  var secs=[].slice.call(document.querySelectorAll('section[id]'));
   var links={}; document.querySelectorAll('.fnav a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a;});
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){Object.values(links).forEach(function(l){l.classList.remove('on');});var l=links[e.target.id];if(l)l.classList.add('on');}});},{rootMargin:'-40% 0px -55% 0px'});
-  secs.forEach(function(s){io.observe(s);});
+  document.querySelectorAll('section[id]').forEach(function(s){io.observe(s);});
 </script>
 </body>
 </html>
