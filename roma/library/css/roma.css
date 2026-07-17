@@ -9,6 +9,10 @@
      the interface. Red survives in exactly two places: the Asite
      logo artwork, and error/alert communication (--error).
    · Depth from 1px hairlines + ONE shadow — never fills.
+   · NO EDGE BARS (COMPULSORY). Never put a thick or coloured
+     border on the edge of a card, panel, banner, row or callout.
+     All structural borders are the 1px neutral --hairline; accent
+     is carried by a mark/dot/tint, never a rail.
    · Hierarchy by VALUE (ink → ink-2 → ink-3) and weight (400→500).
    · Editorial corners: 4px interactive, 8px cards. No pills.
    · Secondary CTAs carry a FULL border — never a bottom stroke.
@@ -281,6 +285,114 @@ img,svg{display:block;max-width:100%}
 /* spec section on the language page */
 .spec{padding:80px 0;border-top:1px solid var(--hairline);scroll-margin-top:76px}
 .spec h2{font-size:32px;line-height:1.1;letter-spacing:-.74px;font-weight:500;margin-bottom:6px}
+
+/* ============================================================
+   ASITE INTELLIGENCE — THE ACCENT LAYER (Neo Red)
+   The interface is achromatic; the Intelligence layer is the ONE
+   sanctioned exception that carries Neo Red (--ai). The mark is
+   Roma's curved four-point SPARK — the setting-out cross softened
+   to a star (path: the .aispark below). Scope --ai to .ai-* only.
+
+   ‼ NO EDGE BARS (COMPULSORY). Never put a thick or coloured
+   border on the edge of a card, panel, banner, row or callout.
+   Presence is carried by the SPARK, a dot, a tinted header or a
+   small chip — never a 2px rail. All structural borders are the
+   1px neutral --hairline.
+   ============================================================ */
+:root{
+  --ai:#FF3131;            /* Neo Red — the Intelligence accent */
+  --ai-press:#E11D1D;
+  --ai-wash:rgba(255,49,49,.08);
+  --ai-line:rgba(255,49,49,.34);
+}
+/* the mark — Roma's curved spark, coloured Neo Red.
+   Use inline: <svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg>
+   Outline (quiet label): add fill="none" stroke="currentColor" stroke-width="1.4". */
+.aispark{color:var(--ai);width:16px;height:16px;flex:none}
+.ai-orb{width:40px;height:40px;border-radius:50%;border:1px solid var(--hairline);display:grid;place-items:center;background:var(--canvas)}
+.ai-orb .aispark{width:18px;height:18px}
+
+/* the Intelligence blob — trigger pill + open panel (no edge bar) */
+.blob-pill{display:inline-flex;align-items:center;gap:9px;font:500 12.5px/1 var(--font-sans);color:var(--ink);
+  background:var(--canvas);box-shadow:var(--shadow-card);border-radius:999px;padding:10px 15px;white-space:nowrap;cursor:pointer}
+.blob-pill .kbd{font-family:var(--font-mono);font-size:11px;color:var(--ink-3);border:1px solid var(--hairline);border-radius:4px;padding:1px 5px}
+.ipanel{width:340px;max-width:100%;background:var(--canvas);box-shadow:var(--shadow-card);border:1px solid var(--hairline);border-radius:var(--r-card);overflow:hidden;text-align:left}
+.ipanel .ihd{display:flex;align-items:center;gap:9px;padding:12px 15px;border-bottom:1px solid var(--hairline);background:var(--ai-wash)}
+.ipanel .ihd .l{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ai)}
+.ipanel .ihd .reg{margin-left:auto;font-family:var(--font-mono);font-size:9px;letter-spacing:.08em;color:var(--ink-3)}
+.ipanel .ibd{padding:15px;display:flex;flex-direction:column;gap:12px}
+.ipanel .iq{align-self:flex-end;max-width:84%;background:var(--tint);border-radius:var(--r-sharp);padding:8px 12px;font-size:12.5px;line-height:1.5}
+.ipanel .ia{font-size:13px;line-height:1.55;color:var(--ink)}
+.ipanel .ia b{font-weight:600}.ipanel .ia .m{font-family:var(--font-mono);font-size:11.5px;color:var(--ai)}
+.ipanel .icta{background:var(--ai);color:#fff;font:500 11px/1 var(--font-mono);letter-spacing:.04em;border:0;border-radius:var(--r-sharp);padding:9px 13px;align-self:flex-start;cursor:pointer}
+.ipanel .icta:hover{background:var(--ai-press)}
+.ipanel .iin{display:flex;align-items:center;gap:8px;padding:11px 15px;border-top:1px solid var(--hairline);font-size:12px;color:var(--ink-3)}
+.ipanel .iin .kbd{margin-left:auto;font-family:var(--font-mono);font-size:11px;border:1px solid var(--hairline);border-radius:4px;padding:1px 5px}
+
+/* the insight line — NO background, NO left bar. Just spark + text. */
+.insight{display:flex;align-items:flex-start;gap:9px;background:none}
+.insight .itxt{font-size:12.5px;line-height:1.55;color:var(--ink)}
+.insight .itxt .m{font-family:var(--font-mono);font-size:11px;color:var(--ai)}
+.insight .ilink{font:500 11px/1 var(--font-mono);letter-spacing:.04em;color:var(--ai);white-space:nowrap}
+
+/* the Coworker CTA (accent button with the spark) + inline trigger */
+.agent-cta{display:inline-flex;align-items:center;gap:8px;font:500 12px/1 var(--font-sans);color:#fff;background:var(--ai);
+  border:0;border-radius:var(--r-sharp);padding:10px 14px;cursor:pointer}
+.agent-cta:hover{background:var(--ai-press)}
+.agent-ib{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex:none;background:var(--ai);border-radius:var(--r-sharp);cursor:pointer}
+.agent-ib:hover{background:var(--ai-press)}
+.ai-chat{width:340px;max-width:100%;background:var(--canvas);box-shadow:var(--shadow-card);border:1px solid var(--hairline);border-radius:var(--r-card);overflow:hidden}
+.ai-chat .ahd{display:flex;align-items:center;gap:9px;padding:12px 15px;border-bottom:1px solid var(--hairline)}
+.ai-chat .ahd b{font-size:13px;font-weight:600}
+.ai-chat .abd{padding:15px;display:flex;flex-direction:column;gap:10px}
+.ai-chat .ainstr{align-self:flex-end;max-width:84%;background:var(--tint);border-radius:var(--r-sharp);padding:8px 12px;font-size:12.5px;line-height:1.5}
+.ai-chat .aft{padding:12px 15px;border-top:1px solid var(--hairline);display:flex;gap:8px;background:var(--tint)}
+.ai-step{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--ink);padding:7px 0;border-top:1px solid var(--hairline)}
+.ai-step .sq{width:8px;height:8px;border-radius:50%;flex:none;background:var(--idle)}
+.ai-step .sref{margin-left:auto;font-family:var(--font-mono);font-size:10px;color:var(--ink-3)}
+.ai-step.done .sq{background:var(--ok)}
+.ai-step.run .sq{background:var(--ai);animation:roma-pulse 1.4s var(--ease) infinite}
+.coworker-card{background:var(--canvas);box-shadow:var(--shadow-card);border:1px solid var(--hairline);border-radius:var(--r-card);padding:18px;display:flex;flex-direction:column;gap:12px}
+
+/* ---- DIFFERENTIATED INTELLIGENCE COMPONENTS -------------- */
+/* 1 · natural-language query bar */
+.ai-query{display:flex;align-items:center;gap:10px;border:1px solid var(--hairline);border-radius:var(--r-sharp);padding:11px 14px;background:var(--canvas)}
+.ai-query input{flex:1;border:0;outline:0;font:400 14px/1 var(--font-sans);color:var(--ink);background:none}
+.ai-query input::placeholder{color:var(--ink-mute)}
+.ai-query .kbd{font-family:var(--font-mono);font-size:11px;color:var(--ink-3);border:1px solid var(--hairline);border-radius:4px;padding:2px 6px}
+/* 2 · smart-fill suggestion (ghost text + accept) */
+.ai-suggest{border:1px solid var(--hairline);border-radius:var(--r-sharp);padding:10px 12px;display:flex;align-items:center;gap:10px;background:var(--canvas)}
+.ai-suggest .val{font-size:13px;color:var(--ink)}
+.ai-suggest .ghost{font-size:13px;color:var(--ai);font-style:italic}
+.ai-suggest .tab{margin-left:auto;font-family:var(--font-mono);font-size:10px;color:var(--ink-3);border:1px solid var(--hairline);border-radius:4px;padding:1px 6px;text-transform:none;letter-spacing:0}
+/* 3 · source / citation chip */
+.ai-cite{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;color:var(--ai);
+  background:var(--ai-wash);border-radius:var(--r-sharp);padding:3px 8px}
+.ai-cite .aispark{width:11px;height:11px}
+/* 4 · confidence gauge */
+.ai-gauge{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;color:var(--ink-2)}
+.ai-gauge .bar{width:64px;height:5px;background:var(--tint);border-radius:3px;overflow:hidden}
+.ai-gauge .bar i{display:block;height:100%;background:var(--ai)}
+/* 5 · reconcile rows (matched / mismatch / missing) */
+.ai-reconcile{display:flex;flex-direction:column}
+.ai-reconcile .rr{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--hairline);font-size:12.5px}
+.ai-reconcile .rr:first-child{border-top:0}
+.ai-reconcile .rr .lab{color:var(--ink-2)}
+.ai-reconcile .rr .res{margin-left:auto;font-weight:500;font-size:12px}
+.ai-reconcile .m-ok{color:var(--ink-3)}.ai-reconcile .m-bad{color:var(--ai)}.ai-reconcile .m-none{color:var(--ink-2)}
+/* 6 · "drafted by Asite Intelligence" attribution badge */
+.ai-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--ai)}
+.ai-badge .aispark{width:12px;height:12px}
+/* 7 · proactive nudge (spark + text, hairline card, no bar) */
+.ai-nudge{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--hairline);border-radius:var(--r-card);box-shadow:var(--shadow-card);padding:12px 14px;background:var(--canvas);max-width:360px}
+.ai-nudge .nx{margin-left:auto;color:var(--ink-3);cursor:pointer;font-size:14px;line-height:1}
+.ai-nudge .ntxt{font-size:12.5px;line-height:1.5;color:var(--ink)}
+/* 8 · inline explain chip */
+.ai-explain{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--ai);background:var(--ai-wash);border-radius:999px;padding:3px 9px;cursor:pointer}
+.ai-explain .aispark{width:11px;height:11px}
+/* row-level risk flag */
+.ai-flag{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ai)}
+.ai-flag .aispark{width:12px;height:12px}
 
 /* ============================================================
    EXPANDED COMPONENT SET — all achromatic; red only for errors.

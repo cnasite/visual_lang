@@ -4,110 +4,104 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Asite — Roma · Intelligence</title>
-<meta name="description" content="Asite Intelligence in the Roma register — the same achromatic instrument, now intelligent. The spark fills with ink only when it is live. It leads with the answer, cites its sources, and applies nothing until you say so.">
+<meta name="description" content="Asite Intelligence in the Roma register — the one layer that carries the Neo Red accent. The curved spark, the blob, insight in context, differentiated components, and the Coworker in real flows.">
 <link rel="stylesheet" href="library/css/roma.css">
 <style>
   html{scroll-behavior:smooth}
-  .hero{padding:126px 0 88px;border-bottom:1px solid var(--hairline)}
+  .hero{padding:126px 0 84px;border-bottom:1px solid var(--hairline)}
   .spec{padding:80px 0;border-top:1px solid var(--hairline);scroll-margin-top:76px}
   .spec:first-of-type{border-top:0}
   .spec h2{font-size:32px;line-height:1.1;letter-spacing:-.74px;font-weight:500;margin-bottom:6px}
-  /* vocabulary */
-  .vocab{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .vc{border:1px solid var(--hairline);border-radius:var(--r-card);padding:18px;display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start}
-  .vc b{font-size:14px;font-weight:500}
-  .vc p{font-size:13px;color:var(--ink-2);line-height:1.5}
-  /* principles */
-  .rules{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-  .rule{border:1px solid var(--hairline);border-radius:var(--r-card);padding:20px}
-  .rule b{font-size:14px;font-weight:500;display:block;margin-bottom:8px}
-  .rule p{font-size:13px;color:var(--ink-2);line-height:1.55}
-  /* mark */
+  .romachip i{background:var(--ai)}
+  /* the mark */
   .markrow{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
   .mk{border:1px solid var(--hairline);border-radius:var(--r-card);padding:24px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
   .mk b{font-size:14px;font-weight:500}.mk p{font-size:12.5px;color:var(--ink-3);line-height:1.5}
   /* states */
-  .states{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .states{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .state{display:flex;align-items:center;gap:9px;font-size:13px;padding:12px 14px;border:1px solid var(--hairline);border-radius:var(--r-sharp)}
   .state i{width:8px;height:8px;border-radius:50%;display:block;flex:none}
-  .st-q{background:var(--idle)}.st-run{background:var(--signal);animation:roma-pulse 1.4s var(--ease) infinite}
-  .st-w{background:var(--warn)}.st-b{background:var(--stop)}.st-d{background:var(--ok)}
+  .st-q{background:var(--idle)}.st-run{background:var(--ai);animation:roma-pulse 1.4s var(--ease) infinite}
+  .st-d{background:var(--ok)}.st-b{background:var(--stop)}
   .state small{color:var(--ink-3);font-family:var(--font-mono);font-size:10.5px;margin-left:auto}
+  /* mock frames — in context */
+  .frame{border:1px solid var(--hairline);border-radius:var(--r-card);overflow:hidden;background:var(--canvas)}
+  .fbar{display:flex;align-items:center;gap:9px;height:34px;padding:0 14px;border-bottom:1px solid var(--hairline);background:var(--tint)}
+  .fbar .dot{width:8px;height:8px;border-radius:50%;background:var(--hairline-strong)}
+  .fbar .ftitle{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+  .fbar .fref{margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--ink-3)}
+  .fbody{padding:16px}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+  .kpi .l{font-family:var(--font-mono);font-size:10px;text-transform:uppercase;color:var(--ink-3)}
+  .kpi .n{font-size:22px;letter-spacing:-1px;margin-top:4px}
+  .trow{display:flex;align-items:center;gap:12px;height:40px;border-top:1px solid var(--hairline);font-size:12.5px}
+  .trow:first-child{border-top:0}.trow .rref{font-family:var(--font-mono);font-size:11px;color:var(--ink-2);width:80px;flex:none}
+  .trow .rt{flex:1;color:var(--ink-2)}
+  .ctx-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  .stage{background:var(--tint);border-radius:var(--r-card);padding:24px;display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+  .blobcap,.sublbl{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .blobcap{display:block;text-align:center;margin-top:12px}.sublbl{margin-bottom:12px}
+  /* differentiated component grid */
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .ccell{border:1px solid var(--hairline);border-radius:var(--r-card);padding:18px;display:flex;flex-direction:column;gap:12px}
+  .ccell .cl{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+  /* agent */
+  .agent-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  .inline-demo{border:1px solid var(--hairline);border-radius:var(--r-card);padding:18px;display:flex;flex-direction:column;gap:16px}
+  .fwrap{display:flex;align-items:center;background:var(--tint);border:1px solid var(--hairline);border-radius:var(--r-sharp)}
+  .fwrap textarea{flex:1;resize:none;background:none;border:0;outline:none;font:400 13px/1.5 var(--font-sans);color:var(--ink-2);padding:10px 12px;min-height:48px}
+  .flab{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px;display:block}
   /* run card */
   .rcard{border:1px solid var(--hairline);border-radius:var(--r-card);overflow:hidden;max-width:760px}
   .rc-h{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--hairline)}
-  .rc-h .spark{color:var(--signal);width:16px}
-  .rc-h b{font-size:14px;font-weight:500}
-  .rc-h .tele{margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--ink-3);display:flex;gap:12px}
-  .rc-b{padding:18px}
-  .rc-b p{font-size:15px;line-height:1.55}
-  .caret::after{content:"";display:inline-block;width:8px;height:15px;background:var(--signal);margin-left:3px;vertical-align:-2px;animation:roma-pulse 1s steps(2) infinite}
+  .rc-h .m{margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--ink-3);display:flex;gap:12px}
+  .rc-b{padding:18px}.rc-b p{font-size:15px;line-height:1.55}
+  .caret::after{content:"";display:inline-block;width:8px;height:15px;background:var(--ai);margin-left:3px;vertical-align:-2px;animation:roma-pulse 1s steps(2) infinite}
   .rc-tool{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-2);background:var(--tint);border-radius:var(--r-sharp);padding:9px 11px;margin:14px 0}
-  .rc-reason{border-top:1px solid var(--hairline);padding:12px 18px;font-size:13px;color:var(--ink-3);display:flex;gap:8px;align-items:center;cursor:pointer}
-  .rc-cites{padding:12px 18px;border-top:1px solid var(--hairline);display:flex;gap:14px;flex-wrap:wrap}
-  .gauge{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;color:var(--ink-2)}
-  .gauge .bar{width:70px;height:5px;background:var(--hairline);border-radius:3px;overflow:hidden}
-  .gauge .bar i{display:block;height:100%;width:86%;background:var(--ink)}
-  /* timeline */
-  .tl{border:1px solid var(--hairline);border-radius:var(--r-card);padding:8px 0;max-width:420px}
-  .tl .step{display:flex;align-items:center;gap:12px;padding:10px 18px;font-size:13px}
+  .rc-cites{padding:12px 18px;border-top:1px solid var(--hairline);display:flex;gap:10px;flex-wrap:wrap}
+  .tl{border:1px solid var(--hairline);border-radius:var(--r-card);padding:8px 0;max-width:360px}
+  .tl .step{display:flex;align-items:center;gap:12px;padding:9px 18px;font-size:13px}
   .tl .step .d{width:8px;height:8px;border-radius:50%;background:var(--idle);flex:none}
-  .tl .step.live .d{background:var(--signal);animation:roma-pulse 1.4s infinite}
-  .tl .step .m{margin-left:auto;font-family:var(--font-mono);font-size:10px;color:var(--ink-3)}
+  .tl .step.live .d{background:var(--ai);animation:roma-pulse 1.4s infinite}
+  .tl .step .mm{margin-left:auto;font-family:var(--font-mono);font-size:10px;color:var(--ink-3)}
   /* thread */
-  .thread{border:1px solid var(--hairline);border-radius:var(--r-card);padding:18px;max-width:640px;display:flex;flex-direction:column;gap:16px}
-  .turn{display:flex;gap:12px}
-  .turn .av{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:11px;font-family:var(--font-mono);border:1px solid var(--hairline)}
-  .turn .av.ai{border-color:var(--signal-line)}
-  .turn .av.ai .spark{width:14px;color:var(--signal)}
-  .turn .msg{font-size:14px;line-height:1.5}
+  .thread{border:1px solid var(--hairline);border-radius:var(--r-card);padding:18px;max-width:620px;display:flex;flex-direction:column;gap:14px}
+  .turn{display:flex;gap:12px}.turn .av{width:28px;height:28px;flex:none;display:grid;place-items:center;font:500 11px/1 var(--font-mono);border:1px solid var(--hairline)}
+  .turn .av.ai{border-color:var(--ai-line)}.turn .msg{font-size:14px;line-height:1.5}
   .turn .who{font-size:11px;font-family:var(--font-mono);color:var(--ink-3);margin-bottom:4px}
   .sysline{font-size:12px;color:var(--ink-3);font-family:var(--font-mono);text-align:center}
-  /* modes */
-  .modes{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-  .mode{border:1px solid var(--hairline);border-radius:var(--r-card);padding:24px}
-  .mode .tag2{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase}
-  .mode h3{font-size:18px;font-weight:500;margin:8px 0 10px}
-  .mode ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:14px}
-  .mode li{font-size:13px;color:var(--ink-2);padding-left:18px;position:relative;line-height:1.45}
-  .mode li::before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;background:var(--ink);border-radius:50%}
-  .cw-field{display:grid;grid-template-columns:1fr auto;gap:6px;padding:9px 0;border-top:1px solid var(--hairline);font-size:13px}
-  /* voice */
+  .cite{font-family:var(--font-mono);font-size:11px;color:var(--ai)}
+  /* voice + do/dont */
   .voice{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   .vg{border:1px solid var(--hairline);border-radius:var(--r-sharp);padding:18px}
   .vg h4{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
-  .vg.bad h4{color:var(--stop)}
-  .vg p{font-size:14px;color:var(--ink-2);line-height:1.5}
-  /* do/dont */
+  .vg.bad h4{color:var(--stop)}.vg p{font-size:14px;color:var(--ink-2);line-height:1.5}
   .dd{display:grid;grid-template-columns:1fr 1fr;gap:24px}
   .ddc{border:1px solid var(--hairline);border-radius:var(--r-card);padding:22px}
   .ddc h3{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
   .ddc ul{list-style:none;display:flex;flex-direction:column;gap:11px}
   .ddc li{font-size:13.5px;line-height:1.45;color:var(--ink-2);padding-left:20px;position:relative}
   .ddc li::before{position:absolute;left:0;font-family:var(--font-mono)}
-  .ddc.do li::before{content:"+";color:var(--ink)}
-  .ddc.dont li::before{content:"\00d7";color:var(--stop)}
-  /* composed */
-  .composed{border:1px solid var(--hairline);border-radius:var(--r-card);padding:56px;background:var(--tint);text-align:center}
-  @media(max-width:900px){.vocab,.rules,.markrow,.states,.modes,.voice,.dd{grid-template-columns:1fr}.states{grid-template-columns:1fr 1fr}}
+  .ddc.do li::before{content:"+";color:var(--ai)}.ddc.dont li::before{content:"\00d7";color:var(--stop)}
+  .note-line{font-size:13px;color:var(--ink-3);margin-top:16px;max-width:70ch;line-height:1.6}
+  @media(max-width:900px){.markrow,.states,.ctx-grid,.cgrid,.agent-grid,.voice,.dd{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <nav class="fnav" aria-label="On this page">
   <span class="fcap">Intelligence</span>
-  <a href="#layer">The layer</a>
-  <a href="#princ">Principles</a>
-  <a href="#mark">Spark &amp; orb</a>
-  <a href="#icons">The set</a>
-  <a href="#motifs">Motifs</a>
+  <a href="#mark">The spark</a>
   <a href="#states">Run states</a>
+  <a href="#blob">The blob</a>
+  <a href="#context">In context</a>
+  <a href="#components">Components</a>
+  <a href="#coworker">The Coworker</a>
   <a href="#run">The run</a>
   <a href="#thread">Conversation</a>
-  <a href="#modes">Two modes</a>
   <a href="#async">Work &amp; failure</a>
   <a href="#voice">Voice</a>
-  <a href="#dodont">The short list</a>
+  <a href="#dodont">Discipline</a>
 </nav>
 
 <nav class="roma-nav">
@@ -121,281 +115,269 @@
 <!-- HERO -->
 <header class="band hero">
   <div class="roma-wrap">
-    <div class="row" style="gap:12px;margin-bottom:16px"><span class="orb"><svg class="spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg></span><span class="eyebrow" style="margin:0">Asite Intelligence · Roma register</span></div>
+    <div class="row" style="gap:12px;margin-bottom:16px">
+      <span class="ai-orb" style="border-color:var(--ai-line)"><svg class="aispark" style="width:18px;height:18px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg></span>
+      <span class="eyebrow" style="margin:0;color:var(--ai)">Asite Intelligence · the accent layer</span>
+    </div>
     <h1 class="display" style="max-width:17ch">One instrument, now intelligent.</h1>
-    <p class="body muted" style="max-width:60ch;margin-top:18px">Asite Intelligence isn't a separate product bolted on — it's the same achromatic surface, the same restraint, doing more. It reads the register, drafts the response, flags the risk, and always shows its working. No AI purple, no robots, no gradients — and no colour: the spark fills with ink only when it is live.</p>
+    <p class="body muted" style="max-width:60ch;margin-top:18px">Roma keeps the whole product achromatic — with one deliberate exception. Intelligence carries <b style="color:var(--ai)">Neo Red</b>, because it is the one thing on screen that is alive: reading the record, drafting a response, flagging a risk. It is expressed through Roma's own curved spark — no AI purple, no robots, no gradients.</p>
+    <div class="hero-meta">
+      <div><b>Accent</b>Neo Red · Intelligence only</div>
+      <div><b>Mark</b>The curved spark</div>
+      <div><b>Default</b>Reads; never writes unasked</div>
+      <div><b>Provenance</b>Every claim cited</div>
+    </div>
   </div>
 </header>
 
-<!-- 01 LAYER -->
-<section id="layer" class="spec">
-  <div class="roma-wrap">
-    <div class="idx">01 — The layer</div>
-    <h2>The shared vocabulary.</h2>
-    <p class="sec-sub">One set of words across design and engineering, so we describe the same things the same way.</p>
-    <div class="vocab">
-      <div class="vc"><b>Intelligence</b><p>The brand name for the layer — <em>Asite Intelligence</em>, never "the AI", "the bot", or "Copilot". A competent colleague that reads the project and acts on it.</p></div>
-      <div class="vc"><b>Run</b><p>One unit of work an agent performs, start to finish. Has a run id, a state, a model, and telemetry — tokens, latency.</p></div>
-      <div class="vc"><b>Tool call</b><p>A function the agent invokes mid-run — a search, a lookup, a write. Rendered as a quiet mono readout, not a raw log.</p></div>
-      <div class="vc"><b>Reasoning</b><p>The agent's working. Always opt-in and quiet — collapsed, dimmed, secondary to the answer.</p></div>
-      <div class="vc"><b>Citation</b><p>A traceable source for any claim about project data — an RFI, document, or model. Required, not decorative.</p></div>
-      <div class="vc"><b>Confidence</b><p>How sure the agent is, shown only when real and actionable. Low confidence always offers a path to verify.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 02 PRINCIPLES -->
-<section id="princ" class="spec">
-  <div class="roma-wrap">
-    <div class="idx">02 — Principles</div>
-    <h2>How intelligence behaves here.</h2>
-    <p class="sec-sub">Six rules keep the AI layer feeling like the same trustworthy instrument, not a different app wearing the logo.</p>
-    <div class="rules">
-      <div class="rule"><b>Only the live thing moves</b><p>There is no accent colour. The live element — running or streaming — is a filled-ink spark that pulses. Queued, idle and finished states are still, dot-first.</p></div>
-      <div class="rule"><b>The answer leads, the working follows</b><p>Lead with the conclusion in plain language. Reasoning and telemetry sit beneath it, collapsed and dimmed. Never make the thinking louder than the answer.</p></div>
-      <div class="rule"><b>Provenance or it didn't happen</b><p>Every claim about project data carries a citation to source. On a construction programme, a confident answer without a source is a liability.</p></div>
-      <div class="rule"><b>Calm under load</b><p>If three agents run at once the surface still reads quiet — only active dots pulse, in one hue. Motion is reserved for the single live element.</p></div>
-      <div class="rule"><b>Honest about uncertainty</b><p>Show confidence only when it's real. Admit limits plainly and offer a way to verify. A fabricated number erodes trust faster than none.</p></div>
-      <div class="rule"><b>No new colour</b><p>No AI purple, no gradients. Intelligence is expressed through the existing system — the spark, the orb, the pulse — not a second brand.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 03 MARK -->
+<!-- 01 THE MARK -->
 <section id="mark" class="spec">
   <div class="roma-wrap">
-    <div class="idx">03 — The mark</div>
-    <h2>The spark &amp; the orb.</h2>
-    <p class="sec-sub">Intelligence has one glyph: a four-point spark — the setting-out cross, sharpened to a star. Filled ink when it is the live agent; a thin gray line when it's a quiet label. The orb is the spark at the datum of concentric survey rings. Never invent a robot, a speech bubble, or a pair of eyes.</p>
+    <div class="idx">01 — The mark</div>
+    <h2>The curved spark.</h2>
+    <p class="sec-sub">Intelligence has one glyph — the setting-out cross softened into a four-point star. A thin line when it is a quiet label; filled Neo Red when it is the live agent, where it pulses. The orb sets the spark at the datum of the survey rings. Never a robot, a speech bubble, or a pair of eyes.</p>
     <div class="markrow">
-      <div class="mk"><svg class="spark" style="width:36px;height:36px;color:var(--signal)" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><b>The spark — live</b><p>Filled ink. Marks the agent and the act of intelligence, and pulses while it works.</p></div>
-      <div class="mk"><svg class="spark" style="width:36px;height:36px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><b>The spark — quiet</b><p>1.4px line, gray. For labels, menu items, and any non-live reference to Intelligence.</p></div>
-      <div class="mk"><span class="orb" style="width:56px;height:56px"><svg class="spark" style="width:24px;height:24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg></span><b>The orb</b><p>The spark at the datum of concentric rings. For entry points, avatars, and hero moments.</p></div>
+      <div class="mk"><svg class="aispark" style="width:34px;height:34px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><b>Quiet — a label</b><p>1.4px line. For menu items and any non-live reference to Intelligence.</p></div>
+      <div class="mk"><svg class="aispark" style="width:34px;height:34px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><b>Live — the agent</b><p>Filled Neo Red, pulsing. Marks the act of intelligence, once.</p></div>
+      <div class="mk"><span class="ai-orb" style="width:52px;height:52px"><svg class="aispark" style="width:22px;height:22px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg></span><b>The orb — entry</b><p>The spark at the datum. Entry points, avatars, hero moments.</p></div>
     </div>
   </div>
 </section>
 
-<!-- 03b ICONS -->
-<section id="icons" class="spec">
-  <div class="roma-wrap">
-    <div class="idx">03b — Icons</div>
-    <h2>The intelligence set.</h2>
-    <p class="sec-sub">Same pen as the product icons — 24px grid, 1.5px stroke, rounded joins, gray at rest. They never carry the accent; only the live spark does.</p>
-    <div class="icongrid">
-      <div class="icell"><svg viewBox="0 0 24 24" stroke-linejoin="round"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><span>Intelligence</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>Run</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M10 4h4M12 4v4M6 10h12v9H6z"/></svg><span>Tool call</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2 2"/></svg><span>Reasoning</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M9 12l2 2 4-4"/></svg><span>Citation</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 15l4-4"/></svg><span>Confidence</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M4 8h10M4 12h16M4 16h7" stroke-dasharray="3 3"/></svg><span>Stream</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4z"/></svg><span>Prompt</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><circle cx="12" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M12 8v4M12 12l-5 4M12 12l5 4"/></svg><span>Orchestrate</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2 6"/><path d="M20 5v6h-6"/></svg><span>Retry</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/></svg><span>Guardrail</span></div>
-      <div class="icell"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .8-1 1.7"/><path d="M12 17h.01"/></svg><span>Ask</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- 03c MOTIFS -->
-<section id="motifs" class="spec">
-  <div class="roma-wrap">
-    <div class="idx">03c — Motifs</div>
-    <h2>The intelligence motifs.</h2>
-    <p class="sec-sub">Site gestures, extended to the AI layer. One per composition — they never stack.</p>
-    <div class="mgrid">
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60"><circle cx="60" cy="30" r="5" fill="#050505"/><circle cx="60" cy="30" r="14" fill="none" stroke="var(--hairline-strong)"/><circle cx="60" cy="30" r="22" fill="none" stroke="var(--hairline-strong)"/></svg></div><div class="mt"><b>The Pulse</b><p>The live signal — a burning point with expanding rings. Only for what is running or streaming.</p></div></div>
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60" stroke="#6b6b6b" stroke-width="1.2" fill="none"><circle cx="30" cy="20" r="3"/><circle cx="90" cy="18" r="3"/><circle cx="86" cy="44" r="3"/><path d="M30 20L60 30M90 18L60 30M86 44L60 30"/><path d="M60 30l0 0" /><circle cx="60" cy="30" r="4" fill="#050505" stroke="none"/></svg></div><div class="mt"><b>The Constellation</b><p>Orchestration as a survey network — sources and steps as nodes, the agent as the spark at the centre.</p></div></div>
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60" stroke="#050505" stroke-width="1.5" fill="none"><path d="M16 30h74" stroke-dasharray="4 4"/><circle cx="100" cy="30" r="4" fill="#050505" stroke="none"/></svg></div><div class="mt"><b>The Stream</b><p>Tokens arriving — a dashed leader resolving to one bright point. The caret is its smallest form.</p></div></div>
-      <div class="mcard"><div class="mstage"><svg viewBox="0 0 120 60" width="120" height="60" fill="none"><path d="M36 42a24 24 0 0 1 48 0" stroke="#e2e2e2" stroke-width="4"/><path d="M60 42l16-12" stroke="#050505" stroke-width="2"/></svg></div><div class="mt"><b>The Gauge</b><p>Confidence as an instrument dial — a quiet arc with a needle. Reads at a glance, never shouts a number.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- 04 STATES -->
+<!-- 02 RUN STATES -->
 <section id="states" class="spec">
   <div class="roma-wrap">
-    <div class="idx">04 — Run states</div>
-    <h2>The state of a run.</h2>
-    <p class="sec-sub">Dot-first, exactly like product status. Only running and streaming pulse in the accent; the rest are static, desaturated hues. Reduced-motion users get a still dot.</p>
+    <div class="idx">02 — Run states</div>
+    <h2>Only the live run burns.</h2>
+    <p class="sec-sub">Dot-first, like product status. Running and streaming pulse in Neo Red — the one moving, coloured thing on the surface. Everything settled is a neutral; only a failure is the error red.</p>
     <div class="states">
       <div class="state"><i class="st-q"></i>Queued<small>idle</small></div>
-      <div class="state"><i class="st-run"></i>Running<small>ink · pulse</small></div>
-      <div class="state"><i class="st-run"></i>Streaming<small>ink · pulse</small></div>
-      <div class="state"><i class="st-w"></i>Waiting on input<small>warn</small></div>
-      <div class="state"><i class="st-b"></i>Blocked<small>stop</small></div>
-      <div class="state"><i class="st-d"></i>Done<small>ok</small></div>
-      <div class="state"><i class="st-b"></i>Error<small>stop</small></div>
-      <div class="state"><i class="st-q"></i>Cancelled<small>idle</small></div>
+      <div class="state"><i class="st-run"></i>Running<small>Neo Red · pulse</small></div>
+      <div class="state"><i class="st-run"></i>Streaming<small>Neo Red · pulse</small></div>
+      <div class="state"><i class="st-q"></i>Waiting<small>idle</small></div>
+      <div class="state"><i class="st-d"></i>Done<small>neutral</small></div>
+      <div class="state"><i class="st-b"></i>Error<small>error red</small></div>
     </div>
   </div>
 </section>
 
-<!-- 05 THE RUN -->
+<!-- 03 THE BLOB -->
+<section id="blob" class="spec">
+  <div class="roma-wrap">
+    <div class="idx">03 — Global · summoned</div>
+    <h2>The Intelligence blob.</h2>
+    <p class="sec-sub">A floating assistant pinned bottom-right of every screen. You come to it. It reads across the record to answer — about the screen you're on or anything in the product — and cites where it read. It never writes.</p>
+    <div class="stage" style="justify-content:flex-start;padding:20px">
+      <span class="blob-pill"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg>Ask Asite Intelligence <span class="kbd">⌘I</span></span>
+    </div>
+    <div class="stage" style="margin-top:16px">
+      <div>
+        <div class="ipanel">
+          <div class="ihd"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><span class="l">Asite Intelligence</span><span class="reg">READS · NEVER WRITES</span></div>
+          <div class="ibd">
+            <div class="iq">What's blocking pour 6?</div>
+            <div class="ia">One hold — <b>RFI <span class="m">#4182</span></b>, a clash at <span class="m">C-07/L+04</span>. Releases on your sign-off.</div>
+            <div class="row" style="gap:8px"><span class="ai-cite"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg>RFI register</span></div>
+            <button class="icta">REVIEW 3</button>
+          </div>
+          <div class="iin">Ask about this screen…<span class="kbd">⌘I</span></div>
+        </div>
+        <span class="blobcap">Screen-context question</span>
+      </div>
+      <div>
+        <div class="ipanel">
+          <div class="ihd"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><span class="l">Asite Intelligence</span><span class="reg">READS · NEVER WRITES</span></div>
+          <div class="ibd">
+            <div class="iq">How does a revision get superseded?</div>
+            <div class="ia">Issue a newer revision and the prior one moves to <span class="m">SUPERSEDED</span> automatically, kept on the audit trail. Nothing is deleted.</div>
+            <button class="icta">OPEN GUIDE</button>
+          </div>
+          <div class="iin">Ask anything about Asite…<span class="kbd">⌘I</span></div>
+        </div>
+        <span class="blobcap">General product question</span>
+      </div>
+    </div>
+    <p class="note-line">The panel is a light surface — white on soft shadow, a whisper of tint on the header, the spark in Neo Red. No coloured edge. A blob CTA opens, navigates or filters; it never commits.</p>
+  </div>
+</section>
+
+<!-- 04 IN CONTEXT (reduced text) -->
+<section id="context" class="spec">
+  <div class="roma-wrap">
+    <div class="idx">04 — In context</div>
+    <h2>Insight, set among the data.</h2>
+    <p class="sec-sub">Unbidden, an insight surfaces inside the real content — one short line, marked by the spark. No background, no edge bar; it never competes with the numbers it comments on.</p>
+    <div class="ctx-grid">
+      <div class="frame">
+        <div class="fbar"><span class="dot"></span><span class="ftitle">Dashboard · Tower C</span><span class="fref">WK 24</span></div>
+        <div class="fbody">
+          <div class="kpis"><div class="kpi"><div class="l">Open RFIs</div><div class="n">47</div></div><div class="kpi"><div class="l">Awaiting you</div><div class="n">17</div></div><div class="kpi"><div class="l">Held</div><div class="n" style="color:var(--stop)">1</div></div></div>
+          <div class="insight"><svg class="aispark" style="margin-top:1px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><div class="itxt">Structural turnaround drifting — <span class="m">2.4d</span>. <a class="ilink" href="#">See workflow →</a></div></div>
+        </div>
+      </div>
+      <div class="frame">
+        <div class="fbar"><span class="dot"></span><span class="ftitle">Register · Structural</span><span class="fref">L26</span></div>
+        <div class="fbody">
+          <div class="trow"><span class="rref">RFI-4182</span><span class="rt">Slab pour clash</span><span class="ai-flag"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg>Critical path</span></div>
+          <div class="trow"><span class="rref">RFI-0839</span><span class="rt">Cover query</span><span class="status" style="font-size:12px">Float 5d</span></div>
+          <div class="trow"><span class="rref">RFI-0851</span><span class="rt">Coupler type</span><span class="status" style="font-size:12px">Float 8d</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="note-line">A dashboard gets a one-line <b style="color:var(--ink)">insight</b>; a register row gets a one-word <b style="color:var(--ink)">flag</b>. Same spark, least possible text.</p>
+  </div>
+</section>
+
+<!-- 05 DIFFERENTIATED COMPONENTS -->
+<section id="components" class="spec">
+  <div class="roma-wrap">
+    <div class="idx">05 — The component set</div>
+    <h2>Differentiated by job.</h2>
+    <p class="sec-sub">Each way Intelligence appears has its own form, so you always know what it will do before you touch it.</p>
+    <div class="cgrid">
+      <div class="ccell"><span class="cl">Natural-language query bar</span><div class="ai-query"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><input placeholder="Ask about this project…"><span class="kbd">⌘I</span></div></div>
+      <div class="ccell"><span class="cl">Smart-fill suggestion</span><div><span class="flab">Suitability code</span><div class="ai-suggest"><span class="val">S2</span><span class="ghost">— suggested from the register</span><span class="tab">Tab ↹</span></div></div></div>
+      <div class="ccell"><span class="cl">Confidence gauge</span><div class="row" style="gap:14px"><span class="ai-gauge">confidence <span class="bar"><i style="width:86%"></i></span> 86%</span><span class="ai-gauge">low <span class="bar"><i style="width:34%"></i></span> 34% · verify</span></div></div>
+      <div class="ccell"><span class="cl">Source / citation chips</span><div class="row" style="gap:8px;flex-wrap:wrap"><span class="ai-cite"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg>RFI-4182</span><span class="ai-cite"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg>Pour plan · Rev C</span></div></div>
+      <div class="ccell"><span class="cl">Reconcile — field level</span><div class="ai-reconcile"><div class="rr"><span class="lab">Drawing number</span><span class="res m-ok">Matched</span></div><div class="rr"><span class="lab">Revision</span><span class="res m-bad">Mismatch</span></div><div class="rr"><span class="lab">Suitability</span><span class="res m-none">Missing</span></div></div></div>
+      <div class="ccell"><span class="cl">Attribution badge &amp; explain chip</span><div class="stack" style="gap:12px"><span class="ai-badge"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg>Drafted by Asite Intelligence</span><span class="row" style="gap:10px"><span class="body-sm muted">35mm cover clash</span><span class="ai-explain"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg>Explain</span></span></div></div>
+      <div class="ccell" style="grid-column:1/-1"><span class="cl">Proactive nudge</span><div class="ai-nudge"><svg class="aispark" style="margin-top:1px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><div class="ntxt">RFI-4182 will breach its response SLA tomorrow. Want me to draft a chase to the structural lead?</div><span class="nx">×</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 THE COWORKER -->
+<section id="coworker" class="spec">
+  <div class="roma-wrap">
+    <div class="idx">06 — In the flow</div>
+    <h2>The Coworker, inside the task.</h2>
+    <p class="sec-sub">Where the blob answers, the Coworker acts — but only when instructed, and only where there's a job. It runs its steps in the open and hands you a reviewable result. Nothing lands until you approve.</p>
+    <div class="agent-grid">
+      <div class="ai-chat">
+        <div class="ahd"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><b>Asite Coworker</b><span class="p-status" style="margin-left:auto;font-size:12px"><span style="width:8px;height:8px;border-radius:50%;background:var(--ai);display:inline-block;margin-right:6px;animation:roma-pulse 1.4s infinite"></span>Running</span></div>
+        <div class="abd">
+          <div class="ainstr">Draft the RFI response and route it to the structural lead.</div>
+          <div class="ai-step done"><span class="sq"></span>Read RFI + 3 drawings<span class="sref">1.1s</span></div>
+          <div class="ai-step done"><span class="sq"></span>Drafted response<span class="sref">done</span></div>
+          <div class="ai-step run"><span class="sq"></span>Routing to D. Mensah<span class="sref">awaiting you</span></div>
+        </div>
+        <div class="aft"><button class="btn-ghost" style="flex:1">Edit</button><button class="agent-cta" style="flex:1;justify-content:center">Approve &amp; route</button></div>
+      </div>
+      <div class="coworker-card">
+        <div class="row" style="align-items:baseline;gap:10px"><b style="font-size:14px;font-weight:600">Metadata QA</b><span class="fref" style="margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--ink-3)">20 files</span></div>
+        <div class="ai-reconcile"><div class="rr"><span class="lab">Matched</span><span class="res m-ok">16</span></div><div class="rr"><span class="lab">Mismatch</span><span class="res m-bad">3</span></div><div class="rr"><span class="lab">Missing</span><span class="res m-none">1</span></div></div>
+        <div class="row" style="justify-content:flex-end;gap:8px"><button class="btn-ghost">Dismiss</button><button class="agent-cta">Apply 4</button></div>
+      </div>
+    </div>
+    <div class="inline-demo" style="margin-top:16px">
+      <div><span class="flab">Inline trigger — a field</span><div class="fwrap"><textarea placeholder="Type a response, or let the Coworker draft one…"></textarea><span class="agent-ib" style="margin:0 8px" title="Draft"><svg class="aispark" style="color:#fff;width:15px;height:15px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg></span></div></div>
+      <div><span class="flab">Inline trigger — a row</span>
+        <div class="trow"><span class="rref">TRN-2201</span><span class="rt">14 drawings → Arup</span><span class="agent-ib" style="width:24px;height:24px" title="Draft cover"><svg class="aispark" style="color:#fff;width:13px;height:13px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg></span></div>
+        <div class="trow"><span class="rref">TRN-2202</span><span class="rt">6 drawings → McG</span><span class="agent-ib" style="width:24px;height:24px" title="Draft cover"><svg class="aispark" style="color:#fff;width:13px;height:13px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 THE RUN -->
 <section id="run" class="spec">
   <div class="roma-wrap">
-    <div class="idx">05 — Agent surfaces</div>
+    <div class="idx">07 — Agent surfaces</div>
     <h2>The run, in the open.</h2>
-    <p class="sec-sub">The container for a single agent turn: identity and telemetry up top, then the streaming answer, a collapsed tool call, quiet reasoning, a confidence reading, and citations. Everything composed from the ramp and the one accent.</p>
+    <p class="sec-sub">A single agent turn: identity and mono telemetry, the streaming answer, a collapsed tool call and citations — with a timeline of what it did.</p>
     <div class="row" style="gap:20px;align-items:flex-start;flex-wrap:wrap">
       <div class="rcard">
-        <div class="rc-h"><svg class="spark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><b>Programme agent</b><span class="tele"><span>asite-intelligence · run_8f2a</span><span>1,284 tok</span><span>1.9s</span></span></div>
+        <div class="rc-h"><svg class="aispark" style="width:16px;height:16px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><b style="font-size:14px;font-weight:500">Programme Coworker</b><span class="m"><span>run_8f2a</span><span>1,284 tok</span><span>1.9s</span></span></div>
         <div class="rc-b">
-          <p><b>Three RFIs are holding pours this week.</b> RFI-0847 (cover clash at L26) is the critical path — it blocks P-1131 on Friday. I drafted a response from the structural model.<span class="caret"></span></p>
-          <div class="rc-tool">search_register · query: open RFIs blocking pours · project: tower-c → RFI-0847, RFI-0839, RFI-0851</div>
-          <div class="gauge">confidence <span class="bar"><i></i></span> 86%</div>
+          <p><b>Three RFIs are holding pours this week.</b> RFI-4182 is the critical path — it blocks pour 6 on Friday.<span class="caret"></span></p>
+          <div class="rc-tool">search_register · open RFIs blocking pours → RFI-4182, RFI-0839, RFI-0851</div>
         </div>
-        <div class="rc-reason"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 6l6 6-6 6"/></svg>Show reasoning</div>
-        <div class="rc-cites"><span class="cite">RFI-0847 · register</span><span class="cite">P-1131 · pour card</span><span class="cite">DWG-0412 · C03</span></div>
+        <div class="rc-cites"><span class="ai-cite"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg>RFI-4182</span><span class="ai-cite"><svg class="aispark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg>Pour plan · Rev C</span></div>
       </div>
       <div class="tl">
         <div class="row" style="padding:8px 18px"><span class="eyebrow">Run timeline</span></div>
-        <div class="step"><span class="d" style="background:var(--ok)"></span>Parsed request<span class="m">intent</span></div>
-        <div class="step"><span class="d" style="background:var(--ok)"></span>Searched register + docs<span class="m">3 tools · 1.2s</span></div>
-        <div class="step live"><span class="d"></span>Drafting RFI response<span class="m">streaming</span></div>
-        <div class="step"><span class="d"></span>Awaiting structural sign-off<span class="m">needs human</span></div>
-        <div class="step"><span class="d"></span>Release pour P-1131<span class="m">pending</span></div>
+        <div class="step"><span class="d" style="background:var(--ok)"></span>Parsed request<span class="mm">intent</span></div>
+        <div class="step"><span class="d" style="background:var(--ok)"></span>Searched register<span class="mm">3 tools</span></div>
+        <div class="step live"><span class="d"></span>Drafting response<span class="mm">streaming</span></div>
+        <div class="step"><span class="d"></span>Awaiting sign-off<span class="mm">needs you</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 06 CONVERSATION -->
+<!-- 08 CONVERSATION -->
 <section id="thread" class="spec">
   <div class="roma-wrap">
-    <div class="idx">06 — Conversation</div>
+    <div class="idx">08 — Conversation</div>
     <h2>Talking to the instrument.</h2>
-    <p class="sec-sub">User, assistant, and system turns. The assistant avatar is the only spark in the thread; the text is plain. System lines narrate orchestration without interrupting.</p>
+    <p class="sec-sub">The assistant avatar is the only spark in the thread; the text is plain. System lines narrate orchestration without interrupting.</p>
     <div class="thread">
-      <div class="turn"><span class="av">CN</span><div><div class="who">You</div><div class="msg">What's holding the L24 pour, and can we clear it before Friday?</div></div></div>
-      <div class="sysline">— Asite Intelligence searched the register and 2 documents —</div>
-      <div class="turn"><span class="av ai"><svg class="spark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg></span><div><div class="who">Asite Intelligence</div><div class="msg">RFI-0847 — a 35mm cover clash at gridline E. The structural lead can sign off once the MEP route is confirmed; I've drafted the response and flagged D. Mensah. Likely clear by Thursday. <span class="cite">RFI-0847</span> <span class="cite">MEP rev B11</span></div></div></div>
+      <div class="turn"><span class="av">CN</span><div><div class="who">You</div><div class="msg">What's holding pour 6, and can we clear it before Friday?</div></div></div>
+      <div class="sysline">— searched the register and 2 documents —</div>
+      <div class="turn"><span class="av ai"><svg class="aispark" style="width:14px;height:14px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg></span><div><div class="who">Asite Intelligence</div><div class="msg">RFI-4182 — a slab clash at C-07. D. Mensah can sign off once the bolt set-out is confirmed; I've drafted the response. Likely clear by Thursday. <span class="cite">RFI-4182</span></div></div></div>
     </div>
   </div>
 </section>
 
-<!-- 07 TWO MODES -->
-<section id="modes" class="spec">
-  <div class="roma-wrap">
-    <div class="idx">07 — Where it lives</div>
-    <h2>Two ways Intelligence shows up.</h2>
-    <p class="sec-sub">A side chat you summon to ask about what's on screen — and a Coworker that works alongside you inside a task. Both wear the same spark; both are assistive and access-scoped, never the final decision.</p>
-    <div class="modes">
-      <div class="mode">
-        <span class="tag2">Summoned</span>
-        <h3>The side chat</h3>
-        <p class="body-sm muted">The always-available way in — a soft-glowing orb at the bottom-right of any surface. Open it to ask about the project, the register, the document in view.</p>
-        <ul>
-          <li>Floating orb + "Ask Asite Intelligence ⌘I" pill</li>
-          <li>Opens a docked conversation panel</li>
-          <li>Context-aware: knows the screen you're on</li>
-          <li>Read-only by default; proposes, you act</li>
-        </ul>
-        <div class="roma-product" style="margin-top:18px">
-          <div class="roma-product__bar"><i></i><i></i><i></i><span class="u">today</span></div>
-          <div style="position:relative;height:120px;background:var(--tint)">
-            <div style="position:absolute;right:16px;bottom:16px;width:12px;height:12px;border-radius:50%;background:var(--signal);box-shadow:0 0 20px 5px var(--signal-wash);animation:roma-pulse 2.2s infinite"></div>
-            <div style="position:absolute;right:14px;bottom:14px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--hairline);border-radius:999px;padding:8px 13px;box-shadow:var(--shadow-card)"><svg class="spark" viewBox="0 0 24 24" fill="currentColor" style="width:14px;color:var(--signal)"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><span style="font-size:12px">Ask Asite Intelligence</span><span class="chip" style="border:0;padding:0;font-size:11px">⌘I</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="mode">
-        <span class="tag2">Embedded</span>
-        <h3>The in-workflow Coworker</h3>
-        <p class="body-sm muted">Intelligence that does part of the job with you, inside the task itself. It reads, extracts, compares, drafts — then hands you discrete, reviewable changes. Nothing is applied until you say so.</p>
-        <ul>
-          <li>Lives in the task: upload, form, drawing, bid</li>
-          <li>Runs steps and returns a checkable result</li>
-          <li>Field-level reconcile, never a silent overwrite</li>
-          <li>Re-runnable; every change is yours to apply</li>
-        </ul>
-        <div class="roma-product" style="margin-top:18px">
-          <div class="roma-product__bar"><i></i><i></i><i></i><span class="u">upload · metadata QA</span></div>
-          <div class="roma-product__body" style="padding:16px">
-            <div class="row" style="justify-content:space-between;margin-bottom:6px"><span class="row" style="gap:8px"><svg class="spark" viewBox="0 0 24 24" fill="currentColor" style="width:15px;color:var(--signal)"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><b class="body-sm" style="font-weight:500">Metadata QA · run_4c1d</b></span><span class="p-status p-live">Live</span></div>
-            <div class="cw-field"><span class="muted">5 matched · 3 mismatched · 1 missing</span><span></span></div>
-            <div class="cw-field"><div><div class="body-sm">Revision</div><small class="mono" style="color:var(--ink-3)">you: P02 · doc: P03</small></div><span style="color:var(--stop);font-weight:500;font-size:13px">Mismatch</span></div>
-            <div class="row" style="gap:8px;margin-top:12px"><button class="btn-outline" style="flex:1">Re-run</button><button class="p-btn" style="flex:1">Apply all (4)</button></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 08 ASYNC / FAILURE -->
+<!-- 09 ASYNC / FAILURE -->
 <section id="async" class="spec">
   <div class="roma-wrap">
-    <div class="idx">08 — Async &amp; failure</div>
+    <div class="idx">09 — Async &amp; failure</div>
     <h2>While it works, and when it fails.</h2>
-    <p class="sec-sub">Before tokens arrive, a skeleton shimmer shaped like the answer. When a run fails, a 1px error-red outline and a retry — never a filled red banner.</p>
+    <p class="sec-sub">Before tokens arrive, a skeleton shimmer shaped like the answer. When a run fails, a quiet error line and a retry — never a filled red banner.</p>
     <div class="grid grid-2">
       <div class="runcard">
-        <div class="row" style="gap:8px;margin-bottom:12px"><svg class="spark" viewBox="0 0 24 24" fill="currentColor" style="width:16px;color:var(--signal)"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><span class="p-status p-live">Thinking</span></div>
-        <div class="skeleton" style="width:92%;margin-bottom:8px"></div><div class="skeleton" style="width:78%;margin-bottom:8px"></div><div class="skeleton" style="width:60%"></div>
-        <div class="runcard__tele" style="margin-top:12px"><span>asite-intelligence</span><span>streaming…</span></div>
+        <div class="row" style="gap:8px;margin-bottom:12px"><svg class="aispark" style="width:16px;height:16px" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg><span class="p-status" style="font-size:12.5px"><span style="width:8px;height:8px;border-radius:50%;background:var(--ai);display:inline-block;margin-right:6px;animation:roma-pulse 1.4s infinite"></span>Thinking</span></div>
+        <div class="skeleton" style="width:92%;margin-bottom:8px"></div><div class="skeleton" style="width:74%;margin-bottom:8px"></div><div class="skeleton" style="width:58%"></div>
       </div>
-      <div class="runcard" style="border-color:var(--stop)">
+      <div class="runcard">
         <div class="row" style="gap:8px;margin-bottom:10px"><span class="status status--stop" style="font-size:13px">Run failed</span></div>
-        <p class="body-sm muted" style="margin-bottom:14px">The structural model was unreachable at read time. No data was changed. Your draft is saved.</p>
-        <button class="btn-outline">Retry run</button>
+        <p class="body-sm muted" style="margin-bottom:14px">The structural model was unreachable. No data was changed. Your draft is saved.</p>
+        <button class="btn-ghost">Retry run</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 09 VOICE -->
+<!-- 10 VOICE -->
 <section id="voice" class="spec">
   <div class="roma-wrap">
-    <div class="idx">09 — Voice</div>
+    <div class="idx">10 — Voice</div>
     <h2>How Intelligence speaks.</h2>
     <p class="sec-sub">A competent colleague, not a chatbot. Leads with the answer; shows working only on request; cites sources; admits uncertainty plainly. No emoji, no marketing superlatives.</p>
     <div class="voice">
-      <div class="vg"><h4>In register</h4><p>"Rev A is blocked pending RFI-0847. The register shows Rev B as current — I can flag the mismatch for the document controller. Sources attached."</p></div>
-      <div class="vg bad"><h4>Out of register</h4><p>"Great question! 🎉 I'd be absolutely delighted to help you supercharge your workflow! Let me work my magic on those files for you…"</p></div>
+      <div class="vg"><h4>In register</h4><p>"Rev A is blocked pending RFI-4182. The register shows Rev B as current — I can flag the mismatch. Sources attached."</p></div>
+      <div class="vg bad"><h4>Out of register</h4><p>"Great question! 🎉 I'd be absolutely delighted to help you supercharge your workflow! Let me work my magic…"</p></div>
     </div>
   </div>
 </section>
 
-<!-- 10 DO / DON'T -->
-<section id="dodont" class="spec">
+<!-- 11 DISCIPLINE -->
+<section id="dodont" class="spec" style="border-bottom:1px solid var(--hairline)">
   <div class="roma-wrap">
-    <div class="idx">10 — The short list</div>
-    <h2>Do &amp; Don't.</h2>
+    <div class="idx">11 — The discipline</div>
+    <h2>The lock on the AI layer.</h2>
     <div class="dd">
       <div class="ddc do">
         <h3>Do</h3>
         <ul>
-          <li>Let only the running/streaming element pulse in ink; keep queued, idle and done still.</li>
-          <li>Lead with the answer; collapse reasoning and telemetry beneath it.</li>
+          <li>Reserve Neo Red for Intelligence — the spark, the blob, the live run. The one accent in the product.</li>
+          <li>Match the form to the job: query bar to ask, insight to inform, Coworker to act.</li>
+          <li>Keep in-context insight to one line; a register row to one word.</li>
+          <li>Show the Coworker's steps in the open and preview every change.</li>
           <li>Cite a source for every claim about project data.</li>
-          <li>Show confidence only when it's real, and offer a way to verify.</li>
-          <li>Return field-level, reviewable changes — Coworker applies nothing until asked.</li>
         </ul>
       </div>
       <div class="ddc dont">
         <h3>Don't</h3>
         <ul>
-          <li>Introduce AI purple, gradients, robots, eyes, or speech-bubbles.</li>
-          <li>Make the reasoning or telemetry louder than the answer.</li>
-          <li>Introduce any accent colour, or pulse more than the one live element.</li>
-          <li>Show a fabricated confidence number, or a claim without provenance.</li>
+          <li>Put a thick or coloured border on any card, panel, banner or row — <b>no edge bars, ever.</b></li>
+          <li>Use Neo Red anywhere outside the Intelligence layer.</li>
+          <li>Give an insight a background, fill or pastel wash.</li>
           <li>Apply a Coworker change silently, or use a filled red error banner.</li>
+          <li>Introduce AI purple, gradients, robots, eyes or speech-bubbles.</li>
         </ul>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- 11 COMPOSED -->
-<section id="composed" class="spec" style="border-bottom:1px solid var(--hairline)">
-  <div class="roma-wrap">
-    <div class="idx">11 — Composed</div>
-    <div class="composed">
-      <span class="orb" style="margin:0 auto 20px"><svg class="spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2c.5 5.2 4.3 9 9.5 10-5.2.9-9 4.3-9.5 10-.5-5.2-4.3-9-9.5-10 5.2-.9 9-4.3 9.5-10Z"/></svg></span>
-      <div class="heading" style="max-width:18ch;margin:0 auto 14px">A competent colleague, in the same quiet hand.</div>
-      <p class="body muted" style="max-width:56ch;margin:0 auto">Read-only by default, ACL-scoped always, sourced on every claim. Intelligence proposes; you decide.</p>
     </div>
   </div>
 </section>
@@ -403,7 +385,7 @@
 <footer class="roma-foot">
   <div class="roma-wrap">
     <div class="row" style="justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px">
-      <div class="stack-sm"><a class="roma-logo" href="index.html" style="color:var(--ink)"><img src="assets/logos/asite-logo-primary.png" alt="Asite" style="height:18px"></a><span class="fine">Asite Intelligence · Roma register</span></div>
+      <div class="stack-sm"><a class="roma-logo" href="index.html"><img src="assets/logos/asite-logo-primary.png" alt="Asite" style="height:20px"></a><span class="fine">Asite Intelligence · Roma register · the accent layer</span></div>
       <div class="row" style="gap:22px"><a href="index.html">Language</a><a href="screens.html">Product</a><a href="ai-hub.html">Intelligence</a><a href="library/index.html">Library</a></div>
     </div>
   </div>
